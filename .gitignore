@@ -1,0 +1,7 @@
+.idea/
+.babelrc
+bundle.js
+bower_components/
+node_modules/
+logs/
+*.bat
