@@ -37,6 +37,7 @@ require('../../logic/express').getServerExpress().post('/rollInitiative', (req, 
             return modifyInitiative(user, result);
         })
         .then(() => res.json({}))
+        .then(() => WebSocketUser.sendToEverybody(WebSocketUser.RELOAD_MAP_MESSAGE))
         .catch(error => errorObj.send(error))
 });
 
