@@ -1,5 +1,6 @@
 .idea/
-bundle.js
+public/bundle.js
+public/styles.css
 bower_components/
 node_modules/
 logs/
