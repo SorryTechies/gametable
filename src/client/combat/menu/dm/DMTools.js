@@ -4,10 +4,8 @@
 
 import * as React from "react";
 import rootScss from '../../../../scss/root.scss';
-import LoginController from "../../../logic/LoginController";
 
 export default class DMTools extends React.Component {
-
     constructor(props) {
         super(props);
 

@@ -11,6 +11,7 @@ import StatusMenu from "./menu/pc/StatusMenu";
 import DMTools from "./menu/dm/DMTools";
 import LockCombat from "../logic/requests/LockCombat";
 import NextTurn from "../logic/requests/NextTurn";
+import ModifiableText from "./menu/dm/ModifiableText";
 
 const SUBSCRIBE_ID = 'map';
 
@@ -184,9 +185,13 @@ export default class CombatWindow extends React.Component {
                 <div>
                     {this.state.map.objects.map(object => {
                         const decoration = {textDecoration: object.initiative === this.state.map.currentInitiative ? "underline" : null};
-                        return <div className={rootScss.dm_initiative}>
+                        return <div key={object.objectId} className={rootScss.dm_initiative}>
                             <p style={decoration} className={rootScss.dm_initiative_text}>{object.name}</p>
-                            <p style={decoration} className={rootScss.dm_initiative_text} id={object.objectId}>{object.initiative}</p>
+                            <ModifiableText
+                                style={decoration}
+                                className={rootScss.dm_initiative_text}
+                                text={object.initiative}
+                            />
                         </div>
                     })}
                 </div>
