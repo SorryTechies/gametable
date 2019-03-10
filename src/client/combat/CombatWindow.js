@@ -87,7 +87,7 @@ export default class CombatWindow extends React.Component {
                     onClick={() => this.clickObject(unit)}
                     key={unit.name}>{unit.img ? "" : unit.name}
                 </div>;
-                    console.log(unit.initiative + ' ' + initiative);
+                console.log(unit.initiative + ' ' + initiative);
                 if (unit.initiative === initiative) {
                     return <div id={rootScss.current_turn_indicator}>{obj}</div>
                 } else {
@@ -180,6 +180,16 @@ export default class CombatWindow extends React.Component {
                 new LockCombat().send().catch(error => console.log(error))
                 this.getMap().catch(error => console.log(error))
             }}>{this.state.map.initiativeLocked ? "UNLOCK" : "LOCK"}</button>
+            {<div>
+                <div>
+                    {this.state.map.objects.map(object => {
+                        return <div className={rootScss.dm_initiative}>
+                            <p className={rootScss.dm_initiative_text}>{object.name}</p>
+                            <p className={rootScss.dm_initiative_text} id={object.objectId}>{object.initiative}</p>
+                        </div>
+                    })}
+                </div>
+            </div>}
             <button onClick={() => new NextTurn().send().catch(error => console.log(error))}>NEXT TURN</button>
         </div>
     }
