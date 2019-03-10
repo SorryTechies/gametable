@@ -50,21 +50,6 @@ function roll(bonus) {
     return Roller.rollDice() + bonus;
 }
 
-function roll20DDice(name, bonus) {
-    const roll = roll(bonus);
-    let result;
-    if (roll === 20) {
-        result = 'critical!';
-    } else {
-        if (roll === 1) {
-            result = 'failed!';
-        } else {
-            result = roll + bonus;
-        }
-    }
-    return name + " roll " + result;
-}
-
 export default class CharacterWindow extends React.Component {
 
     constructor(props) {
@@ -85,14 +70,6 @@ export default class CharacterWindow extends React.Component {
     async loadCharacter() {
         let result = await StaticController.getCharacter();
         this.setState({characterData: result});
-        if (result.data.attacks.length === 0) return;
-        const attackR = new NormalRequest();
-        attackR.method = 'POST';
-        attackR.path = '/loadAttacks';
-        let resultA = await attackR.send({
-            ids: result.data.attacks
-        });
-        this.setState({attacks: resultA});
     }
 
     async rollInitiative(row) {

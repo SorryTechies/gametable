@@ -4,8 +4,8 @@
 
 import * as React from "react";
 import rootScss from '../../scss/root.scss';
-import Roller from "../roller/Roller";
 import NormalRequest from "../logic/NormalRequest";
+import StaticController from "../static/StaticController";
 
 const CharacterDataHelper = require("../../common/CharacterDataHelper");
 
@@ -32,18 +32,20 @@ export default class GroupWindow extends React.Component {
     }
 
     async loadCharacter() {
-        const request = new NormalRequest();
-        request.path = '/loadGroup';
-        let result = await request.send();
+        let result = (await StaticController.getMap()).objects.map(obj => obj.character);
         this.setState({characters: result});
     }
 
     render() {
+        let key = 1;
         return <div className={rootScss.menu_page}>
             {this.state.characters.map(character => {
-                const maxHP = CharacterDataHelper.calculateMaxHp(character);
-                return <div key={character.user.username}>
-                    <p>{character.user.username}</p>
+                let maxHP = 0;
+                try {
+                    maxHP = CharacterDataHelper.calculateMaxHp(character);
+                } catch (ignore) {}
+                return <div key={++key}>
+                    <p>{character.user ? character.user.username : key}</p>
                     <p>{"HP " + (maxHP - character.damage).toString() + "/" + maxHP.toString()}</p>
                     <button onClick={() => {
                         character.damage++;

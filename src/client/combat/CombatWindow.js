@@ -57,7 +57,7 @@ export default class CombatWindow extends React.Component {
     }
 
     componentDidMount() {
-        BrowserWebSocket.subscribe({id: SUBSCRIBE_ID, func: () => this.getMap().catch(e => console.log(e))});
+        StaticController.subscribe({id: StaticController.MAP, func: this.getMap.bind(this)});
         this.getMap().catch(e => console.log(e));
     }
 
