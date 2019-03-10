@@ -41,9 +41,7 @@ export default class ChatWindow extends React.Component {
     }
 
     async getParticipants() {
-        const request = new NormalRequest();
-        request.path = '/getGameParticipants';
-        let players = await request.send();
+        let players = await StaticController.getParticipants();
         this.setState({players: players})
     }
 

@@ -11,6 +11,7 @@ import PathfinderCharacterCore from "./PathfinderCharacterCore";
 import PopupManager from "../popup/PopupManager";
 import RollInitiative from "../logic/requests/RollInitiative";
 import DiceRoller from "../logic/DiceRoller";
+import StaticController from "../static/StaticController";
 
 const CharacterHelper = require('../../common/CharacterDataHelper');
 
@@ -82,9 +83,7 @@ export default class CharacterWindow extends React.Component {
     }
 
     async loadCharacter() {
-        const request = new NormalRequest();
-        request.path = '/loadCharacter';
-        let result = await request.send();
+        let result = await StaticController.getCharacter();
         this.setState({characterData: result});
         if (result.data.attacks.length === 0) return;
         const attackR = new NormalRequest();

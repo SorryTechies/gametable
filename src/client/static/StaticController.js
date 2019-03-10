@@ -4,11 +4,17 @@
 
 import NormalRequest from "../logic/NormalRequest";
 import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
+import LoginController from "../logic/LoginController";
 
 let subscribers = [];
+let chat = null;
+let character = null;
+let map = null;
+let participants = null;
 const STATIC_CHAR = 'static_char';
 const STATIC_CHAT = 'static_chat';
 const STATIC_MAP = 'static_map';
+const STATIC_PARTICIPANTS = 'static_participants';
 const rethrow = async promise => {
     try {
         return await promise;
@@ -23,39 +29,60 @@ export default class StaticController {
         this.loadCharacter();
         this.loadChat();
         this.loadMap();
+        this.loadParticipants();
         BrowserWebSocket.subscribe({id: STATIC_CHAR, func: this.loadCharacter.bind(this)});
         BrowserWebSocket.subscribe({id: STATIC_CHAT, func: this.loadChat.bind(this)});
         BrowserWebSocket.subscribe({id: STATIC_MAP, func: this.loadMap.bind(this)});
     }
 
     static loadCharacter() {
-        const request = new NormalRequest();
-        request.path = '/loadCharacter';
-        this.character = rethrow(request.send());
+        if (!LoginController.isDM()) {
+            const request = new NormalRequest();
+            request.path = '/loadCharacter';
+            character = rethrow(request.send());
+        }
     }
 
     static loadMap() {
         const request = new NormalRequest();
         request.path = '/getMap';
-        this.map = rethrow(request.send());
+        map = rethrow(request.send());
     }
 
     static loadChat() {
         const request = new NormalRequest();
         request.path = '/loadMessages';
-        this.chat = rethrow(request.send());
+        chat = rethrow(request.send());
+    }
+
+    static loadParticipants() {
+        const request = new NormalRequest();
+        request.path = '/getGameParticipants';
+        participants = rethrow(request.send());
     }
 
     static getCharacter() {
-        return this.character;
+        if (LoginController.isDM()) {
+            return Promise.reject('DM has no character.');
+        } else {
+            return character;
+        }
+    }
+
+    static getParticipants() {
+        if (LoginController.isDM()) {
+            return participants;
+        } else {
+            return Promise.reject('Participants for DM only.');
+        }
     }
 
     static getMap() {
-        return this.map;
+        return map;
     }
 
     static getChat() {
-        return this.chat;
+        return chat;
     }
 
     update(id) {
@@ -77,10 +104,6 @@ export default class StaticController {
         if (position !== -1) subscribers.splice(position, 1);
     }
 }
-
-StaticController.character = null;
-StaticController.map = null;
-StaticController.chat = null;
 
 StaticController.CHARACTER = "Character";
 StaticController.MAP = "Map";

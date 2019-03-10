@@ -12,6 +12,7 @@ import DMTools from "./menu/dm/DMTools";
 import LockCombat from "../logic/requests/LockCombat";
 import NextTurn from "../logic/requests/NextTurn";
 import ModifiableText from "./menu/dm/ModifiableText";
+import StaticController from "../static/StaticController";
 
 const SUBSCRIBE_ID = 'map';
 
@@ -44,9 +45,7 @@ export default class CombatWindow extends React.Component {
     }
 
     async getMap() {
-        const request = new NormalRequest();
-        request.path = '/getMap';
-        let map = await request.send();
+        let map = await StaticController.getMap();
         this.setState({map: map})
     }
 
@@ -89,7 +88,6 @@ export default class CombatWindow extends React.Component {
                     onClick={() => this.clickObject(unit)}
                     key={unit.name}>{unit.img ? "" : unit.name}
                 </div>;
-                console.log(unit.initiative + ' ' + initiative);
                 if (unit.initiative === initiative) {
                     return <div id={rootScss.current_turn_indicator}>{obj}</div>
                 } else {
@@ -253,7 +251,6 @@ export default class CombatWindow extends React.Component {
                 break;
         }
         if (map) {
-            console.log(this.state.gridSizeInt + 40);
             return <div>
                 <div
                     className={rootScss.menu_page}
