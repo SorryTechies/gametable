@@ -38,7 +38,8 @@ export default class CombatWindow extends React.Component {
             statusBar: null,
             turn: null,
             gridSizeInt: SCALE_MAX,
-            scale: 1
+            scale: 1,
+            coloredGrid: []
         };
     }
 
@@ -100,8 +101,6 @@ export default class CombatWindow extends React.Component {
     }
 
     drawGrid() {
-        const initiative = this.state
-        console.log(this.state.gridSizeInt.toString() + "px");
         const arr = [];
         for (let i = 0; i < this.state.map.gridX; i++) {
             const innerArr = [];
@@ -153,12 +152,19 @@ export default class CombatWindow extends React.Component {
         }
     }
 
+    painCell(x, y) {
+        const index = this.state.coloredGrid.findIndex(item => item.x === x && item.y === y);
+        if (index >= 0) {
+
+        }
+    }
+
     clickTable(x, y) {
         const move = () => {
             this.state.objectSelected.x = x;
             this.state.objectSelected.y = y;
             this.saveSelected()
-                .then(() => this.getMap())
+                .then(this.getMap.bind(this))
                 .catch(error => console.log(error));
             this.setState({
                 selected: null,
@@ -168,6 +174,8 @@ export default class CombatWindow extends React.Component {
         if (LoginController.isDM()) {
             if (this.state.objectSelected) {
                 move();
+            } else {
+                this.painCell(x, y);
             }
         } else {
             // if (this.state.turn === )

@@ -38,7 +38,20 @@ export default class NormalRequest {
             request.onreadystatechange = (onEvent) => {
                 if (request.readyState === 4) {
                     if (request.status !== 200) {
-                        reject(request.status)
+                        try {
+                            const error = JSON.parse(request.response).error;
+                            if (error) {
+                                return reject(`Server returned error: ${error}`);
+                            } else {
+                                return reject('Unknown error.');
+                            }
+                        } catch (e) {
+                            if (request.response) {
+                                return reject(request.response);
+                            } else {
+                                return reject(`Error trying to send request. Code: ${request.status}!`);
+                            }
+                        }
                     }
                 }
             };

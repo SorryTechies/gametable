@@ -17,8 +17,8 @@ import CharacterWindow from "./character/CharacterWindow";
 import GroupWindow from "./group/GroupWindow";
 import CombatWindow from "./combat/CombatWindow";
 import PopupManager from "./popup/PopupManager";
-import * as config from "../common/config";
 import BrowserWebSocket from "./logic/ws/BrowserWebSocket";
+import StaticController from "./static/StaticController";
 
 let initialized = false;
 let popupIndex = 0;
@@ -69,6 +69,7 @@ class Login extends React.Component {
                 initialized = true;
                 LoginController.loginOk(result.isDM);
                 BrowserWebSocket.init(username);
+                StaticController.init();
                 this.forceUpdate();
             })
             .catch(e => {

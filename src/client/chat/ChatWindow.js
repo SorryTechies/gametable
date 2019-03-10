@@ -7,7 +7,7 @@ import Message from "./Message";
 import rootScss from '../../scss/root.scss';
 import NormalRequest from "../logic/NormalRequest";
 import LoginController from "../logic/LoginController";
-import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
+import StaticController from "../static/StaticController";
 
 let id = 0;
 
@@ -31,14 +31,13 @@ export default class ChatWindow extends React.Component {
     }
 
     componentDidMount() {
-        BrowserWebSocket.subscribe({id: SUBSCRIBE_ID, func: () => this.loadMessages().catch(e => console.log(e))});
+        StaticController.subscribe({id: StaticController.CHARACTER, func: this.loadMessages.bind(this)});
         this.loadMessages().catch(e => console.log(e));
-        if (LoginController.isDM())
-            this.getParticipants().catch(e => console.log(e));
+        if (LoginController.isDM()) this.getParticipants().catch(e => console.log(e));
     }
 
     componentWillUnmount() {
-        BrowserWebSocket.unSubscribe(SUBSCRIBE_ID);
+        StaticController.unSubscribe(SUBSCRIBE_ID);
     }
 
     async getParticipants() {
@@ -49,9 +48,7 @@ export default class ChatWindow extends React.Component {
     }
 
     async loadMessages() {
-        const request = new NormalRequest();
-        request.path = '/loadMessages';
-        let messages = await request.send();
+        let messages = await StaticController.getChat();
         messages.forEach(item => item.timestamp = new Date(Date.parse(item.timestamp)));
         messages.sort((item1, item2) => item2.timestamp - item1.timestamp);
         this.setState({messages: messages})
