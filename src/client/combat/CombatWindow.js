@@ -7,8 +7,8 @@ import rootScss from '../../scss/root.scss';
 import NormalRequest from "../logic/NormalRequest";
 import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import LoginController from "../logic/LoginController";
-import StatusMenu from "./menu/StatusMenu";
-import DMTools from "./menu/DMTools";
+import StatusMenu from "./menu/pc/StatusMenu";
+import DMTools from "./menu/dm/DMTools";
 import LockCombat from "../logic/requests/LockCombat";
 import NextTurn from "../logic/requests/NextTurn";
 
@@ -177,15 +177,16 @@ export default class CombatWindow extends React.Component {
         if (!LoginController.isDM()) return null;
         return <div>
             <button onClick={() => {
-                new LockCombat().send().catch(error => console.log(error))
+                new LockCombat().send().catch(error => console.log(error));
                 this.getMap().catch(error => console.log(error))
             }}>{this.state.map.initiativeLocked ? "UNLOCK" : "LOCK"}</button>
             {<div>
                 <div>
                     {this.state.map.objects.map(object => {
+                        const decoration = {textDecoration: object.initiative === this.state.map.currentInitiative ? "underline" : null};
                         return <div className={rootScss.dm_initiative}>
-                            <p className={rootScss.dm_initiative_text}>{object.name}</p>
-                            <p className={rootScss.dm_initiative_text} id={object.objectId}>{object.initiative}</p>
+                            <p style={decoration} className={rootScss.dm_initiative_text}>{object.name}</p>
+                            <p style={decoration} className={rootScss.dm_initiative_text} id={object.objectId}>{object.initiative}</p>
                         </div>
                     })}
                 </div>
