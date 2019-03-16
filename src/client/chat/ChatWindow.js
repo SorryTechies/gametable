@@ -8,10 +8,10 @@ import rootScss from '../../scss/root.scss';
 import NormalRequest from "../logic/NormalRequest";
 import LoginController from "../logic/LoginController";
 import StaticController from "../static/StaticController";
+import * as WsConstants from "../../common/WsConstants";
 
 let id = 0;
 
-const SUBSCRIBE_ID = 'message';
 
 export default class ChatWindow extends React.Component {
 
@@ -31,13 +31,13 @@ export default class ChatWindow extends React.Component {
     }
 
     componentDidMount() {
-        StaticController.subscribe({id: StaticController.CHARACTER, func: this.loadMessages.bind(this)});
+        StaticController.subscribe({id: WsConstants.STATIC_CHAT, func: this.loadMessages.bind(this)});
         this.loadMessages().catch(e => console.log(e));
         if (LoginController.isDM()) this.getParticipants().catch(e => console.log(e));
     }
 
     componentWillUnmount() {
-        StaticController.unSubscribe(SUBSCRIBE_ID);
+        StaticController.unSubscribe(WsConstants.STATIC_CHAT);
     }
 
     async getParticipants() {

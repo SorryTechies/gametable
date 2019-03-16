@@ -7,6 +7,7 @@ const config = require('../config/serverConfig');
 const ws = require('ws');
 const webSocketApp = require('../logic/express').getWebSocketExpress();
 const WebSocketUser = require('./WebSocketUser');
+const WsConstants = require('../../common/WsConstants');
 
 const wss = new ws.Server({
     server: webSocketApp,
@@ -41,7 +42,9 @@ class WebSocketServer {
     };
 }
 
-WebSocketServer.NEW_MESSAGE_NOTIFICATION = {notification: 'message'};
-WebSocketServer.RELOAD_MAP_MESSAGE = {notification: "map"};
+WebSocketServer.NEW_MESSAGE_NOTIFICATION = {notification: WsConstants.STATIC_CHAT};
+WebSocketServer.RELOAD_MAP_MESSAGE = {notification: WsConstants.STATIC_MAP};
+WebSocketServer.RELOAD_CHARACTER = {notification: WsConstants.STATIC_CHAR};
+WebSocketServer.RELOAD_PARTICIPANTS = {notification: WsConstants.STATIC_PARTICIPANTS};
 
 module.exports = WebSocketServer;

@@ -40,7 +40,11 @@ module.exports.findOrCreateByUserName = async (accessName, ws) => {
  * @param {Access} access
  * @return ?WebSocketUser
  */
-module.exports.findByUser = access => users.find(item => item.access === access);
+module.exports.findByUser = access => users.find(item => {
+    const search = item.access;
+    if (!search || !access) return false;
+    return search.id === access.id;
+});
 
 module.exports.sendToAll = message => {
     users.forEach(user => user.sendMessage(message));

@@ -13,6 +13,7 @@ import LockCombat from "../logic/requests/LockCombat";
 import NextTurn from "../logic/requests/NextTurn";
 import ModifiableText from "./menu/dm/ModifiableText";
 import StaticController from "../static/StaticController";
+import * as WsConstants from "../../common/WsConstants";
 
 const SUBSCRIBE_ID = 'map';
 
@@ -57,12 +58,12 @@ export default class CombatWindow extends React.Component {
     }
 
     componentDidMount() {
-        StaticController.subscribe({id: StaticController.MAP, func: this.getMap.bind(this)});
+        StaticController.subscribe({id: WsConstants.STATIC_MAP, func: this.getMap.bind(this)});
         this.getMap().catch(e => console.log(e));
     }
 
     componentWillUnmount() {
-        BrowserWebSocket.unSubscribe(SUBSCRIBE_ID);
+        BrowserWebSocket.unSubscribe(WsConstants.STATIC_MAP);
     }
 
     setCellContent(i, j) {

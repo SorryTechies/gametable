@@ -5,16 +5,14 @@
 import NormalRequest from "../logic/NormalRequest";
 import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import LoginController from "../logic/LoginController";
+import * as WsConstants from "../../common/WsConstants";
 
 let subscribers = [];
 let chat = null;
 let character = null;
 let map = null;
 let participants = null;
-const STATIC_CHAR = 'static_char';
-const STATIC_CHAT = 'static_chat';
-const STATIC_MAP = 'static_map';
-const STATIC_PARTICIPANTS = 'static_participants';
+
 const rethrow = async promise => {
     try {
         return await promise;
@@ -30,9 +28,9 @@ export default class StaticController {
         this.loadChat();
         this.loadMap();
         this.loadParticipants();
-        BrowserWebSocket.subscribe({id: STATIC_CHAR, func: this.loadCharacter.bind(this)});
-        BrowserWebSocket.subscribe({id: STATIC_CHAT, func: this.loadChat.bind(this)});
-        BrowserWebSocket.subscribe({id: STATIC_MAP, func: this.loadMap.bind(this)});
+        BrowserWebSocket.subscribe({id: WsConstants.STATIC_CHAR, func: this.update.bind(this, WsConstants.STATIC_CHAR)});
+        BrowserWebSocket.subscribe({id: WsConstants.STATIC_CHAT, func: this.update.bind(this, WsConstants.STATIC_CHAT)});
+        BrowserWebSocket.subscribe({id: WsConstants.STATIC_MAP, func: this.update.bind(this, WsConstants.STATIC_MAP)});
     }
 
     static loadCharacter() {
@@ -85,14 +83,18 @@ export default class StaticController {
         return chat;
     }
 
-    update(id) {
+    static async update(id) {
+        console.log(`Update from websocket with id '${id}'`);
         switch (id) {
-            case StaticController.CHARACTER:
-                return this.loadCharacter();
-            case StaticController.MAP:
-                return this.loadMap();
-            case StaticController.CHAT:
-                return this.loadChat();
+            case WsConstants.STATIC_CHAR:
+                await this.loadCharacter();
+                break;
+            case WsConstants.STATIC_MAP:
+                await this.loadMap();
+                break;
+            case WsConstants.STATIC_CHAT:
+                await this.loadChat();
+                break;
         }
         for (let i = 0; i < subscribers.length; i++) if (subscribers[i].id === id) subscribers[i].func();
     }
@@ -104,8 +106,4 @@ export default class StaticController {
         if (position !== -1) subscribers.splice(position, 1);
     }
 }
-
-StaticController.CHARACTER = "Character";
-StaticController.MAP = "Map";
-StaticController.CHAT = "Chat";
 
