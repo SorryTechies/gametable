@@ -23,21 +23,22 @@ export default class ModifiableText extends React.Component {
         if (this.state.currentlyModified && !this.subscribedForClick) {
             this.subscribedForClick = true;
             const id = this.refs[INPUT_REF].className;
-            StaticClicker.subscribe({id: id, func: this.onEvent.bind(this, id)});
+            StaticClicker.subscribe({id: id, func: this.onEvent.bind(this)});
+            this.refs[INPUT_REF].focus();
         }
     }
 
-    onEvent(id, event) {
+    onEvent(event) {
         if (event.target !== this.refs[INPUT_REF]) {
-            this.subscribedForClick = false;
-            StaticClicker.unSubscribe(id);
-            this.stopRedacting(this.refs[INPUT_REF].value);
+            this.stopRedacting();
         }
     }
 
-    stopRedacting(value) {
+    stopRedacting() {
+        this.subscribedForClick = false;
+        StaticClicker.unSubscribe(this.refs[INPUT_REF].className);
         this.setState({currentlyModified: false});
-        if (this.props.callback) this.props.callback(value);
+        if (this.props.callback) this.props.callback(this.refs[INPUT_REF].value);
     }
 
     render() {
@@ -48,6 +49,9 @@ export default class ModifiableText extends React.Component {
                 key={this.props.key}
                 value={this.state.value}
                 onChange={event => this.setState({value: event.target.value})}
+                onKeyPress={event => {
+                    if (event.key === 'Enter') this.stopRedacting();
+                }}
                 ref="input"
             />
         } else {
