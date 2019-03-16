@@ -11,6 +11,7 @@ const CombatMap = require("../../parse/classes/CombatMap");
 const Character = require("../../parse/classes/Character");
 const Game = require("../../parse/classes/Game");
 const WebSocketUser = require("../../wss/WebSocketServer");
+const express = require('../../logic/express').getServerExpress();
 
 /**
  * @param {Access} user
@@ -24,7 +25,24 @@ async function modifyInitiative(user, combObject) {
     return combObject.save();
 }
 
-require('../../logic/express').getServerExpress().post('/rollInitiative', (req, res) => {
+express.post('/setInitiative', (req, res) => {
+    const errorObj = new ErrorClass(res);
+    const user = req.access;
+    const body = req.body;
+    const combatObjectId = body.id;
+    const initiative = parseInt(body.initiative);
+    new Parse.Query(CombatObject).get(combatObjectId, CombatObject.USE_MK)
+        .then(combatObject => {
+            if (!combatObject) return Promise.reject(`No object with id ${combatObject}`);
+            if (!initiative || isNaN(initiative)) return Promise.reject(`Initiative is not set.`);
+            combatObject.initiative = initiative;
+            return combatObject.save();
+        })
+        .then(() => res.json({}))
+        .catch(error => errorObj.send(error))
+});
+
+express.post('/rollInitiative', (req, res) => {
     const errorObj = new ErrorClass(res);
     const user = req.access;
     const body = req.body;
@@ -41,7 +59,7 @@ require('../../logic/express').getServerExpress().post('/rollInitiative', (req, 
         .catch(error => errorObj.send(error))
 });
 
-require('../../logic/express').getServerExpress().post('/lockInitiative', (req, res) => {
+express.post('/lockInitiative', (req, res) => {
     const errorObj = new ErrorClass(res);
     const user = req.access;
     const body = req.body;
@@ -59,7 +77,7 @@ require('../../logic/express').getServerExpress().post('/lockInitiative', (req, 
         .catch(error => errorObj.send(error))
 });
 
-require('../../logic/express').getServerExpress().post('/nextTurn', (req, res) => {
+express.post('/nextTurn', (req, res) => {
     const errorObj = new ErrorClass(res);
     const user = req.access;
     const body = req.body;
