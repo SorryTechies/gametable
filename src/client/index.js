@@ -6,10 +6,6 @@ import * as React from "react";
 import * as ReactDom from "react-dom";
 import LoginController from "./logic/LoginController";
 import ChatWindow from "./chat/ChatWindow";
-import Roller from "./roller/Roller";
-
-const root = document.getElementById('root');
-
 import rootScss from '../scss/root.scss';
 import NormalRequest from "./logic/NormalRequest";
 import RollerWindow from "./roller/RollerWindow";
@@ -20,6 +16,8 @@ import PopupManager from "./popup/PopupManager";
 import BrowserWebSocket from "./logic/ws/BrowserWebSocket";
 import StaticController from "./static/StaticController";
 import StaticClicker from "./static/StaticClicker";
+
+const root = document.getElementById('root');
 
 let initialized = false;
 let popupIndex = 0;
@@ -36,23 +34,11 @@ class Login extends React.Component {
         this.state = {
             loginInput: "",
             currentPage: <ChatWindow/>,
-            additionMenuBar: null,
-            popups: []
+            additionMenuBar: null
         };
     }
 
-    createPopup(data) {
-        const popups = this.state.popups;
-        popups.push(<div key={popupIndex++} className={rootScss.popup}>{data}</div>);
-        this.setState({popups: popups});
-        setTimeout(() => {
-            popups.shift();
-            this.setState({popups: popups});
-        }, 5000)
-    }
-
     componentDidMount() {
-        PopupManager.init(this.createPopup.bind(this));
         LoginController.checkLoginInDB()
             .then(ans => {
                 if (ans) {
@@ -115,7 +101,7 @@ class Login extends React.Component {
                 />
             </div>
             {this.state.currentPage}
-            {this.state.popups}
+            <PopupManager/>
         </div>
     }
 

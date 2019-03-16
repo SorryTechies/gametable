@@ -114,6 +114,7 @@ export default class CharacterWindow extends React.Component {
                 ])
             )}</div> : null;
         const feats = character.feats.length > 0 ? <div><h2>Feats</h2>
+            <button>+</button>
             {generateTable(
                 character.feats.map(item => [
                     item.name,

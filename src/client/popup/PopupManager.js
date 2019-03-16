@@ -1,17 +1,40 @@
 /**
  * Created by LastBerserk on 29.01.2019.
  */
+import * as React from "react";
+import rootScss from '../../scss/root.scss';
 
-let pushCallback = null;
-const array = [];
+export default class PopupManager extends React.Component {
 
-export default class PopupManager {
+    constructor(props) {
+        super(props);
 
-    static init(ref) {
-        pushCallback = ref;
+        this.state = {
+            popups: []
+        }
     }
 
-    static push(data, time) {
-        if (pushCallback) pushCallback(data, time);
+    push(data) {
+        this.state.popups.unshift(data);
+        this.setState({popups: this.state.popups});
+        setTimeout(() => {
+            this.setState({popups: this.state.popups});
+        }, 5000);
+    }
+
+    componentDidMount() {
+        PopupManager.push = this.push.bind(this);
+    }
+
+    render() {
+        return <div>
+            {this.state.popups.map((data, index) => {
+                return <div key={index} style={{top: (50 + index * 50).toString() + "px"}}
+                            className={rootScss.popup}>{data}</div>
+            })}
+        </div>
     }
 }
+
+PopupManager.push = () => {
+};
