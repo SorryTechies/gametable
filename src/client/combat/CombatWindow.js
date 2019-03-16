@@ -14,6 +14,7 @@ import NextTurn from "../logic/requests/NextTurn";
 import ModifiableText from "./menu/dm/ModifiableText";
 import StaticController from "../static/StaticController";
 import * as WsConstants from "../../common/WsConstants";
+import SetInitiativeRequest from "../logic/requests/SetInitiativeRequest";
 
 const SUBSCRIBE_ID = 'map';
 
@@ -183,6 +184,10 @@ export default class CombatWindow extends React.Component {
         }
     }
 
+    setInitiative(id, initiative) {
+        new SetInitiativeRequest().send(id, initiative).catch(error => console.log(error));
+    }
+
     dmCombat() {
         if (!LoginController.isDM()) return null;
         return <div>
@@ -200,6 +205,7 @@ export default class CombatWindow extends React.Component {
                                 style={decoration}
                                 className={rootScss.dm_initiative_text}
                                 text={object.initiative}
+                                callback={this.setInitiative.bind(this, object.objectId)}
                             />
                         </div>
                     })}
