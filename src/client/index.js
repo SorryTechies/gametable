@@ -19,10 +19,14 @@ import CombatWindow from "./combat/CombatWindow";
 import PopupManager from "./popup/PopupManager";
 import BrowserWebSocket from "./logic/ws/BrowserWebSocket";
 import StaticController from "./static/StaticController";
+import StaticClicker from "./static/StaticClicker";
 
 let initialized = false;
 let popupIndex = 0;
 const MENU_REF = 'menu';
+
+const body = document.getElementsByTagName('body')[0];
+body.addEventListener('click', StaticClicker.handleClick);
 
 class Login extends React.Component {
 
