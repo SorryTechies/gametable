@@ -18,6 +18,7 @@ export default class PopupManager extends React.Component {
         this.state.popups.unshift(data);
         this.setState({popups: this.state.popups});
         setTimeout(() => {
+            this.state.popups.pop();
             this.setState({popups: this.state.popups});
         }, 5000);
     }
