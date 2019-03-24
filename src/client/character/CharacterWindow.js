@@ -12,6 +12,8 @@ import PopupManager from "../popup/PopupManager";
 import RollInitiative from "../logic/requests/RollInitiative";
 import DiceRoller from "../logic/DiceRoller";
 import StaticController from "../static/StaticController";
+import StaticViewManager from "../popup/StaticViewManager";
+import AddSpecialPopup from "./AddSpecialPopup";
 
 const CharacterHelper = require('../../common/CharacterDataHelper');
 
@@ -64,12 +66,13 @@ export default class CharacterWindow extends React.Component {
     }
 
     componentDidMount() {
-        this.loadCharacter().catch(e => console.log(e))
+        this.loadCharacter();
     }
 
-    async loadCharacter() {
-        let result = await StaticController.getCharacter();
-        this.setState({characterData: result});
+    loadCharacter() {
+        StaticController.getCharacter()
+            .then(character => this.setState({characterData: character}))
+            .catch(error => console.log(error));
     }
 
     async rollInitiative(row) {
@@ -113,8 +116,12 @@ export default class CharacterWindow extends React.Component {
                     item.range
                 ])
             )}</div> : null;
-        const feats = character.feats.length > 0 ? <div><h2>Feats</h2>
-            <button>+</button>
+        const feats = character.feats.length > 0 ? <div><h2>Specials</h2>
+            <button onClick={() => StaticViewManager.addView({
+                title: "Add special",
+                obj: <AddSpecialPopup/>
+            })}>+
+            </button>
             {generateTable(
                 character.feats.map(item => [
                     item.name,

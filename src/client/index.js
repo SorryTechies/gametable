@@ -16,6 +16,7 @@ import PopupManager from "./popup/PopupManager";
 import BrowserWebSocket from "./logic/ws/BrowserWebSocket";
 import StaticController from "./static/StaticController";
 import StaticClicker from "./static/StaticClicker";
+import StaticViewManager from "./popup/StaticViewManager";
 
 const root = document.getElementById('root');
 
@@ -102,6 +103,7 @@ class Login extends React.Component {
             </div>
             {this.state.currentPage}
             <PopupManager/>
+            <StaticViewManager/>
         </div>
     }
 

@@ -3,8 +3,8 @@
  */
 
 import * as React from "react";
-import rootScss from '../../../../scss/root.scss';
-import StaticClicker from "../../../static/StaticClicker";
+import rootScss from '../../scss/root.scss';
+import StaticClicker from "../static/StaticClicker";
 
 const INPUT_REF = "input";
 export default class ModifiableText extends React.Component {

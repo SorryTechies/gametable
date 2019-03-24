@@ -11,7 +11,7 @@ import StatusMenu from "./menu/pc/StatusMenu";
 import DMTools from "./menu/dm/DMTools";
 import LockCombat from "../logic/requests/LockCombat";
 import NextTurn from "../logic/requests/NextTurn";
-import ModifiableText from "./menu/dm/ModifiableText";
+import ModifiableText from "../elements/ModifiableText";
 import StaticController from "../static/StaticController";
 import * as WsConstants from "../../common/WsConstants";
 import SetInitiativeRequest from "../logic/requests/SetInitiativeRequest";

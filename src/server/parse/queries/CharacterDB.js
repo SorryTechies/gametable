@@ -12,7 +12,6 @@ module.exports.getCharacter = (access) =>
 module.exports.saveCharacter = async json => {
     json.className = Character.CLASS_NAME;
     /** @type Character */
-
     const character = await new Parse.Query(Character.CLASS_NAME).get(json.objectId, {useMasterKey: true});
     character.damage = json.damage;
     character.level = json.level;
@@ -20,6 +19,7 @@ module.exports.saveCharacter = async json => {
     character.spellSlots = json.spellSlots;
     character.spellSlotsUsed = json.spellSlotsUsed;
     character.data = json.data;
+    character.feats = json.feats;
     return character.save();
 };
 

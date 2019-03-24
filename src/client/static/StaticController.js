@@ -59,6 +59,7 @@ export default class StaticController {
         participants = rethrow(request.send());
     }
 
+    /** @return Promise */
     static getCharacter() {
         if (LoginController.isDM()) {
             return Promise.reject('DM has no character.');
@@ -67,6 +68,7 @@ export default class StaticController {
         }
     }
 
+    /** @return Promise */
     static getParticipants() {
         if (LoginController.isDM()) {
             return participants;
@@ -75,10 +77,12 @@ export default class StaticController {
         }
     }
 
+    /** @return Promise */
     static getMap() {
         return map;
     }
 
+    /** @return Promise */
     static getChat() {
         return chat;
     }
@@ -97,6 +101,14 @@ export default class StaticController {
                 break;
         }
         for (let i = 0; i < subscribers.length; i++) if (subscribers[i].id === id) subscribers[i].func();
+    }
+
+    static async saveCharacter() {
+        const request = new NormalRequest();
+        request.path = "/saveCharacter";
+        request.method = "POST";
+        const char = await this.getCharacter();
+        request.send(char).catch(error => console.log(error));
     }
 
     static subscribe = obj => subscribers.push(obj);

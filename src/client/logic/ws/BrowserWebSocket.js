@@ -69,7 +69,6 @@ export default class BrowserWebSocket {
     static unSubscribe(id) {
         const position = subscribers.findIndex(item => item.id === id);
         if (position !== -1) subscribers.splice(position, 1);
-        console.log(subscribers);
     }
 }
 
