@@ -99,6 +99,16 @@ class Character extends ParseSubclass {
         this.set(Character.FEATS_FIELD, value)
     }
 
+    /** @return {[Ability]} */
+    get items() {
+        return this.get(Character.ITEMS_FIELD)
+    }
+
+    /** @param {[Ability]} value */
+    set items(value) {
+        this.set(Character.ITEMS_FIELD, value)
+    }
+
     /**
      * @typedef {{}} StatBlock
      *
@@ -208,6 +218,7 @@ Character.DAMAGE_FIELD = 'damage';
 Character.LEVEL_FIELD = 'level';
 Character.SPELLS_FIELD = 'spells';
 Character.FEATS_FIELD = 'feats';
+Character.ITEMS_FIELD = 'items';
 Character.ABILITIES_FIELD = 'abilities';
 Character.SPELL_SLOTS_USED_FIELD = 'spellSlotsUsed';
 Character.DATA_FIELD = 'data';

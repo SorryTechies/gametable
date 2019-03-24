@@ -14,6 +14,7 @@ import DiceRoller from "../logic/DiceRoller";
 import StaticController from "../static/StaticController";
 import StaticViewManager from "../popup/StaticViewManager";
 import AddSpecialPopup from "./AddSpecialPopup";
+import AddItemPopup from "./AddItemPopup";
 
 const CharacterHelper = require('../../common/CharacterDataHelper');
 
@@ -128,6 +129,18 @@ export default class CharacterWindow extends React.Component {
                     item.description
                 ])
             )}</div> : null;
+        const items = character.items.length > 0 ? <div><h2>Items</h2>
+            <button onClick={() => StaticViewManager.addView({
+                title: "Add special",
+                obj: <AddItemPopup/>
+            })}>+
+            </button>
+            {generateTable(
+                character.items.map(item => [
+                    item.name,
+                    item.description
+                ])
+            )}</div> : null;
         return <div className={rootScss.menu_page}>
             <div id={rootScss.character_screen}>
                 <h2>{LoginController.getLogin()}</h2>
@@ -161,6 +174,7 @@ export default class CharacterWindow extends React.Component {
                 {abilities}
                 {feats}
                 {spells}
+                {items}
             </div>
         </div>
     }
