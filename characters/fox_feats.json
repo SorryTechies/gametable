@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Aspiring Bard",
+    "description": "You gain a +1 trait bonus to one category of Perform checks and a +2 trait bonus to any Knowledge (local) checks that deal with the local music scene."
+  },
+  {
+    "name": "Talented",
+    "description": "You gain a +1 trait bonus on checks with a single Perform skill (your choice), and all Perform skills are always class skills for you."
+  },
+  {
+    "name": "Unstable piro",
+    "description": "+6 to resistanse to fire, acid or poison"
+  },
+  {
+    "name": "Call Out",
+    "description": "As a standard action, you can make an Intimidate check against a hostile target within 30 feet that can clearly see and hear you. The DC of this check is equal to 10 + your opponent’s Hit Dice + its Wisdom modifier. If the target is trained in Sense Motive, the DC is instead equal to 10 + your opponent’s Sense Motive bonus, if higher. If you succeed at this check, the target enters a duel with you. The target cannot withdraw from the duel for 1 round + 1 round for every 5 by which the check beat the DC."
+  },
+  {
+    "name": "Exotic Weapon Proficiency",
+    "description": "You make attack rolls with the weapon normally."
+  },
+  {
+    "name": "Armor Proficiency, Medium",
+    "description": "You are skilled at wearing medium armor."
+  }
+]

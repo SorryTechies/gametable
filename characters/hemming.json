@@ -1,0 +1,166 @@
+{
+  "ac_bonus": 0,
+  "attack_bonus": 4,
+  "temp_hp": 0,
+  "stats": {
+    "strength": 14,
+    "dexterity": 18,
+    "constitution": 16,
+    "intelligence": 12,
+    "wisdom": 16,
+    "charisma": 6
+  },
+  "saves": {
+    "fortitude": 4,
+    "reflex": 4,
+    "will": 1,
+    "f_modifier": 0,
+    "r_modifier": 0,
+    "w_modifier": 0
+  },
+  "skills": {
+    "acrobatics": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "appraise": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "bluff": {
+      "classSkill": false,
+      "modifier": 1,
+      "points": 0
+    },
+    "climb": {
+      "classSkill": true,
+      "modifier": 0,
+      "points": 1
+    },
+    "diplomacy": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "disable_device": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "disguise": {
+      "classSkill": true,
+      "modifier": 2,
+      "points": 4
+    },
+    "escape_artist": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "fly": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "heal": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "intimidate": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "knowledge_arcana": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "knowledge_dungeneering": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "knowledge_engineering": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 4
+    },
+    "knowledge_local": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 4
+    },
+    "knowledge_nature": {
+      "classSkill": true,
+      "modifier": 0,
+      "points": 1
+    },
+    "knowledge_planes": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "knowledge_religion": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "linguistics": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 0
+    },
+    "perception": {
+      "classSkill": true,
+      "modifier": 0,
+      "points": 4
+    },
+    "ride": {
+      "classSkill": true,
+      "modifier": 0,
+      "points": 0
+    },
+    "sense_motive": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 4
+    },
+    "sleight_of_hand": {
+      "classSkill": false,
+      "modifier": 1,
+      "points": 2
+    },
+    "spellcraft": {
+      "classSkill": true,
+      "modifier": 0,
+      "points": 0
+    },
+    "stealth": {
+      "classSkill": true,
+      "modifier": 0,
+      "points": 4
+    },
+    "survival": {
+      "classSkill": true,
+      "modifier": 0,
+      "points": 4
+    },
+    "swim": {
+      "classSkill": true,
+      "modifier": 0,
+      "points": 0
+    },
+    "use_magic_device": {
+      "classSkill": false,
+      "modifier": 0,
+      "points": 4
+    }
+  },
+  "attacks": [],
+  "abilities": [],
+  "spells": []
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Improved Unarmed Strike",
+    "description": "You are considered to be armed even when unarmed—you do not provoke attacks of opportunity when you attack foes while unarmed. Your unarmed strikes can deal lethal or nonlethal damage, at your choice."
+  },
+  {
+    "name": "Improved Grapple",
+    "description": "You do not provoke an attack of opportunity when performing a grapple combat maneuver. In addition, you receive a +2 bonus on checks made to grapple a foe. You also receive a +2 bonus to your Combat Maneuver Defense whenever an opponent tries to grapple you."
+  },
+  {
+    "name": "Deadly Grappler",
+    "description": "You have learned to leverage a grappling creature’s weight against it. While you’re grappled, attacks you make against the grappler using armor spikes, a light or one-handed weapon, a natural weapon, or an unarmed strike deal damage as if the strike or weapon were one size category larger than it actually is."
+  },
+  {
+    "name": "Raging Grappler",
+    "description": "As long as you are raging, whenever you succeed at a check to start a grapple, you can choose to deal damage as if you had also succeeded at a check to maintain the grapple. In addition, while raging, whenever you succeed at a combat maneuver check to maintain a grapple, you can choose to give yourself, the target of your grapple, or both the prone condition as a free action while continuing to maintain the grapple."
+  },
+  {
+    "name": "Smasher",
+    "description": "Once per rage, whenever the barbarian makes an attack against an unattended object or a sunder combat maneuver, she can ignore the object’s hardness. This ability must be used before the attack roll or sunder check is made."
+  }
+]
