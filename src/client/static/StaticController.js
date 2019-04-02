@@ -108,7 +108,9 @@ export default class StaticController {
         request.path = "/saveCharacter";
         request.method = "POST";
         const char = await this.getCharacter();
-        request.send(char).catch(error => console.log(error));
+        request.send(char)
+            .then(this.loadCharacter)
+            .catch(error => console.log(error));
     }
 
     static subscribe = obj => subscribers.push(obj);

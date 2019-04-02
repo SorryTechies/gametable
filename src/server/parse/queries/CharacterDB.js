@@ -20,6 +20,9 @@ module.exports.saveCharacter = async json => {
     character.spellSlotsUsed = json.spellSlotsUsed;
     character.data = json.data;
     character.feats = json.feats;
+    character.items = json.items;
+    character.abilities = json.abilities;
+    character.spells = json.spells;
     return character.save();
 };
 

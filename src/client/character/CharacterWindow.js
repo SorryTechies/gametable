@@ -13,8 +13,10 @@ import RollInitiative from "../logic/requests/RollInitiative";
 import DiceRoller from "../logic/DiceRoller";
 import StaticController from "../static/StaticController";
 import StaticViewManager from "../popup/StaticViewManager";
-import AddSpecialPopup from "./AddSpecialPopup";
-import AddItemPopup from "./AddItemPopup";
+import AddSpecialPopup from "./popups/AddSpecialPopup";
+import AddItemPopup from "./popups/AddItemPopup";
+import AddAbilityPopup from "./popups/AddAbilityPopup";
+import AddSpellPopup from "./popups/AddSpellPopup";
 
 const CharacterHelper = require('../../common/CharacterDataHelper');
 
@@ -83,6 +85,92 @@ export default class CharacterWindow extends React.Component {
         await request.send(diceRoller.calculatedResult);
     }
 
+    renderItems() {
+        const character = this.state.characterData;
+        let items = null;
+        if (character.items && character.items.length > 0) {
+            items = generateTable(character.items.map(item => [
+                item.name,
+                item.description
+            ]))
+        }
+        return <div><h2>Items</h2>
+            <button onClick={() => StaticViewManager.addView({
+                title: "Add item",
+                obj: <AddItemPopup/>
+            })}>+
+            </button>
+            {items}
+        </div>;
+    }
+
+    renderFeats() {
+        const character = this.state.characterData;
+        let feats = null;
+        if (character.feats && character.feats.length > 0) {
+            feats = generateTable(
+                character.feats.map(item => [
+                    item.name,
+                    item.description
+                ])
+            );
+        }
+        return <div><h2>Specials</h2>
+            <button onClick={() => StaticViewManager.addView({
+                title: "Add special",
+                obj: <AddSpecialPopup/>
+            })}>+
+            </button>
+            {feats}
+        </div>;
+    }
+
+    renderSpells() {
+        const character = this.state.characterData;
+        let spells = null;
+        if (character.spells && character.spells.length > 0) {
+            spells = generateTable(
+                character.spells.map(item => [
+                    item.name,
+                    item.description,
+                    item.target,
+                    item.range
+                ])
+            );
+        }
+        return <div><h2>Spells</h2>
+            <button onClick={() => StaticViewManager.addView({
+                title: "Add spell",
+                obj: <AddSpellPopup/>
+            })}>+
+            </button>
+            {spells}
+        </div>;
+    }
+
+    renderAbilities() {
+        const character = this.state.characterData;
+        let abilities = null;
+        if (character.abilities && character.abilities.length > 0) {
+            abilities = generateTable(
+                character.abilities.map(item => [
+                    item.name,
+                    item.description,
+                    item.target,
+                    item.range
+                ])
+            );
+        }
+        return <div><h2>Abilities</h2>
+            <button onClick={() => StaticViewManager.addView({
+                title: "Add ability",
+                obj: <AddAbilityPopup/>
+            })}>+
+            </button>
+            {abilities}
+        </div>;
+    }
+
     render() {
         if (!this.state.characterData) return null;
         /** @type {Character} */
@@ -97,50 +185,6 @@ export default class CharacterWindow extends React.Component {
             wis: CharacterHelper.calculateStatBonus(data.stats.wisdom),
             cha: CharacterHelper.calculateStatBonus(data.stats.charisma)
         };
-        const attacks = this.state.attacks.length > 0 ? <div><h2>Attacks</h2>
-            {generateTable(PathfinderCharacterCore.getWeaponCore(data, this.state.attacks))}</div> : null;
-        const abilities = character.abilities.length > 0 ? <div><h2>Abilities</h2>
-            {generateTable(
-                character.abilities.map(item => [
-                    item.name,
-                    item.description,
-                    item.target,
-                    item.range
-                ])
-            )}</div> : null;
-        const spells = character.spells.length > 0 ? <div><h2>Spells</h2>
-            {generateTable(
-                character.spells.map(item => [
-                    item.name,
-                    item.description,
-                    item.target,
-                    item.range
-                ])
-            )}</div> : null;
-        const feats = character.feats.length > 0 ? <div><h2>Specials</h2>
-            <button onClick={() => StaticViewManager.addView({
-                title: "Add special",
-                obj: <AddSpecialPopup/>
-            })}>+
-            </button>
-            {generateTable(
-                character.feats.map(item => [
-                    item.name,
-                    item.description
-                ])
-            )}</div> : null;
-        const items = character.items.length > 0 ? <div><h2>Items</h2>
-            <button onClick={() => StaticViewManager.addView({
-                title: "Add special",
-                obj: <AddItemPopup/>
-            })}>+
-            </button>
-            {generateTable(
-                character.items.map(item => [
-                    item.name,
-                    item.description
-                ])
-            )}</div> : null;
         return <div className={rootScss.menu_page}>
             <div id={rootScss.character_screen}>
                 <h2>{LoginController.getLogin()}</h2>
@@ -170,11 +214,10 @@ export default class CharacterWindow extends React.Component {
                         (row) => PopupManager.push(new DiceRoller().roll(row[3]).toString(row[0]))
                     )
                 }
-                {attacks}
-                {abilities}
-                {feats}
-                {spells}
-                {items}
+                {this.renderAbilities()}
+                {this.renderFeats()}
+                {this.renderSpells()}
+                {this.renderItems()}
             </div>
         </div>
     }

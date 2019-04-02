@@ -2,19 +2,24 @@
  * Created by LastBerserk on 23.03.2019.
  */
 import * as React from "react";
-import rootScss from '../../scss/root.scss';
-import InputWithDefaultText from "../elements/InputWithDefaultText";
-import TextAreaWithDefaultText from "../elements/TextAreaWithDefaultText";
-import StaticController from "../static/StaticController";
+import rootScss from '../../../scss/root.scss';
+import InputWithDefaultText from "../../elements/InputWithDefaultText";
+import TextAreaWithDefaultText from "../../elements/TextAreaWithDefaultText";
+import StaticController from "../../static/StaticController";
 
-export default class AddItemPopup extends React.Component {
-
+export default class AddAbilityPopup extends React.Component {
     constructor(props) {
         super(props);
         this.obj1 = {
             value: null
         };
         this.obj2 = {
+            value: null
+        };
+        this.obj3 = {
+            value: null
+        };
+        this.obj4 = {
             value: null
         };
     }
@@ -31,6 +36,24 @@ export default class AddItemPopup extends React.Component {
                 />
             </div>
             <div>
+                <InputWithDefaultText
+                    className={rootScss.new_special_title}
+                    text=""
+                    defaultText="Allowed target..."
+                    retObj={this.obj3}
+
+                />
+            </div>
+            <div>
+                <InputWithDefaultText
+                    className={rootScss.new_special_title}
+                    text=""
+                    defaultText="Range..."
+                    retObj={this.obj4}
+
+                />
+            </div>
+            <div>
                 <TextAreaWithDefaultText
                     className={rootScss.new_special_desc}
                     text=""
@@ -43,9 +66,12 @@ export default class AddItemPopup extends React.Component {
                     if (this.obj1.value && this.obj2.value) {
                         StaticController.getCharacter()
                             .then(character => {
-                                character.items.push({
+                                if (!character.abilities) character.abilities = [];
+                                character.abilities.push({
                                     name: this.obj1.value,
-                                    description: this.obj2.value
+                                    description: this.obj2.value,
+                                    target: this.obj3.value,
+                                    range: this.obj4.value
                                 });
                                 return StaticController.saveCharacter();
                             })

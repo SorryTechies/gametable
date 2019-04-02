@@ -2,12 +2,12 @@
  * Created by LastBerserk on 23.03.2019.
  */
 import * as React from "react";
-import rootScss from '../../scss/root.scss';
-import InputWithDefaultText from "../elements/InputWithDefaultText";
-import TextAreaWithDefaultText from "../elements/TextAreaWithDefaultText";
-import StaticController from "../static/StaticController";
+import rootScss from '../../../scss/root.scss';
+import InputWithDefaultText from "../../elements/InputWithDefaultText";
+import TextAreaWithDefaultText from "../../elements/TextAreaWithDefaultText";
+import StaticController from "../../static/StaticController";
 
-export default class AddSpecialPopup extends React.Component {
+export default class AddItemPopup extends React.Component {
 
     constructor(props) {
         super(props);
@@ -43,7 +43,8 @@ export default class AddSpecialPopup extends React.Component {
                     if (this.obj1.value && this.obj2.value) {
                         StaticController.getCharacter()
                             .then(character => {
-                                character.feats.push({
+                                if (!character.items) character.items = [];
+                                character.items.push({
                                     name: this.obj1.value,
                                     description: this.obj2.value
                                 });
