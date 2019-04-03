@@ -17,6 +17,7 @@ import AddSpecialPopup from "./popups/AddSpecialPopup";
 import AddItemPopup from "./popups/AddItemPopup";
 import AddAbilityPopup from "./popups/AddAbilityPopup";
 import AddSpellPopup from "./popups/AddSpellPopup";
+import Transformer from "../logic/Transformer";
 
 const CharacterHelper = require('../../common/CharacterDataHelper');
 
@@ -91,7 +92,7 @@ export default class CharacterWindow extends React.Component {
         if (character.items && character.items.length > 0) {
             items = generateTable(character.items.map(item => [
                 item.name,
-                item.description
+                Transformer.insertRollTag(item.description)
             ]))
         }
         return <div><h2>Items</h2>
@@ -111,7 +112,7 @@ export default class CharacterWindow extends React.Component {
             feats = generateTable(
                 character.feats.map(item => [
                     item.name,
-                    item.description
+                    Transformer.insertRollTag(item.description)
                 ])
             );
         }
@@ -132,7 +133,7 @@ export default class CharacterWindow extends React.Component {
             spells = generateTable(
                 character.spells.map(item => [
                     item.name,
-                    item.description,
+                    Transformer.insertRollTag(item.description),
                     item.target,
                     item.range
                 ])
@@ -155,7 +156,7 @@ export default class CharacterWindow extends React.Component {
             abilities = generateTable(
                 character.abilities.map(item => [
                     item.name,
-                    item.description,
+                    Transformer.insertRollTag(item.description),
                     item.target,
                     item.range
                 ])

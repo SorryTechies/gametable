@@ -10,7 +10,8 @@ export default class DiceRoller {
 
     roll(bonus) {
         this.lastResult = Math.floor(1 + Math.random() * parseInt(this.max - 1));
-        this.calculatedResult = this.lastResult + bonus;
+        this.calculatedResult = this.lastResult;
+        if (bonus) this.calculatedResult += bonus;
         return this;
     }
 
