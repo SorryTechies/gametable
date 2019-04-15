@@ -2,43 +2,44 @@
  * Created by LastBerserk on 10.04.2019.
  */
 
+import CoreController from "./CoreController";
 export default class BaseElement {
     constructor(id, instancetag, default_value) {
-        const class_id = id;
-        const instance_tag = instancetag;
-        this.getID = () => class_id;
-        this.getInstanceTag = () => instance_tag;
-        let value;
+        if (typeof id !== "string" || typeof instancetag !== "string") throw Error("Class id and tag should be string.");
+        this.class_id = id;
+        this.instance_tag = instancetag;
         if (typeof default_value === "number") {
-            value = default_value;
+            this.defaultValue = default_value;
         } else {
-            value = 0;
+            this.defaultValue = 0;
         }
-        let result = 0;
-        let dependencies = [];
-        let dependents = [];
-        this.addDependency = dependency => {
-            if (dependencies.find(item =>
-                item.getID() === dependency.getID() && item.getInstanceTag() === dependency.getInstanceTag()))
-                dependencies.push(dependency);
-        };
-        this.addDependent = dependency => {
-            if (dependents.find(item =>
-                item.getID() === dependency.getID() && item.getInstanceTag() === dependency.getInstanceTag()))
-                dependents.push(dependency);
-        };
+        CoreController.addElement(this);
+
         /**
          * @type function
-         * @return [ElementDependency]
+         * @return number
          */
-        this.getDependencies = () => dependencies;
-        /**
-         * @type function
-         * @return [ElementDependency]
-         */
-        this.getDependents = () => dependents;
-        this.setResult = newValue => result = newValue;
-        this.getDefaultValue = value;
-        this.getCalculatedValue = result;
+        this.calculate = () => {
+        };
+        /** @type [BaseModifier] */
+        this.modifiers = [];
+        this.result = 0;
+
+        /** @type [BaseElement] */
+        this.dependents = [];
+    }
+
+    addModifiers() {
+        this.modifiers.forEach(item => item.calculate());
+    }
+
+    recalculate() {
+        this.calculate();
+        this.addModifiers();
+    }
+
+    recalculateTree() {
+        this.recalculate();
+        this.dependents.forEach(dependent => this.recalculateTree());
     }
 }

@@ -3,10 +3,9 @@
  */
 
 export default class ElementDependency {
-    constructor(classID, tag, func) {
-        if (!classID || !tag) throw Error('ClassID or tag does not exist.');
-        this.classID = classID;
-        this.tag = tag;
+    constructor(instance, func) {
+        /** @type BaseElement */
+        this.instance = instance;
         if (typeof func === "function") {
             this.func = func;
         } else {

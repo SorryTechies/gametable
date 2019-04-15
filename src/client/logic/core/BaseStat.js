@@ -4,8 +4,8 @@
 
 import BaseElement from "./BaseElement";
 export default class BaseStat extends BaseElement {
-    constructor(instancetag) {
-        super(BaseStat.CLASS_ID, instancetag);
+    constructor(instance_tag) {
+        super(BaseStat.CLASS_ID, instance_tag);
     }
 }
 
