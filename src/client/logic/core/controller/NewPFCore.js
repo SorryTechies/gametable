@@ -7,9 +7,12 @@ import StatElement from "../StatElement";
 import StatModifierElement from "../StatModifierElement";
 import SkillElement from "../SkillElement";
 import AdditionalElement from "../AdditionalElement";
+import ArmorComponent from "../ArmorComponentElement";
+import ArmorRatingsElement from "../ArmorRatingsElement";
 
 function createStat(tag) {
-    return new StatElement(tag);
+    const stat = new StatElement(tag);
+    stat.defaultValue = 10;
 }
 
 function createStatModifier(tag) {
@@ -64,18 +67,74 @@ function createSkills() {
     createSkill(NewPFCore.SKILLS.SWIM, NewPFCore.STATS.DEX);
 }
 
+function createArmorComponent() {
+    const dexModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, NewPFCore.STATS.DEX);
+    const dodge = new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.DODGE);
+    dodge.calculate = () => dodge.result = dexModifier.result;
+    new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.DEFLECT);
+    new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.ARMOR);
+    new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.SIZE);
+}
+
 function createAdditional() {
-    const armor = new AdditionalElement(NewPFCore.ADDITIONALS.ARMOR_PENALTY);
+    new AdditionalElement(NewPFCore.ADDITIONALS.ARMOR_PENALTY);
+}
+
+function createArmorValues() {
+    const dodge = CoreController.getDependency(ArmorComponent.CLASS_ID, NewPFCore.ARMOR_COMPONENTS.DODGE);
+    const deflect = CoreController.getDependency(ArmorComponent.CLASS_ID, NewPFCore.ARMOR_COMPONENTS.DEFLECT);
+    const armor = CoreController.getDependency(ArmorComponent.CLASS_ID, NewPFCore.ARMOR_COMPONENTS.ARMOR);
+    const full = new ArmorRatingsElement(NewPFCore.ARMOR_RATING.FULL);
+    full.defaultValue = 10;
+    full.calculate = () => full.result = full.defaultValue + dodge.result + deflect.result + armor.result;
+    full.priority = 9;
+
+    const ff = new ArmorRatingsElement(NewPFCore.ARMOR_RATING.FLAT_FOOTED);
+    ff.defaultValue = 10;
+    ff.calculate = () => {
+        const result = ff.defaultValue + deflect.result + armor.result;
+        if (full.result > result) {
+            ff.result = result;
+        } else {
+            ff.result = full.result;
+        }
+    };
+
+    const to = new ArmorRatingsElement(NewPFCore.ARMOR_RATING.TOUCH);
+    to.defaultValue = 10;
+    to.calculate = () => {
+        const result = to.defaultValue + dodge.result + deflect.result;
+        if (full.result > result) {
+            to.result = result;
+        } else {
+            to.result = full.result;
+        }
+    };
+
+    const ffto = new ArmorRatingsElement(NewPFCore.ARMOR_RATING.FLAT_TOUCH);
+    ffto.defaultValue = 10;
+    ffto.calculate = () => {
+        const result = full.result = full.defaultValue + deflect.result;
+        if (full.result > result) {
+            ffto.result = result;
+        } else {
+            ffto.result = full.result;
+        }
+    };
+}
+
+function createStats() {
+    createStatAndModifier(NewPFCore.STATS.STR);
+    createStatAndModifier(NewPFCore.STATS.DEX);
+    createStatAndModifier(NewPFCore.STATS.CON);
+    createStatAndModifier(NewPFCore.STATS.INT);
+    createStatAndModifier(NewPFCore.STATS.WIS);
+    createStatAndModifier(NewPFCore.STATS.CHA);
 }
 
 export default class NewPFCore {
     static init() {
-        createStatAndModifier(NewPFCore.STATS.STR);
-        createStatAndModifier(NewPFCore.STATS.DEX);
-        createStatAndModifier(NewPFCore.STATS.CON);
-        createStatAndModifier(NewPFCore.STATS.INT);
-        createStatAndModifier(NewPFCore.STATS.WIS);
-        createStatAndModifier(NewPFCore.STATS.CHA);
+        createStats();
         CoreController.setPriorityForCategory(StatElement.CLASS_ID, 0);
         CoreController.setPriorityForCategory(StatModifierElement.CLASS_ID, 1);
 
@@ -84,10 +143,11 @@ export default class NewPFCore {
 
         createSkills();
         CoreController.setPriorityForCategory(SkillElement.CLASS_ID, 3);
-    }
 
-    static calculateAll() {
+        createArmorComponent();
+        CoreController.setPriorityForCategory(ArmorComponent.CLASS_ID, 3);
 
+        createArmorValues();
     }
 }
 
@@ -129,7 +189,8 @@ NewPFCore.ADDITIONALS = {
 NewPFCore.ARMOR_COMPONENTS = {
     DODGE: "dodge",
     ARMOR: "armor",
-    DEFLECT: "deflect"
+    DEFLECT: "deflect",
+    SIZE: "size"
 };
 
 NewPFCore.ARMOR_RATING = {
@@ -138,3 +199,4 @@ NewPFCore.ARMOR_RATING = {
     TOUCH: "ta",
     FLAT_TOUCH: "fft"
 };
+
