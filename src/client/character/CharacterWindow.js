@@ -32,13 +32,12 @@ function generateTable(rows, callbacks) {
         const th = [];
         for (let j = 0; j < rows[i].length; j++) {
             let data = rows[i][j];
-            if (data === undefined) data = "";
+            if (data === undefined || data === null) data = "";
             th.push(<th
                 key={i.toString() + '_' + j.toString()}
                 className={data.length && data.length > 20 ? rootScss.big_box : null}
                 onClick={Array.isArray(callbacks) ? () => callbacks[j](data) : null}
             >{data}</th>);
-
         }
         tr.push(<tr
             key={i}
