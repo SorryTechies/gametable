@@ -17,6 +17,9 @@ import BrowserWebSocket from "./logic/ws/BrowserWebSocket";
 import StaticController from "./static/StaticController";
 import StaticClicker from "./static/StaticClicker";
 import StaticViewManager from "./popup/StaticViewManager";
+import NewPFCore from "./logic/core/controller/NewPFCore";
+import CoreController from "./logic/core/controller/CoreController";
+import StatElement from "./logic/core/StatElement";
 
 const root = document.getElementById('root');
 
@@ -128,3 +131,8 @@ class Login extends React.Component {
 }
 
 ReactDom.render(<Login/>, root);
+
+NewPFCore.init();
+const dex = CoreController.getDependency(StatElement.CLASS_ID, NewPFCore.STATS.DEX);
+dex.defaultValue = 20;
+CoreController.recalculateAll();
