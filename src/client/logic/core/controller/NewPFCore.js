@@ -28,7 +28,7 @@ function createSkills() {
     const armorPenalty = CoreController.getDependency(AdditionalElement.CLASS_ID, NewPFCore.ADDITIONALS.ARMOR_PENALTY);
     if (!armorPenalty) throw Error(`Can't find additional with id ArmorPenalty.`);
     const createSkill = (tag, stat) => {
-        const skill =  new SkillElement(tag, stat);
+        const skill = new SkillElement(tag, stat);
         const statModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, stat);
         if (!statModifier) throw Error(`Can't find stat with id '${statModifier}'.`);
         statModifier.dependents.push(skill);
@@ -69,15 +69,28 @@ function createSkills() {
 
 function createArmorComponent() {
     const dexModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, NewPFCore.STATS.DEX);
+    const size = CoreController.getDependency(AdditionalElement.CLASS_ID, NewPFCore.ADDITIONALS.SIZE);
     const dodge = new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.DODGE);
-    dodge.calculate = () => dodge.result = dexModifier.result;
+    dodge.calculate = () => dodge.result = dexModifier.result - size.result;
     new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.DEFLECT);
     new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.ARMOR);
-    new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.SIZE);
 }
 
 function createAdditional() {
-    new AdditionalElement(NewPFCore.ADDITIONALS.ARMOR_PENALTY);
+    const dexModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, NewPFCore.STATS.DEX);
+    const strModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, NewPFCore.STATS.STR);
+    const size = new AdditionalElement(NewPFCore.ADDITIONALS.SIZE);
+    size.priority = 0;
+    const armorPen = new AdditionalElement(NewPFCore.ADDITIONALS.ARMOR_PENALTY);
+    armorPen.priority = 0;
+    const bab = new AdditionalElement(NewPFCore.ADDITIONALS.BASE_ATTACK_BONUS);
+    bab.priority = 0;
+    const cmb = new AdditionalElement(NewPFCore.ADDITIONALS.COMBAT_MANEUVER_BONUS);
+    cmb.priority = 2;
+    cmb.calculate = () => cmb.result = bab.result + strModifier.result + size.result;
+    const cmd = new AdditionalElement(NewPFCore.ADDITIONALS.COMBAT_MANEUVER_DEFENSE);
+    cmd.priority = 2;
+    cmd.calculate = () => cmb.result = bab.result + strModifier.result + dexModifier.result + size.result;
 }
 
 function createArmorValues() {
@@ -139,7 +152,6 @@ export default class NewPFCore {
         CoreController.setPriorityForCategory(StatModifierElement.CLASS_ID, 1);
 
         createAdditional();
-        CoreController.setPriorityForCategory(AdditionalElement.CLASS_ID, 0);
 
         createSkills();
         CoreController.setPriorityForCategory(SkillElement.CLASS_ID, 3);
@@ -183,14 +195,17 @@ NewPFCore.SKILLS = {
 };
 
 NewPFCore.ADDITIONALS = {
-    ARMOR_PENALTY: "a_penalty"
+    ARMOR_PENALTY: "a_penalty",
+    BASE_ATTACK_BONUS: "bab",
+    COMBAT_MANEUVER_BONUS: "cmb",
+    COMBAT_MANEUVER_DEFENSE: "cmd",
+    SIZE: "size"
 };
 
 NewPFCore.ARMOR_COMPONENTS = {
     DODGE: "dodge",
     ARMOR: "armor",
-    DEFLECT: "deflect",
-    SIZE: "size"
+    DEFLECT: "deflect"
 };
 
 NewPFCore.ARMOR_RATING = {
@@ -198,5 +213,8 @@ NewPFCore.ARMOR_RATING = {
     FLAT_FOOTED: "ff",
     TOUCH: "ta",
     FLAT_TOUCH: "fft"
+};
+NewPFCore.loadCharacter = characterData => {
+    characterData.forEach(data => CoreController.getDependency(data.chategory, data.tag).defaultValue = data.value);
 };
 
