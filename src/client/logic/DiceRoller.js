@@ -79,8 +79,8 @@ export default class DiceRoller {
     }
 
     roll() {
-        this.rollWithoutBonuses = Math.floor(1 + Math.random() * parseInt(this.max - 1));
-        if (this.canBeCritical && (this.criticalRange <= this.rollWithoutBonuses)) this.isCritical = true;
+        this.rollWithoutBonuses = Math.round(1 + Math.random() * parseInt(this.max - 1));
+        if (this.canBeCritical && (this.max === 20 && this.criticalRange <= this.rollWithoutBonuses)) this.isCritical = true;
         if (this.canFail && this.rollWithoutBonuses === 1) this.rollFailed = true;
         if (this.nextRoll) {
             this.nextRoll.isCritical = this.isCritical;
