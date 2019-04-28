@@ -28,7 +28,6 @@ const body = document.getElementsByTagName('body')[0];
 body.addEventListener('click', StaticClicker.handleClick);
 
 class Login extends React.Component {
-
     constructor(pops) {
         super(pops);
 
@@ -37,21 +36,6 @@ class Login extends React.Component {
             currentPage: <ChatWindow/>,
             additionMenuBar: null
         };
-
-        const YTNode = document.getElementById("ytapi");
-        YTNode.onload = setTimeout.bind(null, () => {
-            this.player = new YT.Player('youtube_player', {
-                videoId: 'POHscfRZty8',
-                loop: true,
-                events: {
-                    onReady: e => {
-                        e.target.mute();
-                        e.target.playVideo();
-                        //e.target.seekTo(42);
-                    }
-                }
-            });
-        }, 1000);
     }
 
     componentDidMount() {
@@ -88,7 +72,6 @@ class Login extends React.Component {
     renderMain() {
         return <div>
             <div className={`${rootScss.static_element} ${rootScss.menu}`}>
-                <button onClick={() => {this.player.unMute()}}/>
                 <button onClick={() => {
                     this.setState({currentPage: <ChatWindow/>})
                 }}>Chat
