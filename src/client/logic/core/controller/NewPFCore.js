@@ -11,6 +11,8 @@ import ArmorComponent from "../ArmorComponentElement";
 import ArmorRatingsElement from "../ArmorRatingsElement";
 import BaseModifier from "../base/BaseModifier";
 import * as PFCoreConstants from "../../../../common/PFCoreConstants";
+import RuleCore from "./RuleCore";
+import CoreCharacter from "./CoreCharacter";
 
 function createStat(tag) {
     const stat = new StatElement(tag);
@@ -147,20 +149,17 @@ function createStats() {
     createStatAndModifier(PFCoreConstants.STATS.CHA);
 }
 
-export default class NewPFCore {
-    static init() {
+export default class PFRuleCore extends RuleCore {
+    static createCharacter() {
+        const character = new CoreCharacter();
         createStats();
-        CoreController.setPriorityForCategory(StatElement.CLASS_ID, 0);
-        CoreController.setPriorityForCategory(StatModifierElement.CLASS_ID, 1);
-
+        character.setPriorityForCategory(StatElement.CLASS_ID, 0);
+        character.setPriorityForCategory(StatModifierElement.CLASS_ID, 1);
         createAdditional();
-
         createSkills();
-        CoreController.setPriorityForCategory(SkillElement.CLASS_ID, 3);
-
+        character.setPriorityForCategory(SkillElement.CLASS_ID, 3);
         createArmorComponent();
-        CoreController.setPriorityForCategory(ArmorComponent.CLASS_ID, 3);
-
+        character.setPriorityForCategory(ArmorComponent.CLASS_ID, 3);
         createArmorValues();
     }
 
@@ -186,16 +185,16 @@ export default class NewPFCore {
 /**
  * @param {Character} characterData
  */
-NewPFCore.processCharacter = characterData => {
+PFRuleCore.processCharacter = characterData => {
     let core = characterData.core;
     let modifiers = characterData.modifiers;
     if (!core) core = [];
     if (!modifiers) modifiers = [];
-    core.forEach(coreValue => NewPFCore.setCore(coreValue));
-    modifiers.forEach(modifier => NewPFCore.addModifier(modifier));
+    core.forEach(coreValue => PFRuleCore.setCore(coreValue));
+    modifiers.forEach(modifier => PFRuleCore.addModifier(modifier));
 };
 
-NewPFCore.recalculate = () => {
+PFRuleCore.recalculate = () => {
     CoreController.recalculateAll();
 };
 

@@ -44,5 +44,3 @@ server.listen(config.SERVER_PORT);
 // require('./temp/CreateObjects');
 
 require('./wss/WebSocketServer');
-
-require('./scripts/TransformCharactersToFlexCore');
