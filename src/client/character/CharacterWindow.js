@@ -18,6 +18,7 @@ import AddItemPopup from "./popups/AddItemPopup";
 import AddAbilityPopup from "./popups/AddAbilityPopup";
 import AddSpellPopup from "./popups/AddSpellPopup";
 import Transformer from "../logic/Transformer";
+import NewPFCore from "../logic/core/controller/NewPFCore";
 
 const CharacterHelper = require('../../common/CharacterDataHelper');
 
@@ -75,7 +76,12 @@ export default class CharacterWindow extends React.Component {
 
     loadCharacter() {
         StaticController.getCharacter()
-            .then(character => this.setState({characterData: character}))
+            .then(character => {
+                NewPFCore.init();
+                NewPFCore.processCharacter(character);
+                NewPFCore.recalculate();
+                this.setState({characterData: character})
+            })
             .catch(error => console.log(error));
     }
 

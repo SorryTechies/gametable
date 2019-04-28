@@ -131,8 +131,3 @@ class Login extends React.Component {
 }
 
 ReactDom.render(<Login/>, root);
-
-NewPFCore.init();
-const dex = CoreController.getDependency(StatElement.CLASS_ID, NewPFCore.STATS.DEX);
-dex.defaultValue = 20;
-CoreController.recalculateAll();

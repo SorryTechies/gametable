@@ -9,6 +9,8 @@ import SkillElement from "../SkillElement";
 import AdditionalElement from "../AdditionalElement";
 import ArmorComponent from "../ArmorComponentElement";
 import ArmorRatingsElement from "../ArmorRatingsElement";
+import BaseModifier from "../base/BaseModifier";
+import * as PFCoreConstants from "../../../../common/PFCoreConstants";
 
 function createStat(tag) {
     const stat = new StatElement(tag);
@@ -25,7 +27,7 @@ function createStatAndModifier(tag) {
 }
 
 function createSkills() {
-    const armorPenalty = CoreController.getDependency(AdditionalElement.CLASS_ID, NewPFCore.ADDITIONALS.ARMOR_PENALTY);
+    const armorPenalty = CoreController.getDependency(AdditionalElement.CLASS_ID, PFCoreConstants.ADDITIONALS.ARMOR_PENALTY);
     if (!armorPenalty) throw Error(`Can't find additional with id ArmorPenalty.`);
     const createSkill = (tag, stat) => {
         const skill = new SkillElement(tag, stat);
@@ -33,10 +35,10 @@ function createSkills() {
         if (!statModifier) throw Error(`Can't find stat with id '${statModifier}'.`);
         statModifier.dependents.push(skill);
         switch (stat) {
-            case NewPFCore.SKILLS.ACROBATICS:
-            case NewPFCore.SKILLS.CLIMB:
-            case NewPFCore.SKILLS.DISGUISE:
-            case NewPFCore.SKILLS.SLEIGHT_OF_HANDS:
+            case PFCoreConstants.SKILLS.ACROBATICS:
+            case PFCoreConstants.SKILLS.CLIMB:
+            case PFCoreConstants.SKILLS.DISGUISE:
+            case PFCoreConstants.SKILLS.SLEIGHT_OF_HANDS:
                 skill.calculate = () => skill.result = statModifier.result + armorPenalty.result;
                 break;
             default:
@@ -44,65 +46,65 @@ function createSkills() {
         }
     };
 
-    createSkill(NewPFCore.SKILLS.ACROBATICS, NewPFCore.STATS.DEX);
-    createSkill(NewPFCore.SKILLS.APPRISE, NewPFCore.STATS.INT);
-    createSkill(NewPFCore.SKILLS.CLIMB, NewPFCore.STATS.STR);
-    createSkill(NewPFCore.SKILLS.DISGUISE, NewPFCore.STATS.WIS);
-    createSkill(NewPFCore.SKILLS.DIPLOMACY, NewPFCore.STATS.CHA);
-    createSkill(NewPFCore.SKILLS.INTIMIDATE, NewPFCore.STATS.CHA);
+    createSkill(PFCoreConstants.SKILLS.ACROBATICS, PFCoreConstants.STATS.DEX);
+    createSkill(PFCoreConstants.SKILLS.APPRISE, PFCoreConstants.STATS.INT);
+    createSkill(PFCoreConstants.SKILLS.CLIMB, PFCoreConstants.STATS.STR);
+    createSkill(PFCoreConstants.SKILLS.DISGUISE, PFCoreConstants.STATS.WIS);
+    createSkill(PFCoreConstants.SKILLS.DIPLOMACY, PFCoreConstants.STATS.CHA);
+    createSkill(PFCoreConstants.SKILLS.INTIMIDATE, PFCoreConstants.STATS.CHA);
 
-    createSkill(NewPFCore.SKILLS.KNOWLEDGE_ARCANA, NewPFCore.STATS.INT);
-    createSkill(NewPFCore.SKILLS.KNOWLEDGE_ALCHEMY, NewPFCore.STATS.INT);
-    createSkill(NewPFCore.SKILLS.KNOWLEDGE_DUNGEONEERING, NewPFCore.STATS.INT);
-    createSkill(NewPFCore.SKILLS.KNOWLEDGE_ENGINEERING, NewPFCore.STATS.INT);
-    createSkill(NewPFCore.SKILLS.KNOWLEDGE_GEOGRAPHY, NewPFCore.STATS.INT);
-    createSkill(NewPFCore.SKILLS.KNOWLEDGE_LOCAL, NewPFCore.STATS.INT);
-    createSkill(NewPFCore.SKILLS.KNOWLEDGE_NATURE, NewPFCore.STATS.INT);
-    createSkill(NewPFCore.SKILLS.KNOWLEDGE_RELIGION, NewPFCore.STATS.INT);
-    createSkill(NewPFCore.SKILLS.KNOWLEDGE_PLANES, NewPFCore.STATS.INT);
+    createSkill(PFCoreConstants.SKILLS.KNOWLEDGE_ARCANA, PFCoreConstants.STATS.INT);
+    createSkill(PFCoreConstants.SKILLS.KNOWLEDGE_ALCHEMY, PFCoreConstants.STATS.INT);
+    createSkill(PFCoreConstants.SKILLS.KNOWLEDGE_DUNGEONEERING, PFCoreConstants.STATS.INT);
+    createSkill(PFCoreConstants.SKILLS.KNOWLEDGE_ENGINEERING, PFCoreConstants.STATS.INT);
+    createSkill(PFCoreConstants.SKILLS.KNOWLEDGE_GEOGRAPHY, PFCoreConstants.STATS.INT);
+    createSkill(PFCoreConstants.SKILLS.KNOWLEDGE_LOCAL, PFCoreConstants.STATS.INT);
+    createSkill(PFCoreConstants.SKILLS.KNOWLEDGE_NATURE, PFCoreConstants.STATS.INT);
+    createSkill(PFCoreConstants.SKILLS.KNOWLEDGE_RELIGION, PFCoreConstants.STATS.INT);
+    createSkill(PFCoreConstants.SKILLS.KNOWLEDGE_PLANES, PFCoreConstants.STATS.INT);
 
-    createSkill(NewPFCore.SKILLS.PERCEPTION, NewPFCore.STATS.WIS);
-    createSkill(NewPFCore.SKILLS.SLEIGHT_OF_HANDS, NewPFCore.STATS.DEX);
-    createSkill(NewPFCore.SKILLS.STEALTH, NewPFCore.STATS.DEX);
-    createSkill(NewPFCore.SKILLS.SWIM, NewPFCore.STATS.DEX);
+    createSkill(PFCoreConstants.SKILLS.PERCEPTION, PFCoreConstants.STATS.WIS);
+    createSkill(PFCoreConstants.SKILLS.SLEIGHT_OF_HANDS, PFCoreConstants.STATS.DEX);
+    createSkill(PFCoreConstants.SKILLS.STEALTH, PFCoreConstants.STATS.DEX);
+    createSkill(PFCoreConstants.SKILLS.SWIM, PFCoreConstants.STATS.DEX);
 }
 
 function createArmorComponent() {
-    const dexModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, NewPFCore.STATS.DEX);
-    const size = CoreController.getDependency(AdditionalElement.CLASS_ID, NewPFCore.ADDITIONALS.SIZE);
-    const dodge = new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.DODGE);
+    const dexModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, PFCoreConstants.STATS.DEX);
+    const size = CoreController.getDependency(AdditionalElement.CLASS_ID, PFCoreConstants.ADDITIONALS.SIZE);
+    const dodge = new ArmorComponent(PFCoreConstants.ARMOR_COMPONENTS.DODGE);
     dodge.calculate = () => dodge.result = dexModifier.result - size.result;
-    new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.DEFLECT);
-    new ArmorComponent(NewPFCore.ARMOR_COMPONENTS.ARMOR);
+    new ArmorComponent(PFCoreConstants.ARMOR_COMPONENTS.DEFLECT);
+    new ArmorComponent(PFCoreConstants.ARMOR_COMPONENTS.ARMOR);
 }
 
 function createAdditional() {
-    const dexModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, NewPFCore.STATS.DEX);
-    const strModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, NewPFCore.STATS.STR);
-    const size = new AdditionalElement(NewPFCore.ADDITIONALS.SIZE);
+    const dexModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, PFCoreConstants.STATS.DEX);
+    const strModifier = CoreController.getDependency(StatModifierElement.CLASS_ID, PFCoreConstants.STATS.STR);
+    const size = new AdditionalElement(PFCoreConstants.ADDITIONALS.SIZE);
     size.priority = 0;
-    const armorPen = new AdditionalElement(NewPFCore.ADDITIONALS.ARMOR_PENALTY);
+    const armorPen = new AdditionalElement(PFCoreConstants.ADDITIONALS.ARMOR_PENALTY);
     armorPen.priority = 0;
-    const bab = new AdditionalElement(NewPFCore.ADDITIONALS.BASE_ATTACK_BONUS);
+    const bab = new AdditionalElement(PFCoreConstants.ADDITIONALS.BASE_ATTACK_BONUS);
     bab.priority = 0;
-    const cmb = new AdditionalElement(NewPFCore.ADDITIONALS.COMBAT_MANEUVER_BONUS);
+    const cmb = new AdditionalElement(PFCoreConstants.ADDITIONALS.COMBAT_MANEUVER_BONUS);
     cmb.priority = 2;
     cmb.calculate = () => cmb.result = bab.result + strModifier.result + size.result;
-    const cmd = new AdditionalElement(NewPFCore.ADDITIONALS.COMBAT_MANEUVER_DEFENSE);
+    const cmd = new AdditionalElement(PFCoreConstants.ADDITIONALS.COMBAT_MANEUVER_DEFENSE);
     cmd.priority = 2;
     cmd.calculate = () => cmb.result = bab.result + strModifier.result + dexModifier.result + size.result;
 }
 
 function createArmorValues() {
-    const dodge = CoreController.getDependency(ArmorComponent.CLASS_ID, NewPFCore.ARMOR_COMPONENTS.DODGE);
-    const deflect = CoreController.getDependency(ArmorComponent.CLASS_ID, NewPFCore.ARMOR_COMPONENTS.DEFLECT);
-    const armor = CoreController.getDependency(ArmorComponent.CLASS_ID, NewPFCore.ARMOR_COMPONENTS.ARMOR);
-    const full = new ArmorRatingsElement(NewPFCore.ARMOR_RATING.FULL);
+    const dodge = CoreController.getDependency(ArmorComponent.CLASS_ID, PFCoreConstants.ARMOR_COMPONENTS.DODGE);
+    const deflect = CoreController.getDependency(ArmorComponent.CLASS_ID, PFCoreConstants.ARMOR_COMPONENTS.DEFLECT);
+    const armor = CoreController.getDependency(ArmorComponent.CLASS_ID, PFCoreConstants.ARMOR_COMPONENTS.ARMOR);
+    const full = new ArmorRatingsElement(PFCoreConstants.ARMOR_RATING.FULL);
     full.defaultValue = 10;
     full.calculate = () => full.result = full.defaultValue + dodge.result + deflect.result + armor.result;
     full.priority = 9;
 
-    const ff = new ArmorRatingsElement(NewPFCore.ARMOR_RATING.FLAT_FOOTED);
+    const ff = new ArmorRatingsElement(PFCoreConstants.ARMOR_RATING.FLAT_FOOTED);
     ff.defaultValue = 10;
     ff.calculate = () => {
         const result = ff.defaultValue + deflect.result + armor.result;
@@ -113,7 +115,7 @@ function createArmorValues() {
         }
     };
 
-    const to = new ArmorRatingsElement(NewPFCore.ARMOR_RATING.TOUCH);
+    const to = new ArmorRatingsElement(PFCoreConstants.ARMOR_RATING.TOUCH);
     to.defaultValue = 10;
     to.calculate = () => {
         const result = to.defaultValue + dodge.result + deflect.result;
@@ -124,7 +126,7 @@ function createArmorValues() {
         }
     };
 
-    const ffto = new ArmorRatingsElement(NewPFCore.ARMOR_RATING.FLAT_TOUCH);
+    const ffto = new ArmorRatingsElement(PFCoreConstants.ARMOR_RATING.FLAT_TOUCH);
     ffto.defaultValue = 10;
     ffto.calculate = () => {
         const result = full.result = full.defaultValue + deflect.result;
@@ -137,12 +139,12 @@ function createArmorValues() {
 }
 
 function createStats() {
-    createStatAndModifier(NewPFCore.STATS.STR);
-    createStatAndModifier(NewPFCore.STATS.DEX);
-    createStatAndModifier(NewPFCore.STATS.CON);
-    createStatAndModifier(NewPFCore.STATS.INT);
-    createStatAndModifier(NewPFCore.STATS.WIS);
-    createStatAndModifier(NewPFCore.STATS.CHA);
+    createStatAndModifier(PFCoreConstants.STATS.STR);
+    createStatAndModifier(PFCoreConstants.STATS.DEX);
+    createStatAndModifier(PFCoreConstants.STATS.CON);
+    createStatAndModifier(PFCoreConstants.STATS.INT);
+    createStatAndModifier(PFCoreConstants.STATS.WIS);
+    createStatAndModifier(PFCoreConstants.STATS.CHA);
 }
 
 export default class NewPFCore {
@@ -161,60 +163,39 @@ export default class NewPFCore {
 
         createArmorValues();
     }
+
+    /** @param {CharacterCoreT} data */
+    static setCore(data) {
+        if (!data) return;
+        const core = CoreController.getDependency(data.category, data.tag);
+        if (!core) return;
+        core.defaultValue = data.value;
+    }
+
+    /** @param {CharacterModifierT} data */
+    static addModifier(data) {
+        if (!data) return;
+        const core = CoreController.getDependency(data.category, data.tag);
+        if (!core) return;
+        const modifier = new BaseModifier(id, core);
+        modifier.value = data.value;
+    }
 }
 
-NewPFCore.STATS = {
-    STR: "str",
-    DEX: "dex",
-    CON: "con",
-    INT: "int",
-    WIS: "wis",
-    CHA: "cha"
+
+/**
+ * @param {Character} characterData
+ */
+NewPFCore.processCharacter = characterData => {
+    let core = characterData.core;
+    let modifiers = characterData.modifiers;
+    if (!core) core = [];
+    if (!modifiers) modifiers = [];
+    core.forEach(coreValue => NewPFCore.setCore(coreValue));
+    modifiers.forEach(modifier => NewPFCore.addModifier(modifier));
 };
 
-NewPFCore.SKILLS = {
-    ACROBATICS: "acrob",
-    APPRISE: "appr",
-    CLIMB: "climb",
-    DISGUISE: "disg",
-    DIPLOMACY: "dipl",
-    INTIMIDATE: "inti",
-    KNOWLEDGE_ARCANA: "k_arc",
-    KNOWLEDGE_ALCHEMY: "k_alc",
-    KNOWLEDGE_DUNGEONEERING: "k_dun",
-    KNOWLEDGE_ENGINEERING: "k_eng",
-    KNOWLEDGE_GEOGRAPHY: "k_geo",
-    KNOWLEDGE_LOCAL: "k_loc",
-    KNOWLEDGE_NATURE: "k_nat",
-    KNOWLEDGE_RELIGION: "k_rel",
-    KNOWLEDGE_PLANES: "k_pla",
-    PERCEPTION: "perc",
-    SLEIGHT_OF_HANDS: "soh",
-    STEALTH: "stealth",
-    SWIM: "swim"
-};
-
-NewPFCore.ADDITIONALS = {
-    ARMOR_PENALTY: "a_penalty",
-    BASE_ATTACK_BONUS: "bab",
-    COMBAT_MANEUVER_BONUS: "cmb",
-    COMBAT_MANEUVER_DEFENSE: "cmd",
-    SIZE: "size"
-};
-
-NewPFCore.ARMOR_COMPONENTS = {
-    DODGE: "dodge",
-    ARMOR: "armor",
-    DEFLECT: "deflect"
-};
-
-NewPFCore.ARMOR_RATING = {
-    FULL: "ac",
-    FLAT_FOOTED: "ff",
-    TOUCH: "ta",
-    FLAT_TOUCH: "fft"
-};
-NewPFCore.loadCharacter = characterData => {
-    characterData.forEach(data => CoreController.getDependency(data.chategory, data.tag).defaultValue = data.value);
+NewPFCore.recalculate = () => {
+    CoreController.recalculateAll();
 };
 

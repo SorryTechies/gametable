@@ -209,6 +209,41 @@ class Character extends ParseSubclass {
     set data(data) {
         this.set(Character.DATA_FIELD, data)
     }
+
+    /**
+     * @typedef {{}} CharacterCoreT
+     * @property {string} category
+     * @property {string} tag
+     * @property {number} value
+     */
+
+    /**
+     * @typedef {{}} CharacterModifierT
+     * @property {string} category
+     * @property {string} tag
+     * @property {string} modifierID
+     * @property {number} value
+     */
+
+    /** @return {[CharacterCoreT]} */
+    get core() {
+        return this.get(Character.CORE_FIELD)
+    }
+
+    /** @param {[CharacterCoreT]} data */
+    set core(data) {
+        this.set(Character.CORE_FIELD, data)
+    }
+
+    /** @return {[CharacterModifierT]} */
+    get modifiers() {
+        return this.get(Character.MODIFIER_FIELD)
+    }
+
+    /** @param {[CharacterModifierT]} data */
+    set modifiers(data) {
+        this.set(Character.MODIFIER_FIELD, data)
+    }
 }
 
 Character.CLASS_NAME = 'Character';
@@ -223,5 +258,11 @@ Character.ABILITIES_FIELD = 'abilities';
 Character.SPELL_SLOTS_USED_FIELD = 'spellSlotsUsed';
 Character.DATA_FIELD = 'data';
 Character.SPELL_SLOTS_FIELD = 'spellSlots';
+
+/**
+ * Flexible core fields
+ */
+Character.CORE_FIELD = 'core';
+Character.MODIFIER_FIELD = 'modifier';
 
 module.exports = Character;
