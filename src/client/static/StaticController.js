@@ -12,6 +12,7 @@ let chat = null;
 let character = null;
 let map = null;
 let participants = null;
+let music = null;
 
 const rethrow = async promise => {
     try {
@@ -28,9 +29,11 @@ export default class StaticController {
         this.loadChat();
         this.loadMap();
         this.loadParticipants();
+        this.loadMusic();
         BrowserWebSocket.subscribe({id: WsConstants.STATIC_CHAR, func: this.update.bind(this, WsConstants.STATIC_CHAR)});
         BrowserWebSocket.subscribe({id: WsConstants.STATIC_CHAT, func: this.update.bind(this, WsConstants.STATIC_CHAT)});
         BrowserWebSocket.subscribe({id: WsConstants.STATIC_MAP, func: this.update.bind(this, WsConstants.STATIC_MAP)});
+        BrowserWebSocket.subscribe({id: WsConstants.STATIC_MUSIC, func: this.update.bind(this, WsConstants.STATIC_MUSIC)});
     }
 
     static loadCharacter() {
@@ -59,6 +62,12 @@ export default class StaticController {
         participants = rethrow(request.send());
     }
 
+    static loadMusic() {
+        const request = new NormalRequest();
+        request.path = '/getPlaybackStatus';
+        music = rethrow(request.send());
+    }
+
     /** @return Promise */
     static getCharacter() {
         if (LoginController.isDM()) {
@@ -85,6 +94,11 @@ export default class StaticController {
     /** @return Promise */
     static getChat() {
         return chat;
+    }
+
+    /** @return Promise */
+    static getMusic() {
+        return music;
     }
 
     static async update(id) {
