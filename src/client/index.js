@@ -17,6 +17,7 @@ import BrowserWebSocket from "./logic/ws/BrowserWebSocket";
 import StaticController from "./static/StaticController";
 import StaticClicker from "./static/StaticClicker";
 import StaticViewManager from "./popup/StaticViewManager";
+import DMConsole from "./dm/DMConsole";
 
 const root = document.getElementById('root');
 
@@ -91,6 +92,11 @@ class Login extends React.Component {
                     this.setState({currentPage: <CombatWindow/>})
                 }}>Combat
                 </button>
+                {LoginController.isDM() ?
+                    <button onClick={() => {
+                        this.setState({currentPage: <DMConsole/>})
+                    }}>Stats</button> :
+                    null}
                 <img id={rootScss.logout}
                      src="https://img.icons8.com/ios/50/000000/delete-sign.png"
                      onClick={() => {
