@@ -4,6 +4,7 @@
 
 import * as React from "react";
 import rootScss from '../../scss/root.scss';
+import YoutubeControllPanel from "./youtube/YoutubeControlPanel";
 
 export default class DMConsole extends React.Component {
 
@@ -17,7 +18,7 @@ export default class DMConsole extends React.Component {
 
     render() {
         return <div className={rootScss.menu_page}>
-
+            <YoutubeControllPanel/>
         </div>
     }
 }

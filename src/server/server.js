@@ -36,6 +36,7 @@ require('./express/post/changeCharacter');
 require('./express/get/getMap');
 require('./express/post/saveMapChanges');
 require('./express/post/postInitiative');
+require('./express/get/getPlaybackStatus');
 server.listen(config.SERVER_PORT);
 
 // require('./temp/CreateCharacters');
