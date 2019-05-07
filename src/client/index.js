@@ -18,6 +18,7 @@ import StaticController from "./static/StaticController";
 import StaticClicker from "./static/StaticClicker";
 import StaticViewManager from "./popup/StaticViewManager";
 import DMConsole from "./dm/DMConsole";
+import YoutubePlayer from "./logic/YoutubePlayer";
 
 const root = document.getElementById('root');
 
@@ -109,6 +110,7 @@ class Login extends React.Component {
             {this.state.currentPage}
             <PopupManager/>
             <StaticViewManager/>
+            <YoutubePlayer/>
         </div>
     }
 
