@@ -18,11 +18,7 @@ export default class Timer extends React.Component {
     }
 
     componentDidMount() {
-        if (this.playback) {
-            clearInterval(this.playback);
-            this.playback = null;
-        }
-        setInterval(() => this.setState({playbackTime: this.state.playbackTime + 1}), 1000);
+        this.playback = setInterval(() => this.setState({playbackTime: this.state.playbackTime + 1}), 1000);
     }
 
     componentWillUnmount() {
