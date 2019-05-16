@@ -6,8 +6,6 @@ import IndexedDDB from "../db/IndexedDDB";
 let login = null;
 let isLogined = false;
 let isDM = false;
-let character = null;
-let combatObject = null;
 
 export default class LoginController {
 

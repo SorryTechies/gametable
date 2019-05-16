@@ -4,7 +4,9 @@
 import * as React from "react";
 import rootScss from '../../scss/root.scss';
 import StaticController from "../static/StaticController";
+import StaticSettings from "../static/StaticSettings";
 import * as WsConstants from "../../common/WsConstants";
+import PopupManager from "../popup/PopupManager";
 
 const Y_API = "ytapi";
 const Y_PLAYER = "youtube_player";
@@ -70,7 +72,14 @@ export default class YoutubePlayer extends React.Component {
     }
 
     componentDidMount() {
-        this.playVideo().catch(e => console.error(e));
+        this.playVideo().catch(e => PopupManager.push(JSON.stringify(e)));
+        StaticSettings.subscribe({
+            name: StaticSettings.VOLUME, func: volume => {
+                if (this.player) {
+                    this.player.setVolume(volume);
+                }
+            }
+        });
         StaticController.subscribe({id: WsConstants.STATIC_MUSIC, func: this.playVideo.bind(this)});
     }
 
@@ -81,7 +90,7 @@ export default class YoutubePlayer extends React.Component {
                 <button onClick={() => {
                     if (this.player) {
                         this.player.unMute();
-                        this.player.setVolume(MUSIC_VOLUME);
+                        this.player.setVolume(StaticSettings.getVolume());
                     }
                     this.setState({permissionGranted: true});
                 }}>

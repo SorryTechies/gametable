@@ -50,13 +50,15 @@
   z-index: 10;
 }
 
+$menu_height: 40px;
+
 .menu {
   top: 0;
-  height: 30px;
+  height: $menu_height;
 
   button {
-    width: 80px;
-    height: 30px;
+    width: 60px;
+    height: $menu_height;
     vertical-align: top;
   }
 }
@@ -66,12 +68,12 @@
   left: 0;
   overflow-x: auto;
   overflow-y: auto;
-  padding-top: 40px;
+  padding-top: calc(#{$menu_height} + 10px);
 }
 
 #logout {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   vertical-align: top
 }
 
@@ -187,9 +189,9 @@
   position: fixed;
   left: 0;
   top: 0;
-  margin: 40px 0 0;
+  margin: calc(#{$menu_height} + 10px) 0 0;
   width: 100%;
-  height: calc(100% - 40px);
+  height: calc(100% - #{$menu_height} - 10px);
   background-color: antiquewhite;
 
   #global_popup_menu {
