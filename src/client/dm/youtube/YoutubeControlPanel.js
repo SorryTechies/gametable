@@ -64,17 +64,27 @@ export default class YoutubeControlPanel extends React.Component {
         </div>
     }
 
+    stopPlayback() {
+        const request = new NormalRequest();
+        request.path = "/postPlaybackStatus";
+        request.method = "POST";
+        request.send({
+            currentTime: -1
+        });
+        this.getPlaybackStatus();
+    }
+
     render() {
         return <div className={rootScss.menu_page}>
             <div>
                 <input type="text"
                        onChange={event => this.setState({musicInput: event.target.value})}
                        value={this.state.musicInput}/>
-                <input type="text"
+                <input type="number"
                        onChange={event => this.setState({musicTime: this.parseTime(event.target.value)})}
                        value={this.state.musicTime}/>
-                <button onClick={this.postPlayback.bind(this)}>Play
-                </button>
+                <button onClick={this.postPlayback.bind(this)}>Play</button>
+                <button onClick={this.stopPlayback.bind(this)}>Stop</button>
                 <div>
                     {this.isCurrentlyPlaying() ? this.renderPlayback() : <div>Nothing playing currently...</div>}
                 </div>

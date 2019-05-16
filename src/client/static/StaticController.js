@@ -113,6 +113,9 @@ export default class StaticController {
             case WsConstants.STATIC_CHAT:
                 await this.loadChat();
                 break;
+            case WsConstants.STATIC_MUSIC:
+                await this.loadMusic();
+                break;
         }
         for (let i = 0; i < subscribers.length; i++) if (subscribers[i].id === id) subscribers[i].func();
     }

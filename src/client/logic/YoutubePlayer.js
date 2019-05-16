@@ -4,52 +4,86 @@
 import * as React from "react";
 import rootScss from '../../scss/root.scss';
 import StaticController from "../static/StaticController";
+import * as WsConstants from "../../common/WsConstants";
 
 const Y_API = "ytapi";
 const Y_PLAYER = "youtube_player";
+const MUSIC_VOLUME = 2;
 export default class YoutubePlayer extends React.Component {
     constructor(props) {
         super(props);
         this.player = null;
         this.state = {
-            isMuted:  false
+            isMuted: false,
+            permissionGranted: true
         }
     }
 
-    async createPlayer() {
+    async playVideo() {
         const youtubeData = await StaticController.getMusic();
+        this.stopVideo();
         if (!youtubeData.id) return;
-        const YTNode = document.getElementById(Y_API);
-        setTimeout(() => {
-            console.log("Youtube node loaded.");
-            this.player = new YT.Player(Y_PLAYER, {
-                videoId: youtubeData.id,
-                loop: true,
-                events: {
-                    onReady: e => {
-                        console.log("Youtube player loaded.");
-                        const w = e.target;
-                        w.mute();
-                        w.seekTo(youtubeData.currentTime);
-                        w.playVideo();
-                        this.setState({isMuted : true});
-                    }
+        console.log("Playing new video.");
+        if (youtubeData.currentTime !== -1) this.createPlayer(youtubeData);
+    }
+
+    setUpVideo(youtubeData) {
+        if (this.player) {
+            this.player.seekTo(youtubeData.currentTime);
+            this.player.playVideo();
+        }
+    }
+
+    createPlayer(youtubeData) {
+        const ytObject = {
+            videoId: youtubeData.id,
+            startSeconds: youtubeData.currentTime,
+            events: {
+                onReady: e => {
+                    console.log("Youtube player loaded.");
+                    this.player.mute();
+                    this.setState({permissionGranted: false});
+                    this.setUpVideo(youtubeData);
                 }
-            });
-        }, 2000);
+            }
+        };
+        if (this.player) {
+            this.player.loadVideoById(ytObject);
+        } else {
+            setTimeout(() => {
+                console.log("Youtube node loaded.");
+                try {
+                    this.player = new YT.Player(Y_PLAYER, ytObject);
+                } catch (e) {
+                    console.error(e)
+                }
+            }, 2000);
+        }
+    }
+
+    stopVideo() {
+        if (this.player) this.player.stopVideo();
+    }
+
+    pauseVideo() {
+        if (this.player) this.player.pauseVideo();
     }
 
     componentDidMount() {
-        this.createPlayer().catch(e => console.error(e));
+        this.playVideo().catch(e => console.error(e));
+        StaticController.subscribe({id: WsConstants.STATIC_MUSIC, func: this.playVideo.bind(this)});
     }
 
     render() {
         return <div id={rootScss.music_popup}>
             <div id={Y_PLAYER} style={{position: "absolute", top: "-9999px", left: "-9999px"}}/>
-            {this.state.isMuted ? <div className={rootScss.global_popup}>
+            {!this.state.permissionGranted ? <div className={rootScss.global_popup}>
                 <button onClick={() => {
-                    if (this.player) this.player.unMute();
-                    this.setState({isMuted: false});
+                    if (this.player) {
+                        this.player.unMute();
+                        this.player.setVolume(MUSIC_VOLUME);
+                    }
+                    this.setState({permissionGranted: true});
                 }}>
                     Server want to play audio. Press to listen...
                 </button>
