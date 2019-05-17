@@ -18,12 +18,12 @@ import SetInitiativeRequest from "../logic/requests/SetInitiativeRequest";
 
 const SUBSCRIBE_ID = 'map';
 
-const SCALE_MAX = 60;
-const SCALE_MIN = 10;
+const SCALE_MAX = 90;
+const SCALE_MIN = 30;
 const BAR_STATUS = 'status';
 const DM_STATUS = 'dm';
 const ON_CHANGE_INTERVAL = 10;
-const HALF = (SCALE_MAX - SCALE_MIN) / 2;
+const DEFAULT = 60;
 
 export default class CombatWindow extends React.Component {
 
@@ -31,7 +31,7 @@ export default class CombatWindow extends React.Component {
         super(props);
 
         this.onChangeTimer = null;
-        this.currentZoomValue = HALF;
+        this.currentZoomValue = DEFAULT;
 
         this.state = {
             /** @type CombatMap */
@@ -40,7 +40,7 @@ export default class CombatWindow extends React.Component {
             objectSelected: null,
             statusBar: null,
             turn: null,
-            gridSizeInt: SCALE_MAX,
+            gridSizeInt: DEFAULT,
             scale: 1,
             coloredGrid: []
         };
@@ -78,12 +78,15 @@ export default class CombatWindow extends React.Component {
                 }
                 const obj = <div
                     style={{
-                        width: (this.state.gridSizeInt - 10).toString() + "px",
-                        height: (this.state.gridSizeInt - 10).toString() + "px",
+                        width: (this.state.gridSizeInt - 20).toString() + "px",
+                        height: (this.state.gridSizeInt - 20).toString() + "px",
                         borderColor: color,
                         backgroundColor: unit.img ? unit.color ? unit.color : undefined : undefined,
                         backgroundImage: unit.img ? "url('" + unit.img + "')" : undefined,
-                        backgroundSize: unit.img ? "cover" : undefined
+                        backgroundSize: unit.img ? "cover" : undefined,
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginTop: "3px"
                     }}
                     ref={unit.name}
                     className={rootScss.map_object}
@@ -91,7 +94,13 @@ export default class CombatWindow extends React.Component {
                     key={unit.name}>{unit.img ? "" : unit.name}
                 </div>;
                 if (unit.initiative === initiative) {
-                    return <div id={rootScss.current_turn_indicator}>{obj}</div>
+                    return <div
+                        id={rootScss.current_turn_indicator}
+                        style={{
+                            width: (this.state.gridSizeInt - 10).toString() + "px",
+                            height: (this.state.gridSizeInt - 10).toString() + "px",
+                        }}
+                        >{obj}</div>
                 } else {
                     return obj;
                 }
@@ -223,7 +232,7 @@ export default class CombatWindow extends React.Component {
                 type="range"
                 min={SCALE_MIN}
                 max={SCALE_MAX}
-                defaultValue={HALF}
+                defaultValue={DEFAULT}
                 id={rootScss.zoom}
                 onChange={event => {
                     this.currentZoomValue = event.target.value;
@@ -269,7 +278,7 @@ export default class CombatWindow extends React.Component {
                 >
                     <div style={{
                         width: ((this.state.gridSizeInt - 10) * this.state.map.gridX + 40 + 500) + 'px',
-                        height: ((this.state.gridSizeInt - 10) * this.state.map.gridY + 40 + 500) + 'px'
+                        height: ((this.state.gridSizeInt - 10) * this.state.map.gridY + 40) + 'px'
                     }}>
                         <div className={rootScss.combat_map}>
                             <div id={rootScss.combat_map_background}
