@@ -120,7 +120,7 @@ class Login extends React.Component {
                 {LoginController.isDM() ?
                     <button onClick={() => {
                         this.setState({currentPage: <DMConsole/>})
-                    }}>Stats</button> :
+                    }}>DM</button> :
                     null}
                 <img id={rootScss.logout}
                      src="https://cdn3.iconfinder.com/data/icons/vector-icons-for-mobile-apps-2/512/Settings_black-512.png"
