@@ -27,7 +27,7 @@ export default class GroupWindow extends React.Component {
     async saveCharacter(character) {
         const request = new NormalRequest();
         request.path = '/saveCharacter';
-        request.method = 'POST';
+        request.method = NormalRequest.METHOD.POST;
         let result = await request.send(character);
     }
 

@@ -123,7 +123,7 @@ export default class StaticController {
     static async saveCharacter() {
         const request = new NormalRequest();
         request.path = "/saveCharacter";
-        request.method = "POST";
+        request.method = NormalRequest.METHOD.POST;
         const char = await this.getCharacter();
         request.send(char)
             .then(this.loadCharacter)

@@ -53,7 +53,7 @@ export default class CombatWindow extends React.Component {
 
     async saveSelected() {
         const request = new NormalRequest();
-        request.method = 'POST';
+        request.method =  NormalRequest.METHOD.POST;
         request.path = '/saveObject';
         await request.send(this.state.objectSelected);
     }
@@ -111,11 +111,10 @@ export default class CombatWindow extends React.Component {
 
     drawGrid() {
         const arr = [];
-        for (let i = 0; i < this.state.map.gridX; i++) {
+        for (let i = 0; i < this.state.map.gridY; i++) {
             const innerArr = [];
-            for (let j = 0; j < this.state.map.gridY; j++) {
+            for (let j = 0; j < this.state.map.gridX; j++) {
                 const cellContent = this.setCellContent(i, j);
-                //https://i.ebayimg.com/images/g/Rx8AAOSwwhhbMp-p/s-l300.jpg
                 innerArr.push(<th
                     style={{
                         width: this.state.gridSizeInt.toString() + "px",
@@ -277,8 +276,8 @@ export default class CombatWindow extends React.Component {
                     }}
                 >
                     <div style={{
-                        width: ((this.state.gridSizeInt - 10) * this.state.map.gridX + 40 + 500) + 'px',
-                        height: ((this.state.gridSizeInt - 10) * this.state.map.gridY + 40) + 'px'
+                        width: (this.state.gridSizeInt * this.state.map.gridX) + 'px',
+                        height: (this.state.gridSizeInt * this.state.map.gridY + 200) + 'px'
                     }}>
                         <div className={rootScss.combat_map}>
                             <div id={rootScss.combat_map_background}

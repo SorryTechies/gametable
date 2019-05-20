@@ -67,7 +67,7 @@ export default class YoutubeControlPanel extends React.Component {
     stopPlayback() {
         const request = new NormalRequest();
         request.path = "/postPlaybackStatus";
-        request.method = "POST";
+        request.method = NormalRequest.METHOD.POST;
         request.send({
             currentTime: -1
         });

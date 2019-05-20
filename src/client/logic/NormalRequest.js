@@ -14,7 +14,7 @@ function getAjax() {
 
 export default class NormalRequest {
     constructor() {
-        this.method = 'GET';
+        this.method = NormalRequest.METHOD.GET;
         this.path = '';
         this.port = config.SERVER_PORT;
     }
@@ -23,7 +23,7 @@ export default class NormalRequest {
         return new Promise((resolve, reject) => {
             const request = getAjax();
             request.open(this.method, `http://${window.location.hostname}:${this.port}${this.path}`);
-            if (this.method === "POST") request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            if (this.method === NormalRequest.METHOD.POST) request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             request.setRequestHeader(headers.LOGIN_HEADER, LoginController.getLogin());
             if (json) {
                 request.send(JSON.stringify(json));
@@ -58,3 +58,8 @@ export default class NormalRequest {
         })
     }
 }
+
+NormalRequest.METHOD = {
+    GET: "GET",
+    POST: "POST"
+};

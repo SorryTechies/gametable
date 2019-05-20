@@ -37,7 +37,7 @@ require('./express/get/getMap');
 require('./express/post/saveMapChanges');
 require('./express/post/postInitiative');
 require('./express/get/getPlaybackStatus');
-server.listen(config.SERVER_PORT);
+server.listen(config.SERVER_PORT, () => console.log(`Server is running on localhost:${config.SERVER_PORT}`));
 
 // require('./temp/CreateCharacters');
 // require('./temp/CreateAttacks');
