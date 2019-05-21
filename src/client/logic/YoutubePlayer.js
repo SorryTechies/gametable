@@ -15,51 +15,44 @@ export default class YoutubePlayer extends React.Component {
     constructor(props) {
         super(props);
         this.player = null;
+        this.permissionGranted = false;
+        this.videoData = null;
         this.state = {
             isMuted: false,
-            permissionGranted: true
+            showPermissionPopup: false
         }
     }
 
-    async playVideo() {
+    async loadVideoDataAndCreatePlayer() {
         const youtubeData = await StaticController.getMusic();
         this.stopVideo();
         if (!youtubeData.id) return;
+        this.videoData = youtubeData;
         console.log("Playing new video.");
-        if (youtubeData.currentTime !== -1) this.createPlayer(youtubeData);
+        if (youtubeData.currentTime !== -1) this.createPlayer();
     }
 
-    setUpVideo(youtubeData) {
-        if (this.player) {
-            this.player.seekTo(youtubeData.currentTime);
-            this.player.playVideo();
+    onStateChange(state) {
+        alert(state.data);
+        switch (state.data) {
+            case YoutubePlayer.STATE.PLAYING:
+                if (!this.permissionGranted) {
+                    this.setState({showPermissionPopup: true});
+                } else {
+                    this.player.unMute();
+                    this.player.setVolume(StaticSettings.getVolume());
+                }
+                break;
         }
     }
 
-    createPlayer(youtubeData) {
+    createPlayer() {
         const ytObject = {
-            videoId: youtubeData.id,
-            startSeconds: youtubeData.currentTime,
-            events: {
-                onReady: e => {
-                    console.log("Youtube player loaded.");
-                    this.player.mute();
-                    this.setState({permissionGranted: false});
-                    this.setUpVideo(youtubeData);
-                }
-            }
+            videoId: this.videoData.id,
+            startSeconds: this.videoData.currentTime,
         };
         if (this.player) {
             this.player.loadVideoById(ytObject);
-        } else {
-            setTimeout(() => {
-                console.log("Youtube node loaded.");
-                try {
-                    this.player = new YT.Player(Y_PLAYER, ytObject);
-                } catch (e) {
-                    console.error(e)
-                }
-            }, 2000);
         }
     }
 
@@ -72,7 +65,6 @@ export default class YoutubePlayer extends React.Component {
     }
 
     componentDidMount() {
-        this.playVideo().catch(e => PopupManager.push(JSON.stringify(e)));
         StaticSettings.subscribe({
             name: StaticSettings.VOLUME, func: volume => {
                 if (this.player) {
@@ -80,19 +72,39 @@ export default class YoutubePlayer extends React.Component {
                 }
             }
         });
-        StaticController.subscribe({id: WsConstants.STATIC_MUSIC, func: this.playVideo.bind(this)});
+        StaticController.subscribe({id: WsConstants.STATIC_MUSIC, func: this.loadVideoDataAndCreatePlayer.bind(this)});
+        setTimeout(() => {
+            console.log("Youtube node loaded.");
+            try {
+                const events = {
+                    onReady: () => {
+                        console.log("Youtube player loaded.");
+                        this.player.mute();
+                        this.loadVideoDataAndCreatePlayer().catch(e => {
+                            console.error(e);
+                            PopupManager.push(e.toString())
+                        });
+                    },
+                    onStateChange: this.onStateChange.bind(this)
+                };
+                this.player = new YT.Player(Y_PLAYER, {events: events});
+            } catch (e) {
+                console.error(e)
+            }
+        }, 2000);
     }
 
     render() {
         return <div id={rootScss.music_popup}>
             <div id={Y_PLAYER} style={{position: "absolute", top: "-9999px", left: "-9999px"}}/>
-            {!this.state.permissionGranted ? <div className={rootScss.global_popup}>
+            {this.state.showPermissionPopup ? <div className={rootScss.global_popup}>
                 <button onClick={() => {
                     if (this.player) {
                         this.player.unMute();
                         this.player.setVolume(StaticSettings.getVolume());
                     }
-                    this.setState({permissionGranted: true});
+                    this.setState({showPermissionPopup: false});
+                    this.permissionGranted = true;
                 }}>
                     Server want to play audio. Press to listen...
                 </button>
@@ -100,3 +112,12 @@ export default class YoutubePlayer extends React.Component {
         </div>
     }
 }
+
+YoutubePlayer.STATE = {
+    NOT_STARTED: -1,
+    ENDED: 0,
+    PLAYING: 1,
+    PAUSED: 2,
+    BUFFERING: 3,
+    QUEUED: 5
+};
