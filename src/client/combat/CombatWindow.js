@@ -275,7 +275,8 @@ export default class CombatWindow extends React.Component {
                         paddingBottom: this.state.objectSelected ? "60px" : "0",
                     }}
                 >
-                    <div style={{
+                    <div ref="whole_map"
+                        style={{
                         width: (this.state.gridSizeInt * this.state.map.gridX) + 'px',
                         height: (this.state.gridSizeInt * this.state.map.gridY + 200) + 'px'
                     }}>

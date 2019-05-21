@@ -123,7 +123,7 @@ class Login extends React.Component {
                     }}>Stats</button> :
                     null}
                 <img id={rootScss.logout}
-                     src="https://cdn3.iconfinder.com/data/icons/vector-icons-for-mobile-apps-2/512/Settings_black-512.png"
+                     src="/Settings_black-512.png"
                      onClick={this.showSettings.bind(this)}
                 />
             </div>
