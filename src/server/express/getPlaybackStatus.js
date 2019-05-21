@@ -2,11 +2,11 @@
  * Created by LastBerserk on 26.01.2019.
  */
 
-const ErrorClass = require('../../logic/ErrorClass');
-const PlaybackController = require('../../logic/PlaybackController');
-const WebSocketUser = require("../../wss/WebSocketServer");
+const ErrorClass = require('../logic/ErrorClass');
+const PlaybackController = require('../logic/PlaybackController');
+const WebSocketUser = require("../wss/WebSocketServer");
 
-require('../../logic/express').getServerExpress().get('/getPlaybackStatus', (req, res) => {
+require('../logic/express').getServerExpress().get('/getPlaybackStatus', (req, res) => {
     const error = new ErrorClass(res);
     try {
         res.json(PlaybackController.getPlayback());
@@ -15,7 +15,7 @@ require('../../logic/express').getServerExpress().get('/getPlaybackStatus', (req
     }
 });
 
-require('../../logic/express').getServerExpress().post('/postPlaybackStatus', (req, res) => {
+require('../logic/express').getServerExpress().post('/postPlaybackStatus', (req, res) => {
     const error = new ErrorClass(res);
     const body = req.body;
     try {

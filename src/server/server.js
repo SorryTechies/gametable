@@ -36,12 +36,14 @@ require('./express/post/changeCharacter');
 require('./express/get/getMap');
 require('./express/post/saveMapChanges');
 require('./express/post/postInitiative');
-require('./express/get/getPlaybackStatus');
+require('./express/getPlaybackStatus');
 server.listen(config.SERVER_PORT, () => console.log(`Server is running on localhost:${config.SERVER_PORT}`));
 
 // require('./temp/CreateCharacters');
 // require('./temp/CreateAttacks');
 // require('./temp/CreateMap');
 // require('./temp/CreateObjects');
+
+require('./express/debugDisp');
 
 require('./wss/WebSocketServer');

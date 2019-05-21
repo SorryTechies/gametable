@@ -33,7 +33,6 @@ export default class YoutubePlayer extends React.Component {
     }
 
     onStateChange(state) {
-        alert(state.data);
         switch (state.data) {
             case YoutubePlayer.STATE.PLAYING:
                 if (!this.permissionGranted) {
