@@ -67,9 +67,12 @@ export default class Transformer {
         const parts = [];
         while (true) {
             const obj = safeGet(text);
-            if (!obj) break;
-            let temp = text.split(MASK_TO_SPLIT, 2);
-            text = temp[1];
+            if (!obj) {
+                parts.push(text);
+                break;
+            }
+            let temp = text.split(MASK_TO_SPLIT);
+            text = temp[8];
             parts.push(temp[0]);
             parts.push(obj);
         }
