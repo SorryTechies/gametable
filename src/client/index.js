@@ -15,30 +15,28 @@ import CombatWindow from "./combat/CombatWindow";
 import PopupManager from "./popup/PopupManager";
 import BrowserWebSocket from "./logic/ws/BrowserWebSocket";
 import StaticController from "./static/StaticController";
+import StaticSettings from "./static/StaticSettings";
 import StaticClicker from "./static/StaticClicker";
 import StaticViewManager from "./popup/StaticViewManager";
-import NewPFCore from "./logic/core/controller/NewPFCore";
-import CoreController from "./logic/core/controller/CoreController";
-import StatElement from "./logic/core/StatElement";
+import DMConsole from "./dm/DMConsole";
+import YoutubePlayer from "./logic/YoutubePlayer";
 
 const root = document.getElementById('root');
 
 let initialized = false;
-let popupIndex = 0;
-const MENU_REF = 'menu';
 
 const body = document.getElementsByTagName('body')[0];
 body.addEventListener('click', StaticClicker.handleClick);
 
 class Login extends React.Component {
-
     constructor(pops) {
         super(pops);
 
         this.state = {
             loginInput: "",
             currentPage: <ChatWindow/>,
-            additionMenuBar: null
+            additionMenuBar: null,
+            settings: null
         };
     }
 
@@ -64,6 +62,7 @@ class Login extends React.Component {
                 LoginController.loginOk(result.isDM);
                 BrowserWebSocket.init(username);
                 StaticController.init();
+                StaticSettings.init();
                 this.forceUpdate();
             })
             .catch(e => {
@@ -71,6 +70,29 @@ class Login extends React.Component {
                 this.forceUpdate();
                 console.log(e)
             });
+    }
+
+    showSettings() {
+        if (this.state.settings) {
+            this.setState({settings: null});
+        } else {
+            this.setState({
+                settings: <div className={rootScss.global_popup}>
+                    <div>
+                        <label>Volume</label>
+                        <input type="range" min="0" max="10" defaultValue={StaticSettings.getVolume()} step="1"
+                               onChange={event => StaticSettings.setVolume(event.target.value)}
+                        />
+                    </div>
+                    <button onClick={() => {
+                        LoginController.logOut();
+                        BrowserWebSocket.closeConnection();
+                        this.forceUpdate();
+                    }}>Logout
+                    </button>
+                </div>
+            });
+        }
     }
 
     renderMain() {
@@ -95,18 +117,21 @@ class Login extends React.Component {
                     this.setState({currentPage: <CombatWindow/>})
                 }}>Combat
                 </button>
+                {LoginController.isDM() ?
+                    <button onClick={() => {
+                        this.setState({currentPage: <DMConsole/>})
+                    }}>DM</button> :
+                    null}
                 <img id={rootScss.logout}
-                     src="https://img.icons8.com/ios/50/000000/delete-sign.png"
-                     onClick={() => {
-                         LoginController.logOut();
-                         BrowserWebSocket.closeConnection();
-                         this.forceUpdate();
-                     }}
+                     src="/Settings_black-512.png"
+                     onClick={this.showSettings.bind(this)}
                 />
             </div>
             {this.state.currentPage}
+            {this.state.settings}
             <PopupManager/>
             <StaticViewManager/>
+            <YoutubePlayer/>
         </div>
     }
 

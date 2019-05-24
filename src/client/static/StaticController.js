@@ -12,6 +12,7 @@ let chat = null;
 let character = null;
 let map = null;
 let participants = null;
+let music = null;
 
 const rethrow = async promise => {
     try {
@@ -28,9 +29,11 @@ export default class StaticController {
         this.loadChat();
         this.loadMap();
         this.loadParticipants();
+        this.loadMusic();
         BrowserWebSocket.subscribe({id: WsConstants.STATIC_CHAR, func: this.update.bind(this, WsConstants.STATIC_CHAR)});
         BrowserWebSocket.subscribe({id: WsConstants.STATIC_CHAT, func: this.update.bind(this, WsConstants.STATIC_CHAT)});
         BrowserWebSocket.subscribe({id: WsConstants.STATIC_MAP, func: this.update.bind(this, WsConstants.STATIC_MAP)});
+        BrowserWebSocket.subscribe({id: WsConstants.STATIC_MUSIC, func: this.update.bind(this, WsConstants.STATIC_MUSIC)});
     }
 
     static loadCharacter() {
@@ -57,6 +60,12 @@ export default class StaticController {
         const request = new NormalRequest();
         request.path = '/getGameParticipants';
         participants = rethrow(request.send());
+    }
+
+    static loadMusic() {
+        const request = new NormalRequest();
+        request.path = '/getPlaybackStatus';
+        music = rethrow(request.send());
     }
 
     /** @return Promise */
@@ -87,6 +96,11 @@ export default class StaticController {
         return chat;
     }
 
+    /** @return Promise */
+    static getMusic() {
+        return music;
+    }
+
     static async update(id) {
         console.log(`Update from websocket with id '${id}'`);
         switch (id) {
@@ -99,6 +113,9 @@ export default class StaticController {
             case WsConstants.STATIC_CHAT:
                 await this.loadChat();
                 break;
+            case WsConstants.STATIC_MUSIC:
+                await this.loadMusic();
+                break;
         }
         for (let i = 0; i < subscribers.length; i++) if (subscribers[i].id === id) subscribers[i].func();
     }
@@ -106,7 +123,7 @@ export default class StaticController {
     static async saveCharacter() {
         const request = new NormalRequest();
         request.path = "/saveCharacter";
-        request.method = "POST";
+        request.method = NormalRequest.METHOD.POST;
         const char = await this.getCharacter();
         request.send(char)
             .then(this.loadCharacter)

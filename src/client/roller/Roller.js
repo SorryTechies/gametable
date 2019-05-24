@@ -30,6 +30,6 @@ export default class Roller extends React.Component {
 
     static rollDice(max) {
         max = max || 20;
-        return Math.floor(1 + Math.random() * parseInt(max - 1));
+        return Math.round(1 + Math.random() * parseInt(max - 1));
     }
 }

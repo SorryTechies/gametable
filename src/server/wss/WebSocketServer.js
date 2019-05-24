@@ -46,5 +46,6 @@ WebSocketServer.NEW_MESSAGE_NOTIFICATION = {notification: WsConstants.STATIC_CHA
 WebSocketServer.RELOAD_MAP_MESSAGE = {notification: WsConstants.STATIC_MAP};
 WebSocketServer.RELOAD_CHARACTER = {notification: WsConstants.STATIC_CHAR};
 WebSocketServer.RELOAD_PARTICIPANTS = {notification: WsConstants.STATIC_PARTICIPANTS};
+WebSocketServer.MUSIC_CHANGED = {notification: WsConstants.STATIC_MUSIC};
 
 module.exports = WebSocketServer;

@@ -33,13 +33,12 @@ function generateTable(rows, callbacks) {
         const th = [];
         for (let j = 0; j < rows[i].length; j++) {
             let data = rows[i][j];
-            if (data === undefined) data = "";
+            if (data === undefined || data === null) data = "";
             th.push(<th
                 key={i.toString() + '_' + j.toString()}
                 className={data.length && data.length > 20 ? rootScss.big_box : null}
                 onClick={Array.isArray(callbacks) ? () => callbacks[j](data) : null}
             >{data}</th>);
-
         }
         tr.push(<tr
             key={i}
@@ -86,7 +85,7 @@ export default class CharacterWindow extends React.Component {
     }
 
     async rollInitiative(row) {
-        const diceRoller = new DiceRoller().roll(row[1]);
+        const diceRoller = new DiceRoller().setBonus(row[1]).roll();
         PopupManager.push(diceRoller.toString(row[0]));
         const request = new RollInitiative();
         await request.send(diceRoller.calculatedResult);
@@ -199,14 +198,14 @@ export default class CharacterWindow extends React.Component {
                 {
                     generateTable(
                         PathfinderCharacterCore.getStatsCore(data, statBonuses),
-                        (row) => PopupManager.push(new DiceRoller().roll(row[2]).toString(row[0]))
+                        (row) => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0]))
                     )
                 }
                 <h2>Saves</h2>
                 {
                     generateTable(
                         PathfinderCharacterCore.getSavesCore(data, statBonuses),
-                        (row) => PopupManager.push(new DiceRoller().roll(row[1]).toString(row[0]))
+                        (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0]))
                     )
                 }
                 {
@@ -218,7 +217,7 @@ export default class CharacterWindow extends React.Component {
                 {
                     generateTable(
                         PathfinderCharacterCore.getSkillsCore(data, statBonuses),
-                        (row) => PopupManager.push(new DiceRoller().roll(row[3]).toString(row[0]))
+                        (row) => PopupManager.push(new DiceRoller().setBonus(row[3]).roll().toString(row[0]))
                     )
                 }
                 {this.renderAbilities()}
