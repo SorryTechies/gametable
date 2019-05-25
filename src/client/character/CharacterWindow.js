@@ -19,6 +19,8 @@ import AddAbilityPopup from "./popups/AddAbilityPopup";
 import AddSpellPopup from "./popups/AddSpellPopup";
 import Transformer from "../logic/Transformer";
 import NewPFCore from "../logic/core/controller/NewPFCore";
+import CoreController from "../logic/core/controller/CoreController";
+import PFDataUtils from "./PFDataUtils";
 
 const CharacterHelper = require('../../common/CharacterDataHelper');
 
@@ -56,6 +58,8 @@ function roll(bonus) {
     return Roller.rollDice() + bonus;
 }
 
+
+
 export default class CharacterWindow extends React.Component {
 
     constructor(props) {
@@ -64,8 +68,7 @@ export default class CharacterWindow extends React.Component {
         this.state = {
             /** @type Character */
             characterData: null,
-            /** @type [Attack] */
-            attacks: []
+            character: null
         };
     }
 
@@ -76,10 +79,10 @@ export default class CharacterWindow extends React.Component {
     loadCharacter() {
         StaticController.getCharacter()
             .then(character => {
-                NewPFCore.init();
-                NewPFCore.processCharacter(character);
-                NewPFCore.recalculate();
-                this.setState({characterData: character})
+                this.setState({
+                    characterData: character,
+                    character: CoreController.createCharacter(character)
+                })
             })
             .catch(error => console.log(error));
     }
@@ -197,26 +200,33 @@ export default class CharacterWindow extends React.Component {
                 <h3>Primary stats</h3>
                 {
                     generateTable(
-                        PathfinderCharacterCore.getStatsCore(data, statBonuses),
+                        PFDataUtils.getStats(this.state.character),
                         (row) => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0]))
                     )
                 }
                 <h2>Saves</h2>
                 {
                     generateTable(
-                        PathfinderCharacterCore.getSavesCore(data, statBonuses),
+                        PFDataUtils.getSaves(this.state.character),
                         (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0]))
                     )
                 }
+                <h2>Additional</h2>
                 {
                     generateTable(
-                        [['Initiative', statBonuses.dex]],
-                        this.rollInitiative.bind(this)
+                        PFDataUtils.getAdditionals(this.state.character),
+                        (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0]))
+                    )}
+                <h2>Defense</h2>
+                {
+                    generateTable(
+                        PFDataUtils.getDefense(this.state.character),
+                        (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0]))
                     )}
                 <h2>Skills</h2>
                 {
                     generateTable(
-                        PathfinderCharacterCore.getSkillsCore(data, statBonuses),
+                        PFDataUtils.getSkills(this.state.character),
                         (row) => PopupManager.push(new DiceRoller().setBonus(row[3]).roll().toString(row[0]))
                     )
                 }

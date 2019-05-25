@@ -2,7 +2,6 @@
  * Created by LastBerserk on 10.04.2019.
  */
 
-import CoreController from "../controller/CoreController";
 export default class BaseElement {
     /**
      * @param {string} id - category, where to put this object
@@ -11,14 +10,13 @@ export default class BaseElement {
      */
     constructor(id, instanceTag, defaultValue) {
         if (typeof id !== "string" || typeof instanceTag !== "string") throw Error("Class id and tag should be string.");
-        this.class_id = id;
-        this.instance_tag = instanceTag;
+        this.category = id;
+        this.tag = instanceTag;
         if (typeof defaultValue === "number") {
             this.defaultValue = defaultValue;
         } else {
             this.defaultValue = 0;
         }
-        CoreController.addElement(this);
 
         /**
          * @type function

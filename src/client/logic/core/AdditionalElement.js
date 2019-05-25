@@ -4,9 +4,9 @@
 
 import BaseElement from "./base/BaseElement";
 export default class AdditionalElement extends BaseElement {
-    constructor(instance_tag) {
-        super(AdditionalElement.CLASS_ID, instance_tag);
+    constructor(tag) {
+        super(AdditionalElement.category, tag);
     }
 }
 
-AdditionalElement.CLASS_ID = "additional";
+AdditionalElement.category = "additional";

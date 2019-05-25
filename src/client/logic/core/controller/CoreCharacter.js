@@ -4,21 +4,31 @@
 
 export default class CoreCharacter {
     constructor() {
-        this.stats = {};
+        this.core = {};
         this.categoryPriorities = {};
+        this.modifiers = {};
     }
 
     addElement(instance) {
-        if (!this.stats[instance.class_id]) {
-            this.stats[instance.class_id] = {};
-            this.categoryPriorities[instance.class_id] = -1;
+        if (!this.core[instance.category]) {
+            this.core[instance.category] = {};
+            this.categoryPriorities[instance.category] = -1;
         }
-        this.stats[instance.class_id][instance.instance_tag] = instance;
+        this.core[instance.category][instance.tag] = instance;
+    }
+
+    setCore(core) {
+        console.log(core.category, core.tag);
+        this.core[core.category][core.tag].defaultValue = core.value;
+    }
+
+    addModifier(modifiers) {
+
     }
 
     recalculateWithPriority(number) {
-        for (let categoryName in this.stats) {
-            const category = this.stats[categoryName];
+        for (let categoryName in this.core) {
+            const category = this.core[categoryName];
             if (this.categoryPriorities[categoryName] === number) {
                 for (let tag in category) {
                     category[tag].recalculate();
@@ -34,10 +44,9 @@ export default class CoreCharacter {
     }
 
     recalculateAll() {
-        for (let priority = 0; priority < 10; priority++) {
+        for (let priority = 0; priority <= 10; priority++) {
             this.recalculateWithPriority(priority);
         }
-        console.log(this.stats);
     }
 
     setPriorityForCategory(category, priority) {
@@ -45,12 +54,28 @@ export default class CoreCharacter {
     }
 
     /**
-     * @param {string} class_id
+     * @param {string} category
      * @param {string} tag
      * @return BaseElement
      */
-    getDependency(class_id, tag) {
-        if (!this.stats[class_id]) return null;
-        return this.stats[class_id][tag];
+    getDependency(category, tag) {
+        if (!this.core[category]) return null;
+        return this.core[category][tag];
+    }
+
+    getValue(category, tag) {
+        if (!this.core[category] ||
+            !this.core[category][tag] ||
+            typeof this.core[category][tag].result !== "number") return 0;
+        return this.core[category][tag].result;
+    }
+
+    getCategory(name) {
+        return this.core[name];
+    }
+
+    printCharacterData() {
+        console.log(this.core);
+        console.log(this.modifiers);
     }
 }

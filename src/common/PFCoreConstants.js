@@ -6,7 +6,6 @@ class PFCoreConstants {
     
 }
 
-
 PFCoreConstants.STATS = {
     CATEGORY: "stat",
     STR: "str",
@@ -19,12 +18,19 @@ PFCoreConstants.STATS = {
 
 PFCoreConstants.SKILLS = {
     CATEGORY: "skill",
+    PROFICIENCY: "skill_proficiency",
+    POINTS: "skill_points",
     ACROBATICS: "acrob",
     APPRISE: "appr",
+    BLUFF: "bluff",
     CLIMB: "climb",
+    CRAFT: "craft",
     DISGUISE: "disg",
+    DISABLE_DEVICE: "dis_dev",
     DIPLOMACY: "dipl",
+    ESCAPE_ARTIST: "esc",
     FLY: "fly",
+    HEAL: "heal",
     INTIMIDATE: "inti",
     KNOWLEDGE_ARCANA: "k_arc",
     KNOWLEDGE_ALCHEMY: "k_alc",
@@ -35,8 +41,10 @@ PFCoreConstants.SKILLS = {
     KNOWLEDGE_NATURE: "k_nat",
     KNOWLEDGE_RELIGION: "k_rel",
     KNOWLEDGE_PLANES: "k_pla",
+    LINGUISTICS: "ling",
     PERCEPTION: "perc",
     PERFORM: "perf",
+    RIDE: "ride",
     SENSE_MOTIVE: "smot",
     SPELLCRAFT: "spc",
     SLEIGHT_OF_HANDS: "soh",
@@ -52,7 +60,15 @@ PFCoreConstants.ADDITIONALS = {
     BASE_ATTACK_BONUS: "bab",
     COMBAT_MANEUVER_BONUS: "cmb",
     COMBAT_MANEUVER_DEFENSE: "cmd",
-    SIZE: "size"
+    SIZE: "size",
+    INITIATIVE: "init"
+};
+
+PFCoreConstants.SAVES = {
+    CATEGORY: "save",
+    FORTITUDE: "fort",
+    REFLEX: "refl",
+    WILL: "will"
 };
 
 PFCoreConstants.ARMOR_COMPONENTS = {
