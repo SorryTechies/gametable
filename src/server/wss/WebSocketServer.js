@@ -43,6 +43,7 @@ class WebSocketServer {
 }
 
 WebSocketServer.NEW_MESSAGE_NOTIFICATION = {notification: WsConstants.STATIC_CHAT};
+WebSocketServer.DEMAND_ROLL = {notification: WsConstants.STATIC_ROLL};
 WebSocketServer.RELOAD_MAP_MESSAGE = {notification: WsConstants.STATIC_MAP};
 WebSocketServer.RELOAD_CHARACTER = {notification: WsConstants.STATIC_CHAR};
 WebSocketServer.RELOAD_PARTICIPANTS = {notification: WsConstants.STATIC_PARTICIPANTS};

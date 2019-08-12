@@ -6,5 +6,6 @@ module.exports = {
     STATIC_CHAT:            'static_chat',
     STATIC_MAP:             'static_map',
     STATIC_PARTICIPANTS:    'static_participants',
-    STATIC_MUSIC:           'static_music'
+    STATIC_MUSIC:           'static_music',
+    STATIC_ROLL:            'static_roll',
 };
