@@ -32,8 +32,8 @@ export default class ChatWindow extends React.Component {
 
     componentDidMount() {
         StaticController.subscribe({id: WsConstants.STATIC_CHAT, func: this.loadMessages.bind(this)});
-        this.loadMessages().catch(e => console.log(e));
-        if (LoginController.isDM()) this.getParticipants().catch(e => console.log(e));
+        this.loadMessages().catch(console.error);
+        if (LoginController.isDM()) this.getParticipants().catch(console.error);
     }
 
     componentWillUnmount() {
@@ -58,13 +58,13 @@ export default class ChatWindow extends React.Component {
         request.path = "/sendMessage";
         request.send({message: this.state.input, to: this.state.to})
             .then(() => this.setState({input: ""}))
-            .then(() => this.loadMessages())
-            .catch(e => console.log(e))
+            .then(this.loadMessages.bind(this))
+            .catch(console.error)
     }
 
     render() {
         return <div>
-            <div className={`${rootScss.static_element} ${rootScss.additional_menu}`}>
+            <div id={rootScss.bottom_menu} className={`${rootScss.static_element}`}>
                 <form autoComplete="off">
                     <input id={rootScss.chat_input} type="text" value={this.state.input}
                            onChange={event => this.setState({input: event.target.value})}/>
@@ -86,14 +86,7 @@ export default class ChatWindow extends React.Component {
                     </button>
                 </form>
             </div>
-            <div
-                className={rootScss.menu_page}
-                style={{paddingBottom: "40px"}}
-            >
-                <div className={rootScss.chat_window}>
-                    {this.state.messages.map(obj => <Message key={id++} message={obj}/>)}
-                </div>
-            </div>
+            {this.state.messages.map(obj => <Message key={id++} message={obj}/>)}
         </div>
     }
 }

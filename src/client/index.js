@@ -101,36 +101,18 @@ class Login extends React.Component {
     renderMain() {
         return <div>
             <div className={`${rootScss.static_element} ${rootScss.menu}`}>
-                <button onClick={() => {
-                    this.setState({currentPage: <ChatWindow/>})
-                }}>Chat
-                </button>
-                <button onClick={() => {
-                    this.setState({currentPage: <RollerWindow/>})
-                }}>Roller
-                </button>
+                <button onClick={() => this.setState({currentPage: <ChatWindow/>})}>Chat</button>
+                <button onClick={() => this.setState({currentPage: <RollerWindow/>})}>Roller</button>
                 {LoginController.isDM() ?
-                    <button onClick={() => {
-                        this.setState({currentPage: <GroupWindow/>})
-                    }}>Group</button> :
-                    <button onClick={() => {
-                        this.setState({currentPage: <CharacterWindow/>})
-                    }}>Stats</button>}
-                <button onClick={() => {
-                    this.setState({currentPage: <CombatWindow/>})
-                }}>Combat
-                </button>
+                    <button onClick={() => this.setState({currentPage: <GroupWindow/>})}>Group</button> :
+                    <button onClick={() => this.setState({currentPage: <CharacterWindow/>})}>Stats</button>}
+                <button onClick={() => this.setState({currentPage: <CombatWindow/>})}>Combat</button>
                 {LoginController.isDM() ?
-                    <button onClick={() => {
-                        this.setState({currentPage: <DMConsole/>})
-                    }}>DM</button> :
-                    null}
-                <img id={rootScss.logout}
-                     src="/Settings_black-512.png"
-                     onClick={this.showSettings.bind(this)}
+                    <button onClick={() => this.setState({currentPage: <DMConsole/>})}>DM</button> : null}
+                <img id={rootScss.logout} src="/Settings_black-512.png" onClick={this.showSettings.bind(this)}
                 />
             </div>
-            {this.state.currentPage}
+            <div id={rootScss.workspace}>{this.state.currentPage}</div>
             {this.state.settings}
             <PopupManager/>
             <StaticViewManager/>
@@ -142,8 +124,7 @@ class Login extends React.Component {
         return <div>
             <h1>Pls LogIn</h1>
             <input type="text" onChange={(event) => this.setState({loginInput: event.target.value})}/>
-            <button onClick={() => this.tryToLogin(this.state.loginInput)}>Login
-            </button>
+            <button onClick={() => this.tryToLogin(this.state.loginInput)}>Login</button>
             {this.state.popups}
         </div>
     }
