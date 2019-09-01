@@ -9,11 +9,20 @@ function getDefault(val, def) {
 }
 
 function setArray(obj, data) {
-    if (Array.isArray(data)) {
+    if (data) {
         for (let key in data) {
             if (data[key]) obj[key] = data[key];
         }
     }
+}
+
+function getStatsModifiers(obj) {
+    const ans = {};
+    for (let key in obj) {
+        const mod = (obj[key] - 10) / 2;
+        ans[key] =  mod < 0 ? Math.floor(mod) : Math.floor(mod);
+    }
+    return ans;
 }
 
 export default class CharacterCore {
@@ -26,6 +35,7 @@ export default class CharacterCore {
         /** @type {StatsObject} */
         this.stats = DefaultCharacterData.getStats();
         setArray(this.stats, data.stats);
+        this.bonuses = getStatsModifiers(this.stats);
         /** @type {OffenseObject} */
         this.offense = DefaultCharacterData.getOffense();
         setArray(this.offense, data.offense);

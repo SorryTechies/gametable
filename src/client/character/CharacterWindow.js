@@ -17,9 +17,6 @@ import AddSpellPopup from "./popups/AddSpellPopup";
 import Transformer from "../logic/Transformer";
 import CharacterCore from "./CharacterCore";
 
-const CharacterHelper = require('../../common/CharacterDataHelper');
-
-
 /**
  * @param {[[]]} rows
  * @param {Function | [Function]} [callbacks]
@@ -48,22 +45,25 @@ function generateTable(rows, callbacks) {
     </table>;
 }
 
-function keyToArray(data) {
+function keyToArray(data, additional) {
     const ans = [];
-    for (let key in data) ans.push([key, data[key]]);
+    for (let key in data) {
+        const arr = [key, data[key]];
+        if (additional) arr.push(additional[key]);
+        ans.push(arr);
+    }
     return ans;
 }
 
-const GENERATE_STATS = self => generateTable(keyToArray(self.state.character.stats),
+const GENERATE_STATS = self => generateTable(keyToArray(self.state.character.stats, self.state.character.bonuses),
     (row) => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0])));
 const GENERATE_SAVES = self => generateTable(keyToArray(self.state.character.saves),
     (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])));
 const GENERATE_ADDITIONAL = self => generateTable(keyToArray(self.state.character.offense),
     (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])));
-const GENERATE_DEFENCE = self => generateTable(keyToArray(self.state.character.defense),
-    (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])));
+const GENERATE_DEFENCE = self => generateTable(keyToArray(self.state.character.defense));
 const GENERATE_SKILLS = self => generateTable(keyToArray(self.state.character.skills),
-    (row) => PopupManager.push(new DiceRoller().setBonus(row[3]).roll().toString(row[0])));
+    (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])));
 
 export default class CharacterWindow extends React.Component {
 
@@ -83,7 +83,6 @@ export default class CharacterWindow extends React.Component {
     loadCharacter() {
         StaticController.getCharacter()
             .then(character => {
-                console.log(character);
                 this.setState({
                     characterData: character,
                     character: new CharacterCore(character)
