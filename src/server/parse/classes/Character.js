@@ -1,7 +1,6 @@
 /**
- * Created by LastBerserk on 25.01.2019.
+ * Created by LastBerserk on 01.09.2019.
  */
-
 const ParseSubclass = require('../ParseSubclass');
 
 class Character extends ParseSubclass {
@@ -14,255 +13,153 @@ class Character extends ParseSubclass {
         return this.get(Character.USER_FIELD)
     }
 
-    /** @param {Access} user */
-    set user(user) {
-        this.set(Character.USER_FIELD, user)
+    /** @param {Access} val */
+    set user(val) {
+        this.set(Character.USER_FIELD, val)
     }
 
-    /** @return {int} */
-    get damage() {
-        return this.get(Character.DAMAGE_FIELD)
-    }
-
-    /** @param {int} damage */
-    set damage(damage) {
-        this.set(Character.DAMAGE_FIELD, damage)
-    }
-
-    /** @return {int} */
     get level() {
         return this.get(Character.LEVEL_FIELD)
     }
 
-    /** @param {int} level */
-    set level(level) {
-        this.set(Character.LEVEL_FIELD, level)
+    set level(val) {
+        this.set(Character.LEVEL_FIELD, val)
     }
 
-    /** @return {int} */
-    get hpDice() {
-        return this.get(Character.HP_DICE_FIELD)
+    /** @return {DefenseObject} */
+    get defense() {
+        return this.get(Character.DEFENSE_FIELD)
     }
 
-    /** @param {int} hpDice */
-    set hpDice(hpDice) {
-        this.set(Character.HP_DICE_FIELD, hpDice)
+    /** @param {DefenseObject} val */
+    set defense(val) {
+        this.set(Character.DEFENSE_FIELD, val)
     }
 
-    /** @return {int} */
-    get spellSlotsUsed() {
-        return this.get(Character.SPELL_SLOTS_USED_FIELD)
+    /** @return {OffenseObject} */
+    get offense() {
+        return this.get(Character.OFFENSE_FIELD)
     }
 
-    /** @param {int} spellSlotsUsed */
-    set spellSlotsUsed(spellSlotsUsed) {
-        this.set(Character.SPELL_SLOTS_USED_FIELD, spellSlotsUsed)
+    /** @param {OffenseObject} val */
+    set offense(val) {
+        this.set(Character.OFFENSE_FIELD, val)
     }
 
-    /** @return {int} */
-    get spellSlots() {
-        return this.get(Character.SPELL_SLOTS_FIELD)
+    /** @return {StatsObject} */
+    get stats() {
+        return this.get(Character.STATS_FIELD)
     }
 
-    /** @param {int} spellSlots */
-    set spellSlots(spellSlots) {
-        this.set(Character.SPELL_SLOTS_FIELD, spellSlots)
+    /** @param {StatsObject} val */
+    set stats(val) {
+        this.set(Character.STATS_FIELD, val)
     }
 
-    /** @return {[Ability]} */
-    get abilities() {
-        return this.get(Character.ABILITIES_FIELD)
+    /** @return {SkillsBlock} */
+    get skills() {
+        return this.get(Character.SKILLS_FIELD)
     }
 
-    /** @param {[Ability]} value */
-    set abilities(value) {
-        this.set(Character.ABILITIES_FIELD, value)
+    /** @param {SkillsBlock} val */
+    set skills(val) {
+        this.set(Character.SKILLS_FIELD, val)
     }
 
-    /** @return {[Ability]} */
-    get spells() {
-        return this.get(Character.SPELLS_FIELD)
+    /** @return {Saves} */
+    get saves() {
+        return this.get(Character.SAVES_FIELD)
     }
 
-    /** @param {[Ability]} value */
-    set spells(value) {
-        this.set(Character.SPELLS_FIELD, value)
-    }
-
-    /** @return {[Ability]} */
-    get feats() {
-        return this.get(Character.FEATS_FIELD)
-    }
-
-    /** @param {[Ability]} value */
-    set feats(value) {
-        this.set(Character.FEATS_FIELD, value)
-    }
-
-    /** @return {[Ability]} */
-    get items() {
-        return this.get(Character.ITEMS_FIELD)
-    }
-
-    /** @param {[Ability]} value */
-    set items(value) {
-        this.set(Character.ITEMS_FIELD, value)
-    }
-
-    /**
-     * @typedef {{}} StatBlock
-     *
-     * @property {int} strength
-     * @property {int} dexterity
-     * @property {int} constitution
-     * @property {int} intelligence
-     * @property {int} wisdom
-     * @property {int} charisma
-     */
-
-    /**
-     * @typedef {{}} SavesBlock
-     *
-     * @property {int} fortitude
-     * @property {int} f_modifier
-     * @property {int} reflex
-     * @property {int} r_modifier
-     * @property {int} will
-     * @property {int} w_modifier
-     */
-
-    /**
-     * @typedef {{}} Skill
-     *
-     * @property {int} points
-     * @property {boolean} classSkill
-     * @property {int} modifier
-     */
-
-    /**
-     * @typedef {{}} SkillsBlock
-     *
-     * @property {Skill} acrobatics
-     * @property {Skill} appraise
-     * @property {Skill} bluff
-     * @property {Skill} climb
-     * @property {Skill} diplomacy
-     * @property {Skill} disable_device
-     * @property {Skill} disguise
-     * @property {Skill} escape_artist
-     * @property {Skill} fly
-     * @property {Skill} heal
-     * @property {Skill} intimidate
-     * @property {Skill} knowledge_arcana
-     * @property {Skill} knowledge_dungeneering
-     * @property {Skill} knowledge_engineering
-     * @property {Skill} knowledge_local
-     * @property {Skill} knowledge_planes
-     * @property {Skill} knowledge_religion
-     * @property {Skill} knowledge_nature
-     * @property {Skill} linguistics
-     * @property {Skill} perception
-     * @property {Skill} ride
-     * @property {Skill} sense_motive
-     * @property {Skill} sleight_of_hand
-     * @property {Skill} spellcraft
-     * @property {Skill} stealth
-     * @property {Skill} survival
-     * @property {Skill} swim
-     * @property {Skill} use_magic_device
-     */
-
-    /**
-     * @typedef {{}} Ability
-     *
-     * @property {string} name
-     * @property {string} description
-     * @property {int} range
-     * @property {string} target
-     */
-
-    /**
-     * @typedef {{}} Attack
-     *
-     * @property {string} id
-     */
-
-    /**
-     * @typedef {{}} CharacterDataT
-     *
-     * @property {StatBlock} stats
-     * @property {SavesBlock} saves
-     * @property {SkillsBlock} skills
-     * @property {[Attack]} attacks
-     *
-     * @property {int} ac_bonus
-     * @property {int} attack_bonus
-     * @property {int} temp_hp
-     */
-
-    /** @return CharacterDataT */
-    get data() {
-        return this.get(Character.DATA_FIELD)
-    }
-
-    /** @param {CharacterDataT} data */
-    set data(data) {
-        this.set(Character.DATA_FIELD, data)
-    }
-
-    /**
-     * @typedef {{}} CharacterCoreT
-     * @property {string} category
-     * @property {string} tag
-     * @property {number} value
-     */
-
-    /**
-     * @typedef {{}} CharacterModifierT
-     * @property {string} category
-     * @property {string} tag
-     * @property {string} modifierID
-     * @property {number} value
-     */
-
-    /** @return {[CharacterCoreT]} */
-    get core() {
-        return this.get(Character.CORE_FIELD)
-    }
-
-    /** @param {[CharacterCoreT]} data */
-    set core(data) {
-        this.set(Character.CORE_FIELD, data)
-    }
-
-    /** @return {[CharacterModifierT]} */
-    get modifiers() {
-        return this.get(Character.MODIFIER_FIELD)
-    }
-
-    /** @param {[CharacterModifierT]} data */
-    set modifiers(data) {
-        this.set(Character.MODIFIER_FIELD, data)
+    /** @param {Saves} val */
+    set saves(val) {
+        this.set(Character.SAVES_FIELD, val)
     }
 }
 
-Character.CLASS_NAME = 'Character';
-Character.USER_FIELD = 'user';
-Character.HP_DICE_FIELD = 'hpDice';
-Character.DAMAGE_FIELD = 'damage';
-Character.LEVEL_FIELD = 'level';
-Character.SPELLS_FIELD = 'spells';
-Character.FEATS_FIELD = 'feats';
-Character.ITEMS_FIELD = 'items';
-Character.ABILITIES_FIELD = 'abilities';
-Character.SPELL_SLOTS_USED_FIELD = 'spellSlotsUsed';
-Character.DATA_FIELD = 'data';
-Character.SPELL_SLOTS_FIELD = 'spellSlots';
+Character.CLASS_NAME = "Character";
+Character.USER_FIELD = "user";
+Character.LEVEL_FIELD = "level";
 
 /**
- * Flexible core fields
+ * @typedef {{}} DefenseObject
+ * @property {int} AC
+ * @property {int} FFAC
+ * @property {int} TAC
+ * @property {int} FFTAC
+ * @property {int} CMD
  */
-Character.CORE_FIELD = 'core';
-Character.MODIFIER_FIELD = 'modifier';
+Character.DEFENSE_FIELD = "defense";
+
+/**
+ * @typedef {{}} OffenseObject
+ * @property {int} BAB
+ * @property {int} CMB
+ */
+Character.OFFENSE_FIELD = "offense";
+
+/**
+ * @typedef {{}} StatsObject
+ * @property {int} Strength
+ * @property {int} Agility
+ * @property {int} Constitution
+ * @property {int} Intelligence
+ * @property {int} Wisdom
+ * @property {int} Charisma
+ */
+Character.STATS_FIELD = "stats";
+
+/**
+ * @typedef {{}} Skills
+ * @property {int} Strength
+ * @property {int} Agility
+ * @property {int} Constitution
+ * @property {int} Intelligence
+ * @property {int} Wisdom
+ * @property {int} Charisma
+ */
+Character.STATS_FIELD = "stats";
+
+/**
+ * @typedef {{}} Saves
+ * @property {int} fortitude
+ * @property {int} reflex
+ * @property {int} will
+ */
+Character.SAVES_FIELD = "saves";
+
+/**
+ * @typedef {{}} SkillsBlock
+ *
+ * @property {int} acrobatics
+ * @property {int} appraise
+ * @property {int} bluff
+ * @property {int} climb
+ * @property {int} diplomacy
+ * @property {int} disable_device
+ * @property {int} disguise
+ * @property {int} escape_artist
+ * @property {int} fly
+ * @property {int} heal
+ * @property {int} intimidate
+ * @property {int} knowledge_arcana
+ * @property {int} knowledge_dungeneering
+ * @property {int} knowledge_engineering
+ * @property {int} knowledge_local
+ * @property {int} knowledge_planes
+ * @property {int} knowledge_religion
+ * @property {int} knowledge_nature
+ * @property {int} linguistics
+ * @property {int} perception
+ * @property {int} ride
+ * @property {int} sense_motive
+ * @property {int} sleight_of_hand
+ * @property {int} spellcraft
+ * @property {int} stealth
+ * @property {int} survival
+ * @property {int} swim
+ * @property {int} use_magic_device
+ */
+Character.SKILLS_FIELD = "skills";
 
 module.exports = Character;

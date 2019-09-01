@@ -20,8 +20,6 @@ import StaticClicker from "./static/StaticClicker";
 import StaticViewManager from "./popup/StaticViewManager";
 import DMConsole from "./dm/DMConsole";
 import YoutubePlayer from "./logic/YoutubePlayer";
-import CoreController from "./logic/core/controller/CoreController";
-import PFRuleCore from "./logic/core/controller/NewPFCore";
 
 const root = document.getElementById('root');
 
@@ -65,7 +63,6 @@ class Login extends React.Component {
                 BrowserWebSocket.init(username);
                 StaticController.init();
                 StaticSettings.init();
-                CoreController.init(PFRuleCore);
                 this.forceUpdate();
             })
             .catch(e => {

@@ -5,9 +5,6 @@
 import * as React from "react";
 import rootScss from '../../scss/root.scss';
 import LoginController from "../logic/LoginController";
-import NormalRequest from "../logic/NormalRequest";
-import Roller from "../roller/Roller";
-import PathfinderCharacterCore from "./PathfinderCharacterCore";
 import PopupManager from "../popup/PopupManager";
 import RollInitiative from "../logic/requests/RollInitiative";
 import DiceRoller from "../logic/DiceRoller";
@@ -18,11 +15,10 @@ import AddItemPopup from "./popups/AddItemPopup";
 import AddAbilityPopup from "./popups/AddAbilityPopup";
 import AddSpellPopup from "./popups/AddSpellPopup";
 import Transformer from "../logic/Transformer";
-import NewPFCore from "../logic/core/controller/NewPFCore";
-import CoreController from "../logic/core/controller/CoreController";
-import PFDataUtils from "./PFDataUtils";
+import CharacterCore from "./CharacterCore";
 
 const CharacterHelper = require('../../common/CharacterDataHelper');
+
 
 /**
  * @param {[[]]} rows
@@ -35,7 +31,7 @@ function generateTable(rows, callbacks) {
         const th = [];
         for (let j = 0; j < rows[i].length; j++) {
             let data = rows[i][j];
-            if (data === undefined || data === null) data = "";
+            if (typeof data === "undefined" || data === null) data = "";
             th.push(<th
                 key={i.toString() + '_' + j.toString()}
                 className={data.length && data.length > 20 ? rootScss.big_box : null}
@@ -48,23 +44,31 @@ function generateTable(rows, callbacks) {
         >{th}</tr>);
     }
     return <table>
-        <tbody>
-        {tr}
-        </tbody>
+        <tbody>{tr}</tbody>
     </table>;
 }
 
-function roll(bonus) {
-    return Roller.rollDice() + bonus;
+function keyToArray(data) {
+    const ans = [];
+    for (let key in data) ans.push([key, data[key]]);
+    return ans;
 }
 
-
+const GENERATE_STATS = self => generateTable(keyToArray(self.state.character.stats),
+    (row) => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0])));
+const GENERATE_SAVES = self => generateTable(keyToArray(self.state.character.saves),
+    (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])));
+const GENERATE_ADDITIONAL = self => generateTable(keyToArray(self.state.character.offense),
+    (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])));
+const GENERATE_DEFENCE = self => generateTable(keyToArray(self.state.character.defense),
+    (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])));
+const GENERATE_SKILLS = self => generateTable(keyToArray(self.state.character.skills),
+    (row) => PopupManager.push(new DiceRoller().setBonus(row[3]).roll().toString(row[0])));
 
 export default class CharacterWindow extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             /** @type Character */
             characterData: null,
@@ -79,12 +83,13 @@ export default class CharacterWindow extends React.Component {
     loadCharacter() {
         StaticController.getCharacter()
             .then(character => {
+                console.log(character);
                 this.setState({
                     characterData: character,
-                    character: CoreController.createCharacter(character)
+                    character: new CharacterCore(character)
                 })
             })
-            .catch(error => console.log(error));
+            .catch(console.error);
     }
 
     async rollInitiative(row) {
@@ -182,59 +187,22 @@ export default class CharacterWindow extends React.Component {
 
     render() {
         if (!this.state.characterData) return null;
-        /** @type {Character} */
-        const character = this.state.characterData;
-        /** @type {CharacterDataT} */
-        const data = character.data;
-        const statBonuses = {
-            str: CharacterHelper.calculateStatBonus(data.stats.strength),
-            dex: CharacterHelper.calculateStatBonus(data.stats.dexterity),
-            con: CharacterHelper.calculateStatBonus(data.stats.constitution),
-            int: CharacterHelper.calculateStatBonus(data.stats.intelligence),
-            wis: CharacterHelper.calculateStatBonus(data.stats.wisdom),
-            cha: CharacterHelper.calculateStatBonus(data.stats.charisma)
-        };
-        return <div className={rootScss.menu_page}>
-            <div id={rootScss.character_screen}>
-                <h2>{LoginController.getLogin()}</h2>
-                <h3>Primary stats</h3>
-                {
-                    generateTable(
-                        PFDataUtils.getStats(this.state.character),
-                        (row) => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0]))
-                    )
-                }
-                <h2>Saves</h2>
-                {
-                    generateTable(
-                        PFDataUtils.getSaves(this.state.character),
-                        (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0]))
-                    )
-                }
-                <h2>Additional</h2>
-                {
-                    generateTable(
-                        PFDataUtils.getAdditionals(this.state.character),
-                        (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0]))
-                    )}
-                <h2>Defense</h2>
-                {
-                    generateTable(
-                        PFDataUtils.getDefense(this.state.character),
-                        (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0]))
-                    )}
-                <h2>Skills</h2>
-                {
-                    generateTable(
-                        PFDataUtils.getSkills(this.state.character),
-                        (row) => PopupManager.push(new DiceRoller().setBonus(row[3]).roll().toString(row[0]))
-                    )
-                }
-                {this.renderAbilities()}
-                {this.renderFeats()}
-                {this.renderSpells()}
-                {this.renderItems()}
-            </div>
+        return <div id={rootScss.character_screen}>
+            <h2>{LoginController.getLogin()}</h2>
+            <h3>Primary stats</h3>
+            {GENERATE_STATS(this)}
+            <h2>Saves</h2>
+            {GENERATE_SAVES(this)}
+            <h2>Additional</h2>
+            {GENERATE_ADDITIONAL(this)}
+            <h2>Defense</h2>
+            {GENERATE_DEFENCE(this)}
+            <h2>Skills</h2>
+            {GENERATE_SKILLS(this)}
+            {this.renderAbilities()}
+            {this.renderFeats()}
+            {this.renderSpells()}
+            {this.renderItems()}
         </div>
     }
 }
