@@ -96,18 +96,24 @@ class Login extends React.Component {
     }
 
     renderMain() {
+        const iconClassName = `${rootScss.top_icon}  material-icons`;
         return <div>
             <div className={`${rootScss.static_element} ${rootScss.menu}`}>
-                <button onClick={() => this.setState({currentPage: <ChatWindow/>})}>Chat</button>
-                <button onClick={() => this.setState({currentPage: <RollerWindow/>})}>Roller</button>
+                <i className={iconClassName}
+                   onClick={() => this.setState({currentPage: <ChatWindow/>})}>chat_bubble</i>
+                <i className={iconClassName}
+                   onClick={() => this.setState({currentPage: <RollerWindow/>})}>crop_square</i>
                 {LoginController.isDM() ?
-                    <button onClick={() => this.setState({currentPage: <GroupWindow/>})}>Group</button> :
-                    <button onClick={() => this.setState({currentPage: <CharacterWindow/>})}>Stats</button>}
-                <button onClick={() => this.setState({currentPage: <CombatWindow/>})}>Combat</button>
+                    <i className={iconClassName}
+                       onClick={() => this.setState({currentPage: <GroupWindow/>})}>people</i> :
+                    <i className={iconClassName}
+                       onClick={() => this.setState({currentPage: <CharacterWindow/>})}>person</i>}
+                <i className={iconClassName}
+                   onClick={() => this.setState({currentPage: <CombatWindow/>})}>map</i>
                 {LoginController.isDM() ?
-                    <button onClick={() => this.setState({currentPage: <DMConsole/>})}>DM</button> : null}
-                <img id={rootScss.logout} src="/Settings_black-512.png" onClick={this.showSettings.bind(this)}
-                />
+                    <i className={iconClassName}
+                       onClick={() => this.setState({currentPage: <DMConsole/>})}>donut_small</i> : null}
+                <i className={iconClassName} onClick={this.showSettings.bind(this)}>settings</i>
             </div>
             <div id={rootScss.workspace}>{this.state.currentPage}</div>
             {this.state.settings}
