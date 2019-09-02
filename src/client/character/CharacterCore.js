@@ -41,7 +41,7 @@ export default class CharacterCore {
         setArray(this.offense, data.offense);
         /** @type {DefenseObject} */
         this.defense = DefaultCharacterData.getDefense();
-        setArray(this.skills, data.defense);
+        setArray(this.defense, data.defense);
         /** @type {Saves} */
         this.saves = DefaultCharacterData.getSaves();
         setArray(this.saves, data.saves);

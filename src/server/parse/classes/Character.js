@@ -110,17 +110,6 @@ Character.OFFENSE_FIELD = "offense";
 Character.STATS_FIELD = "stats";
 
 /**
- * @typedef {{}} Skills
- * @property {int} Strength
- * @property {int} Agility
- * @property {int} Constitution
- * @property {int} Intelligence
- * @property {int} Wisdom
- * @property {int} Charisma
- */
-Character.STATS_FIELD = "stats";
-
-/**
  * @typedef {{}} Saves
  * @property {int} fortitude
  * @property {int} reflex
@@ -159,6 +148,8 @@ Character.SAVES_FIELD = "saves";
  * @property {int} survival
  * @property {int} swim
  * @property {int} use_magic_device
+ * @property {int} handle_animal
+ * @property {int} craft
  */
 Character.SKILLS_FIELD = "skills";
 

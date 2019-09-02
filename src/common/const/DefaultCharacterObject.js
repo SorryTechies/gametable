@@ -37,7 +37,9 @@ module.exports.SKILL_NAMES = [
     "stealth",
     "survival",
     "swim",
-    "use_magic_device"
+    "use_magic_device",
+    "handle_animal",
+    "craft"
 ];
 module.exports.getSkills = () => {
     return createWithDefault(module.exports.SKILL_NAMES, 0);
