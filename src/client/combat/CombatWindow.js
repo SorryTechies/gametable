@@ -32,7 +32,7 @@ export default class CombatWindow extends React.Component {
 
         this.onChangeTimer = null;
         this.currentZoomValue = DEFAULT;
-
+        this.mapRef = React.createRef();
         this.state = {
             /** @type CombatMap */
             map: null,
@@ -53,14 +53,14 @@ export default class CombatWindow extends React.Component {
 
     async saveSelected() {
         const request = new NormalRequest();
-        request.method =  NormalRequest.METHOD.POST;
+        request.method = NormalRequest.METHOD.POST;
         request.path = '/saveObject';
         await request.send(this.state.objectSelected);
     }
 
     componentDidMount() {
         StaticController.subscribe({id: WsConstants.STATIC_MAP, func: this.getMap.bind(this)});
-        this.getMap().catch(e => console.log(e));
+        this.getMap().catch(console.error);
     }
 
     componentWillUnmount() {
@@ -88,7 +88,6 @@ export default class CombatWindow extends React.Component {
                         marginRight: "auto",
                         marginTop: "3px"
                     }}
-                    ref={unit.name}
                     className={rootScss.map_object}
                     onClick={() => this.clickObject(unit)}
                     key={unit.name}>{unit.img ? "" : unit.name}
@@ -100,7 +99,7 @@ export default class CombatWindow extends React.Component {
                             width: (this.state.gridSizeInt - 10).toString() + "px",
                             height: (this.state.gridSizeInt - 10).toString() + "px",
                         }}
-                        >{obj}</div>
+                    >{obj}</div>
                 } else {
                     return obj;
                 }
@@ -127,13 +126,15 @@ export default class CombatWindow extends React.Component {
             }
             arr.push(<tr key={i.toString()}>{innerArr}</tr>);
         }
-        return <table style={{
-            backgroundSize: "100% 100%",
-            backgroundRepeat: "no-repeat",
-            backgroundImage: `url(${this.state.map.img})`,
-            width: this.state.gridSizeInt.toString() + "px",
-            height: this.state.gridSizeInt.toString() + "px",
-        }}>
+        return <table
+            ref={this.mapRef}
+            style={{
+                backgroundSize: "100% 100%",
+                backgroundRepeat: "no-repeat",
+                backgroundImage: `url(${this.state.map.img})`,
+                width: this.state.gridSizeInt.toString() + "px",
+                height: this.state.gridSizeInt.toString() + "px",
+            }}>
             <tbody>
             {arr}
             </tbody>
@@ -141,11 +142,7 @@ export default class CombatWindow extends React.Component {
     }
 
     getStatusElement() {
-        return <div
-            className={`${rootScss.static_element} ${rootScss.combat_menu}`}
-        >
-            <input/>
-        </div>
+        return <div className={`${rootScss.static_element} ${rootScss.combat_menu}`}><input/></div>
     }
 
     clickObject(unit) {
@@ -268,23 +265,26 @@ export default class CombatWindow extends React.Component {
                 break;
         }
         if (map) {
-            return <div>
+            if (this.mapRef && this.mapRef.current) {
+                const map = this.mapRef.current;
+                map.addEventListener('click', () => alert("click"));
+                map.addEventListener('gesturechange', () => alert("gesturechange"), false);
+                map.addEventListener('gesturestart', () => alert("gesturestart"), false);
+                map.addEventListener('gestureend', () => alert("gestureend"), false);
+                map.addEventListener('touchstart ', () => alert("touchstart "), false);
+                map.addEventListener('touchend  ', () => alert("touchend  "), false);
+            }
+            return <div ref={this.mapRef}>
                 <div
                     className={rootScss.menu_page}
-                    style={{
-                        paddingBottom: this.state.objectSelected ? "60px" : "0",
-                    }}
+                    style={{paddingBottom: this.state.objectSelected ? "60px" : "0"}}
                 >
-                    <div ref="whole_map"
-                        style={{
+                    <div style={{
                         width: (this.state.gridSizeInt * this.state.map.gridX) + 'px',
                         height: (this.state.gridSizeInt * this.state.map.gridY + 200) + 'px'
                     }}>
                         <div className={rootScss.combat_map}>
-                            <div id={rootScss.combat_map_background}
-                            >
-                                {this.drawGrid()}
-                            </div>
+                            <div id={rootScss.combat_map_background}>{this.drawGrid()}</div>
                         </div>
                     </div>
                 </div>

@@ -22,16 +22,13 @@ import DMConsole from "./dm/DMConsole";
 import YoutubePlayer from "./logic/YoutubePlayer";
 
 const root = document.getElementById('root');
-
-let initialized = false;
-
 const body = document.getElementsByTagName('body')[0];
 body.addEventListener('click', StaticClicker.handleClick);
 
+let initialized = false;
 class Login extends React.Component {
     constructor(pops) {
         super(pops);
-
         this.state = {
             loginInput: "",
             currentPage: <ChatWindow/>,
@@ -49,7 +46,7 @@ class Login extends React.Component {
                     initialized = true;
                     this.forceUpdate();
                 }
-            });
+            }).catch(console.error);
     }
 
     tryToLogin(username) {
