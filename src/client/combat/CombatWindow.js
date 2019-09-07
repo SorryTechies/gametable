@@ -29,10 +29,8 @@ export default class CombatWindow extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.onChangeTimer = null;
         this.currentZoomValue = DEFAULT;
-        this.mapRef = React.createRef();
         this.state = {
             /** @type CombatMap */
             map: null,
@@ -127,7 +125,6 @@ export default class CombatWindow extends React.Component {
             arr.push(<tr key={i.toString()}>{innerArr}</tr>);
         }
         return <table
-            ref={this.mapRef}
             style={{
                 backgroundSize: "100% 100%",
                 backgroundRepeat: "no-repeat",
@@ -265,16 +262,7 @@ export default class CombatWindow extends React.Component {
                 break;
         }
         if (map) {
-            if (this.mapRef && this.mapRef.current) {
-                const map = this.mapRef.current;
-                map.addEventListener('click', () => alert("click"));
-                map.addEventListener('gesturechange', () => alert("gesturechange"), false);
-                map.addEventListener('gesturestart', () => alert("gesturestart"), false);
-                map.addEventListener('gestureend', () => alert("gestureend"), false);
-                map.addEventListener('touchstart ', () => alert("touchstart "), false);
-                map.addEventListener('touchend  ', () => alert("touchend  "), false);
-            }
-            return <div ref={this.mapRef}>
+            return <div>
                 <div
                     className={rootScss.menu_page}
                     style={{paddingBottom: this.state.objectSelected ? "60px" : "0"}}

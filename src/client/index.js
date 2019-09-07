@@ -20,6 +20,7 @@ import StaticClicker from "./static/StaticClicker";
 import StaticViewManager from "./popup/StaticViewManager";
 import DMConsole from "./dm/DMConsole";
 import YoutubePlayer from "./logic/YoutubePlayer";
+import SettingsWindow from "./settings/SettingsWindow";
 
 const root = document.getElementById('root');
 const body = document.getElementsByTagName('body')[0];
@@ -32,8 +33,7 @@ class Login extends React.Component {
         this.state = {
             loginInput: "",
             currentPage: <ChatWindow/>,
-            additionMenuBar: null,
-            settings: null
+            additionMenuBar: null
         };
     }
 
@@ -69,27 +69,10 @@ class Login extends React.Component {
             });
     }
 
-    showSettings() {
-        if (this.state.settings) {
-            this.setState({settings: null});
-        } else {
-            this.setState({
-                settings: <div className={rootScss.global_popup}>
-                    <div>
-                        <label>Volume</label>
-                        <input type="range" min="0" max="10" defaultValue={StaticSettings.getVolume()} step="1"
-                               onChange={event => StaticSettings.setVolume(event.target.value)}
-                        />
-                    </div>
-                    <button onClick={() => {
-                        LoginController.logOut();
-                        BrowserWebSocket.closeConnection();
-                        this.forceUpdate();
-                    }}>Logout
-                    </button>
-                </div>
-            });
-        }
+    logoutCallback() {
+        LoginController.logOut();
+        BrowserWebSocket.closeConnection();
+        this.setState({currentPage: <ChatWindow/>});
     }
 
     renderMain() {
@@ -110,10 +93,10 @@ class Login extends React.Component {
                 {LoginController.isDM() ?
                     <i className={iconClassName}
                        onClick={() => this.setState({currentPage: <DMConsole/>})}>donut_small</i> : null}
-                <i className={iconClassName} onClick={this.showSettings.bind(this)}>settings</i>
+                <i className={iconClassName} onClick={() => this.setState(
+                    {currentPage: <SettingsWindow clickCallback={this.logoutCallback.bind(this)}/>})}>settings</i>
             </div>
             <div id={rootScss.workspace}>{this.state.currentPage}</div>
-            {this.state.settings}
             <PopupManager/>
             <StaticViewManager/>
             <YoutubePlayer/>

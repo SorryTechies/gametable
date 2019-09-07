@@ -18,19 +18,14 @@ const DEFAULT_VOLUME = 2;
 let volume = DEFAULT_VOLUME;
 
 function saveSettings() {
-    new IndexedDDB()
-        .saveSettings([{key: StaticSettings.VOLUME, value: volume}])
-        .catch(error => console.error(error));
+    new IndexedDDB().saveSettings([{key: StaticSettings.VOLUME, value: volume}]).catch(console.error);
 }
 
 const subscribers = [];
 export default class StaticSettings {
     static init() {
-        new IndexedDDB()
-            .getSettings()
-            .then(result => {
-                volume = findSettingValue(result, StaticSettings.VOLUME, StaticSettings.DEFAULT_VOLUME);
-            })
+        new IndexedDDB().getSettings()
+            .then(result => volume = findSettingValue(result, StaticSettings.VOLUME, StaticSettings.DEFAULT_VOLUME))
             .catch(error => PopupManager.push(JSON.stringify(error)));
     }
 
