@@ -30,10 +30,19 @@ export default class StaticController {
         this.loadMap();
         this.loadParticipants();
         this.loadMusic();
-        BrowserWebSocket.subscribe({id: WsConstants.STATIC_CHAR, func: this.update.bind(this, WsConstants.STATIC_CHAR)});
-        BrowserWebSocket.subscribe({id: WsConstants.STATIC_CHAT, func: this.update.bind(this, WsConstants.STATIC_CHAT)});
+        BrowserWebSocket.subscribe({
+            id: WsConstants.STATIC_CHAR,
+            func: this.update.bind(this, WsConstants.STATIC_CHAR)
+        });
+        BrowserWebSocket.subscribe({
+            id: WsConstants.STATIC_CHAT,
+            func: this.update.bind(this, WsConstants.STATIC_CHAT)
+        });
         BrowserWebSocket.subscribe({id: WsConstants.STATIC_MAP, func: this.update.bind(this, WsConstants.STATIC_MAP)});
-        BrowserWebSocket.subscribe({id: WsConstants.STATIC_MUSIC, func: this.update.bind(this, WsConstants.STATIC_MUSIC)});
+        BrowserWebSocket.subscribe({
+            id: WsConstants.STATIC_MUSIC,
+            func: this.update.bind(this, WsConstants.STATIC_MUSIC)
+        });
     }
 
     static loadCharacter() {
@@ -120,14 +129,12 @@ export default class StaticController {
         for (let i = 0; i < subscribers.length; i++) if (subscribers[i].id === id) subscribers[i].func();
     }
 
-    static async saveCharacter() {
+    static async saveCharacter(character) {
         const request = new NormalRequest();
         request.path = "/saveCharacter";
         request.method = NormalRequest.METHOD.POST;
         const char = await this.getCharacter();
-        request.send(char)
-            .then(this.loadCharacter)
-            .catch(error => console.log(error));
+        request.send(char).then(this.loadCharacter).catch(console.error);
     }
 
     static subscribe = obj => subscribers.push(obj);

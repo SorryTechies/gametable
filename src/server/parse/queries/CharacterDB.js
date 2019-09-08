@@ -13,16 +13,16 @@ module.exports.saveCharacter = async json => {
     json.className = Character.CLASS_NAME;
     /** @type Character */
     const character = await new Parse.Query(Character.CLASS_NAME).get(json.objectId, {useMasterKey: true});
-    character.damage = json.damage;
-    character.level = json.level;
-    character.hpDice = json.hpDice;
-    character.spellSlots = json.spellSlots;
-    character.spellSlotsUsed = json.spellSlotsUsed;
-    character.data = json.data;
-    character.feats = json.feats;
-    character.items = json.items;
-    character.abilities = json.abilities;
-    character.spells = json.spells;
+    const setIfExists = name => {
+        if (typeof json[name] !== "undefined") {
+            character[name] = json[name];
+        }
+    };
+    setIfExists(Character.LEVEL_FIELD);
+    setIfExists(Character.STATS_FIELD);
+    setIfExists(Character.SKILLS_FIELD);
+    setIfExists(Character.OFFENSE_FIELD);
+    setIfExists(Character.DEFENSE_FIELD);
     return character.save();
 };
 

@@ -16,54 +16,33 @@ import AddAbilityPopup from "./popups/AddAbilityPopup";
 import AddSpellPopup from "./popups/AddSpellPopup";
 import Transformer from "../logic/Transformer";
 import CharacterCore from "./CharacterCore";
+import ClickableEditableRow from "./ClickableEditableRow";
 
-/**
- * @param {[[]]} rows
- * @param {Function | [Function]} [callbacks]
- * @return {XML}
- */
-function generateTable(rows, callbacks) {
-    const tr = [];
-    for (let i = 0; i < rows.length; i++) {
-        const th = [];
-        for (let j = 0; j < rows[i].length; j++) {
-            let data = rows[i][j];
-            if (typeof data === "undefined" || data === null) data = "";
-            th.push(<th
-                key={i.toString() + '_' + j.toString()}
-                className={data.length && data.length > 20 ? rootScss.big_box : null}
-                onClick={Array.isArray(callbacks) ? () => callbacks[j](data) : null}
-            >{data}</th>);
+function generateTable(args, type, click, onSave) {
+    const arr = [];
+    for (let key in args[0]) {
+        if (args[0].hasOwnProperty(key)) {
+            arr.push(<ClickableEditableRow
+                args={args}
+                key={key}
+                name={key}
+                type={type}
+                onClick={click}
+                onSave={onSave}/>
+            );
         }
-        tr.push(<tr
-            key={i}
-            onClick={Array.isArray(callbacks) || !callbacks ? null : () => callbacks(rows[i])}
-        >{th}</tr>);
     }
     return <table>
-        <tbody>{tr}</tbody>
+        <tbody>{arr}</tbody>
     </table>;
 }
 
-function keyToArray(data, additional) {
-    const ans = [];
-    for (let key in data) {
-        const arr = [key, data[key]];
-        if (additional) arr.push(additional[key]);
-        ans.push(arr);
-    }
-    return ans;
-}
-
-const GENERATE_STATS = self => generateTable(keyToArray(self.state.character.stats, self.state.character.bonuses),
-    (row) => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0])));
-const GENERATE_SAVES = self => generateTable(keyToArray(self.state.character.saves),
-    (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])));
-const GENERATE_ADDITIONAL = self => generateTable(keyToArray(self.state.character.offense),
-    (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])));
-const GENERATE_DEFENCE = self => generateTable(keyToArray(self.state.character.defense));
-const GENERATE_SKILLS = self => generateTable(keyToArray(self.state.character.skills),
-    (row) => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])));
+const GENERATE_STATS = (self, save) => generateTable([self.state.character.bonuses, self.state.character.stats], "number",
+    row => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0])), save);
+const GENERATE_SAVES = (self, save) => generateTable([self.state.character.stats], "number",
+    row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
+const GENERATE_OFFENSE = (self, save) => generateTable([self.state.character.offense], "number",
+    row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
 
 export default class CharacterWindow extends React.Component {
 
@@ -74,6 +53,14 @@ export default class CharacterWindow extends React.Component {
             characterData: null,
             character: null
         };
+        this.saveFunction = async () => {
+            try {
+                await this.state.character.saveToServer();
+                this.loadCharacter();
+            } catch (e) {
+                console.error(e);
+            }
+        }
     }
 
     componentDidMount() {
@@ -189,15 +176,11 @@ export default class CharacterWindow extends React.Component {
         return <div id={rootScss.character_screen}>
             <h2>{LoginController.getLogin()}</h2>
             <h3>Primary stats</h3>
-            {GENERATE_STATS(this)}
-            <h2>Saves</h2>
-            {GENERATE_SAVES(this)}
-            <h2>Additional</h2>
-            {GENERATE_ADDITIONAL(this)}
-            <h2>Defense</h2>
-            {GENERATE_DEFENCE(this)}
-            <h2>Skills</h2>
-            {GENERATE_SKILLS(this)}
+            {GENERATE_STATS(this, this.saveFunction)}
+            <h3>Saves</h3>
+            {GENERATE_SAVES(this, this.saveFunction)}
+            <h3>Offense</h3>
+            {GENERATE_OFFENSE(this, this.saveFunction)}
             {this.renderAbilities()}
             {this.renderFeats()}
             {this.renderSpells()}

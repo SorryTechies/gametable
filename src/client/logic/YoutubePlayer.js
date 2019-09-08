@@ -8,9 +8,7 @@ import StaticSettings from "../static/StaticSettings";
 import * as WsConstants from "../../common/WsConstants";
 import PopupManager from "../popup/PopupManager";
 
-const Y_API = "ytapi";
 const Y_PLAYER = "youtube_player";
-const MUSIC_VOLUME = 2;
 export default class YoutubePlayer extends React.Component {
     constructor(props) {
         super(props);
@@ -39,7 +37,7 @@ export default class YoutubePlayer extends React.Component {
                     this.setState({showPermissionPopup: true});
                 } else {
                     this.player.unMute();
-                    this.player.setVolume(StaticSettings.getVolume());
+                    this.player.setVolume(StaticSettings.get(StaticSettings.VOLUME));
                 }
                 break;
         }
@@ -100,7 +98,7 @@ export default class YoutubePlayer extends React.Component {
                 <button onClick={() => {
                     if (this.player) {
                         this.player.unMute();
-                        this.player.setVolume(StaticSettings.getVolume());
+                        this.player.setVolume(StaticSettings.get(StaticSettings.VOLUME));
                     }
                     this.setState({showPermissionPopup: false});
                     this.permissionGranted = true;

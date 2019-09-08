@@ -3,6 +3,7 @@
  */
 
 const DefaultCharacterData = require("../../common/const/DefaultCharacterObject");
+import StaticController from "../static/StaticController";
 
 function getDefault(val, def) {
     return !!val ? val : def;
@@ -45,5 +46,16 @@ export default class CharacterCore {
         /** @type {Saves} */
         this.saves = DefaultCharacterData.getSaves();
         setArray(this.saves, data.saves);
+    }
+
+    async saveToServer() {
+        const char = await StaticController.getCharacter();
+        char.level = this.level;
+        char.skills = this.skills;
+        char.stats = this.stats;
+        char.offense = this.offense;
+        char.defense = this.defense;
+        char.saves = this.defense;
+        return StaticController.saveCharacter();
     }
 }
