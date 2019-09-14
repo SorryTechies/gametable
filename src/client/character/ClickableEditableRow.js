@@ -31,27 +31,36 @@ export default class ClickableEditableRow extends React.Component {
         super(props);
         this.state = {edit: false};
         this.isLast = index => index === (this.props.args.length);
+        this.isFist = index => index === 0;
         this.callback = e => {
-            this.props.args[this.props.args.length - 1][this.props.name] = e.target.value;
+            const value = this.props.type === "number" ? parseInt(e.target.value) : e.target.value;
+            this.props.args[this.props.args.length - 1][this.props.name] = value;
             this.forceUpdate();
+        };
+        this.stopRedacting = () => {
+            this.props.onSave();
+            this.setState({edit: false});
         }
     }
 
     getCell(value, index) {
-        let inner;
+        let inner = value;
         if (this.isLast(index) && this.state.edit) {
             inner = <input
                 type={getType(this.props.type)}
                 value={value}
-                onBlur={() => {
-                    this.props.onSave();
-                    this.setState({edit: false});
-                }}
+                onBlur={this.stopRedacting}
                 onChange={this.callback}
                 autoFocus={true}
+                onKeyPress={e => {
+                    const keyNum = e.keyCode ? e.keyCode : e.which;
+                    if (keyNum === 13) {
+                        this.stopRedacting();
+                    }
+                }}
             />;
         } else {
-            inner = value;
+            if (this.isFist(index) && this.props.displayName) inner = this.props.displayName;
         }
         return <th
             key={index}
@@ -71,8 +80,8 @@ export default class ClickableEditableRow extends React.Component {
         const name = this.props.name;
         const args = this.props.args;
         const array = toArray(args, name);
-        return <tr
-            onClick={() => this.props.onClick(toArray(args, name))}>{array.map((cell, i) => this.getCell(cell, i))}</tr>;
+        const onClick = typeof this.props.onClick === "function" ? () => this.props.onClick(toArray(args, name)) : null;
+        return <tr onClick={onClick}>{array.map(this.getCell.bind(this))}</tr>;
     }
 
     render() {
@@ -88,7 +97,8 @@ ClickableEditableRow.propTypes = {
     args: PropTypes.array.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
-    onSave: PropTypes.func.isRequired
+    onSave: PropTypes.func.isRequired,
+    onClick: PropTypes.func,
+    displayName: PropTypes.string
 };
 

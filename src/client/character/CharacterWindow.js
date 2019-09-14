@@ -2,6 +2,7 @@
  * Created by LastBerserk on 26.01.2019.
  */
 
+const TranslationEn = require("../../common/const/TranslationEn");
 import * as React from "react";
 import rootScss from '../../scss/root.scss';
 import LoginController from "../logic/LoginController";
@@ -9,12 +10,6 @@ import PopupManager from "../popup/PopupManager";
 import RollInitiative from "../logic/requests/RollInitiative";
 import DiceRoller from "../logic/DiceRoller";
 import StaticController from "../static/StaticController";
-import StaticViewManager from "../popup/StaticViewManager";
-import AddSpecialPopup from "./popups/AddSpecialPopup";
-import AddItemPopup from "./popups/AddItemPopup";
-import AddAbilityPopup from "./popups/AddAbilityPopup";
-import AddSpellPopup from "./popups/AddSpellPopup";
-import Transformer from "../logic/Transformer";
 import CharacterCore from "./CharacterCore";
 import ClickableEditableRow from "./ClickableEditableRow";
 
@@ -38,6 +33,7 @@ function generateTable(args, type, click, onSave, sort) {
             args={args}
             key={key}
             name={key}
+            displayName={TranslationEn.translate(key)}
             type={type}
             onClick={click}
             onSave={onSave}/>)}</tbody>
@@ -50,7 +46,7 @@ const GENERATE_SAVES = (self, save) => generateTable([self.state.character.saves
     row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
 const GENERATE_OFFENSE = (self, save) => generateTable([self.state.character.offense], "number",
     row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
-const GENERATE_DEFENSE = (self, save) => generateTable([self.state.character.defense], "number");
+const GENERATE_DEFENSE = (self, save) => generateTable([self.state.character.defense], "number", null, save);
 const GENERATE_SKILLS = (self, save) => generateTable([self.state.character.skills], "number",
     row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save, true);
 

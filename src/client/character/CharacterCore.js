@@ -55,7 +55,7 @@ export default class CharacterCore {
         char.stats = this.stats;
         char.offense = this.offense;
         char.defense = this.defense;
-        char.saves = this.defense;
+        char.saves = this.saves;
         return StaticController.saveCharacter();
     }
 }

@@ -23,6 +23,7 @@ module.exports.saveCharacter = async json => {
     setIfExists(Character.SKILLS_FIELD);
     setIfExists(Character.OFFENSE_FIELD);
     setIfExists(Character.DEFENSE_FIELD);
+    setIfExists(Character.SAVES_FIELD);
     return character.save();
 };
 
