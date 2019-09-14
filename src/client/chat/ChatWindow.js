@@ -64,7 +64,7 @@ export default class ChatWindow extends React.Component {
 
     render() {
         return <div>
-            <div id={rootScss.bottom_menu} className={`${rootScss.static_element}`}>
+            <div id={rootScss.bottom_menu} className={rootScss.static_element}>
                 <form autoComplete="off">
                     <input id={rootScss.chat_input} type="text" value={this.state.input}
                            onChange={event => this.setState({input: event.target.value})}/>

@@ -55,13 +55,13 @@ const GENERATE_SKILLS = (self, save) => generateTable([self.state.character.skil
     row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save, true);
 
 export default class CharacterWindow extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
             /** @type Character */
             characterData: null,
-            character: null
+            character: null,
+            currentPage: "basic"
         };
         this.saveFunction = async () => {
             try {
@@ -95,110 +95,53 @@ export default class CharacterWindow extends React.Component {
         await request.send(diceRoller.calculatedResult);
     }
 
-    renderItems() {
-        const character = this.state.characterData;
-        let items = null;
-        if (character.items && character.items.length > 0) {
-            items = generateTable(character.items.map(item => [
-                item.name,
-                Transformer.insertRollTag(item.description)
-            ]))
+    renderPage() {
+        switch (this.state.currentPage) {
+            case "basic":
+                return <div>
+                    <h3>Primary stats</h3>
+                    {GENERATE_STATS(this, this.saveFunction)}
+                </div>;
+            case "offense":
+                return <div>
+                    <h3>Offense</h3>
+                    {GENERATE_OFFENSE(this, this.saveFunction)}
+                </div>;
+            case "defense":
+                return <div>
+                    <h3>Saves</h3>
+                    {GENERATE_SAVES(this, this.saveFunction)}
+                    <h3>Defense</h3>
+                    {GENERATE_DEFENSE(this, this.saveFunction)}
+                </div>;
+            case "skills":
+                return <div>
+                    <h3>Skills</h3>
+                    {GENERATE_SKILLS(this, this.saveFunction)}
+                </div>;
         }
-        return <div><h2>Items</h2>
-            <button onClick={() => StaticViewManager.addView({
-                title: "Add item",
-                obj: <AddItemPopup/>
-            })}>+
-            </button>
-            {items}
-        </div>;
     }
 
-    renderFeats() {
-        const character = this.state.characterData;
-        let feats = null;
-        if (character.feats && character.feats.length > 0) {
-            feats = generateTable(
-                character.feats.map(item => [
-                    item.name,
-                    Transformer.insertRollTag(item.description)
-                ])
-            );
-        }
-        return <div><h2>Specials</h2>
-            <button onClick={() => StaticViewManager.addView({
-                title: "Add special",
-                obj: <AddSpecialPopup/>
-            })}>+
-            </button>
-            {feats}
-        </div>;
-    }
-
-    renderSpells() {
-        const character = this.state.characterData;
-        let spells = null;
-        if (character.spells && character.spells.length > 0) {
-            spells = generateTable(
-                character.spells.map(item => [
-                    item.name,
-                    Transformer.insertRollTag(item.description),
-                    item.target,
-                    item.range
-                ])
-            );
-        }
-        return <div><h2>Spells</h2>
-            <button onClick={() => StaticViewManager.addView({
-                title: "Add spell",
-                obj: <AddSpellPopup/>
-            })}>+
-            </button>
-            {spells}
-        </div>;
-    }
-
-    renderAbilities() {
-        const character = this.state.characterData;
-        let abilities = null;
-        if (character.abilities && character.abilities.length > 0) {
-            abilities = generateTable(
-                character.abilities.map(item => [
-                    item.name,
-                    Transformer.insertRollTag(item.description),
-                    item.target,
-                    item.range
-                ])
-            );
-        }
-        return <div><h2>Abilities</h2>
-            <button onClick={() => StaticViewManager.addView({
-                title: "Add ability",
-                obj: <AddAbilityPopup/>
-            })}>+
-            </button>
-            {abilities}
-        </div>;
+    renderMenu() {
+        const iconClassName = `${rootScss.top_icon}  material-icons`;
+        return <div id={rootScss.bottom_menu} className={rootScss.static_element}>
+            <i className={iconClassName}
+               onClick={() => this.setState({currentPage: "basic"})}>add_box</i>
+            <i className={iconClassName}
+               onClick={() => this.setState({currentPage: "offense"})}>toys</i>
+            <i className={iconClassName}
+               onClick={() => this.setState({currentPage: "defense"})}>verified_user</i>
+            <i className={iconClassName}
+               onClick={() => this.setState({currentPage: "skills"})}>usb</i>
+        </div>
     }
 
     render() {
         if (!this.state.characterData) return null;
         return <div id={rootScss.character_screen}>
             <h2>{LoginController.getLogin()}</h2>
-            <h3>Primary stats</h3>
-            {GENERATE_STATS(this, this.saveFunction)}
-            <h3>Saves</h3>
-            {GENERATE_SAVES(this, this.saveFunction)}
-            <h3>Offense</h3>
-            {GENERATE_OFFENSE(this, this.saveFunction)}
-            <h3>Defense</h3>
-            {GENERATE_DEFENSE(this, this.saveFunction)}
-            <h3>Skills</h3>
-            {GENERATE_SKILLS(this, this.saveFunction)}
-            {this.renderAbilities()}
-            {this.renderFeats()}
-            {this.renderSpells()}
-            {this.renderItems()}
+            {this.renderPage()}
+            {this.renderMenu()}
         </div>
     }
 }
