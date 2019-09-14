@@ -18,31 +18,41 @@ import Transformer from "../logic/Transformer";
 import CharacterCore from "./CharacterCore";
 import ClickableEditableRow from "./ClickableEditableRow";
 
-function generateTable(args, type, click, onSave) {
-    const arr = [];
+function keysAsArray(args) {
+    const ans = [];
     for (let key in args[0]) {
         if (args[0].hasOwnProperty(key)) {
-            arr.push(<ClickableEditableRow
-                args={args}
-                key={key}
-                name={key}
-                type={type}
-                onClick={click}
-                onSave={onSave}/>
-            );
+            ans.push(key);
         }
     }
+    return ans;
+}
+
+function generateTable(args, type, click, onSave, sort) {
+    const keyArray = keysAsArray(args);
+    if (sort) {
+        keyArray.sort((a, b) => typeof a === "string" ? a.localeCompare(b) : -1);
+    }
     return <table>
-        <tbody>{arr}</tbody>
+        <tbody>{keyArray.map(key => <ClickableEditableRow
+            args={args}
+            key={key}
+            name={key}
+            type={type}
+            onClick={click}
+            onSave={onSave}/>)}</tbody>
     </table>;
 }
 
 const GENERATE_STATS = (self, save) => generateTable([self.state.character.bonuses, self.state.character.stats], "number",
-    row => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0])), save);
-const GENERATE_SAVES = (self, save) => generateTable([self.state.character.stats], "number",
+    row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
+const GENERATE_SAVES = (self, save) => generateTable([self.state.character.saves], "number",
     row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
 const GENERATE_OFFENSE = (self, save) => generateTable([self.state.character.offense], "number",
     row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
+const GENERATE_DEFENSE = (self, save) => generateTable([self.state.character.defense], "number");
+const GENERATE_SKILLS = (self, save) => generateTable([self.state.character.skills], "number",
+    row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save, true);
 
 export default class CharacterWindow extends React.Component {
 
@@ -181,6 +191,10 @@ export default class CharacterWindow extends React.Component {
             {GENERATE_SAVES(this, this.saveFunction)}
             <h3>Offense</h3>
             {GENERATE_OFFENSE(this, this.saveFunction)}
+            <h3>Defense</h3>
+            {GENERATE_DEFENSE(this, this.saveFunction)}
+            <h3>Skills</h3>
+            {GENERATE_SKILLS(this, this.saveFunction)}
             {this.renderAbilities()}
             {this.renderFeats()}
             {this.renderSpells()}

@@ -30,7 +30,7 @@ export default class PopupManager extends React.Component {
     render() {
         return <div>
             {this.state.popups.map((data, index) => {
-                return <div key={index} style={{top: (50 + index * 50).toString() + "px"}}
+                return <div key={index} style={{top: (85 + index * 50).toString() + "px"}}
                             className={rootScss.popup}>{data}</div>
             })}
         </div>
