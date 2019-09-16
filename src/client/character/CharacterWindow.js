@@ -4,6 +4,7 @@
 
 const TranslationEn = require("../../common/const/TranslationEn");
 import * as React from "react";
+import Transformer from "../logic/Transformer";
 import rootScss from '../../scss/root.scss';
 import LoginController from "../logic/LoginController";
 import PopupManager from "../popup/PopupManager";
@@ -49,6 +50,15 @@ const GENERATE_OFFENSE = (self, save) => generateTable([self.state.character.off
 const GENERATE_DEFENSE = (self, save) => generateTable([self.state.character.defense], "number", null, save);
 const GENERATE_SKILLS = (self, save) => generateTable([self.state.character.skills], "number",
     row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save, true);
+
+const GENERATE_ATTACKS = (self, save) => <table>
+    <tbody>
+    {self.state.character.attacks.map(item => <tr key={item.name}>
+        <th>{item.name}</th>
+        <th>{Transformer.insertRollTag(item.text, item.name)}</th>
+    </tr>)}
+    </tbody>
+</table>;
 
 export default class CharacterWindow extends React.Component {
     constructor(props) {
@@ -102,6 +112,8 @@ export default class CharacterWindow extends React.Component {
                 return <div>
                     <h3>Offense</h3>
                     {GENERATE_OFFENSE(this, this.saveFunction)}
+                    <h3>Attacks</h3>
+                    {GENERATE_ATTACKS(this)}
                 </div>;
             case "defense":
                 return <div>

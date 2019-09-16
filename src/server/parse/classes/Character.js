@@ -85,6 +85,16 @@ class Character extends ParseSubclass {
     set name(val) {
         this.set(Character.NAME_FIELD, val)
     }
+
+    /** @return {string} */
+    get attacks() {
+        return this.get(Character.ATTACKS_FIELD)
+    }
+
+    /** @param {string} val */
+    set attacks(val) {
+        this.set(Character.ATTACKS_FIELD, val)
+    }
 }
 
 Character.CLASS_NAME = "Character";
@@ -164,5 +174,12 @@ Character.SAVES_FIELD = "saves";
 Character.SKILLS_FIELD = "skills";
 
 Character.NAME_FIELD = "name";
+
+/**
+ * @typedef {{}} SpecialString
+ * @property {int} text
+ * @property {int} name
+ */
+Character.ATTACKS_FIELD = "attacks";
 
 module.exports = Character;

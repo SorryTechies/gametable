@@ -13,6 +13,7 @@ export default class DiceRoller {
         this.criticalMultiplier = 1;
         this.nextRoll = null;
         this.canBeCritical = true;
+        this.criticalNeedConfirmation = false;
         this.bonus = 0;
     }
 
@@ -78,9 +79,17 @@ export default class DiceRoller {
         return this;
     }
 
+    setCriticalNeedConfirmation(value) {
+        this.criticalNeedConfirmation = value;
+        return this;
+    }
+
     roll() {
         this.rollWithoutBonuses = Math.round(1 + Math.random() * parseInt(this.max - 1));
-        if (this.canBeCritical && (this.max === 20 && this.criticalRange <= this.rollWithoutBonuses)) this.isCritical = true;
+        if (this.canBeCritical && (this.max === 20 && this.criticalRange <= this.rollWithoutBonuses)) {
+            this.isCritical = true;
+            if (this.criticalNeedConfirmation) this.rollWithoutBonuses = Math.round(1 + Math.random() * parseInt(this.max - 1));
+        }
         if (this.canFail && this.rollWithoutBonuses === 1) this.rollFailed = true;
         if (this.nextRoll) {
             this.nextRoll.isCritical = this.isCritical;

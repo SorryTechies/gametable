@@ -46,6 +46,8 @@ export default class CharacterCore {
         /** @type {Saves} */
         this.saves = DefaultCharacterData.getSaves();
         setArray(this.saves, data.saves);
+        /** @type {SpecialString} */
+        this.attacks = Array.isArray(data.attacks) ? data.attacks : [];
     }
 
     async saveToServer() {
@@ -56,6 +58,7 @@ export default class CharacterCore {
         char.offense = this.offense;
         char.defense = this.defense;
         char.saves = this.saves;
+        char.attack = this.attacks;
         return StaticController.saveCharacter();
     }
 }

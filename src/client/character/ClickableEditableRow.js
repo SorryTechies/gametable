@@ -73,7 +73,7 @@ export default class ClickableEditableRow extends React.Component {
         const args = this.props.args;
         const array = toArray(args, name);
         return <tr
-            onDoubleClick={() => this.setState({edit: true})}>{array.map((cell, i) => this.getCell(cell, i))}</tr>;
+            onClick={() => this.setState({edit: true})}>{array.map((cell, i) => this.getCell(cell, i))}</tr>;
     }
 
     renderClickable() {

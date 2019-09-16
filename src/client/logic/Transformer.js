@@ -54,7 +54,7 @@ function safeGet(text) {
 function createRoller(item) {
     const rollMax = item.rollerCount * item.rollMax;
     const roller = new DiceRoller(rollMax)
-        .setBonus(item.bonus);
+        .setBonus(item.bonus).setCriticalNeedConfirmation(true);
     if (item.rollMax !== 20) roller.canFail = false;
     if (item.critRange) roller.setCriticalRange(item.critRange);
     if (item.critMultiplier) roller.setCriticalMultiplier(item.critMultiplier);
@@ -63,7 +63,7 @@ function createRoller(item) {
 }
 
 export default class Transformer {
-    static insertRollTag(text) {
+    static insertRollTag(text, displayName) {
         const parts = [];
         while (true) {
             const obj = safeGet(text);
@@ -83,7 +83,7 @@ export default class Transformer {
                 return <div
                     className={rootScss.injected_roller}
                     key={index}
-                    onClick={() => PopupManager.push(createRoller(item).roll().toString())}>
+                    onClick={() => PopupManager.push(createRoller(item).roll().toString(displayName))}>
                     {item.raw}
                 </div>
             })}
