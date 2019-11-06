@@ -14,6 +14,8 @@ let map = null;
 let participants = null;
 let music = null;
 
+const LOG_LEVEL = "DEBUG";
+
 const rethrow = async promise => {
     try {
         return await promise;
@@ -111,6 +113,7 @@ export default class StaticController {
     }
 
     static async update(id) {
+        if (LOG_LEVEL === StaticController.VERBOSE) alert("UPDATE: " + id);
         console.log(`Update from websocket with id '${id}'`);
         switch (id) {
             case WsConstants.STATIC_CHAR:
@@ -143,5 +146,14 @@ export default class StaticController {
         const position = subscribers.findIndex(item => item.id === id);
         if (position !== -1) subscribers.splice(position, 1);
     }
+
+    static getLogLevel() {
+        return LOG_LEVEL;
+    }
 }
+
+StaticController.VERBOSE = "VERBOSE";
+StaticController.DEBUG = "DEBUG";
+StaticController.INFO = "INFO";
+StaticController.PROD = "PROD";
 
