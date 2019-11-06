@@ -62,7 +62,7 @@ export default class CombatWindow extends React.Component {
     }
 
     componentWillUnmount() {
-        BrowserWebSocket.unSubscribe(WsConstants.STATIC_MAP);
+        StaticController.unSubscribe(WsConstants.STATIC_MAP);
     }
 
     setCellContent(i, j) {
