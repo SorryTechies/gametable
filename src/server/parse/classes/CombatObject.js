@@ -109,6 +109,16 @@ class CombatObject extends ParseSubclass {
     set initiative(value) {
         this.set(CombatObject.INITIATIVE_FIELD, value)
     }
+
+    /** @return {int} */
+    get health() {
+        return this.get(CombatObject.HEATH_FIELD);
+    }
+
+    /** @param {int} value */
+    set health(value) {
+        this.set(CombatObject.HEATH_FIELD, value)
+    }
 }
 
 CombatObject.CLASS_NAME = 'CombatObject';
@@ -121,5 +131,6 @@ CombatObject.COLOR_FIELD = 'color';
 CombatObject.CHARACTER_FIELD = 'character';
 CombatObject.BUFFS_FIELD = 'buffs';
 CombatObject.INITIATIVE_FIELD = 'initiative';
+CombatObject.HEATH_FIELD = 'health';
 
 module.exports = CombatObject;
