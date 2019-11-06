@@ -110,14 +110,22 @@ class CombatObject extends ParseSubclass {
         this.set(CombatObject.INITIATIVE_FIELD, value)
     }
 
-    /** @return {int} */
-    get health() {
-        return this.get(CombatObject.HEATH_FIELD);
+    /**
+     * @typedef {{}} CombatData
+     * @property {int} health
+     * @property {int} lDamage
+     * @property {int} nDamage
+     * @property {int} aHealth
+     */
+
+    /** @return {CombatData} */
+    get data() {
+        return this.get(CombatObject.DATA_FIELD);
     }
 
-    /** @param {int} value */
-    set health(value) {
-        this.set(CombatObject.HEATH_FIELD, value)
+    /** @param {CombatData} value */
+    set data(value) {
+        this.set(CombatObject.DATA_FIELD, value)
     }
 }
 
@@ -131,6 +139,6 @@ CombatObject.COLOR_FIELD = 'color';
 CombatObject.CHARACTER_FIELD = 'character';
 CombatObject.BUFFS_FIELD = 'buffs';
 CombatObject.INITIATIVE_FIELD = 'initiative';
-CombatObject.HEATH_FIELD = 'health';
+CombatObject.DATA_FIELD = 'data';
 
 module.exports = CombatObject;
