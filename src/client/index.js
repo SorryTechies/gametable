@@ -83,9 +83,9 @@ class Login extends React.Component {
                    onClick={() => this.setState({currentPage: <ChatWindow/>})}>chat_bubble</i>
                 <i className={iconClassName}
                    onClick={() => this.setState({currentPage: <RollerWindow/>})}>crop_square</i>
-                {LoginController.isDM() ?
+                {LoginController.isDM() ? null /*
                     <i className={iconClassName}
-                       onClick={() => this.setState({currentPage: <GroupWindow/>})}>people</i> :
+                       onClick={() => this.setState({currentPage: <GroupWindow/>})}>people</i> */:
                     <i className={iconClassName}
                        onClick={() => this.setState({currentPage: <CharacterWindow/>})}>person</i>}
                 <i className={iconClassName}
