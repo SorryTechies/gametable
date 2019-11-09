@@ -20,6 +20,7 @@ require('../../logic/express').getServerExpress().post('/saveObject', (req, res)
         if (!object) throw Error('Object not found');
         object.x = body.x;
         object.y = body.y;
+        object.data = body.data;
         object.buffs = body.buffs;
         await object.save();
         return res.json({});
