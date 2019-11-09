@@ -112,6 +112,10 @@ export default class StaticController {
         return music;
     }
 
+    static notifySubscribed(id) {
+        for (let i = 0; i < subscribers.length; i++) if (subscribers[i].id === id) subscribers[i].func();
+    }
+
     static async update(id) {
         if (LOG_LEVEL === StaticController.VERBOSE) alert("UPDATE: " + id);
         console.log(`Update from websocket with id '${id}'`);
@@ -129,15 +133,22 @@ export default class StaticController {
                 await this.loadMusic();
                 break;
         }
-        for (let i = 0; i < subscribers.length; i++) if (subscribers[i].id === id) subscribers[i].func();
+        StaticController.notifySubscribed(id);
     }
 
-    static async saveCharacter(character) {
+    static async saveCharacter() {
         const request = new NormalRequest();
         request.path = "/saveCharacter";
         request.method = NormalRequest.METHOD.POST;
         const char = await this.getCharacter();
         request.send(char).then(this.loadCharacter).catch(console.error);
+    }
+
+    static async saveObject(object) {
+        const request = new NormalRequest();
+        request.path = "/saveObject";
+        request.method = NormalRequest.METHOD.POST;
+        request.send(object).then(this.loadCharacter).catch(console.error);
     }
 
     static subscribe = obj => subscribers.push(obj);

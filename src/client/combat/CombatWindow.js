@@ -5,7 +5,6 @@
 import * as React from "react";
 import rootScss from '../../scss/root.scss';
 import NormalRequest from "../logic/NormalRequest";
-import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import LoginController from "../logic/LoginController";
 import StatusMenu from "./menu/pc/StatusMenu";
 import DMTools from "./menu/dm/DMTools";
@@ -167,9 +166,7 @@ export default class CombatWindow extends React.Component {
         const move = () => {
             this.state.objectSelected.x = x;
             this.state.objectSelected.y = y;
-            this.saveSelected()
-                .then(this.getMap.bind(this))
-                .catch(error => console.log(error));
+            this.saveSelected().then(this.getMap.bind(this)).catch(console.log);
             this.setState({
                 selected: null,
                 objectSelected: null
@@ -187,15 +184,15 @@ export default class CombatWindow extends React.Component {
     }
 
     setInitiative(id, initiative) {
-        new SetInitiativeRequest().send(id, initiative).catch(error => console.log(error));
+        new SetInitiativeRequest().send(id, initiative).catch(console.log);
     }
 
     dmCombat() {
         if (!LoginController.isDM()) return null;
         return <div>
             <button onClick={() => {
-                new LockCombat().send().catch(error => console.log(error));
-                this.getMap().catch(error => console.log(error))
+                new LockCombat().send().catch(console.log);
+                this.getMap().catch(console.log)
             }}>{this.state.map.initiativeLocked ? "UNLOCK" : "LOCK"}</button>
             {<div>
                 <div>
@@ -213,7 +210,7 @@ export default class CombatWindow extends React.Component {
                     })}
                 </div>
             </div>}
-            <button onClick={() => new NextTurn().send().catch(error => console.log(error))}>NEXT TURN</button>
+            <button onClick={() => new NextTurn().send().catch(console.log)}>NEXT TURN</button>
         </div>
     }
 
@@ -257,7 +254,7 @@ export default class CombatWindow extends React.Component {
                         turns: turns,
                         description: description
                     });
-                    await this.saveSelected().catch(error => console.log(error));
+                    await this.saveSelected().catch(console.log);
                 }}/>;
                 break;
         }

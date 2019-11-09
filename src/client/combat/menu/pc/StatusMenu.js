@@ -5,13 +5,9 @@
 import * as React from "react";
 import rootScss from '../../../../scss/root.scss';
 import LoginController from "../../../logic/LoginController";
+import HealthStatus from "./HealthStatus";
 
 export default class StatusMenu extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     getStatusTable(buffs) {
         if (!buffs || buffs.length === 0) return null;
         return <table>
@@ -67,7 +63,7 @@ export default class StatusMenu extends React.Component {
         if (!unit || !unit.data) return console.warn("No data found.");
         if (!LoginController.isDM() && !unit.character) return;
         return <div>
-            {this.renderHealth()}
+            <HealthStatus unit={unit} allowEdit={LoginController.isDM()}/>
             {this.renderStats()}
         </div>
     }
