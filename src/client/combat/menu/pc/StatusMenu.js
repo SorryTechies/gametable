@@ -38,7 +38,7 @@ export default class StatusMenu extends React.Component {
         const maxHealth = data.health + data.aHealth;
         const currentHealth = maxHealth - data.lDamage - data.nDamage;
         const lDam = data.lDamage > 0 ? "- " + data.lDamage.toString() : "";
-        const nDam = data.nDamage > 0 ? (lDam ? lDam : "- 0") + "/" + data.nDamage.toString() + " damage" : "";
+        const nDam = data.nDamage > 0 ? (lDam ? lDam : "- 0") + "/" + data.nDamage.toString() + " damage" : lDam;
         const aHp = (data.aHealth > 0 ? "+ " + data.aHealth.toString() + " bonus" : "");
         return <div>{`Health: ${currentHealth}/${maxHealth}hp ${nDam} ${aHp}`}</div>
     }
