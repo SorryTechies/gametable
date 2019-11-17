@@ -52,7 +52,6 @@ export default class BrowserWebSocket {
                         new Audio('https://www.soundjay.com/button/sounds/button-32.mp3').play();
                         break;
                     case "roll":
-
                         break;
                 }
             } catch (e) {
