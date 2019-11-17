@@ -6,6 +6,7 @@ import NormalRequest from "../logic/NormalRequest";
 import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import LoginController from "../logic/LoginController";
 import * as WsConstants from "../../common/WsConstants";
+import SoundController from "../logic/SoundController";
 
 let subscribers = [];
 let chat = null;
@@ -127,6 +128,7 @@ export default class StaticController {
                 await this.loadMap();
                 break;
             case WsConstants.STATIC_CHAT:
+                SoundController.playNewMessageSound();
                 await this.loadChat();
                 break;
             case WsConstants.STATIC_MUSIC:
