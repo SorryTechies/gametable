@@ -20,6 +20,7 @@ import StaticClicker from "./static/StaticClicker";
 import StaticViewManager from "./popup/StaticViewManager";
 import DMConsole from "./dm/DMConsole";
 import SettingsWindow from "./settings/SettingsWindow";
+import StaticKeyboardController from "./static/StaticKeyboardController";
 
 const root = document.getElementById('root');
 const body = document.getElementsByTagName('body')[0];
@@ -37,6 +38,7 @@ class Login extends React.Component {
     }
 
     componentDidMount() {
+        document.onkeydown  = StaticKeyboardController.onKeyPressed;
         LoginController.checkLoginInDB()
             .then(ans => {
                 if (ans) {

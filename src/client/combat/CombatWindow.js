@@ -14,6 +14,7 @@ import ModifiableText from "../elements/ModifiableText";
 import StaticController from "../static/StaticController";
 import * as WsConstants from "../../common/WsConstants";
 import SetInitiativeRequest from "../logic/requests/SetInitiativeRequest";
+import StaticKeyboardController from "../static/StaticKeyboardController";
 
 const SUBSCRIBE_ID = 'map';
 
@@ -57,11 +58,13 @@ export default class CombatWindow extends React.Component {
 
     componentDidMount() {
         StaticController.subscribe({id: WsConstants.STATIC_MAP, func: this.getMap.bind(this)});
+        StaticKeyboardController.subscribe(StaticKeyboardController.ESCAPER, this.clearSelection.bind(this));
         this.getMap().catch(console.error);
     }
 
     componentWillUnmount() {
         StaticController.unSubscribe(WsConstants.STATIC_MAP);
+        StaticKeyboardController.unsubscribe(StaticKeyboardController.ESCAPER, this.clearSelection.bind(this));
     }
 
     setCellContent(i, j) {
@@ -141,12 +144,16 @@ export default class CombatWindow extends React.Component {
         return <div className={`${rootScss.static_element} ${rootScss.combat_menu}`}><input/></div>
     }
 
+    clearSelection() {
+        this.setState({
+            statusBar: null,
+            objectSelected: null,
+        })
+    }
+
     clickObject(unit) {
         if (this.state.objectSelected) {
-            this.setState({
-                statusBar: null,
-                objectSelected: null,
-            })
+            this.clearSelection();
         } else {
             this.setState({
                 statusBar: BAR_STATUS,
@@ -254,7 +261,7 @@ export default class CombatWindow extends React.Component {
                         turns: turns,
                         description: description
                     });
-                    await this.saveSelected().catch(console.log);
+                    await this.saveSelected().then(this.clearSelection.bind(this)).catch(console.log);
                 }}/>;
                 break;
         }
