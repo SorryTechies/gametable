@@ -23,7 +23,7 @@ function findAsPlayer(access) {
 
 /**
  * @param {Access} access
- * @return {Promise.<Game>}
+ * @return Promise<Game>
  */
 function getCurrentGame(access) {
     return Promise.all([

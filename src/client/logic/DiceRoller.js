@@ -2,9 +2,11 @@
  * Created by LastBerserk on 17.02.2019.
  */
 
+import PostRollRequest from "./requests/PostRollRequest";
+// TODO REWRITE
 export default class DiceRoller {
     constructor(type) {
-        if (typeof type !== 'number') this.max = 20; else this.max = type;
+        this.max = typeof type === 'number' ? type : 20;
         this.rollWithoutBonuses = null;
         this.criticalRange = 20;
         this.isCritical = false;
@@ -96,7 +98,7 @@ export default class DiceRoller {
             this.nextRoll.rollFailed = this.rollFailed;
             this.nextRoll.roll();
         }
-        let result = this.rollWithoutBonuses += this.bonus;
+        let result = this.rollWithoutBonuses + this.bonus;
         if (this.canBeCritical && this.isCritical) result *= this.criticalMultiplier;
         this.calculatedResult = result;
         return this;
@@ -124,6 +126,7 @@ export default class DiceRoller {
         } else {
             result += "."
         }
+        new PostRollRequest().send(name, this.calculatedResult, this.rollWithoutBonuses).catch(console.error);
         return ans + result;
     }
 }
