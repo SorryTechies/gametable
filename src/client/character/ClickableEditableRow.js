@@ -64,7 +64,7 @@ export default class ClickableEditableRow extends React.Component {
         }
         return <th
             key={index}
-            className={value.length && value.length > 20 ? rootScss.big_box : null}
+            className={value.length > 20 ? rootScss.big_box : null}
         >{inner}</th>
     }
 
@@ -72,8 +72,7 @@ export default class ClickableEditableRow extends React.Component {
         const name = this.props.name;
         const args = this.props.args;
         const array = toArray(args, name);
-        return <tr
-            onClick={() => this.setState({edit: true})}>{array.map((cell, i) => this.getCell(cell, i))}</tr>;
+        return <tr onClick={() => this.setState({edit: true})}>{array.map((cell, i) => this.getCell(cell, i))}</tr>;
     }
 
     renderClickable() {

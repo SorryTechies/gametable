@@ -3,6 +3,7 @@
  */
 
 const TranslationEn = require("../../common/const/TranslationEn");
+const CharacterStates = require("../../common/const/CharacterStates");
 
 import * as React from "react";
 import Transformer from "../logic/Transformer";
@@ -16,7 +17,7 @@ import CharacterCore from "./CharacterCore";
 import ClickableEditableRow from "./ClickableEditableRow";
 
 function generateTable(args, type, click, onSave, sort) {
-    const keyArray = Object.keys(args);
+    const keyArray = Object.keys(args[0]);
     if (sort) keyArray.sort((a, b) => typeof a === "string" ? a.localeCompare(b) : -1);
     return <table>
         <tbody>{keyArray.map(key => <ClickableEditableRow
@@ -120,7 +121,28 @@ export default class CharacterWindow extends React.Component {
                     <h3>Skills</h3>
                     {GENERATE_SKILLS(this, this.saveFunction)}
                 </div>;
+            case "states":
+                return <div>
+                    <h3>States</h3>
+                    {this.renderStates()}
+                </div>;
         }
+    }
+
+    renderStates() {
+        const states = this.state.character.state;
+        return <div>
+            {Object.keys(states).map(key =>
+                <div key={key}>
+                    {key}
+                    <input checked={states[key]} onChange={() => {
+                        states[key] = !states[key];
+                        CharacterStates.applyState(this.state.character, key, states[key]);
+                        this.saveFunction();
+                    }} type="checkbox"/>
+                </div>
+            )}
+        </div>
     }
 
     renderMenu() {
@@ -134,6 +156,8 @@ export default class CharacterWindow extends React.Component {
                onClick={() => this.setState({currentPage: "defense"})}>verified_user</i>
             <i className={iconClassName}
                onClick={() => this.setState({currentPage: "skills"})}>usb</i>
+            <i className={iconClassName}
+               onClick={() => this.setState({currentPage: "states"})}>usb</i>
         </div>
     }
 

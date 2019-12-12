@@ -32,7 +32,7 @@ require('./express/post/sendMessage');
 require('./express/get/getParticipants');
 require('./express/get/getCharacter');
 require('./express/get/getAttacks');
-require('./express/post/changeCharacter');
+require('./express/post/saveCharacter');
 require('./express/get/getMap');
 require('./express/post/saveMapChanges');
 require('./express/post/postInitiative');

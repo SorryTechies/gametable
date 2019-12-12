@@ -9,14 +9,6 @@ function createWithDefault(arr, def) {
     }, {});
 }
 
-function toKeyArray(obj) {
-    const arr = [];
-    for (let key in obj) if (obj.hasOwnProperty(key)) {
-        arr.push(obj[key]);
-    }
-    return arr;
-}
-
 module.exports.SKILLS_NAMES = {
     ACROBATIC: "acrobatics",
     APPRAISE: "appraise",
@@ -85,8 +77,8 @@ module.exports.SAVES_NAMES = {
     WILL: "will"
 };
 
-module.exports.getSkills = () => createWithDefault(Object.keys(module.exports.SKILLS_NAMES), 0);
-module.exports.getStats = () => createWithDefault(Object.keys(module.exports.STATS_NAMES), 10);
-module.exports.getOffense = () => createWithDefault(Object.keys(module.exports.OFFENSE_NAMES), 0);
-module.exports.getDefense = () => createWithDefault(Object.keys(module.exports.DEFENSE_NAMES), 10);
-module.exports.getSaves = () => createWithDefault(Object.keys(module.exports.SAVES_NAMES), 0);
+module.exports.getSkills = () => createWithDefault(Object.values(module.exports.SKILLS_NAMES), 0);
+module.exports.getStats = () => createWithDefault(Object.values(module.exports.STATS_NAMES), 10);
+module.exports.getOffense = () => createWithDefault(Object.values(module.exports.OFFENSE_NAMES), 0);
+module.exports.getDefense = () => createWithDefault(Object.values(module.exports.DEFENSE_NAMES), 10);
+module.exports.getSaves = () => createWithDefault(Object.values(module.exports.SAVES_NAMES), 0);

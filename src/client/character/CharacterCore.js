@@ -3,6 +3,7 @@
  */
 
 const DefaultCharacterData = require("../../common/const/DefaultCharacterObject");
+const CharacterStates = require("../../common/const/CharacterStates");
 import StaticController from "../static/StaticController";
 
 function getDefault(val, def) {
@@ -11,18 +12,18 @@ function getDefault(val, def) {
 
 function setArray(obj, data) {
     if (data) {
-        for (let key in data) {
+        Object.keys(data).forEach(key => {
             if (data[key]) obj[key] = data[key];
-        }
+        });
     }
 }
 
 function getStatsModifiers(obj) {
     const ans = {};
-    for (let key in obj) {
+    Object.keys(obj).forEach(key => {
         const mod = (obj[key] - 10) / 2;
         ans[key] =  mod < 0 ? Math.floor(mod) : Math.floor(mod);
-    }
+    });
     return ans;
 }
 
@@ -48,6 +49,9 @@ export default class CharacterCore {
         setArray(this.saves, data.saves);
         /** @type {SpecialString} */
         this.attacks = Array.isArray(data.attacks) ? data.attacks : [];
+        /** @type {StateObject} */
+        this.state = CharacterStates.getMandatory();
+        setArray(this.state, data.state);
     }
 
     async saveToServer() {
@@ -59,6 +63,7 @@ export default class CharacterCore {
         char.defense = this.defense;
         char.saves = this.saves;
         char.attack = this.attacks;
+        char.state = this.state;
         return StaticController.saveCharacter();
     }
 }
