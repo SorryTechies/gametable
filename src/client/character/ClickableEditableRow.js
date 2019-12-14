@@ -33,8 +33,7 @@ export default class ClickableEditableRow extends React.Component {
         this.isLast = index => index === (this.props.args.length);
         this.isFist = index => index === 0;
         this.callback = e => {
-            const value = this.props.type === "number" ? parseInt(e.target.value) : e.target.value;
-            this.props.args[this.props.args.length - 1][this.props.name] = value;
+            this.props.args[this.props.args.length - 1][this.props.name] = e.target.value;
             this.forceUpdate();
         };
         this.stopRedacting = () => {
@@ -47,7 +46,6 @@ export default class ClickableEditableRow extends React.Component {
         let inner = value;
         if (this.isLast(index) && this.state.edit) {
             inner = <input
-                type={getType(this.props.type)}
                 value={value}
                 onBlur={this.stopRedacting}
                 onChange={this.callback}
@@ -62,6 +60,7 @@ export default class ClickableEditableRow extends React.Component {
         } else {
             if (this.isFist(index) && this.props.displayName) inner = this.props.displayName;
         }
+
         return <th
             key={index}
             className={value.length > 20 ? rootScss.big_box : null}
@@ -95,7 +94,6 @@ export default class ClickableEditableRow extends React.Component {
 ClickableEditableRow.propTypes = {
     args: PropTypes.array.isRequired,
     name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
     onSave: PropTypes.func.isRequired,
     onClick: PropTypes.func,
     displayName: PropTypes.string

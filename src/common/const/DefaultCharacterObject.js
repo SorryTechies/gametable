@@ -9,6 +9,17 @@ function createWithDefault(arr, def) {
     }, {});
 }
 
+function createDefaultSkills(arr) {
+    return arr.reduce((ans, item) => {
+        ans[item] = {
+            value: 0,
+            ranks: 0,
+            trained: false
+        };
+        return ans;
+    }, {});
+}
+
 module.exports.SKILLS_NAMES = {
     ACROBATIC: "acrobatics",
     APPRAISE: "appraise",
@@ -77,7 +88,7 @@ module.exports.SAVES_NAMES = {
     WILL: "will"
 };
 
-module.exports.getSkills = () => createWithDefault(Object.values(module.exports.SKILLS_NAMES), 0);
+module.exports.getSkills = () => createDefaultSkills(Object.values(module.exports.SKILLS_NAMES));
 module.exports.getStats = () => createWithDefault(Object.values(module.exports.STATS_NAMES), 10);
 module.exports.getOffense = () => createWithDefault(Object.values(module.exports.OFFENSE_NAMES), 0);
 module.exports.getDefense = () => createWithDefault(Object.values(module.exports.DEFENSE_NAMES), 10);

@@ -148,38 +148,46 @@ Character.STATS_FIELD = "stats";
 Character.SAVES_FIELD = "saves";
 
 /**
+ * @typedef {{}} SkillObject
+ * 
+ * @property {int} value
+ * @property {int} ranks
+ * @property {boolean} trained
+ */
+
+/**
  * @typedef {{}} SkillsBlock
  *
- * @property {int} acrobatics
- * @property {int} appraise
- * @property {int} bluff
- * @property {int} climb
- * @property {int} diplomacy
- * @property {int} disable_device
- * @property {int} disguise
- * @property {int} escape_artist
- * @property {int} fly
- * @property {int} heal
- * @property {int} intimidate
- * @property {int} knowledge_arcana
- * @property {int} knowledge_dungeneering
- * @property {int} knowledge_engineering
- * @property {int} knowledge_local
- * @property {int} knowledge_planes
- * @property {int} knowledge_religion
- * @property {int} knowledge_nature
- * @property {int} linguistics
- * @property {int} perception
- * @property {int} ride
- * @property {int} sense_motive
- * @property {int} sleight_of_hand
- * @property {int} spellcraft
- * @property {int} stealth
- * @property {int} survival
- * @property {int} swim
- * @property {int} use_magic_device
- * @property {int} handle_animal
- * @property {int} craft
+ * @property {SkillObject} acrobatics
+ * @property {SkillObject} appraise
+ * @property {SkillObject} bluff
+ * @property {SkillObject} climb
+ * @property {SkillObject} diplomacy
+ * @property {SkillObject} disable_device
+ * @property {SkillObject} disguise
+ * @property {SkillObject} escape_artist
+ * @property {SkillObject} fly
+ * @property {SkillObject} heal
+ * @property {SkillObject} intimidate
+ * @property {SkillObject} knowledge_arcana
+ * @property {SkillObject} knowledge_dungeneering
+ * @property {SkillObject} knowledge_engineering
+ * @property {SkillObject} knowledge_local
+ * @property {SkillObject} knowledge_planes
+ * @property {SkillObject} knowledge_religion
+ * @property {SkillObject} knowledge_nature
+ * @property {SkillObject} linguistics
+ * @property {SkillObject} perception
+ * @property {SkillObject} ride
+ * @property {SkillObject} sense_motive
+ * @property {SkillObject} sleight_of_hand
+ * @property {SkillObject} spellcraft
+ * @property {SkillObject} stealth
+ * @property {SkillObject} survival
+ * @property {SkillObject} swim
+ * @property {SkillObject} use_magic_device
+ * @property {SkillObject} handle_animal
+ * @property {SkillObject} craft
  */
 Character.SKILLS_FIELD = "skills";
 

@@ -16,7 +16,7 @@ import StaticController from "../static/StaticController";
 import CharacterCore from "./CharacterCore";
 import ClickableEditableRow from "./ClickableEditableRow";
 
-function generateTable(args, type, click, onSave, sort) {
+function generateTable(args, click, onSave, sort, colors) {
     const keyArray = Object.keys(args[0]);
     if (sort) keyArray.sort((a, b) => typeof a === "string" ? a.localeCompare(b) : -1);
     return <table>
@@ -24,26 +24,34 @@ function generateTable(args, type, click, onSave, sort) {
             args={args}
             key={key}
             name={key}
+            colors={colors}
             displayName={TranslationEn.translate(key)}
-            type={type}
             onClick={click}
             onSave={onSave}/>)}</tbody>
     </table>;
 }
 
-const GENERATE_STATS = (self, save) => generateTable([self.state.character.bonuses, self.state.character.stats], "number",
+const GENERATE_STATS = (self, save) => generateTable([self.state.character.bonuses, self.state.character.stats],
     row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
 
-const GENERATE_SAVES = (self, save) => generateTable([self.state.character.saves], "number",
+const GENERATE_SAVES = (self, save) => generateTable([self.state.character.saves],
     row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
 
-const GENERATE_OFFENSE = (self, save) => generateTable([self.state.character.offense], "number",
+const GENERATE_OFFENSE = (self, save) => generateTable([self.state.character.offense],
     row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
 
-const GENERATE_DEFENSE = (self, save) => generateTable([self.state.character.defense], "number", null, save);
+const GENERATE_DEFENSE = (self, save) => generateTable([self.state.character.defense], null, save);
 
-const GENERATE_SKILLS = (self, save) => generateTable([self.state.character.skills], "number",
-    row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save, true);
+const GENERATE_SKILLS = (self, save) => {
+    const skills = self.state.character.skills;
+    const values = {}, ranks = {};
+    Object.keys(skills).forEach(key => {
+        ranks[key] = skills[key].ranks;
+        values[key] = skills[key].value;
+    });
+    return generateTable([ranks, values],
+        row => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0])), save, true);
+};
 
 const GENERATE_ATTACKS = (self, save) => <table>
     <tbody>
