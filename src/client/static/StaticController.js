@@ -38,6 +38,10 @@ export default class StaticController {
             func: this.update.bind(this, WsConstants.STATIC_CHAR)
         });
         BrowserWebSocket.subscribe({
+            id: WsConstants.STATIC_MAP,
+            func: this.update.bind(this, WsConstants.STATIC_MAP)
+        });
+        BrowserWebSocket.subscribe({
             id: WsConstants.STATIC_CHAT,
             func: this.update.bind(this, WsConstants.STATIC_CHAT)
         });

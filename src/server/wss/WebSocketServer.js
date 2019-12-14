@@ -40,6 +40,16 @@ class WebSocketServer {
             console.log(e);
         }
     };
+
+    static sendToAllInGame(game, message) {
+        try {
+            if (!game) return;
+            if (Array.isArray(game.players)) game.players.map(user => WebSocketServer.sendMessageToUser(user, message));
+            if (game.dm) WebSocketServer.sendMessageToUser(game.dm, message);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 }
 
 WebSocketServer.NEW_MESSAGE_NOTIFICATION = {notification: WsConstants.STATIC_CHAT};

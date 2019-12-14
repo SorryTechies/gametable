@@ -46,7 +46,7 @@ export default class CombatWindow extends React.Component {
 
     async getMap() {
         let map = await StaticController.getMap();
-        this.setState({map: map})
+        this.setState({map: map});
     }
 
     async saveSelected() {
