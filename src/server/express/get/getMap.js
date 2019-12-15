@@ -11,17 +11,18 @@ require('../../logic/express').getServerExpress().get('/getMap', (req, res) => {
     const error = new ErrorClass(res);
     const user = req.access;
     (async () => {
-        let game = await GameDB.searchAsDM(user);
-        if (!game) game = await GameDB.searchAsPlayer(user);
+        const game = await GameDB.searchGame(user);
         const map = await MapDB.findCurrentMap(game);
         const objects = await map.objects.query().include(CombatObject.CHARACTER_FIELD).find({useMasterKey: true});
-        return res.json({
+        const ans = {
             img: map.img,
             gridX: map.gridX,
             gridY: map.gridY,
             objects: objects,
             initiativeLocked: map.initiativeLocked,
             currentInitiative: map.currentInitiative
-        });
+        };
+        if (user.isDM) ans.dmImg = map.dmImg;
+        return res.json(ans);
     })().catch((e) => error.send(e));
 });

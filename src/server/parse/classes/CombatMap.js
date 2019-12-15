@@ -19,6 +19,16 @@ class CombatMap extends ParseSubclass {
         this.set(CombatMap.IMAGE_FIELD, img)
     }
 
+    /** @return {string} */
+    get dmImg() {
+        return this.get(CombatMap.DM_IMAGE_FILED)
+    }
+
+    /** @param {string} img */
+    set dmImg(img) {
+        this.set(CombatMap.DM_IMAGE_FILED, img)
+    }
+
     /** @return {int} */
     get gridX() {
         return this.get(CombatMap.X_FIELD)
@@ -82,6 +92,7 @@ class CombatMap extends ParseSubclass {
 
 CombatMap.CLASS_NAME = 'CombatMap';
 CombatMap.IMAGE_FIELD = 'img';
+CombatMap.DM_IMAGE_FILED = 'dmImg';
 CombatMap.X_FIELD = 'gridX';
 CombatMap.Y_FIELD = 'gridY';
 CombatMap.OBJECTS_FIELD = 'objects';

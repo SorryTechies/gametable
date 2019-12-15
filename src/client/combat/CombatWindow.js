@@ -130,7 +130,7 @@ export default class CombatWindow extends React.Component {
             style={{
                 backgroundSize: "100% 100%",
                 backgroundRepeat: "no-repeat",
-                backgroundImage: `url(${this.state.map.img})`,
+                backgroundImage: `url(${this.state.map.dmImg ? this.state.map.dmImg : this.state.map.img})`,
                 width: this.state.gridSizeInt.toString() + "px",
                 height: this.state.gridSizeInt.toString() + "px",
             }}>
