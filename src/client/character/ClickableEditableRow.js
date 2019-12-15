@@ -8,20 +8,6 @@ import rootScss from '../../scss/root.scss';
 import StaticSettings from "../static/StaticSettings";
 import PopupManager from "../popup/PopupManager";
 
-function allowEdit() {
-    return StaticSettings.get(StaticSettings.EDITING_MODE);
-}
-
-function getType(type) {
-    switch (type) {
-        case "text":
-        case "number":
-            return type;
-        default:
-            return "text";
-    }
-}
-
 function toArray(args, key) {
     return [key].concat(args.map(item => item[key]));
 }
@@ -30,10 +16,9 @@ export default class ClickableEditableRow extends React.Component {
     constructor(props) {
         super(props);
         this.state = {edit: false};
-        this.isLast = index => index === (this.props.args.length);
         this.isFist = index => index === 0;
-        this.callback = e => {
-            this.props.args[this.props.args.length - 1][this.props.name] = e.target.value;
+        this.callback = (index, e) => {
+            this.props.args[index - 1][this.props.name] = parseInt(e.target.value);
             this.forceUpdate();
         };
         this.stopRedacting = () => {
@@ -44,17 +29,14 @@ export default class ClickableEditableRow extends React.Component {
 
     getCell(value, index) {
         let inner = value;
-        if (this.isLast(index) && this.state.edit) {
+        if (!this.isFist(index) && this.state.edit) {
             inner = <input
                 value={value}
+                onChange={this.callback.bind(this, index)}
                 onBlur={this.stopRedacting}
-                onChange={this.callback}
-                autoFocus={true}
                 onKeyPress={e => {
                     const keyNum = e.keyCode ? e.keyCode : e.which;
-                    if (keyNum === 13) {
-                        this.stopRedacting();
-                    }
+                    if (keyNum === 13) this.stopRedacting();
                 }}
             />;
         } else {
@@ -83,11 +65,7 @@ export default class ClickableEditableRow extends React.Component {
     }
 
     render() {
-        if (allowEdit()) {
-            return this.renderEditable();
-        } else {
-            return this.renderClickable();
-        }
+        return StaticSettings.get(StaticSettings.EDITING_MODE) ? this.renderEditable() : this.renderClickable();
     }
 }
 

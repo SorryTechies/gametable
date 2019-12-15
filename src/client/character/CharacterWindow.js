@@ -6,6 +6,7 @@ const TranslationEn = require("../../common/const/TranslationEn");
 const CharacterStates = require("../../common/const/CharacterStates");
 
 import * as React from "react";
+import SkillBean from "./SkillBean";
 import Transformer from "../logic/Transformer";
 import rootScss from '../../scss/root.scss';
 import LoginController from "../logic/LoginController";
@@ -43,14 +44,13 @@ const GENERATE_OFFENSE = (self, save) => generateTable([self.state.character.off
 const GENERATE_DEFENSE = (self, save) => generateTable([self.state.character.defense], null, save);
 
 const GENERATE_SKILLS = (self, save) => {
-    const skills = self.state.character.skills;
-    const values = {}, ranks = {};
-    Object.keys(skills).forEach(key => {
-        ranks[key] = skills[key].ranks;
-        values[key] = skills[key].value;
-    });
-    return generateTable([ranks, values],
-        row => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0])), save, true);
+    const bean = SkillBean.fromJson(self.state.character.skills);
+    return generateTable([bean.ranks, bean.values],
+        row => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0])),
+        () => {
+            self.state.character.skills = bean.toJson();
+            save();
+        }, true);
 };
 
 const GENERATE_ATTACKS = (self, save) => <table>
