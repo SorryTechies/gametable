@@ -10,13 +10,14 @@ export default class CheckDice extends Dice {
     constructor() {
         super();
         this.die = 20;
+        this.critRange = 20;
         this.critical = false;
         this.failed = false;
     }
 
     roll() {
         this.simpleRoll();
-        if (this.rawResult === 20) this.critical = true;
+        if (this.rawResult >= this.critRange) this.critical = true;
         if (this.rawResult === 1) this.failed = true;
         this.rollNext();
         return this;

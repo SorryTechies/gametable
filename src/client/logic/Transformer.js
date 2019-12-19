@@ -6,6 +6,8 @@ import * as React from "react";
 import DiceRoller from "./DiceRoller";
 import PopupManager from "../popup/PopupManager";
 import rootScss from '../../scss/root.scss';
+import CheckDice from "./roll/CheckDice";
+import DamageDice from "./roll/DamageDice";
 
 const MASK = /!!(\d+)d(\d+)([+-]?)(\d*)((?:\(\d*\))?)(x\d+)?(\[.+])?!!/;
 const MASK_TO_SPLIT = /!!(\d+)d(\d+)([+-]?)(\d*)((?:\(\d*\))?)(x\d+)?(\[.+])?!!(.*)/;
@@ -51,15 +53,27 @@ function safeGet(text) {
     }
 }
 
-function createRoller(item) {
-    const rollMax = item.rollerCount * item.rollMax;
-    const roller = new DiceRoller(rollMax)
-        .setBonus(item.bonus).setCriticalNeedConfirmation(true);
-    if (item.rollMax !== 20) roller.canFail = false;
-    if (item.critRange) roller.setCriticalRange(item.critRange);
-    if (item.critMultiplier) roller.setCriticalMultiplier(item.critMultiplier);
-    if (item.nextRoll) roller.nextRoll = createRoller(item.nextRoll);
+function createDice(item, displayName) {
+    let roller;
+    if (item.rollMax === 20) {
+        roller = new CheckDice();
+        roller.critRange = item.critRange;
+    } else {
+        roller = new DamageDice();
+        roller.die = item.rollMax;
+        roller.amountOfDices = item.rollerCount;
+        roller.criticalModifier = item.critMultiplier;
+    }
+    roller.name = displayName;
+    roller.bonus = item.bonus;
+    if (item.nextRoll) {
+        roller.nextDice = [createDice(item.nextRoll, "")];
+    }
     return roller;
+}
+
+function displayRoll(item, displayName) {
+    PopupManager.push(createDice(item, displayName).roll().generateText());
 }
 
 export default class Transformer {
@@ -83,7 +97,7 @@ export default class Transformer {
                 return <div
                     className={rootScss.injected_roller}
                     key={index}
-                    onClick={() => PopupManager.push(createRoller(item).roll().toString(displayName))}>
+                    onClick={displayRoll.bind(null, item, displayName)}>
                     {item.raw}
                 </div>
             })}

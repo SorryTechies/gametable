@@ -34,8 +34,9 @@ export default class DamageDice extends Dice {
     }
 
     roll() {
+        this.simpleRoll();
         if (this.prevRoll && this.prevRoll.critical && this.canBeCritical) {
-            if (DamageDice.isFullFormula) {
+            if (DamageDice.USE_FULL_CRIT_FORMULA) {
                 this.result = fullFormula(this);
             } else {
                 this.result = newFormula(this);
@@ -46,11 +47,8 @@ export default class DamageDice extends Dice {
     }
 
     generateForThisDice() {
-        let status;
-        if (this.critical) status = " critical";
-        if (this.failed) status = " failed";
         return `${this.name} ${this.result}(${diceToStr(this.amountOfDices, this.die, this.bonus)})`;
     }
 }
 
-DamageDice.isFullFormula = false;
+DamageDice.USE_FULL_CRIT_FORMULA = false;
