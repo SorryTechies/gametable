@@ -16,9 +16,7 @@ export default class DMTools extends React.Component {
     }
 
     render() {
-        return <div
-            className={`${rootScss.static_element} ${rootScss.combat_menu}`}
-        >
+        return <div className={`${rootScss.static_element} ${rootScss.combat_menu}`}>
             Name:
             <input type="text" value={this.state.name} onChange={event => this.setState({name: event.target.value})}/>
             Turns:
