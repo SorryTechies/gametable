@@ -6,6 +6,7 @@ const TranslationEn = require("../../common/const/TranslationEn");
 const CharacterStates = require("../../common/const/CharacterStates");
 
 import * as React from "react";
+import CheckDice from "../logic/roll/CheckDice";
 import SkillBean from "./SkillBean";
 import Transformer from "../logic/Transformer";
 import rootScss from '../../scss/root.scss';
@@ -32,21 +33,35 @@ function generateTable(args, click, onSave, sort, colors) {
     </table>;
 }
 
-const GENERATE_STATS = (self, save) => generateTable([self.state.character.bonuses, self.state.character.stats],
-    row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
+function simpleRollFunction(row) {
+    const roller = new CheckDice();
+    roller.name = row[0];
+    roller.bonus = row[1];
+    PopupManager.push(roller.roll().generateText());
+}
 
-const GENERATE_SAVES = (self, save) => generateTable([self.state.character.saves],
-    row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
+function skillsRollFunction(row) {
+    const roller = new CheckDice();
+    roller.name = row[0];
+    roller.bonus = row[2];
+    PopupManager.push(roller.roll().generateText());
+}
 
-const GENERATE_OFFENSE = (self, save) => generateTable([self.state.character.offense],
-    row => PopupManager.push(new DiceRoller().setBonus(row[1]).roll().toString(row[0])), save);
+const GENERATE_SAVES = (self, save) =>
+    generateTable([self.state.character.saves], simpleRollFunction, save);
 
-const GENERATE_DEFENSE = (self, save) => generateTable([self.state.character.defense], null, save);
+const GENERATE_STATS = (self, save) =>
+    generateTable([self.state.character.bonuses, self.state.character.stats], simpleRollFunction, save);
+
+const GENERATE_OFFENSE = (self, save) =>
+    generateTable([self.state.character.offense], simpleRollFunction, save);
+
+const GENERATE_DEFENSE = (self, save) =>
+    generateTable([self.state.character.defense], null, save);
 
 const GENERATE_SKILLS = (self, save) => {
     const bean = SkillBean.fromJson(self.state.character.skills);
-    return generateTable([bean.ranks, bean.values],
-        row => PopupManager.push(new DiceRoller().setBonus(row[2]).roll().toString(row[0])),
+    return generateTable([bean.ranks, bean.values], skillsRollFunction,
         () => {
             self.state.character.skills = bean.toJson();
             save();
