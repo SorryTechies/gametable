@@ -60,7 +60,22 @@ const GENERATE_DEFENSE = (self, save) =>
     generateTable([self.state.character.defense], null, save);
 
 const GENERATE_SKILLS = (self, save) => {
-    const bean = SkillBean.fromJson(self.state.character.skills);
+    const skills = self.state.character.skills;
+    const obj = {};
+    Object.keys(skills).forEach(key => !key.startsWith("knowledge_") ? obj[key] = skills[key] : null);
+    const bean = SkillBean.fromJson(obj);
+    return generateTable([bean.ranks, bean.values], skillsRollFunction,
+        () => {
+            self.state.character.skills = bean.toJson();
+            save();
+        }, true);
+};
+
+const GENERATE_KNOWLEDGE = (self, save) => {
+    const skills = self.state.character.skills;
+    const obj = {};
+    Object.keys(skills).forEach(key => key.startsWith("knowledge_") ? obj[key] = skills[key] : null);
+    const bean = SkillBean.fromJson(obj);
     return generateTable([bean.ranks, bean.values], skillsRollFunction,
         () => {
             self.state.character.skills = bean.toJson();
@@ -144,6 +159,11 @@ export default class CharacterWindow extends React.Component {
                     <h3>Skills</h3>
                     {GENERATE_SKILLS(this, this.saveFunction)}
                 </div>;
+            case "knowledge":
+                return <div>
+                    <h3>Knowledge</h3>
+                    {GENERATE_KNOWLEDGE(this, this.saveFunction)}
+                </div>;
             case "states":
                 return <div>
                     <h3>States</h3>
@@ -168,20 +188,24 @@ export default class CharacterWindow extends React.Component {
         </div>
     }
 
+    onMenuSelected(e) {
+        this.setState({currentPage: e.target.value});
+    }
+
     renderMenu() {
         const iconClassName = `${rootScss.top_icon}  material-icons`;
         return <div id={rootScss.bottom_menu} className={rootScss.static_element}>
-            <i className={iconClassName}
-               onClick={() => this.setState({currentPage: "basic"})}>add_box</i>
-            <i className={iconClassName}
-               onClick={() => this.setState({currentPage: "offense"})}>toys</i>
-            <i className={iconClassName}
-               onClick={() => this.setState({currentPage: "defense"})}>verified_user</i>
-            <i className={iconClassName}
-               onClick={() => this.setState({currentPage: "skills"})}>usb</i>
-            <i className={iconClassName}
-               onClick={() => this.setState({currentPage: "states"})}>usb</i>
-        </div>
+            <select className={rootScss.big_select} onChange={this.onMenuSelected.bind(this)}>
+                <option value="basic">Stats</option>
+                <option value="offense">Offense</option>
+                <option value="defense">Saves</option>
+                <option value="skills">Skills</option>
+                <option value="knowledge">Knowledge</option>
+                <option value="states">States</option>
+                <option value="">Feats</option>
+                <option value="">Items</option>
+            </select>
+        </div>;
     }
 
     render() {
