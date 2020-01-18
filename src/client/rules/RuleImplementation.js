@@ -2,16 +2,17 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-const RuleConstants = require("./RuleConstants");
 
-module.exports.dodgeCalc = cha => cha.set(RuleConstants.DODGE, cha.get(RuleConstants.MODIFIER_DODGE) +
+import RuleConstants from "./RuleConstants";
+
+export const dodgeCalc = cha => cha.set(RuleConstants.DODGE, cha.get(RuleConstants.MODIFIER_DODGE) +
     cha.get(RuleConstants.MOD_DEXTERITY));
 
 /**
  * AC calculation.
  * @param character
  */
-module.exports.defenceCalc = character => {
+export const defenceCalc = character => {
     const ac = 10 +
         character.get(RuleConstants.MODIFIER_ARMOR) +
         character.get(RuleConstants.DODGE) +
@@ -35,7 +36,7 @@ module.exports.defenceCalc = character => {
  * Stat modificators calculation.
  * @param character
  */
-module.exports.statCalc = character => {
+export const statCalc = character => {
     const calcStats = (val) => {
         const mod = (val - 10) / 2;
         return mod < 0 ? Math.floor(mod) : Math.floor(mod);
@@ -48,7 +49,7 @@ module.exports.statCalc = character => {
     character.set(RuleConstants.MOD_CHARISMA, calcStats(character.get(RuleConstants.STAT_CHARISMA)));
 };
 
-module.exports.attackBonusCalc = character => {
+export const attackBonusCalc = character => {
     character.set(RuleConstants.ATTACK_STR,
         character.get(RuleConstants.BAB) +
         character.get(RuleConstants.MOD_STRENGTH) +
@@ -62,7 +63,7 @@ module.exports.attackBonusCalc = character => {
         character.get(RuleConstants.MODIFIER_ATTACK));
 };
 
-module.exports.saveCalc = character => {
+export const saveCalc = character => {
     character.set(RuleConstants.SAVE_FORTITUDE,
         character.get(RuleConstants.MODIFIER_SAVE_FORTITUDE) +
         character.get(RuleConstants.CLASS_SAVE_FORTITUDE) +
@@ -77,7 +78,7 @@ module.exports.saveCalc = character => {
         character.get(RuleConstants.MOD_WISDOM));
 };
 
-module.exports.healthCalc = cha => {
+export const healthCalc = cha => {
     const hpPerLevel = cha.get(RuleConstants.HEALTH_DIE_PER_LEVEL) +
         cha.get(RuleConstants.MOD_CONSTITUTION) +
         cha.get(RuleConstants.MODIFIER_HEALTH_PER_LEVEL);
@@ -91,7 +92,7 @@ module.exports.healthCalc = cha => {
         cha.get(RuleConstants.NONLETHAL_DAMAGE));
 };
 
-module.exports.combatManeuverCalc = cha => {
+export const combatManeuverCalc = cha => {
     cha.set(RuleConstants.COMBAT_MANEUVER_BONUS, cha.get(RuleConstants.BAB) +
         cha.get(RuleConstants.MOD_STRENGTH) +
         cha.get(RuleConstants.MODIFIER_CMB));

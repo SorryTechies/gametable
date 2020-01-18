@@ -11,6 +11,7 @@
     "bufferutil": "^3.0.2",
     "chai": "^4.1.2",
     "css-loader": "^0.28.4",
+    "esm": "^3.2.25",
     "esprima": "^4.0.0",
     "esprima-fb": "^15001.1001.0-dev-harmony-fb",
     "fs": "0.0.1-security",

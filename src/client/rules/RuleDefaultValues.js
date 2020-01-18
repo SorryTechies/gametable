@@ -2,9 +2,9 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-const RuleConstants = require("./RuleConstants");
+import RuleConstants from "./RuleConstants";
 
-class RuleDefaultValues {
+export default class RuleDefaultValues {
     /**
      * @param {RuleCharacter} character
      */
@@ -23,5 +23,3 @@ class RuleDefaultValues {
         character.set(RuleConstants.HEALTH_DIE_PER_LEVEL, 6);
     }
 }
-
-module.exports = RuleDefaultValues;

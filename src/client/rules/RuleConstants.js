@@ -2,7 +2,7 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-module.exports = {
+export default {
     STAT_STRENGTH: "str",
     STAT_CONSTITUTION: "con",
     STAT_INTELLIGENCE: "int",

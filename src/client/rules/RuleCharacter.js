@@ -2,9 +2,9 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-const RuleBuff = require("./RuleBuff");
-const RuleBuffController = require("./RuleBuffController");
-const RuleDefaultValues = require("./RuleDefaultValues");
+import RuleBuffController from "./RuleBuffController";
+import RuleBuff from "./RuleBuff";
+import RuleDefaultValues from "./RuleDefaultValues";
 
 function getBuffArr(self, type) {
     switch (type) {
@@ -23,7 +23,7 @@ function getBuffBonus(self, key) {
     return self.ench.getMaxValue(key) + self.morale.getMaxValue(key) + self.other.getSum(key);
 }
 
-class RuleCharacter {
+export default class RuleCharacter {
     constructor() {
         this.data = {};
         this.ench = new RuleBuffController(RuleBuff.TYPE_ENCHANTED);
@@ -48,5 +48,3 @@ class RuleCharacter {
         getBuffArr(this, buff.type).remove(buff);
     }
 }
-
-module.exports = RuleCharacter;

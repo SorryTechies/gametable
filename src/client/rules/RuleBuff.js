@@ -2,7 +2,7 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-class RuleBuff {
+export default class RuleBuff {
     constructor(key, val, type = RuleBuff.TYPE_OTHER) {
         this.key = key;
         this.val = val;
@@ -13,5 +13,3 @@ class RuleBuff {
 RuleBuff.TYPE_ENCHANTED = "ench";
 RuleBuff.TYPE_MORALE = "morale";
 RuleBuff.TYPE_OTHER = "other";
-
-module.exports = RuleBuff;

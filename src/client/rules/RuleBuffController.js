@@ -2,7 +2,7 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-class RuleBuffController {
+export default class RuleBuffController {
     constructor(type) {
         this.type = type;
         this.arr = [];
@@ -24,5 +24,3 @@ class RuleBuffController {
         return this.arr.reduce((acc, item) => item.key === key ? acc + item.val : acc, 0);
     }
 }
-
-module.exports = RuleBuffController;
