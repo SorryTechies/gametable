@@ -2,17 +2,19 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-import RuleBuffController from "./RuleBuffController";
-import RuleBuff from "./RuleBuff";
+import RuleEffectController from "./RuleEffectController";
+import RuleEffect from "./RuleEffect";
 import RuleDefaultValues from "./RuleDefaultValues";
+import RuleBuffController from "./RuleBuffController";
+import * as RuleImplementation from "./RuleImplementation";
 
 function getBuffArr(self, type) {
     switch (type) {
-        case RuleBuff.TYPE_ENCHANTED:
+        case RuleEffect.TYPE_ENCHANTED:
             return self.ench;
-        case RuleBuff.TYPE_MORALE:
+        case RuleEffect.TYPE_MORALE:
             return self.morale;
-        case RuleBuff.TYPE_OTHER:
+        case RuleEffect.TYPE_OTHER:
             return self.other;
         default:
             throw new Error("Unknown buff type " + type);
@@ -25,11 +27,17 @@ function getBuffBonus(self, key) {
 
 export default class RuleCharacter {
     constructor() {
+        this.originalData = {};
         this.data = {};
-        this.ench = new RuleBuffController(RuleBuff.TYPE_ENCHANTED);
-        this.morale = new RuleBuffController(RuleBuff.TYPE_MORALE);
-        this.other = new RuleBuffController(RuleBuff.TYPE_OTHER);
+        this.ench = new RuleEffectController(RuleEffect.TYPE_ENCHANTED);
+        this.morale = new RuleEffectController(RuleEffect.TYPE_MORALE);
+        this.other = new RuleEffectController(RuleEffect.TYPE_OTHER);
+        this.buff = new RuleBuffController(this);
         RuleDefaultValues.setDefault(this);
+    }
+
+    setOriginal(key, val) {
+        if (key && typeof val === "number") this.originalData[key] = val;
     }
 
     set(key, val) {
@@ -40,11 +48,37 @@ export default class RuleCharacter {
         return this.data[key] + getBuffBonus(this, key);
     }
 
+    addEffect(effect) {
+        getBuffArr(this, effect.type).add(effect);
+    }
+
+    removeEffect(effect) {
+        getBuffArr(this, effect.type).remove(effect);
+    }
+
     addBuff(buff) {
-        getBuffArr(this, buff.type).add(buff);
+        this.buff.add(buff);
     }
 
     removeBuff(buff) {
-        getBuffArr(this, buff.type).remove(buff);
+        this.buff.remove(buff);
+    }
+
+    dispelBuff(key) {
+        this.buff.removeByKey(key);
+    }
+
+    recalculate() {
+        this.data = Object.keys(this.originalData).reduce((acc, key) => {
+            acc[key] = this.originalData[key];
+            return acc;
+        }, {});
+        RuleImplementation.statCalc(this);
+        RuleImplementation.dodgeCalc(this);
+        RuleImplementation.attackBonusCalc(this);
+        RuleImplementation.defenceCalc(this);
+        RuleImplementation.saveCalc(this);
+        RuleImplementation.healthCalc(this);
+        RuleImplementation.combatManeuverCalc(this);
     }
 }

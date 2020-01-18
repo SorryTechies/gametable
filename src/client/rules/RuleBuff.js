@@ -3,13 +3,19 @@
  */
 
 export default class RuleBuff {
-    constructor(key, val, type = RuleBuff.TYPE_OTHER) {
+    constructor(key) {
+        this.onCreate = RuleBuff.EMPTY_FUNCTION;
+        this.onTurn = RuleBuff.EMPTY_FUNCTION;
+        this.onEnd = RuleBuff.EMPTY_FUNCTION;
+        this.onRenew = RuleBuff.DEFAULT_ON_RENEW;
+        this.duration = -1;
+        this.timer = 0;
         this.key = key;
-        this.val = val;
-        this.type = type;
+        this.character = null;
     }
 }
 
-RuleBuff.TYPE_ENCHANTED = "ench";
-RuleBuff.TYPE_MORALE = "morale";
-RuleBuff.TYPE_OTHER = "other";
+RuleBuff.EMPTY_FUNCTION = () => {};
+RuleBuff.DEFAULT_ON_RENEW = () => {
+    if (this.duration !== -1) this.duration += this.timer;
+};
