@@ -6,13 +6,18 @@ import RuleConstants from "./RuleConstants";
 import RuleCharacter from "./RuleCharacter";
 import RuleActionList from "./RuleActionList";
 
+class RoundObject {
+    constructor(character) {
+        this.character = character;
+        this.actionList = new RuleActionList();
+    }
+}
+
 export default class RuleRound {
     constructor(characters) {
-        this.stack = characters.map(character => ({
-            character: character,
-            actionList: new RuleActionList()
-        }));
-        this.stack.sort((c1, c2) => c1.character.get(RuleConstants.INITIATIVE) - c2.character.get(RuleConstants.INITIATIVE));
+        /** @type {Array.<RoundObject>} */
+        this.stack = characters.map(character => new RoundObject(character));
+        this.stack.sort((c1, c2) => c1.character.get(RuleConstants.CURRENT_INITIATIVE) - c2.character.get(RuleConstants.CURRENT_INITIATIVE));
     }
 
     getObject(character) {
@@ -28,5 +33,15 @@ export default class RuleRound {
 
     removeAction(character, action) {
         this.getObject(character).actionList.removeAction(action);
+    }
+
+    finish() {
+        this.stack.forEach(obj => {
+            try {
+                obj.actionList.execute();
+            } catch (e) {
+                console.error(e);
+            }
+        });
     }
 }

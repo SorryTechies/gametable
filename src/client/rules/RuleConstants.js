@@ -33,6 +33,7 @@ export default {
     MOVE_SPEED: "speed",
 
     INITIATIVE: "initiative",
+    CURRENT_INITIATIVE: "cur_init",
 
     COMBAT_MANEUVER_BONUS: "cmb",
     COMBAT_MANEUVER_DEFENCE: "cmd",
