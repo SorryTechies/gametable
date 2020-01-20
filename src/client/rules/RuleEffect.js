@@ -12,4 +12,5 @@ export default class RuleEffect {
 
 RuleEffect.TYPE_ENCHANTED = "ench";
 RuleEffect.TYPE_MORALE = "morale";
+RuleEffect.TYPE_LUCK = "luck";
 RuleEffect.TYPE_OTHER = "other";

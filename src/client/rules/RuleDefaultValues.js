@@ -21,5 +21,7 @@ export default class RuleDefaultValues {
 
         character.setOriginal(RuleConstants.HEALTH_DIE, 8);
         character.setOriginal(RuleConstants.HEALTH_DIE_PER_LEVEL, 6);
+
+        character.setOriginal(RuleConstants.MOVE_SPEED, 30);
     }
 }

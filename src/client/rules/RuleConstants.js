@@ -30,6 +30,10 @@ export default {
 
     DODGE: "dodge",
 
+    MOVE_SPEED: "speed",
+
+    INITIATIVE: "initiative",
+
     COMBAT_MANEUVER_BONUS: "cmb",
     COMBAT_MANEUVER_DEFENCE: "cmd",
 

@@ -16,6 +16,8 @@ function getBuffArr(self, type) {
             return self.morale;
         case RuleEffect.TYPE_OTHER:
             return self.other;
+        case RuleEffect.TYPE_LUCK:
+            return self.luck;
         default:
             throw new Error("Unknown buff type " + type);
     }
@@ -31,6 +33,7 @@ export default class RuleCharacter {
         this.data = {};
         this.ench = new RuleEffectController(RuleEffect.TYPE_ENCHANTED);
         this.morale = new RuleEffectController(RuleEffect.TYPE_MORALE);
+        this.luck = new RuleEffectController(RuleEffect.TYPE_LUCK);
         this.other = new RuleEffectController(RuleEffect.TYPE_OTHER);
         this.buff = new RuleBuffController(this);
         RuleDefaultValues.setDefault(this);

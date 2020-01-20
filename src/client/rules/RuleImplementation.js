@@ -61,6 +61,7 @@ export const attackBonusCalc = character => {
     character.set(RuleConstants.ATTACK_FLAT,
         character.get(RuleConstants.BAB) +
         character.get(RuleConstants.MODIFIER_ATTACK));
+    character.set(RuleConstants.INITIATIVE, character.get(RuleConstants.MOD_DEXTERITY));
 };
 
 export const saveCalc = character => {
