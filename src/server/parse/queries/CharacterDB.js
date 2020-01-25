@@ -25,6 +25,7 @@ module.exports.saveCharacter = async json => {
     setIfExists(Character.DEFENSE_FIELD);
     setIfExists(Character.SAVES_FIELD);
     setIfExists(Character.STATES_FIELD);
+    setIfExists(Character.DATA_FIELED);
     return character.save();
 };
 

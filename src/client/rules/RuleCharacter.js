@@ -28,19 +28,28 @@ function getBuffBonus(self, key) {
 }
 
 export default class RuleCharacter {
-    constructor() {
-        this.originalData = {};
+    constructor(data) {
+        if (data) {
+            this.originalData = data;
+        } else {
+            this.originalData = {};
+            RuleDefaultValues.setDefault(this);
+        }
         this.data = {};
         this.ench = new RuleEffectController(RuleEffect.TYPE_ENCHANTED);
         this.morale = new RuleEffectController(RuleEffect.TYPE_MORALE);
         this.luck = new RuleEffectController(RuleEffect.TYPE_LUCK);
         this.other = new RuleEffectController(RuleEffect.TYPE_OTHER);
         this.buff = new RuleBuffController(this);
-        RuleDefaultValues.setDefault(this);
     }
 
     setOriginal(key, val) {
+        console.log(key, val);
         if (key && typeof val === "number") this.originalData[key] = val;
+    }
+
+    getOriginal(key) {
+        return this.originalData[key];
     }
 
     set(key, val) {
