@@ -6,8 +6,6 @@ import * as React from "react";
 import StaticController from "../../static/StaticController";
 import CharacterRow from "../element/CharacterRow";
 import RuleConstants from "../../rules/RuleConstants";
-import PopupManager from "../../popup/PopupManager";
-import CheckDice from "../../logic/roll/CheckDice";
 import CharacterPageController from "./CharacterPageController";
 
 const KEY_ARRAY = [

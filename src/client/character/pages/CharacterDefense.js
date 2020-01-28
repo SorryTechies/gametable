@@ -41,8 +41,7 @@ export default class CharacterDefense extends React.Component {
                               displayName={obj.stat}
                               finalValue={character.get(obj.mod)}
                               modifiedValue={character.getOriginal(obj.stat)}
-                              onSave={CharacterPageController.saveCharacter(character, obj.mod)}
-                              onClick={CharacterPageController.getRollPop(obj, character)}/>)}
+                              onSave={CharacterPageController.saveCharacter(character, obj.mod)}/>)}
             </tbody>
         </table>;
     }

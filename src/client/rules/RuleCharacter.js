@@ -33,8 +33,8 @@ export default class RuleCharacter {
             this.originalData = data;
         } else {
             this.originalData = {};
-            RuleDefaultValues.setDefault(this);
         }
+        RuleDefaultValues.setDefault(this);
         this.data = {};
         this.ench = new RuleEffectController(RuleEffect.TYPE_ENCHANTED);
         this.morale = new RuleEffectController(RuleEffect.TYPE_MORALE);
@@ -44,8 +44,7 @@ export default class RuleCharacter {
     }
 
     setOriginal(key, val) {
-        console.log(key, val);
-        if (key && typeof val === "number") this.originalData[key] = val;
+        if (key) this.originalData[key] = val;
     }
 
     getOriginal(key) {
@@ -53,11 +52,12 @@ export default class RuleCharacter {
     }
 
     set(key, val) {
-        if (key && typeof val === "number") this.data[key] = val;
+        if (key) this.data[key] = val;
     }
 
     get(key) {
-        return this.data[key] + getBuffBonus(this, key);
+        if (typeof this.data[key] === "number") return this.data[key] + getBuffBonus(this, key);
+        return this.data[key];
     }
 
     addEffect(effect) {
@@ -92,5 +92,6 @@ export default class RuleCharacter {
         RuleImplementation.saveCalc(this);
         RuleImplementation.healthCalc(this);
         RuleImplementation.combatManeuverCalc(this);
+        RuleImplementation.skillCalc(this);
     }
 }

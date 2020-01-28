@@ -9,12 +9,20 @@ const Game = require("../classes/Game");
 module.exports.getCharacter = (access) =>
     new Parse.Query(Character).equalTo(Character.USER_FIELD, access).first({useMasterKey: true});
 
+function copyNonZeroVars(obj) {
+    const ans = {};
+    Object.keys(obj).forEach(key => {
+        if (obj[key]) ans[key] = obj[key];
+    });
+    return ans;
+}
+
 module.exports.saveCharacter = async json => {
     json.className = Character.CLASS_NAME;
     /** @type Character */
     const character = await new Parse.Query(Character.CLASS_NAME).get(json.objectId, {useMasterKey: true});
     const setIfExists = name => {
-        if (typeof json[name] !== "undefined") {
+        if (typeof json[name]) {
             character[name] = json[name];
         }
     };
@@ -25,7 +33,9 @@ module.exports.saveCharacter = async json => {
     setIfExists(Character.DEFENSE_FIELD);
     setIfExists(Character.SAVES_FIELD);
     setIfExists(Character.STATES_FIELD);
-    setIfExists(Character.DATA_FIELED);
+    if (typeof json[Character.DATA_FIELED] !== "undefined") {
+        character[Character.DATA_FIELED] = copyNonZeroVars(json[Character.DATA_FIELED]);
+    }
     return character.save();
 };
 

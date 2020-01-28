@@ -4,6 +4,8 @@
 
 
 import RuleConstants from "./RuleConstants";
+import RuleSkillsStatConstants from "./constants/RuleSkillsStatConstants";
+import RuleSkillConstants from "./constants/RuleSkillConstants";
 
 export const dodgeCalc = cha => cha.set(RuleConstants.DODGE, cha.get(RuleConstants.MODIFIER_DODGE) +
     cha.get(RuleConstants.MOD_DEXTERITY));
@@ -102,4 +104,61 @@ export const combatManeuverCalc = cha => {
         cha.get(RuleConstants.DODGE) +
         cha.get(RuleConstants.MODIFIER_DEFLECT) +
         cha.get(RuleConstants.MODIFIER_CMD));
+};
+
+export const skillCalc = cha => {
+    const getSkillModifier = key => {
+        if (RuleSkillsStatConstants.SKILLS_STR.includes(key)) return cha.get(RuleConstants.MOD_STRENGTH);
+        if (RuleSkillsStatConstants.SKILLS_DEX.includes(key)) return cha.get(RuleConstants.MOD_DEXTERITY);
+        if (RuleSkillsStatConstants.SKILLS_INT.includes(key)) return cha.get(RuleConstants.MOD_INTELLIGENCE);
+        if (RuleSkillsStatConstants.SKILLS_WIS.includes(key)) return cha.get(RuleConstants.MOD_WISDOM);
+        if (RuleSkillsStatConstants.SKILLS_CHA.includes(key)) return cha.get(RuleConstants.MOD_CHARISMA);
+    };
+    const processRanks = key => {
+        const ranks = cha.get(key);
+        if (cha.get(RuleSkillConstants.CLASS_SKILLS_ARRAY).includes(key) && ranks > 0) {
+            return ranks + 2;
+        } else {
+            return ranks;
+        }
+    };
+
+    cha.set(RuleSkillConstants.SKILL_ACROBATICS, processRanks(RuleSkillConstants.SKILL_ACROBATICS_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_ACROBATICS));
+    cha.set(RuleSkillConstants.SKILL_APPRAISE, processRanks(RuleSkillConstants.SKILL_APPRAISE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_APPRAISE));
+    cha.set(RuleSkillConstants.SKILL_BLUFF, processRanks(RuleSkillConstants.SKILL_BLUFF_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_BLUFF));
+    cha.set(RuleSkillConstants.SKILL_CLIMB, processRanks(RuleSkillConstants.SKILL_CLIMB_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_CLIMB));
+    cha.set(RuleSkillConstants.SKILL_CRAFT, processRanks(RuleSkillConstants.SKILL_CRAFT_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_CRAFT));
+    cha.set(RuleSkillConstants.SKILL_DIPLOMACY, processRanks(RuleSkillConstants.SKILL_DIPLOMACY_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_DIPLOMACY));
+    cha.set(RuleSkillConstants.SKILL_DISABLE_DEVICE, processRanks(RuleSkillConstants.SKILL_DISABLE_DEVICE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_DISABLE_DEVICE));
+    cha.set(RuleSkillConstants.SKILL_DISGUISE, processRanks(RuleSkillConstants.SKILL_DISGUISE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_DISGUISE));
+    cha.set(RuleSkillConstants.SKILL_ESCAPE_ARTIST, processRanks(RuleSkillConstants.SKILL_ESCAPE_ARTIST_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_ESCAPE_ARTIST));
+    cha.set(RuleSkillConstants.SKILL_FLY, processRanks(RuleSkillConstants.SKILL_FLY_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_FLY));
+    cha.set(RuleSkillConstants.SKILL_HANDLE_ANIMAL, processRanks(RuleSkillConstants.SKILL_HANDLE_ANIMAL_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_HANDLE_ANIMAL));
+    cha.set(RuleSkillConstants.SKILL_HEAL, processRanks(RuleSkillConstants.SKILL_HEAL_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_HEAL));
+    cha.set(RuleSkillConstants.SKILL_INTIMIDATE, processRanks(RuleSkillConstants.SKILL_INTIMIDATE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_INTIMIDATE));
+    cha.set(RuleSkillConstants.SKILL_LINGUISTICS, processRanks(RuleSkillConstants.SKILL_LINGUISTICS_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_LINGUISTICS));
+    cha.set(RuleSkillConstants.SKILL_PERCEPTION, processRanks(RuleSkillConstants.SKILL_PERCEPTION_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_PERCEPTION));
+    cha.set(RuleSkillConstants.SKILL_PERFORM, processRanks(RuleSkillConstants.SKILL_PERFORM_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_PERFORM));
+    cha.set(RuleSkillConstants.SKILL_PROFESSION, processRanks(RuleSkillConstants.SKILL_PROFESSION_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_PROFESSION));
+    cha.set(RuleSkillConstants.SKILL_RIDE, processRanks(RuleSkillConstants.SKILL_RIDE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_RIDE));
+    cha.set(RuleSkillConstants.SKILL_SENSE_MOTIVE, processRanks(RuleSkillConstants.SKILL_SENSE_MOTIVE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SENSE_MOTIVE));
+    cha.set(RuleSkillConstants.SKILL_SLEIGHT_OF_HAND, processRanks(RuleSkillConstants.SKILL_SLEIGHT_OF_HAND_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SLEIGHT_OF_HAND));
+    cha.set(RuleSkillConstants.SKILL_SPELLCRAFT, processRanks(RuleSkillConstants.SKILL_SPELLCRAFT_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SPELLCRAFT));
+    cha.set(RuleSkillConstants.SKILL_STEALTH, processRanks(RuleSkillConstants.SKILL_STEALTH_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_STEALTH));
+    cha.set(RuleSkillConstants.SKILL_SURVIVAL, processRanks(RuleSkillConstants.SKILL_SURVIVAL_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SURVIVAL));
+    cha.set(RuleSkillConstants.SKILL_SWIM, processRanks(RuleSkillConstants.SKILL_SWIM_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SWIM));
+    cha.set(RuleSkillConstants.SKILL_USE_MAGIC_DEVICE, processRanks(RuleSkillConstants.SKILL_USE_MAGIC_DEVICE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_USE_MAGIC_DEVICE));
+
+    cha.set(RuleSkillConstants.SKILL_KNOWLEDGE_ARCANA, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_ARCANA_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_ARCANA));
+    cha.set(RuleSkillConstants.SKILL_KNOWLEDGE_DUNGEONEERING, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_DUNGEONEERING_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_DUNGEONEERING));
+    cha.set(RuleSkillConstants.SKILL_KNOWLEDGE_GEOGRAPHY, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_GEOGRAPHY_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_GEOGRAPHY));
+    cha.set(RuleSkillConstants.SKILL_KNOWLEDGE_ENGINEERING, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_ENGINEERING_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_ENGINEERING));
+    cha.set(RuleSkillConstants.SKILL_KNOWLEDGE_HISTORY, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_HISTORY_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_HISTORY));
+    cha.set(RuleSkillConstants.SKILL_KNOWLEDGE_LOCAL, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_LOCAL_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_LOCAL));
+    cha.set(RuleSkillConstants.SKILL_KNOWLEDGE_NOBILITY, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_NOBILITY_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_NOBILITY));
+    cha.set(RuleSkillConstants.SKILL_KNOWLEDGE_NATURE, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_NATURE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_NATURE));
+    cha.set(RuleSkillConstants.SKILL_KNOWLEDGE_PLANES, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_PLANES_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_PLANES));
+    cha.set(RuleSkillConstants.SKILL_KNOWLEDGE_RELIGION, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_RELIGION_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_RELIGION));
+
+    cha.set(RuleSkillConstants.SKILL_SCIENCE, processRanks(RuleSkillConstants.SKILL_SCIENCE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SCIENCE));
 };
