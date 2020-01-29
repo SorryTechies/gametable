@@ -22,7 +22,7 @@ export default class MongoController {
         console.log("Connected to MongoDB on " + DB_URL);
         db = client.db(DB_NAME);
         if (!db) throw new Error("No database " + DB_NAME + " found");
-        console.log("Database " + DB_NAME + "selected");
+        console.log("Database " + DB_NAME + " selected");
     }
 
     static isInit() {
@@ -52,6 +52,11 @@ export default class MongoController {
     static update(name, query, setObj) {
         throwIfNotInit();
         return db.collection(name).updateMany(query, {$set: setObj});
+    }
+
+    static aggregate(name, query) {
+        throwIfNotInit();
+        return db.collection(name).aggregate(query).toArray();
     }
 
     static remove(name, query) {

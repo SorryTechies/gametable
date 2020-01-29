@@ -8,7 +8,8 @@ import MongoController from "../MongoController";
  * @typedef {{}} GameSession
  * @param {string} _id
  * @param {string} owner_id
- * @param {Array.<string>} session_maps
+ * @param {Array.<string>} participants_id
+ * @param {Array.<string>} session_maps_id
  */
 
 export default class GameSessionDB {
@@ -20,4 +21,5 @@ export default class GameSessionDB {
 
 GameSessionDB.DB_NAME = "GameSession";
 GameSessionDB.OWNER_FIELD = "owner_id";
-GameSessionDB.SESSION_MAPS_FIELD = "session_maps";
+GameSessionDB.PARTICIPANTS_FIELD = "participants_id";
+GameSessionDB.SESSION_MAPS_FIELD = "session_maps_id";
