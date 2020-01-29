@@ -48,5 +48,3 @@ server.listen(config.SERVER_PORT, () => console.log(`Server is running on localh
 require('./express/debugDisp');
 
 require('./wss/WebSocketServer');
-
-require('./scripts/TransformCharactersToFlexCore');

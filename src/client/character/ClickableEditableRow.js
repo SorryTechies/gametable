@@ -60,7 +60,7 @@ export default class ClickableEditableRow extends React.Component {
         const name = this.props.name;
         const args = this.props.args;
         const array = toArray(args, name);
-        const onClick = typeof this.props.onClick === "function" ? () => this.props.onClick(toArray(args, name)) : null;
+        const onClick = typeof this.props.onClick === "function" ? () => this.props.onClick(array) : null;
         return <tr onClick={onClick}>{array.map(this.getCell.bind(this))}</tr>;
     }
 

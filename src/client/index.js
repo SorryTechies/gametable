@@ -21,6 +21,7 @@ import StaticViewManager from "./popup/StaticViewManager";
 import DMConsole from "./dm/DMConsole";
 import SettingsWindow from "./settings/SettingsWindow";
 import StaticKeyboardController from "./static/StaticKeyboardController";
+import CharacterStats from "./character/pages/CharacterStats";
 
 const root = document.getElementById('root');
 const body = document.getElementsByTagName('body')[0];

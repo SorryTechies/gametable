@@ -7,6 +7,7 @@ import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import LoginController from "../logic/LoginController";
 import * as WsConstants from "../../common/WsConstants";
 import SoundController from "../logic/SoundController";
+import RuleCharacter from "../rules/RuleCharacter";
 
 let subscribers = [];
 let chat = null;
@@ -52,11 +53,12 @@ export default class StaticController {
         });
     }
 
-    static loadCharacter() {
+    static async loadCharacter() {
         if (!LoginController.isDM()) {
             const request = new NormalRequest();
             request.path = '/loadCharacter';
-            character = rethrow(request.send());
+            character = await request.send();
+            character.data = new RuleCharacter(character.data);
         }
     }
 
@@ -84,7 +86,7 @@ export default class StaticController {
         music = rethrow(request.send());
     }
 
-    /** @return Promise */
+    /** @return RuleCharacter */
     static getCharacter() {
         if (LoginController.isDM()) {
             return Promise.reject('DM has no character.');
@@ -146,7 +148,8 @@ export default class StaticController {
         const request = new NormalRequest();
         request.path = "/saveCharacter";
         request.method = NormalRequest.METHOD.POST;
-        const char = await this.getCharacter();
+        const char = this.getCharacter();
+        char.data = char.data.originalData;
         request.send(char).then(this.loadCharacter).catch(console.error);
     }
 
