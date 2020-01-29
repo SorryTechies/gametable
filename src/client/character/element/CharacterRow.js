@@ -21,7 +21,7 @@ export default class CharacterRow extends React.Component {
             this.props.onSave(this.state.value);
             this.setState({edit: false});
         };
-        return <input
+        return <th><input
             value={this.state.value}
             onChange={e => this.setState({value: e.target.value})}
             onBlur={stopRedacting}
@@ -29,11 +29,11 @@ export default class CharacterRow extends React.Component {
                 const keyNum = e.keyCode ? e.keyCode : e.which;
                 if (keyNum === 13) stopRedacting();
             }}
-        />;
+        /></th>;
     }
 
     getModifiable() {
-        return this.state.edit ? this.getInput() :  <CharacterField value={this.props.modifiedValue}/>;
+        return this.state.edit ? this.getInput() : <CharacterField value={this.props.modifiedValue}/>;
     }
 
     getOnClick() {

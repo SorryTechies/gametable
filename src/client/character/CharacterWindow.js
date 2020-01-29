@@ -10,6 +10,7 @@ import CharacterStats from "./pages/CharacterStats";
 import CharacterDefense from "./pages/CharacterDefense";
 import CharacterOffense from "./pages/CharacterOffense";
 import CharacterSkills from "./pages/CharacterSkills";
+import CharacterKnowledges from "./pages/CharacterKnowledges";
 
 export default class CharacterWindow extends React.Component {
     constructor(props) {
@@ -45,6 +46,7 @@ export default class CharacterWindow extends React.Component {
             case "knowledge":
                 return <div>
                     <h3>Knowledge</h3>
+                    <CharacterKnowledges/>
                 </div>;
             case "states":
                 return <div>
