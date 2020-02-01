@@ -3,5 +3,6 @@
  */
 
 module.exports = {
-    LOGIN_HEADER: 'X-Login'
+    LOGIN_HEADER: 'X-Login',
+    X_SESSION_HEADER: 'X-Session'
 };

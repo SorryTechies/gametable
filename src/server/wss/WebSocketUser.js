@@ -2,50 +2,54 @@
  * Created by LastBerserk on 30.01.2019.
  */
 
-const WebSocket = require('ws');
-const AccessDB = require("../parse/queries/AccessDB");
+import * as WebSocket from 'ws';
 
-class WebSocketUser {
-    constructor() {
-        this.name = "";
-        this.access = null;
-        this.ws = null;
-    }
-
-    sendMessage(message) {
-        if (this.ws.readyState === WebSocket.OPEN)
-            this.ws.send(JSON.stringify(message));
-    }
-}
-
+/** @type {Array.<WebSocketUser>} */
 const users = [];
 
-module.exports.findOrCreateByUserName = async (accessName, ws) => {
-    let wsUser = users.find(item => item.name === accessName);
-    if (wsUser) {
-        wsUser.ws = ws;
+export default class WebSocketUser {
+    constructor() {
+        this.account = null;
+        this.ws = [];
+    }
+
+    /** @param {WebSocketMessage} message */
+    sendMessage(message) {
+        this.ws.forEach(ws => ws.readyState === WebSocket.OPEN ? ws.send(message.toJson()) : null);
+    }
+
+    removeSocket(ws) {
+        const index = this.ws.findIndex(item => ws === item);
+        if (index !== -1) this.ws.splice(index, 1);
+        if (this.ws.length === 0 && typeof this.onDelete === "function") WebSocketUser.removeUser(this);
+    }
+
+    /**
+     * @param {Account} account
+     * @param ws
+     * @return WebSocketUser
+     */
+    static findOrCreateByAccount(account, ws) {
+        let wsUser = WebSocketUser.findByUser(account);
+        if (!wsUser) {
+            wsUser = new WebSocketUser();
+            users.push(wsUser);
+            wsUser.account = account;
+        }
+        wsUser.ws.push(ws);
         return wsUser;
     }
-    const user = await AccessDB.getUser(accessName);
-    if (!user) return null;
-    wsUser = new WebSocketUser();
-    wsUser.name = accessName;
-    wsUser.access = user;
-    wsUser.ws = ws;
-    users.push(wsUser);
-    return wsUser;
-};
 
-/**
- * @param {Access} access
- * @return ?WebSocketUser
- */
-module.exports.findByUser = access => users.find(item => {
-    const search = item.access;
-    if (!search || !access) return false;
-    return search.id === access.id;
-});
+    /**
+     * @param {Account} account
+     * @return WebSocketUser
+     */
+    static findByUser(account) {
+        return users.find(user => user.access && user.account._id === account._id);
+    }
 
-module.exports.sendToAll = message => {
-    users.forEach(user => user.sendMessage(message));
-};
+    static removeUser(user) {
+        const index = users.findIndex(item => user === item);
+        if (index !== -1) users.splice(index, 1);
+    }
+}

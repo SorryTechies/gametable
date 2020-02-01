@@ -1,0 +1,72 @@
+/**
+ * Created by LastBerserk on 01.02.2020.
+ */
+
+import WebSocketMessage from "../../common/logic/WebSocketMessage";
+const DEFAULT_TIMEOUT = 30 * 1000;
+const DELETE_TIMEOUT = DEFAULT_TIMEOUT + 5 * 1000;
+
+export default class WebSocketWrap {
+    constructor(ws, id) {
+        if (!ws) throw new Error("No ws given.");
+        if (!id) throw new Error("No id given.");
+        this.ws = ws;
+        this.id = id;
+        this.onDelete = null;
+        this.autoCloseTimeout = null;
+        this.onAuth = null;
+        this.heartbeat();
+        this.pingInterval = () => this.ws.ping();
+        this.authenticated = false;
+
+        ws.on('pong', () => this.authenticated ? this.heartbeat() : null);
+
+        ws.on('message', async (message) => {
+            try {
+                const json = WebSocketMessage.fromJson(message);
+                if (!this.authenticated && json.type !== WebSocketMessage.TYPE_AUTH) throw new Error("Auth required.");
+                switch (json.type) {
+                    case (WebSocketMessage.TYPE_AUTH):
+                        await this.auth(json);
+                        break;
+                    case (WebSocketMessage.TYPE_CHAT):
+                        return; // TODO
+                    case (WebSocketMessage.TYPE_INTENT):
+                        return; // TODO
+                    default:
+                        throw new Error("Unrecognized message type.");
+                }
+            } catch (e) {
+                console.error("Error message for " + this.id);
+                console.error(e);
+                const message = new WebSocketMessage(WebSocketMessage.TYPE_ERROR);
+                message.json = e.message;
+                return ws.send(message.toJson());
+            }
+        });
+
+        ws.on('close', () => {
+            console.log("Connection closed for " + this.id);
+            clearTimeout(this.autoCloseTimeout);
+            clearInterval(this.pingInterval);
+            if (typeof this.onDelete === "function") this.onDelete(this);
+        });
+    }
+
+
+
+    /** @param {WebSocketMessage} json */
+    async auth(json) {
+        if (typeof this.onAuth === 'function') await this.onAuth(json.data);
+        this.authenticated = true;
+    }
+
+    terminate() {
+        this.ws.terminate();
+    }
+
+    heartbeat() {
+        clearTimeout(this.autoCloseTimeout);
+        this.autoCloseTimeout = setTimeout(this.terminate.bind(this), DELETE_TIMEOUT);
+    }
+}

@@ -4,59 +4,35 @@
 
 const config = require('../config/serverConfig');
 
-const ws = require('ws');
-const webSocketApp = require('../logic/express').getWebSocketExpress();
-const WebSocketUser = require('./WebSocketUser');
-const WsConstants = require('../../common/WsConstants');
+import * as ws from 'ws';
+import {getWebSocketExpress} from "../logic/express";
+import WebSocketUser from "./WebSocketUser";
+import WebSocketWrap from "./WebSocketWrap";
+
+const webSocketApp = getWebSocketExpress();
 
 const wss = new ws.Server({
     server: webSocketApp,
     port: config.WSS_PORT
 });
 
-const ERROR_ANS = {error: "ERROR"};
-
-wss.on('connection', (ws) => {
-    ws.on('message', async (message) => {
-        const json = JSON.parse(message);
-        const username = json.username;
-        if (username) {
-            const wsUser = await WebSocketUser.findOrCreateByUserName(username, ws);
-            if (!wsUser) return wsUser.sendMessage(ERROR_ANS);
+wss.on('connection', (ws, req) => {
+    const ip = req.connection.remoteAddress;
+    console.log("New connection from " + ip);
+    const wrap = new WebSocketWrap(ws, ip);
+    wrap.onAuth = async auth => {
+        // TODO AUTH
+        if (auth === 'apples') {
+            console.log("Authorized as " + 'apples' + " for" + ip);
+            const acc = {username: 'apples'};
+            const user = WebSocketUser.findOrCreateByAccount(acc, ws);
+            wrap.onDelete = () => user.removeSocket(ws);
+        } else {
+            throw new Error("Unauthorized.");
         }
-    });
+    };
 });
 
-class WebSocketServer {
-    static sendMessageToUser(access, message) {
-        const wsUser = WebSocketUser.findByUser(access);
-        if (wsUser) wsUser.sendMessage(message);
-    };
+export default class WebSocketServer {
 
-    static sendToEverybody(message) {
-        try {
-            WebSocketUser.sendToAll(message);
-        } catch (e) {
-            console.log(e);
-        }
-    };
-
-    static sendToAllInGame(game, message) {
-        try {
-            if (!game) return;
-            if (Array.isArray(game.players)) game.players.map(user => WebSocketServer.sendMessageToUser(user, message));
-            if (game.dm) WebSocketServer.sendMessageToUser(game.dm, message);
-        } catch (e) {
-            console.log(e);
-        }
-    }
 }
-
-WebSocketServer.NEW_MESSAGE_NOTIFICATION = {notification: WsConstants.STATIC_CHAT};
-WebSocketServer.DEMAND_ROLL = {notification: WsConstants.STATIC_ROLL};
-WebSocketServer.RELOAD_MAP_MESSAGE = {notification: WsConstants.STATIC_MAP};
-WebSocketServer.RELOAD_CHARACTER = {notification: WsConstants.STATIC_CHAR};
-WebSocketServer.RELOAD_PARTICIPANTS = {notification: WsConstants.STATIC_PARTICIPANTS};
-WebSocketServer.MUSIC_CHANGED = {notification: WsConstants.STATIC_MUSIC};
-
-module.exports = WebSocketServer;
