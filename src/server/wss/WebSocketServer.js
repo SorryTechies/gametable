@@ -5,7 +5,7 @@
 const config = require('../config/serverConfig');
 
 import * as ws from 'ws';
-import {getWebSocketExpress} from "../logic/express";
+import {getWebSocketExpress} from "../logic/ExpressController";
 import WebSocketUser from "./WebSocketUser";
 import WebSocketWrap from "./WebSocketWrap";
 
@@ -32,7 +32,3 @@ wss.on('connection', (ws, req) => {
         }
     };
 });
-
-export default class WebSocketServer {
-
-}

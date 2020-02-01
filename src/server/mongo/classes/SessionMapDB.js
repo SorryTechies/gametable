@@ -7,7 +7,7 @@ import MongoController from "../MongoController";
 /**
  * @typedef {{}} SessionMap
  * @param {string} _id
- * @param {{x: number, y: number}} SIZE_FIELD
+ * @param {{x: number, y: number}} size
  * @param {string} dm_url
  * @param {string} url
  * @param {Array.<string>} map_objects_id

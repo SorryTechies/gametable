@@ -3,6 +3,7 @@
  */
 
 import WebSocketMessage from "../../common/logic/WebSocketMessage";
+
 const DEFAULT_TIMEOUT = 30 * 1000;
 const DELETE_TIMEOUT = DEFAULT_TIMEOUT + 5 * 1000;
 

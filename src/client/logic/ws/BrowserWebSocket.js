@@ -3,9 +3,13 @@
  */
 
 import * as config from "../../../common/config";
+import WebSocketMessage from "../../../common/logic/WebSocketMessage";
 
 let ws = null;
 let timeout = null;
+
+const DEFAULT_TIMEOUT = 10 * 1000;
+
 /**
  * @type {[{id: string, func: function}]}
  */
@@ -17,7 +21,9 @@ export default class BrowserWebSocket {
         ws = new WebSocket(`ws://${location}:${config.WSS_PORT}`);
         ws.onopen = () => {
             console.log("Ws opened.");
-            ws.send(JSON.stringify({username: username}));
+            const message = new WebSocketMessage(WebSocketMessage.TYPE_AUTH);
+            message.data = username;
+            ws.send(message.toJson());
             if (timeout !== null) {
                 clearInterval(timeout);
                 subscribers.forEach(obj => obj.func())
@@ -31,21 +37,21 @@ export default class BrowserWebSocket {
                     ws.close();
                 }
                 BrowserWebSocket.init(username);
-            }, 10000);
+            }, DEFAULT_TIMEOUT);
         };
 
         ws.onmessage = evt => {
             try {
-                const message = JSON.parse(evt.data);
-                if (!message) return message;
-                const error = message.error;
-                if (error) return console.log(error);
-                const notification = message.notification;
-                for (let i = 0; i < subscribers.length; i++) {
-                    if (subscribers[i].id === notification) {
-                        subscribers[i].func();
-                        break;
-                    }
+                const message = WebSocketMessage.fromJson(evt.data);
+                switch (message.type) {
+                    case WebSocketMessage.TYPE_ERROR:
+                        console.error("Error from websocket.");
+                        console.error(message.data);
+                        return;
+                    case WebSocketMessage.TYPE_CHAT:
+                        return; //TODO
+                    case WebSocketMessage.TYPE_INTENT:
+                        return;
                 }
             } catch (e) {
                 console.log(e);

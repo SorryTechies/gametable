@@ -21,7 +21,7 @@ export default class WebSocketUser {
     removeSocket(ws) {
         const index = this.ws.findIndex(item => ws === item);
         if (index !== -1) this.ws.splice(index, 1);
-        if (this.ws.length === 0 && typeof this.onDelete === "function") WebSocketUser.removeUser(this);
+        if (this.ws.length === 0) WebSocketUser.removeUser(this);
     }
 
     /**

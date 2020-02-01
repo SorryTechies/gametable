@@ -16,6 +16,10 @@ export default class WebSocketMessage {
         });
     }
 
+    /**
+     * @param json
+     * @return {WebSocketMessage}
+     */
     static fromJson(json) {
         const obj = JSON.parse(json);
         if (typeof obj !== "object") throw new Error("Bad message.");
