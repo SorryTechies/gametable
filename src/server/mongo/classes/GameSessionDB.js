@@ -4,26 +4,22 @@
 
 import MongoController from "../MongoController";
 
-/**
- * @typedef {{}} GameSession
- * @param {string} _id
- * @param {string} owner_id
- * @param {Array.<string>} participants_id
- * @param {Array.<string>} session_maps_id
- */
-
 export default class GameSessionDB {
-    /** @return Promise.<GameSession> */
+    /** @return Promise<GameSession> */
     static getById(id) {
         return MongoController.getById(GameSessionDB.DB_NAME, id);
     }
 
-    static getSessionWithCharacter(character_id) {
-        return MongoController.select(GameSessionDB.DB_NAME, {});
+    /**
+     * @param character_id
+     * @return {Promise<Array<GameSession>>}
+     */
+    static findSessionsByCharacter(character_id) {
+        return MongoController.select(GameSessionDB.DB_NAME, {[GameSessionDB.PARTICIPANTS_CHARACTER_FIELD]: [character_id]});
     }
 }
 
 GameSessionDB.DB_NAME = "GameSession";
 GameSessionDB.OWNER_FIELD = "owner_id";
-GameSessionDB.PARTICIPANTS_FIELD = "participants_id";
+GameSessionDB.PARTICIPANTS_CHARACTER_FIELD = "participants_character_id";
 GameSessionDB.SESSION_MAPS_FIELD = "session_maps_id";

@@ -4,27 +4,44 @@
 
 import MongoController from "../MongoController";
 
-/**
- * @typedef {{}} Account
- * @param {string} _id
- * @param {string} username
- * @param {Array.<string>} characters_ids
- */
-
 export default class AccountDB {
-    /** @return Promise.<Account> */
+    /** @return Promise<Account> */
     static getById(id) {
         return MongoController.getById(AccountDB.DB_NAME, id);
     }
 
-    /** @return Promise.<Account> */
+    /** @return Promise<Account> */
     static getByUsername(name) {
         return MongoController.getOne(AccountDB.DB_NAME, {[AccountDB.NAME_FIELD]: name});
     }
 
-    /** @return Promise.<Account> */
+    /**
+     * @param {string} character_id
+     * @return Promise<Account>
+     */
     static findOwner(character_id) {
         return MongoController.getOne(AccountDB.DB_NAME, {[AccountDB.CHARACTERS_FIELD]: [character_id]});
+    }
+
+    /**
+     * @param {GameSession} game
+     * @return Promise<Array<Account>>
+     */
+    static getParticipantsInGame(game) {
+        return MongoController.select(AccountDB.DB_NAME, {[AccountDB.CHARACTERS_FIELD]: game.participants_character_id});
+    }
+
+    /**
+     * @param {GameSession} game
+     * @return Promise<Array<Account>>
+     */
+    static getParticipantsInGameWithDM(game) {
+        return MongoController.select(AccountDB.DB_NAME, {
+            $or: [
+                {[AccountDB.CHARACTERS_FIELD]: game.participants_character_id},
+                {_id: game.owner_id}
+            ]
+        });
     }
 }
 

@@ -4,17 +4,12 @@
 
 import MongoController from "../MongoController";
 
-/**
- * @typedef {{}} ChatMessage
- * @param {string} _id
- * @param {string} text
- * @param {string} sender_id
- * @param {string} target_id
- * @param {string} session_id
- * @param {Date} stmp
- */
-
 export default class ChatMessageDB {
+    /**
+     * @param {Account} account
+     * @param {GameSession} session
+     * @return {Promise<Array<ChatMessage>>}
+     */
     static getMessagesForAccountAndSession(account, session) {
         return MongoController.select(ChatMessageDB.DB_NAME, {
             $or: [

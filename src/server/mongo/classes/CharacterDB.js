@@ -4,14 +4,8 @@
 
 import MongoController from "../MongoController";
 
-/**
- * @typedef {{}} Character
- * @param {string} _id
- * @param {string} data
- */
-
 export default class CharacterDB {
-    /** @return Promise.<Character> */
+    /** @return Promise<GameCharacter> */
     static getById(id) {
         return MongoController.getById(CharacterDB.DB_NAME, id);
     }
