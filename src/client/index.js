@@ -53,21 +53,19 @@ class Login extends React.Component {
 
     tryToLogin(username) {
         LoginController.setLogin(username);
-        const request = new NormalRequest();
-        request.path = '/login';
-        request.send()
-            .then(result => {
+        new NormalRequest('/login').send()
+            .then(async result => {
                 initialized = true;
-                LoginController.loginOk(result.isDM);
+                LoginController.loginOk(false);
                 BrowserWebSocket.init(username);
-                StaticController.init();
+                await StaticController.init(result);
                 StaticSettings.init();
                 this.forceUpdate();
             })
             .catch(e => {
                 initialized = true;
                 this.forceUpdate();
-                console.log(e)
+                console.error(e)
             });
     }
 

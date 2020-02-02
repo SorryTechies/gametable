@@ -9,6 +9,8 @@ import * as WsConstants from "../../common/WsConstants";
 import SoundController from "../logic/SoundController";
 import RuleCharacter from "../rules/RuleCharacter";
 
+/** @type Account */
+let account = null;
 let subscribers = [];
 let chat = null;
 let character = null;
@@ -18,103 +20,67 @@ let music = null;
 
 const LOG_LEVEL = "DEBUG";
 
-const rethrow = async promise => {
-    try {
-        return await promise;
-    } catch (e) {
-        console.error(e);
-        return e;
-    }
-};
-
 export default class StaticController {
-    static init() {
-        this.loadCharacter();
-        this.loadChat();
-        this.loadMap();
-        this.loadParticipants();
-        this.loadMusic();
-        BrowserWebSocket.subscribe({
-            id: WsConstants.STATIC_CHAR,
-            func: this.update.bind(this, WsConstants.STATIC_CHAR)
-        });
-        BrowserWebSocket.subscribe({
-            id: WsConstants.STATIC_MAP,
-            func: this.update.bind(this, WsConstants.STATIC_MAP)
-        });
-        BrowserWebSocket.subscribe({
-            id: WsConstants.STATIC_CHAT,
-            func: this.update.bind(this, WsConstants.STATIC_CHAT)
-        });
-        BrowserWebSocket.subscribe({id: WsConstants.STATIC_MAP, func: this.update.bind(this, WsConstants.STATIC_MAP)});
-        BrowserWebSocket.subscribe({
-            id: WsConstants.STATIC_MUSIC,
-            func: this.update.bind(this, WsConstants.STATIC_MUSIC)
-        });
+    /**
+     * @param {Account} acc
+     * @return {Promise.<void>}
+     */
+    static async init(acc) {
+        if (!acc) throw new Error("No account provided.");
+        account = acc;
+        await this.loadCharacter();
+        await this.loadChat();
+        await this.loadMap();
+        await this.loadParticipants();
+        await this.loadMusic();
     }
 
     static async loadCharacter() {
-        if (!LoginController.isDM()) {
-            const request = new NormalRequest();
-            request.path = '/loadCharacter';
-            character = await request.send();
-            character.data = new RuleCharacter(character.data);
-        }
+        if (LoginController.isDM()) return;
+        const id = Array.isArray(account.characters_ids) ? account.characters_ids[0]: null;
+        if (!id) return;
+        character = await new NormalRequest('/character').send();
+        character.data = new RuleCharacter(character.data);
     }
 
-    static loadMap() {
-        const request = new NormalRequest();
-        request.path = '/getMap';
-        map = rethrow(request.send());
+    static async loadMap() {
+        map = await new NormalRequest('/map').send();
     }
 
-    static loadChat() {
-        const request = new NormalRequest();
-        request.path = '/loadMessages';
-        chat = rethrow(request.send());
+    static async loadChat() {
+        chat = await new NormalRequest('/chat').send();
     }
 
-    static loadParticipants() {
-        const request = new NormalRequest();
-        request.path = '/getGameParticipants';
-        participants = rethrow(request.send());
+    static async loadParticipants() {
+        participants = await new NormalRequest('/todo').send();
     }
 
-    static loadMusic() {
-        const request = new NormalRequest();
-        request.path = '/getPlaybackStatus';
-        music = rethrow(request.send());
+    static async loadMusic() {
+        music = await new NormalRequest('/todo').send();
     }
 
     /** @return RuleCharacter */
     static getCharacter() {
-        if (LoginController.isDM()) {
-            return Promise.reject('DM has no character.');
-        } else {
-            return character;
-        }
+        if (LoginController.isDM()) throw new Error("DM have no stats).");
+        return character.data;
     }
 
-    /** @return Promise */
+    /** @return Array<Account> */
     static getParticipants() {
-        if (LoginController.isDM()) {
-            return participants;
-        } else {
-            return Promise.reject('Participants for DM only.');
-        }
+        return participants;
     }
 
-    /** @return Promise */
+    /** @return SessionMap */
     static getMap() {
         return map;
     }
 
-    /** @return Promise */
+    /** @return Array<ChatMessage> */
     static getChat() {
         return chat;
     }
 
-    /** @return Promise */
+    /** @return {{}} */
     static getMusic() {
         return music;
     }
@@ -142,22 +108,6 @@ export default class StaticController {
                 break;
         }
         StaticController.notifySubscribed(id);
-    }
-
-    static async saveCharacter() {
-        const request = new NormalRequest();
-        request.path = "/saveCharacter";
-        request.method = NormalRequest.METHOD.POST;
-        const char = this.getCharacter();
-        char.data = char.data.originalData;
-        request.send(char).then(this.loadCharacter).catch(console.error);
-    }
-
-    static async saveObject(object) {
-        const request = new NormalRequest();
-        request.path = "/saveObject";
-        request.method = NormalRequest.METHOD.POST;
-        request.send(object).then(this.loadCharacter).catch(console.error);
     }
 
     static subscribe = obj => subscribers.push(obj);

@@ -3,10 +3,10 @@
  */
 
 export default class WebSocketMessage {
-    constructor(type) {
+    constructor(type, data) {
         if (!type) throw new Error("No message type given.");
         this.type = type;
-        this.data = {};
+        this.data = data ? data : {};
     }
 
     toJson() {

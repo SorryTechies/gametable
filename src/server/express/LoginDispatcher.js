@@ -4,4 +4,4 @@
 
 import * as express from "./ExpressWrapper";
 
-express.wrapGet('/login', req => ({isDM: req.access.isDM}));
+express.wrapGet('/login', req => req.access);

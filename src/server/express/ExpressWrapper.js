@@ -4,28 +4,24 @@
 
 import {EXPRESS_SERVER} from "../logic/ExpressController";
 
-export function wrapGet(path, func) {
-    EXPRESS_SERVER.get(path, async (req, res) => {
+async function wrap(path, func, wrapFunc) {
+    wrapFunc(path, async (req, res) => {
         try {
             let ans;
-            ans = await func();
+            if (typeof func === "function") ans = await func(req, res);
             if (!ans) ans = {};
             res.json(ans);
         } catch (e) {
+            console.error(e);
             res.status(500).send({error: e.message});
         }
     });
 }
 
+export function wrapGet(path, func) {
+    wrap(path, func, EXPRESS_SERVER.get.bind(EXPRESS_SERVER));
+}
+
 export function wrapPost(path, func) {
-    EXPRESS_SERVER.post(path, async (req, res) => {
-        try {
-            let ans;
-            ans = await func();
-            if (!ans) ans = {};
-            res.json(ans);
-        } catch (e) {
-            res.status(500).send({error: e.message});
-        }
-    });
+    wrap(path, func, EXPRESS_SERVER.post.bind(EXPRESS_SERVER));
 }

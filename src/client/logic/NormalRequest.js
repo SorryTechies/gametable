@@ -12,17 +12,31 @@ function getAjax() {
     return request;
 }
 
+function queryToString(query) {
+    let ans =  Object.keys(query).reduce((acc, key) => {
+        if (acc) acc += ";";
+        return acc + `${key}=${query[key]}`;
+    },"");
+    if (ans) ans = '?' + ans;
+    return ans;
+}
+
 export default class NormalRequest {
-    constructor() {
+    /**
+     * @param {string} [path]
+     * @param {{}} [query]
+     */
+    constructor(path, query) {
         this.method = NormalRequest.METHOD.GET;
-        this.path = '';
+        this.path = path ? path : '';
+        this.query = query ? query : {};
         this.port = config.SERVER_PORT;
     }
 
     send(json) {
         return new Promise((resolve, reject) => {
             const request = getAjax();
-            request.open(this.method, `http://${window.location.hostname}:${this.port}${this.path}`);
+            request.open(this.method, `http://${window.location.hostname}:${this.port}${this.path}${queryToString(this.query)}`);
             if (this.method === NormalRequest.METHOD.POST) request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             request.setRequestHeader(headers.LOGIN_HEADER, LoginController.getLogin());
             if (json) {

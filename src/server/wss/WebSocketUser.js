@@ -3,6 +3,7 @@
  */
 
 import * as WebSocket from 'ws';
+import AccountDB from "../mongo/classes/AccountDB";
 
 /** @type {Array.<WebSocketUser>} */
 const users = [];
@@ -54,7 +55,8 @@ export default class WebSocketUser {
     }
 
     static sendToGameSession(session, message) {
-        const participants = [session.owner_id].concat(session.participants_id);
-        users.filter(user => participants.includes(user.account._id)).forEach(user => user.sendMessage(message));
+        AccountDB.getParticipantsInGameWithDM(session)
+            .then(accounts => accounts.forEach(user => user.sendMessage(message)))
+            .catch(console.error);
     }
 }
