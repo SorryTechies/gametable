@@ -52,4 +52,9 @@ export default class WebSocketUser {
         const index = users.findIndex(item => user === item);
         if (index !== -1) users.splice(index, 1);
     }
+
+    static sendToGameSession(session, message) {
+        const participants = [session.owner_id].concat(session.participants_id);
+        users.filter(user => participants.includes(user.account._id)).forEach(user => user.sendMessage(message));
+    }
 }

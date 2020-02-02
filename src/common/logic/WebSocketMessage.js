@@ -34,3 +34,4 @@ WebSocketMessage.TYPE_AUTH = "auth";
 WebSocketMessage.TYPE_CHAT = "chat";
 WebSocketMessage.TYPE_ERROR = "error";
 WebSocketMessage.TYPE_INTENT = "intent";
+WebSocketMessage.TYPE_CHARACTER = "character";

@@ -3,6 +3,7 @@
  */
 
 import WebSocketMessage from "../../common/logic/WebSocketMessage";
+import * as WsCharacterDispatcher from "./dispatchers/WsCharacterDispatcher";
 
 const DEFAULT_TIMEOUT = 30 * 1000;
 const DELETE_TIMEOUT = DEFAULT_TIMEOUT + 5 * 1000;
@@ -34,6 +35,9 @@ export default class WebSocketWrap {
                         return; // TODO
                     case (WebSocketMessage.TYPE_INTENT):
                         return; // TODO
+                    case (WebSocketMessage.TYPE_CHARACTER):
+                        await WsCharacterDispatcher.onCharacterUpdate(json);
+                        break;
                     default:
                         throw new Error("Unrecognized message type.");
                 }

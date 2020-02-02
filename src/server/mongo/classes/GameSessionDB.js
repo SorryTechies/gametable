@@ -17,6 +17,10 @@ export default class GameSessionDB {
     static getById(id) {
         return MongoController.getById(GameSessionDB.DB_NAME, id);
     }
+
+    static getSessionWithCharacter(character_id) {
+        return MongoController.select(GameSessionDB.DB_NAME, {});
+    }
 }
 
 GameSessionDB.DB_NAME = "GameSession";

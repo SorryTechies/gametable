@@ -5,28 +5,16 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as config from './config/serverConfig';
 import MongoController from "./mongo/MongoController";
-import {getServerExpress} from "./logic/ExpressController";
+import {EXPRESS_SERVER} from "./logic/ExpressController";
 
 MongoController.init().catch(console.error);
 
-const server = getServerExpress();
-server.use(bodyParser.json());
-server.use('/', express.static('public'));
-require('./logic/AuthController');
-require('./express/LoginDispatcher');
-require('./express/get/getMessages');
-require('./express/post/sendMessage');
-require('./express/get/getParticipants');
-require('./express/get/getCharacter');
-require('./express/get/getAttacks');
-require('./express/post/saveCharacter');
-require('./express/get/getMap');
-require('./express/post/saveMapChanges');
-require('./express/post/postInitiative');
-require('./express/getPlaybackStatus');
-require('./express/post/sendRoll');
-server.listen(config.SERVER_PORT, () => console.log(`Server is running on localhost:${config.SERVER_PORT}`));
+EXPRESS_SERVER.use(bodyParser.json());
+EXPRESS_SERVER.use('/', express.static('public'));
 
-require('./express/debugDisp');
+import './express/LoginDispatcher';
+import './express/MapDispatcher';
 
-require('./wss/WebSocketServer');
+EXPRESS_SERVER.listen(config.SERVER_PORT, () => console.log(`Server is running on localhost:${config.SERVER_PORT}`));
+
+import './wss/WebSocketServer';
