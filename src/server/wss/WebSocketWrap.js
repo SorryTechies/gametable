@@ -36,7 +36,7 @@ export default class WebSocketWrap {
                     case (WebSocketMessage.TYPE_INTENT):
                         return; // TODO
                     case (WebSocketMessage.TYPE_CHARACTER):
-                        await WsCharacterDispatcher.onCharacterUpdate(json);
+                        await WsCharacterDispatcher.onCharacterUpdate(json.data, ws);
                         break;
                     default:
                         throw new Error("Unrecognized message type.");

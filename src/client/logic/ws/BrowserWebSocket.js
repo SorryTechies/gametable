@@ -52,11 +52,22 @@ export default class BrowserWebSocket {
                         return; //TODO
                     case WebSocketMessage.TYPE_INTENT:
                         return;
+                    case WebSocketMessage.TYPE_CHARACTER:
+
+                        return;
                 }
             } catch (e) {
                 console.log(e);
             }
         };
+    }
+
+    /**
+     * @param {WebSocketMessage} message
+     */
+    static sendMessage(message) {
+        if (!ws) throw new Error("Ws isn't open.");
+        ws.send(message.toJson());
     }
 
     static subscribe = obj => subscribers.push(obj);

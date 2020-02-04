@@ -8,6 +8,8 @@ import StaticController from "../../static/StaticController";
 import CharacterRow from "../element/CharacterRow";
 import PopupManager from "../../popup/PopupManager";
 import CheckDice from "../../logic/roll/CheckDice";
+import BrowserWebSocket from "../../logic/ws/BrowserWebSocket";
+import WebSocketMessage from "../../../common/logic/WebSocketMessage";
 
 export default class CharacterPage extends React.Component {
     constructor(props) {
@@ -21,8 +23,8 @@ export default class CharacterPage extends React.Component {
 
     loadCharacter() {
         const character = StaticController.getCharacter();
-        character.data.recalculate();
-        this.setState({character: character.data});
+        character.recalculate();
+        this.setState({character: character});
     }
 
     getRollPop(obj) {
@@ -36,7 +38,10 @@ export default class CharacterPage extends React.Component {
         const v = parseInt(value);
         if (isNaN(v)) return;
         this.state.character.setOriginal(key, v);
-        StaticController.saveCharacter();
+        BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_CHARACTER, {
+            _id: this.state.character.id,
+            [key]: v
+        }));
         this.state.character.recalculate();
         this.forceUpdate();
     }

@@ -5,7 +5,7 @@
 import * as WebSocket from 'ws';
 import AccountDB from "../mongo/classes/AccountDB";
 
-/** @type {Array.<WebSocketUser>} */
+/** @type {Array<WebSocketUser>} */
 const users = [];
 
 export default class WebSocketUser {
@@ -54,9 +54,17 @@ export default class WebSocketUser {
         if (index !== -1) users.splice(index, 1);
     }
 
-    static sendToGameSession(session, message) {
+    /**
+     * @param {GameSession} session
+     * @param {WebSocketMessage} message
+     * @param [ws]
+     */
+    static sendToGameSession(session, message, ws) {
         AccountDB.getParticipantsInGameWithDM(session)
-            .then(accounts => accounts.forEach(user => user.sendMessage(message)))
+            .then(accounts => accounts.forEach(account => {
+                const webUser = WebSocketUser.findByUser(account);
+                if (webUser && webUser.ws !== ws) webUser.sendMessage(message);
+            }))
             .catch(console.error);
     }
 }

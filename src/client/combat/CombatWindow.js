@@ -14,6 +14,8 @@ import StaticKeyboardController from "../static/StaticKeyboardController";
 import CombatObject from "./CombatObject";
 import ScaleSlider from "./ScaleSlider";
 import MapGrid from "./MapGrid";
+import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
+import WebSocketMessage from "../../common/logic/WebSocketMessage";
 
 const BAR_STATUS = 'status';
 const DM_STATUS = 'dm';
@@ -24,9 +26,8 @@ export default class CombatWindow extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            /** @type CombatMap */
+            /** @type SessionMap */
             map: null,
-            /** @type CombatObject */
             objectSelected: null,
             statusBar: null,
             turn: null,
@@ -41,11 +42,12 @@ export default class CombatWindow extends React.Component {
         this.setState({map: map});
     }
 
-    async saveSelected() {
-        const request = new NormalRequest();
-        request.method = NormalRequest.METHOD.POST;
-        request.path = '/saveObject';
-        await request.send(this.state.objectSelected);
+    saveMoveAction(object) {
+        BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_OBJECT, {
+            _id: this.state.object._id,
+            x: object.x,
+            y: object.y
+        }));
     }
 
     componentDidMount() {
@@ -81,7 +83,7 @@ export default class CombatWindow extends React.Component {
         if (LoginController.isDM() && this.state.objectSelected) {
             this.state.objectSelected.x = x;
             this.state.objectSelected.y = y;
-            this.saveSelected().then(this.getMap.bind(this)).catch(console.log);
+            this.saveMoveAction(this.state.objectSelected);
             this.setState({
                 selected: null,
                 objectSelected: null

@@ -41,8 +41,7 @@ export default class StaticController {
         // TODO multiple characters support
         const id = Array.isArray(account.characters_ids) ? account.characters_ids[0]: null;
         if (!id) return;
-        character = await new NormalRequest('/character', {id: id}).send();
-        character.data = new RuleCharacter(character.data);
+        character = new RuleCharacter(await new NormalRequest('/character', {id: id}).send());
     }
 
     static async loadMap() {

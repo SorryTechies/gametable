@@ -28,9 +28,11 @@ function getBuffBonus(self, key) {
 }
 
 export default class RuleCharacter {
-    constructor(data) {
-        if (data) {
-            this.originalData = data;
+    constructor(character) {
+        this.id = character._id;
+        this.name = character.name;
+        if (character.data) {
+            this.originalData = character.data;
         } else {
             this.originalData = {};
         }
