@@ -7,8 +7,20 @@ import GameSessionDB from "../mongo/classes/GameSessionDB";
 import {EXPRESS_SERVER} from "./ExpressController";
 import AccountDB from "../mongo/classes/AccountDB";
 
+function excludePublicPaths(path) {
+    switch (path) {
+        case "/favicon.ico":
+        case "/index.html":
+        case "/styles.css":
+        case "/bundle.js":
+            return true;
+    }
+    return false;
+}
+
 EXPRESS_SERVER.use(async (req, res, next) => {
     try {
+        if (excludePublicPaths(req.path)) return next();
         const login = req.headers[Headers.LOGIN_HEADER.toLowerCase()];
         const sessionID = req.headers[Headers.X_SESSION_HEADER.toLowerCase()];
         if (!login) throw new Error("Unauthorized.");

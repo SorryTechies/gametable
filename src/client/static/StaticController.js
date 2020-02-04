@@ -74,7 +74,7 @@ export default class StaticController {
     /** @return RuleCharacter */
     static getCharacter() {
         if (LoginController.isDM()) throw new Error("DM have no stats).");
-        return character.data;
+        return character;
     }
 
     /** @return Array<Account> */
