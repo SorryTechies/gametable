@@ -4,6 +4,4 @@
 
 import * as express from "./ExpressWrapper";
 
-express.wrapGet("/todo", async () => {
-    throw new Error("Not implemented.");
-});
+express.wrapGet("/todo", async () => ({result: "Not implemented."}));

@@ -12,7 +12,7 @@ export default class AccountDB {
 
     /** @return Promise<Account> */
     static getByUsername(name) {
-        return MongoController.getOne(AccountDB.DB_NAME, {[AccountDB.NAME_FIELD]: name});
+        return MongoController.getOne(AccountDB.DB_NAME, {[AccountDB.USERNAME_FIELD]: name});
     }
 
     /**
@@ -48,3 +48,4 @@ export default class AccountDB {
 AccountDB.DB_NAME = "Account";
 AccountDB.USERNAME_FIELD = "username";
 AccountDB.CHARACTERS_FIELD = "characters_ids";
+AccountDB.SESSION_FIELD = "session_ids";

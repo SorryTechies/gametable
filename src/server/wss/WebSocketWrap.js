@@ -18,7 +18,7 @@ export default class WebSocketWrap {
         this.autoCloseTimeout = null;
         this.onAuth = null;
         this.heartbeat();
-        this.pingInterval = () => this.ws.ping();
+        this.pingInterval = setInterval(() => this.ws.ping(), DEFAULT_TIMEOUT);
         this.authenticated = false;
 
         ws.on('pong', () => this.authenticated ? this.heartbeat() : null);

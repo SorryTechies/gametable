@@ -8,4 +8,5 @@ export interface SessionMap {
     dm_url: string;
     url: string;
     map_objects_id: Array<string>;
+    name: string;
 }

@@ -8,5 +8,5 @@ import ChatMessageDB from "../mongo/classes/ChatMessageDB";
 express.wrapGet("/chat", async req => {
     const session = req.session;
     if (!session) throw new Error("No session provided.");
-    return ChatMessageDB.getMessagesForAccountAndSession(req.account, session);
+    return ChatMessageDB.getMessagesForAccountAndSession(req.access, session);
 });

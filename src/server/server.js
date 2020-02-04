@@ -8,6 +8,7 @@ import './logic/AuthController';
 import './express/LoginDispatcher';
 import './express/MapDispatcher';
 import './express/ChatDispatcher';
+import './express/SessionDispatcher';
 import './express/CharacterDispatcher';
 import './express/TodoDispatcher';
 

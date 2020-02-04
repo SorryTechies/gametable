@@ -5,6 +5,7 @@
 import * as MongoDB from "mongodb";
 
 const MongoClient = MongoDB.MongoClient;
+const ObjectId = MongoDB.ObjectID;
 
 const DB_NAME = 'game_table';
 const DB_URL = 'mongodb://localhost:27017';
@@ -36,11 +37,12 @@ export default class MongoController {
 
     static getOne(name, query) {
         throwIfNotInit();
-        return db.collection(name).findOne();
+        return db.collection(name).findOne(query);
     }
 
     static getById(name, id) {
         throwIfNotInit();
+        if (typeof id === "string") id = ObjectId(id);
         return MongoController.getOne(name, {_id: id});
     }
 

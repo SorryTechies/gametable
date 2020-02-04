@@ -12,4 +12,5 @@ export default class CharacterDB {
 }
 
 CharacterDB.DB_NAME = "Character";
-CharacterDB.USERNAME_FIELD = "username";
+CharacterDB.DATA_FIELD = "data";
+CharacterDB.NAME_FIELD = "name";

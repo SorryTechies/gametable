@@ -4,6 +4,7 @@
 
 import IndexedDDB from "../db/IndexedDDB";
 let login = null;
+let game = null;
 let isLogined = false;
 let isDM = false;
 
@@ -15,6 +16,10 @@ export default class LoginController {
 
     static setLogin(username) {
         login = username;
+    }
+
+    static setSession(session) {
+        game = session
     }
 
     static logout() {
@@ -36,12 +41,17 @@ export default class LoginController {
         return login;
     }
 
+    static getSession() {
+        return game;
+    }
+
     static isDM() {
         return isDM;
     }
 
     static logOut() {
         login = null;
+        gamr = null;
         isLogined = false;
         isDM = false;
         return new IndexedDDB().clearAuth();

@@ -3,7 +3,6 @@
  */
 
 import NormalRequest from "../logic/NormalRequest";
-import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import LoginController from "../logic/LoginController";
 import * as WsConstants from "../../common/WsConstants";
 import SoundController from "../logic/SoundController";
@@ -15,6 +14,7 @@ let subscribers = [];
 let chat = null;
 let character = null;
 let map = null;
+let session = null;
 let participants = null;
 let music = null;
 
@@ -28,6 +28,7 @@ export default class StaticController {
     static async init(acc) {
         if (!acc) throw new Error("No account provided.");
         account = acc;
+        await this.loadSession();
         await this.loadCharacter();
         await this.loadChat();
         await this.loadMap();
@@ -37,14 +38,25 @@ export default class StaticController {
 
     static async loadCharacter() {
         if (LoginController.isDM()) return;
+        // TODO multiple characters support
         const id = Array.isArray(account.characters_ids) ? account.characters_ids[0]: null;
         if (!id) return;
-        character = await new NormalRequest('/character').send();
+        character = await new NormalRequest('/character', {id: id}).send();
         character.data = new RuleCharacter(character.data);
     }
 
     static async loadMap() {
-        map = await new NormalRequest('/map').send();
+        const id = Array.isArray(session.session_maps_id) ? session.session_maps_id[0]: null;
+        if (!id) return;
+        map = await new NormalRequest('/map', {id: id}).send();
+    }
+
+    static async loadSession() {
+        const id = Array.isArray(account.session_ids) ? account.session_ids[0]: null;
+        if (!id) return;
+        session = await new NormalRequest('/session', {id: id}).send();
+        if (!session) throw new Error("Player has no session.");
+        LoginController.setSession(session._id);
     }
 
     static async loadChat() {

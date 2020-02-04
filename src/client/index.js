@@ -10,7 +10,6 @@ import rootScss from '../scss/root.scss';
 import NormalRequest from "./logic/NormalRequest";
 import RollerWindow from "./roller/RollerWindow";
 import CharacterWindow from "./character/CharacterWindow";
-import GroupWindow from "./group/GroupWindow";
 import CombatWindow from "./combat/CombatWindow";
 import PopupManager from "./popup/PopupManager";
 import BrowserWebSocket from "./logic/ws/BrowserWebSocket";
@@ -21,7 +20,6 @@ import StaticViewManager from "./popup/StaticViewManager";
 import DMConsole from "./dm/DMConsole";
 import SettingsWindow from "./settings/SettingsWindow";
 import StaticKeyboardController from "./static/StaticKeyboardController";
-import CharacterStats from "./character/pages/CharacterStats";
 
 const root = document.getElementById('root');
 const body = document.getElementsByTagName('body')[0];

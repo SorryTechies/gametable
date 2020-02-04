@@ -13,10 +13,10 @@ function getAjax() {
 }
 
 function queryToString(query) {
-    let ans =  Object.keys(query).reduce((acc, key) => {
+    let ans = Object.keys(query).reduce((acc, key) => {
         if (acc) acc += ";";
         return acc + `${key}=${query[key]}`;
-    },"");
+    }, "");
     if (ans) ans = '?' + ans;
     return ans;
 }
@@ -33,12 +33,17 @@ export default class NormalRequest {
         this.port = config.SERVER_PORT;
     }
 
+    setHeaders(request) {
+        if (this.method === NormalRequest.METHOD.POST) request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        if (LoginController.getLogin()) request.setRequestHeader(headers.LOGIN_HEADER, LoginController.getLogin());
+        if (LoginController.getSession()) request.setRequestHeader(headers.X_SESSION_HEADER, LoginController.getSession());
+    }
+
     send(json) {
         return new Promise((resolve, reject) => {
             const request = getAjax();
             request.open(this.method, `http://${window.location.hostname}:${this.port}${this.path}${queryToString(this.query)}`);
-            if (this.method === NormalRequest.METHOD.POST) request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            request.setRequestHeader(headers.LOGIN_HEADER, LoginController.getLogin());
+            this.setHeaders(request);
             if (json) {
                 request.send(JSON.stringify(json));
             } else {
