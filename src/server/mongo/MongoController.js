@@ -56,6 +56,11 @@ export default class MongoController {
         return db.collection(name).updateMany(query, {$set: setObj});
     }
 
+    static pushInto(name, query, setObj) {
+        throwIfNotInit();
+        return db.collection(name).updateMany(query, {$push: setObj});
+    }
+
     static aggregate(name, query) {
         throwIfNotInit();
         return db.collection(name).aggregate(query).toArray();

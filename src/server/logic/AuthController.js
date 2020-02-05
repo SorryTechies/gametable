@@ -8,6 +8,9 @@ import {EXPRESS_SERVER} from "./ExpressController";
 import AccountDB from "../mongo/classes/AccountDB";
 
 function excludePublicPaths(path) {
+    if (path.startsWith("/icons/")) return true;
+    if (path.startsWith("/maps/")) return true;
+    if (path.startsWith("/sound/")) return true;
     switch (path) {
         case "/favicon.ico":
         case "/index.html":

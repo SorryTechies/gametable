@@ -12,9 +12,13 @@ import RuleCharacter from "../rules/RuleCharacter";
 let account = null;
 let subscribers = [];
 let chat = null;
+/** @type RuleCharacter */
 let character = null;
+/** @type SessionMap */
 let map = null;
+/** @type GameSession */
 let session = null;
+let objects = [];
 let participants = null;
 let music = null;
 
@@ -32,6 +36,7 @@ export default class StaticController {
         await this.loadCharacter();
         await this.loadChat();
         await this.loadMap();
+        await this.loadObjects();
         await this.loadParticipants();
         await this.loadMusic();
     }
@@ -39,19 +44,26 @@ export default class StaticController {
     static async loadCharacter() {
         if (LoginController.isDM()) return;
         // TODO multiple characters support
-        const id = Array.isArray(account.characters_ids) ? account.characters_ids[0]: null;
+        const id = Array.isArray(account.characters_ids) ? account.characters_ids[0] : null;
         if (!id) return;
         character = new RuleCharacter(await new NormalRequest('/character', {id: id}).send());
     }
 
     static async loadMap() {
-        const id = Array.isArray(session.session_maps_id) ? session.session_maps_id[0]: null;
+        const id = Array.isArray(session.session_maps_id) ? session.session_maps_id[0] : null;
         if (!id) return;
         map = await new NormalRequest('/map', {id: id}).send();
     }
 
+    static async loadObjects() {
+        const idArray = Array.isArray(map.map_objects_id) ? map.map_objects_id : [];
+        const request = new NormalRequest('/object');
+        request.method = NormalRequest.METHOD.POST;
+        objects = (await request.send({ids: idArray})).objects;
+    }
+
     static async loadSession() {
-        const id = Array.isArray(account.session_ids) ? account.session_ids[0]: null;
+        const id = Array.isArray(account.session_ids) ? account.session_ids[0] : null;
         if (!id) return;
         session = await new NormalRequest('/session', {id: id}).send();
         if (!session) throw new Error("Player has no session.");
@@ -94,6 +106,11 @@ export default class StaticController {
     /** @return {{}} */
     static getMusic() {
         return music;
+    }
+
+    /** @return {Array<GameObject>} */
+    static getObjects() {
+        return objects;
     }
 
     static notifySubscribed(id) {

@@ -22,12 +22,12 @@ const DM_STATUS = 'dm';
 const DEFAULT = 60;
 
 export default class CombatWindow extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
             /** @type SessionMap */
             map: null,
+            objects: [],
             objectSelected: null,
             statusBar: null,
             turn: null,
@@ -37,27 +37,25 @@ export default class CombatWindow extends React.Component {
         };
     }
 
-    async getMap() {
-        let map = await StaticController.getMap();
-        this.setState({map: map});
-    }
-
     saveMoveAction(object) {
         BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_OBJECT, {
             _id: this.state.object._id,
-            x: object.x,
-            y: object.y
+            x: object.position.x,
+            y: object.position.y
         }));
     }
 
     componentDidMount() {
-        StaticController.subscribe({id: WsConstants.STATIC_MAP, func: this.getMap.bind(this)});
+        //  StaticController.subscribe({id: WsConstants.STATIC_MAP, func: this.getMap.bind(this)});
         StaticKeyboardController.subscribe(StaticKeyboardController.ESCAPER, this.clearSelection.bind(this));
-        this.getMap().catch(console.error);
+        this.setState({
+            map: StaticController.getMap(),
+            objects: StaticController.getObjects()
+        });
     }
 
     componentWillUnmount() {
-        StaticController.unSubscribe(WsConstants.STATIC_MAP);
+        //  StaticController.unSubscribe(WsConstants.STATIC_MAP);
         StaticKeyboardController.unsubscribe(StaticKeyboardController.ESCAPER, this.clearSelection.bind(this));
     }
 
@@ -81,8 +79,8 @@ export default class CombatWindow extends React.Component {
 
     clickTable(x, y) {
         if (LoginController.isDM() && this.state.objectSelected) {
-            this.state.objectSelected.x = x;
-            this.state.objectSelected.y = y;
+            this.state.objectSelected.position.x = x;
+            this.state.objectSelected.position.y = y;
             this.saveMoveAction(this.state.objectSelected);
             this.setState({
                 selected: null,
@@ -120,13 +118,14 @@ export default class CombatWindow extends React.Component {
                     style={{paddingBottom: this.state.objectSelected ? "60px" : "0"}}
                 >
                     <div style={{
-                        width: (this.state.gridSizeInt * this.state.map.gridX) + 'px',
-                        height: (this.state.gridSizeInt * this.state.map.gridY + 200) + 'px'
+                        width: (this.state.gridSizeInt * this.state.map.size.x) + 'px',
+                        height: (this.state.gridSizeInt * this.state.map.size.y + 200) + 'px'
                     }}>
                         <div className={rootScss.combat_map}>
                             <div id={rootScss.combat_map_background}>
                                 <MapGrid size={this.state.gridSizeInt}
                                          map={this.state.map}
+                                         objects={this.state.objects}
                                          onClick={this.clickTable.bind(this)}
                                          onClickObject={this.clickObject.bind(this)}
                                          objectSelected={this.state.objectSelected}/>

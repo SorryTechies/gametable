@@ -10,6 +10,8 @@ import './express/MapDispatcher';
 import './express/ChatDispatcher';
 import './express/SessionDispatcher';
 import './express/CharacterDispatcher';
+import './express/CharacterTemplateDispatcher';
+import './express/GameObjectDispatcher';
 import './express/TodoDispatcher';
 
 import './wss/WebSocketServer';
