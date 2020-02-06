@@ -10,5 +10,7 @@ export default {
     FULL_ROUND_ATTACK: "full_attack",
     CAST_SPELL: "spell",
     FULL_ROUND_SPELL: "full_spell",
-    FIVE_FOOT_STEP: "5ft"
+    FIVE_FOOT_STEP: "5ft",
+    NO_ACTION: "no",
+    TOTAL_DEFENCE: "total_def"
 };

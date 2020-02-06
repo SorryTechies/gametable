@@ -11,15 +11,44 @@ function findType(key) {
     throw new Error(`Type ${key} isn't found.`);
 }
 
-export default class RuleActions {
-    constructor(key) {
-        this.key = key;
-        this.func = RuleActions.DEFAULT_ACTION;
-        this.type = findType(key);
+function actionKeyToTarget(key) {
+    switch (key) {
+        case RuleActionsConstants.MOVE:
+        case RuleActionsConstants.SPRINT:
+        case RuleActionsConstants.FIVE_FOOT_STEP:
+            return RuleActions.TARGET_TYPE.GROUND;
+        case RuleActionsConstants.ATTACK:
+        case RuleActionsConstants.CHARGE:
+        case RuleActionsConstants.CAST_SPELL:
+            return RuleActions.TARGET_TYPE.UNIT;
+        default:
+            return RuleActions.TARGET_TYPE.NONE;
     }
 }
 
-RuleActions.DEFAULT_ACTION = () => {};
+export default class RuleActions {
+    constructor(key) {
+        this.key = key;
+        this.performerId = "";
+        this.target = null;
+        this.targetType = actionKeyToTarget(key);
+        this.type = findType(key);
+    }
+
+    setTarget(type, data) {
+        if (this.targetType === type) {
+            this.target = data;
+        } else {
+            throw new Error("Wrong target.");
+        }
+    }
+}
+
+RuleActions.TARGET_TYPE = {
+    GROUND: "ground",
+    UNIT: "unit",
+    NONE: "none"
+};
 
 RuleActions.MOVE_ACTIONS = [
     RuleActionsConstants.MOVE

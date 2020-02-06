@@ -7,6 +7,7 @@ import LoginController from "../logic/LoginController";
 import * as WsConstants from "../../common/WsConstants";
 import SoundController from "../logic/SoundController";
 import RuleCharacter from "../rules/RuleCharacter";
+import RuleRound from "../rules/RuleRound";
 
 /** @type Account */
 let account = null;
@@ -18,6 +19,8 @@ let character = null;
 let map = null;
 /** @type GameSession */
 let session = null;
+/** @type RuleRound */
+let round = null;
 let objects = [];
 let participants = null;
 let music = null;
@@ -37,6 +40,7 @@ export default class StaticController {
         await this.loadChat();
         await this.loadMap();
         await this.loadObjects();
+        await this.loadActions();
         await this.loadParticipants();
         await this.loadMusic();
     }
@@ -68,6 +72,11 @@ export default class StaticController {
         session = await new NormalRequest('/session', {id: id}).send();
         if (!session) throw new Error("Player has no session.");
         LoginController.setSession(session._id);
+        LoginController.setDM(session.owner === account._id);
+    }
+
+    static async loadActions() {
+        round = new RuleRound(objects);
     }
 
     static async loadChat() {
@@ -111,6 +120,20 @@ export default class StaticController {
     /** @return {Array<GameObject>} */
     static getObjects() {
         return objects;
+    }
+
+    /** @return {RuleRound} */
+    static getRound() {
+        return round;
+    }
+
+    /**
+     * @param {GameObject} unit
+     * @return {boolean}
+     */
+    static isOwnedGameObject(unit) {
+        if (!unit) throw new Error("No GameObject unit.");
+        return unit.character_id && account.characters_ids.includes(unit.character_id);
     }
 
     static notifySubscribed(id) {

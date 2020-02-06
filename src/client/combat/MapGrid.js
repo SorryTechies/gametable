@@ -4,7 +4,6 @@
 
 import * as React from "react";
 import * as PropTypes from "prop-types";
-import rootScss from '../../scss/root.scss';
 import CombatObject from "./CombatObject";
 
 export default class MapGrid extends React.Component {
@@ -27,7 +26,10 @@ export default class MapGrid extends React.Component {
                              size={this.props.size}
                              borderColor={this.getColor(unit)}
                              unit={unit}
-                             onClick={() => this.props.onClickObject(unit)}/>;
+                             onClick={e => {
+                                 e.stopPropagation();
+                                 this.props.onClickObject(unit)
+                             }}/>;
     }
 
     renderTable() {
@@ -41,7 +43,7 @@ export default class MapGrid extends React.Component {
                         width: size,
                         height: size,
                     }}
-                    onClick={() => this.props.onClick(i, j)}
+                    onClick={() => this.props.onClickGrid(i, j)}
                     key={i.toString() + '_' + j.toString()}>
                     {this.setCellContent(i, j)}
                 </th>;
@@ -74,7 +76,7 @@ MapGrid.propTypes = {
     map: PropTypes.object.isRequired,
     /** @type {Array<GameObject>} */
     objects: PropTypes.array.isRequired,
-    onClick: PropTypes.func.isRequired,
     onClickObject: PropTypes.func.isRequired,
+    onClickGrid: PropTypes.func.isRequired,
     objectSelected: PropTypes.object
 };

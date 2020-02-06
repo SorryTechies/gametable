@@ -27,9 +27,8 @@ export default class LoginController {
         isLogined = false;
     }
 
-    static loginOk(dm) {
+    static loginOk() {
         isLogined = true;
-        isDM = !!dm;
         return new IndexedDDB().saveAuth(login);
     }
 
@@ -43,6 +42,10 @@ export default class LoginController {
 
     static getSession() {
         return game;
+    }
+
+    static setDM(val) {
+        isDM = val;
     }
 
     static isDM() {

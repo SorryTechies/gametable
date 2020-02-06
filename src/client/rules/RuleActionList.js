@@ -44,22 +44,30 @@ export default class RuleActionList {
     }
 
     canMove() {
-        return !this.list.find(item =>
-            item.key === RuleActionsConstants.FIVE_FOOT_STEP ||
-            item.key === RuleActionsConstants.CHARGE ||
-            item.key === RuleActionsConstants.SPRINT ||
-            item.key === RuleActionsConstants.MOVE
-        );
+        return !this.list.some(item => RuleActionList.REPOSITION_ACTIONS.includes(item.key));
     }
 
     canDoSwiftAction() {
         return !this.list.find(item => item.type === RuleTypes.TYPE_SWIFT);
     }
 
-    execute() {
-        this.list.forEach(action => action.func());
+    getAllowedActionsList() {
+        let ans = [];
+        if (this.canDoFullRoundAction()) ans = ans.concat(RuleActionList.FULL_ROUND_ACTIONS);
+        if (this.canDoStandardAction()) ans = ans.concat(RuleActionList.STANDARD_ACTIONS);
+        if (this.canDoMoveAction()) ans = ans.concat(RuleActionList.MOVE_ACTIONS);
+        if (this.canDoSwiftAction()) ans = ans.concat(RuleActionList.SWIFT_ACTION);
+        if (!this.canMove()) ans = ans.filter(key => RuleActionList.MOVE_ACTIONS.includes(key));
+        return ans;
     }
 }
+
+RuleActionList.REPOSITION_ACTIONS = [
+    RuleActionsConstants.MOVE,
+    RuleActionsConstants.CHARGE,
+    RuleActionsConstants.SPRINT,
+    RuleActionsConstants.FIVE_FOOT_STEP
+];
 
 RuleActionList.MOVE_ACTIONS = [
     RuleActionsConstants.MOVE

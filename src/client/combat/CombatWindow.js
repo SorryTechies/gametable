@@ -16,24 +16,35 @@ import ScaleSlider from "./ScaleSlider";
 import MapGrid from "./MapGrid";
 import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import WebSocketMessage from "../../common/logic/WebSocketMessage";
+import ActionHighlight from "./menu/pc/ActionHighlight";
+import RuleActionsConstants from "../rules/constants/RuleActionsConstants";
+import PopupManager from "../popup/PopupManager";
+import RuleActions from "../rules/RuleAction";
 
 const BAR_STATUS = 'status';
+const ACTION_HIGHLIGHT = 'act';
 const DM_STATUS = 'dm';
 const DEFAULT = 60;
 
 export default class CombatWindow extends React.Component {
     constructor(props) {
         super(props);
+        /** @type RoundObject */
+        this.selectedActionList = null;
         this.state = {
             /** @type SessionMap */
             map: null,
             objects: [],
             objectSelected: null,
+            /** @type RuleActions */
+            clickRuleAction: null,
+            clickTarget: null,
             statusBar: null,
             turn: null,
             gridSizeInt: DEFAULT,
             scale: 1,
-            coloredGrid: []
+            coloredGrid: [],
+
         };
     }
 
@@ -66,50 +77,87 @@ export default class CombatWindow extends React.Component {
         })
     }
 
+    clearAim(action) {
+        if (action) this.selectedActionList.actionList.addAction(action);
+        this.setState({
+            statusBar: BAR_STATUS,
+            clickRuleAction: null,
+            clickTarget: null
+        });
+    }
+
     clickObject(unit) {
-        if (this.state.objectSelected) {
-            this.clearSelection();
+        if (this.state.clickRuleAction) {
+            try {
+                this.state.clickRuleAction.setTarget(RuleActions.TARGET_TYPE.UNIT, unit._id);
+                this.clearAim(this.state.clickRuleAction)
+            } catch (ignored) {
+                PopupManager.push("Нужно указать юнита.");
+            }
         } else {
-            this.setState({
-                statusBar: BAR_STATUS,
-                objectSelected: unit,
-            })
+            if (this.state.objectSelected) {
+                this.clearSelection();
+            } else {
+                this.setState({
+                    statusBar: BAR_STATUS,
+                    objectSelected: unit,
+                })
+            }
         }
     }
 
     clickTable(x, y) {
-        if (LoginController.isDM() && this.state.objectSelected) {
-            this.state.objectSelected.position.x = x;
-            this.state.objectSelected.position.y = y;
-            this.saveMoveAction(this.state.objectSelected);
-            this.setState({
-                selected: null,
-                objectSelected: null
-            })
+        if (this.state.clickRuleAction) {
+            try {
+                this.state.clickRuleAction.setTarget(RuleActions.TARGET_TYPE.GROUND, {x: x, y: y});
+                this.clearAim(this.state.clickRuleAction)
+            } catch (ignored) {
+                PopupManager.push("Нужно указать юнита.");
+            }
+        } else {
+            if (LoginController.isDM() && this.state.objectSelected) {
+                this.state.objectSelected.position.x = x;
+                this.state.objectSelected.position.y = y;
+                this.saveMoveAction(this.state.objectSelected);
+                this.setState({
+                    selected: null,
+                    objectSelected: null
+                })
+            }
         }
     }
 
+    doAimAction(action) {
+        if (action.targetType === RuleActions.TARGET_TYPE.NONE) {
+            this.selectedActionList.actionList.addAction(action);
+            this.forceUpdate();
+        } else {
+            this.setState({
+                statusBar: ACTION_HIGHLIGHT,
+                clickRuleAction: action
+            });
+        }
+    }
+
+    onActionDelete(action) {
+        this.selectedActionList.actionList.removeAction(action);
+        this.forceUpdate();
+    }
+
     render() {
+        this.selectedActionList = StaticController.getRound().getObject(this.state.objectSelected);
         const map = this.state.map;
         let statusBar = null;
         switch (this.state.statusBar) {
             case BAR_STATUS:
                 statusBar = <StatusMenu
                     unit={this.state.objectSelected}
-                    dmCallback={() => this.setState({statusBar: DM_STATUS})}
-                />;
+                    doAimAction={this.doAimAction.bind(this)}
+                    actionList={StaticController.getRound().getObject(this.state.objectSelected).actionList}
+                    onActionDelete={this.onActionDelete.bind(this)}/>;
                 break;
-            case DM_STATUS:
-                statusBar = <DMTools addCallback={async (name, turns, description) => {
-                    if (!this.state.objectSelected.buffs) this.state.objectSelected.buffs = [];
-                    this.state.objectSelected.buffs.push({
-                        name: name,
-                        turns: turns,
-                        description: description
-                    });
-                    await this.saveSelected().then(this.clearSelection.bind(this)).catch(console.log);
-                }}/>;
-                break;
+            case ACTION_HIGHLIGHT:
+                statusBar = <ActionHighlight text="ВЫБЕРЕТЕ ЦЕЛЬ"/>
         }
         if (map) {
             return <div>
@@ -126,9 +174,9 @@ export default class CombatWindow extends React.Component {
                                 <MapGrid size={this.state.gridSizeInt}
                                          map={this.state.map}
                                          objects={this.state.objects}
-                                         onClick={this.clickTable.bind(this)}
                                          onClickObject={this.clickObject.bind(this)}
-                                         objectSelected={this.state.objectSelected}/>
+                                         objectSelected={this.state.objectSelected}
+                                         onClickGrid={this.clickTable.bind(this)}/>
                             </div>
                         </div>
                     </div>
