@@ -4,20 +4,15 @@
 
 import * as React from "react";
 import rootScss from '../../scss/root.scss';
-import NormalRequest from "../logic/NormalRequest";
 import LoginController from "../logic/LoginController";
 import StatusMenu from "./menu/pc/StatusMenu";
-import DMTools from "./menu/dm/DMTools";
 import StaticController from "../static/StaticController";
-import * as WsConstants from "../../common/WsConstants";
 import StaticKeyboardController from "../static/StaticKeyboardController";
-import CombatObject from "./CombatObject";
 import ScaleSlider from "./ScaleSlider";
 import MapGrid from "./MapGrid";
 import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import WebSocketMessage from "../../common/logic/WebSocketMessage";
 import ActionHighlight from "./menu/pc/ActionHighlight";
-import RuleActionsConstants from "../rules/constants/RuleActionsConstants";
 import PopupManager from "../popup/PopupManager";
 import RuleActions from "../rules/RuleAction";
 
@@ -29,7 +24,7 @@ const DEFAULT = 60;
 export default class CombatWindow extends React.Component {
     constructor(props) {
         super(props);
-        /** @type RoundObject */
+        /** @type RuleActionList */
         this.selectedActionList = null;
         this.state = {
             /** @type SessionMap */
@@ -57,7 +52,7 @@ export default class CombatWindow extends React.Component {
     }
 
     componentDidMount() {
-        //  StaticController.subscribe({id: WsConstants.STATIC_MAP, func: this.getMap.bind(this)});
+        StaticController.subscribe({id: WebSocketMessage.TYPE_INTENT, func: this.forceUpdate.bind(this)});
         StaticKeyboardController.subscribe(StaticKeyboardController.ESCAPER, this.clearSelection.bind(this));
         this.setState({
             map: StaticController.getMap(),
@@ -66,7 +61,7 @@ export default class CombatWindow extends React.Component {
     }
 
     componentWillUnmount() {
-        //  StaticController.unSubscribe(WsConstants.STATIC_MAP);
+        StaticController.unSubscribe(WebSocketMessage.TYPE_INTENT);
         StaticKeyboardController.unsubscribe(StaticKeyboardController.ESCAPER, this.clearSelection.bind(this));
     }
 
@@ -74,11 +69,33 @@ export default class CombatWindow extends React.Component {
         this.setState({
             statusBar: null,
             objectSelected: null,
+            clickRuleAction: null,
+            clickTarget: null
         })
     }
 
+    addNewCombatAction(action) {
+        this.selectedActionList.addAction(action);
+        const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
+        message.data = action;
+        message.action = "new";
+        BrowserWebSocket.sendMessage(message);
+    }
+
+    removeCombatAction(action) {
+        this.selectedActionList.removeAction(action);
+        const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
+        message.data = {
+            id: action.id,
+            performerId: action.performerId
+        };
+        message.action = "rem";
+        BrowserWebSocket.sendMessage(message);
+        this.forceUpdate();
+    }
+
     clearAim(action) {
-        if (action) this.selectedActionList.actionList.addAction(action);
+        if (action) this.addNewCombatAction(action);
         this.setState({
             statusBar: BAR_STATUS,
             clickRuleAction: null,
@@ -129,7 +146,7 @@ export default class CombatWindow extends React.Component {
 
     doAimAction(action) {
         if (action.targetType === RuleActions.TARGET_TYPE.NONE) {
-            this.selectedActionList.actionList.addAction(action);
+            this.addNewCombatAction(action);
             this.forceUpdate();
         } else {
             this.setState({
@@ -140,12 +157,12 @@ export default class CombatWindow extends React.Component {
     }
 
     onActionDelete(action) {
-        this.selectedActionList.actionList.removeAction(action);
+        this.removeCombatAction(action);
         this.forceUpdate();
     }
 
     render() {
-        this.selectedActionList = StaticController.getRound().getObject(this.state.objectSelected);
+        if (this.state.objectSelected) this.selectedActionList = StaticController.getRound().getObject(this.state.objectSelected._id).actionList;
         const map = this.state.map;
         let statusBar = null;
         switch (this.state.statusBar) {
@@ -153,7 +170,7 @@ export default class CombatWindow extends React.Component {
                 statusBar = <StatusMenu
                     unit={this.state.objectSelected}
                     doAimAction={this.doAimAction.bind(this)}
-                    actionList={StaticController.getRound().getObject(this.state.objectSelected).actionList}
+                    actionList={this.selectedActionList}
                     onActionDelete={this.onActionDelete.bind(this)}/>;
                 break;
             case ACTION_HIGHLIGHT:

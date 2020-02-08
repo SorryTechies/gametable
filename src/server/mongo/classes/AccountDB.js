@@ -38,7 +38,7 @@ export default class AccountDB {
     static getParticipantsInGameWithDM(game) {
         return MongoController.select(AccountDB.DB_NAME, {
             $or: [
-                {[AccountDB.CHARACTERS_FIELD]: game.participants_character_id},
+                {_id: {$in: game.participants_character_id}},
                 {_id: game.owner_id}
             ]
         });

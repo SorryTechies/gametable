@@ -10,7 +10,7 @@ import SessionMapDB from "../server/mongo/classes/SessionMapDB";
 
 (async () => {
     await MongoController.init();
-    const account = await AccountDB.getByUsername("alkor");
+    const account = await AccountDB.getByUsername("vatan");
     console.log(account);
     const characters = await MongoController.select(CharacterDB.DB_NAME, {_id: {$in: account[AccountDB.CHARACTERS_FIELD]}});
     console.log(characters);

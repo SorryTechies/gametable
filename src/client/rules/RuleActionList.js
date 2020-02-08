@@ -17,7 +17,7 @@ export default class RuleActionList {
     }
 
     removeAction(action) {
-        const index = this.list.findIndex(item => action === item);
+        const index = this.list.findIndex(item => action.id === item.id);
         if (index !== -1) this.list.splice(index, 1);
     }
 
@@ -57,7 +57,7 @@ export default class RuleActionList {
         if (this.canDoStandardAction()) ans = ans.concat(RuleActionList.STANDARD_ACTIONS);
         if (this.canDoMoveAction()) ans = ans.concat(RuleActionList.MOVE_ACTIONS);
         if (this.canDoSwiftAction()) ans = ans.concat(RuleActionList.SWIFT_ACTION);
-        if (!this.canMove()) ans = ans.filter(key => RuleActionList.MOVE_ACTIONS.includes(key));
+        if (!this.canMove()) ans = ans.filter(key => !RuleActionList.MOVE_ACTIONS.includes(key));
         return ans;
     }
 }

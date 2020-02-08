@@ -14,7 +14,7 @@ export default class MapGrid extends React.Component {
     getColor(unit) {
         let color = "white";
         if (this.props.objectSelected) {
-            color = unit.name === this.props.objectSelected.name ? "red" : "white";
+            color = unit._id === this.props.objectSelected._id ? "red" : "white";
         }
         return color;
     }

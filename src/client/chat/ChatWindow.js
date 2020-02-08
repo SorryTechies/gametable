@@ -33,16 +33,15 @@ export default class ChatWindow extends React.Component {
     componentDidMount() {
         StaticController.subscribe({id: WsConstants.STATIC_CHAT, func: this.loadMessages.bind(this)});
         this.loadMessages().catch(console.error);
-        if (LoginController.isDM()) this.getParticipants().catch(console.error);
+        if (LoginController.isDM()) this.getParticipants();
     }
 
     componentWillUnmount() {
         StaticController.unSubscribe(WsConstants.STATIC_CHAT);
     }
 
-    async getParticipants() {
-        let players = await StaticController.getParticipants();
-        this.setState({players: players})
+    getParticipants() {
+        this.setState({players: StaticController.getParticipants()})
     }
 
     async loadMessages() {
@@ -73,7 +72,7 @@ export default class ChatWindow extends React.Component {
                             id={rootScss.chat_select}
                             onChange={event => this.setState({to: event.target.value})}>
                             <option>ALL</option>
-                            {this.state.players.map(player => <option key={player}>{player}</option>)}
+                            {Array.isArray(this.state.players) ? this.state.players.map(player => <option key={player}>{player}</option>) : null}
                         </select> : null}
                     <button
                         id={rootScss.chat_button}

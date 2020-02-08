@@ -5,13 +5,31 @@
 import * as React from "react";
 import * as PropTypes from "prop-types";
 
+function toDisplay(action) {
+    let result = action.key;
+    console.log(action);
+    switch (action.targetType) {
+        case "ground":
+            result += ` to {${action.target.x}, ${action.target.y}}`;
+            break;
+        case "unit":
+            result += " " + action.target;
+            break;
+        case "none":
+            break;
+    }
+    return result;
+}
+
 export default class ActionBar extends React.Component {
     render() {
+        const isMine = this.props.isMine;
+        const actions = isMine ? this.props.actionList.list : this.props.actionList.list.filter(action => !action.isHidden);
         return <div>
-            {this.props.actionList.list.map((action, i) =>
+            {actions.map((action, i) =>
                 <div key={i}>
-                    {action.key}
-                    <button onClick={() => this.props.onDelete(action)}>del</button>
+                    {toDisplay(action)}
+                    {isMine ? <button onClick={() => this.props.onDelete(action)}>del</button> : null}
                 </div>
             )}
         </div>
@@ -20,5 +38,6 @@ export default class ActionBar extends React.Component {
 
 ActionBar.propTypes = {
     actionList: PropTypes.object.isRequired,
-    onDelete: PropTypes.func.isRequired
+    onDelete: PropTypes.func.isRequired,
+    isMine: PropTypes.bool
 };

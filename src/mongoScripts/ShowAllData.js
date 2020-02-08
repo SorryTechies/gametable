@@ -7,6 +7,7 @@ import AccountDB from "../server/mongo/classes/AccountDB";
 import CharacterDB from "../server/mongo/classes/CharacterDB";
 import GameSessionDB from "../server/mongo/classes/GameSessionDB";
 import SessionMapDB from "../server/mongo/classes/SessionMapDB";
+import GameObjectDB from "../server/mongo/classes/GameObjectDB";
 
 (async () => {
     await MongoController.init();
@@ -18,4 +19,6 @@ import SessionMapDB from "../server/mongo/classes/SessionMapDB";
     console.log(sessions);
     const map = await MongoController.select(SessionMapDB.DB_NAME);
     console.log(map);
+    const objs = await MongoController.select(GameObjectDB.DB_NAME);
+    console.log(objs);
 })().catch(console.error);

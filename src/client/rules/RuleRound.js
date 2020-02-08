@@ -19,21 +19,26 @@ export default class RuleRound {
     }
 
     /**
-     * @param {RuleCharacter} character
+     * @param {string} id
      * @return {RoundObject}
      */
-    getObject(character) {
-        if (!character instanceof RuleCharacter) throw new Error("Character isn't instance of RuleCharacter");
-        const obj = this.stack.find(obj => obj.character === character);
+    getObject(id) {
+        const obj = this.stack.find(obj => obj.character._id === id);
         if (!obj) throw new Error("Character not found in stack");
         return obj;
     }
 
-    addAction(character, action) {
-        this.getObject(character).actionList.addAction(action);
+    /**
+     * @param {RuleActions} action
+     */
+    addAction(action) {
+        this.getObject(action.performerId).actionList.addAction(action);
     }
 
-    removeAction(character, action) {
-        this.getObject(character).actionList.removeAction(action);
+    /**
+     * @param {RuleActions} action
+     */
+    removeAction(action) {
+        this.getObject(action.performerId).actionList.removeAction(action);
     }
 }

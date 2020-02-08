@@ -4,6 +4,8 @@
 
 import * as config from "../../../common/config";
 import WebSocketMessage from "../../../common/logic/WebSocketMessage";
+import * as IntentHandler from "./handlers/IntentHandler";
+import LoginController from "../LoginController";
 
 let ws = null;
 let timeout = null;
@@ -51,6 +53,11 @@ export default class BrowserWebSocket {
                     case WebSocketMessage.TYPE_CHAT:
                         return; //TODO
                     case WebSocketMessage.TYPE_INTENT:
+                        if (message.action === "new") {
+                            IntentHandler.handleNewAction(message);
+                        } else {
+                            IntentHandler.handleRemoveAction(message);
+                        }
                         return;
                     case WebSocketMessage.TYPE_CHARACTER:
 
@@ -67,6 +74,7 @@ export default class BrowserWebSocket {
      */
     static sendMessage(message) {
         if (!ws) throw new Error("Ws isn't open.");
+        if (LoginController.getSession()) message.game_id = LoginController.getSession();
         ws.send(message.toJson());
     }
 

@@ -2,11 +2,12 @@
  * Created by LastBerserk on 20.01.2020.
  */
 
+import * as uuid from "uuid";
 import RuleActionsConstants from "./constants/RuleActionsConstants";
 import RuleTypes from "./constants/RuleTypes";
 
 function findType(key) {
-    const type = Object.keys(RuleActions.ACTION_TYPE_OBJECT).find(key => RuleActions.ACTION_TYPE_OBJECT[key].includes(key));
+    const type = Object.keys(RuleActions.ACTION_TYPE_OBJECT).find(item => RuleActions.ACTION_TYPE_OBJECT[item].includes(key));
     if (type) return type;
     throw new Error(`Type ${key} isn't found.`);
 }
@@ -27,9 +28,11 @@ function actionKeyToTarget(key) {
 }
 
 export default class RuleActions {
-    constructor(key) {
+    constructor(key, id) {
         this.key = key;
+        this.isHidden = false;
         this.performerId = "";
+        this.id = id ? id : uuid.v1();
         this.target = null;
         this.targetType = actionKeyToTarget(key);
         this.type = findType(key);

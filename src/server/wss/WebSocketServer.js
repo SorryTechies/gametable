@@ -23,11 +23,12 @@ wss.on('connection', (ws, req) => {
         const account = await AccountDB.getByUsername(auth);
         if (account) {
             console.log("Authorized as " + account.username + " for" + ip);
-            const acc = {username: 'apples'};
-            const user = WebSocketUser.findOrCreateByAccount(acc, ws);
+            const user = WebSocketUser.findOrCreateByAccount(account, ws);
             wrap.onDelete = () => user.removeSocket(ws);
         } else {
             throw new Error("Unauthorized.");
         }
     };
 });
+
+wss.on('error', console.error);

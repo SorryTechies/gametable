@@ -40,11 +40,11 @@ async function getMap() {
     const map = (await getMap())[0];
     const character = (await MongoController.insert(CharacterDB.DB_NAME, [{
         [CharacterDB.DATA_FIELD]: {},
-        [CharacterDB.NAME_FIELD]: "Biba"
+        [CharacterDB.NAME_FIELD]: "Vatan"
     }]))[0];
     const game = (await getGame(map))[0];
     const account = (await MongoController.insert(AccountDB.DB_NAME, [{
-        [AccountDB.USERNAME_FIELD]: "alkor",
+        [AccountDB.USERNAME_FIELD]: "vatan",
         [AccountDB.CHARACTERS_FIELD]: [character._id],
         [AccountDB.SESSION_FIELD]: [game._id]
     }]))[0];

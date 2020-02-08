@@ -72,7 +72,7 @@ export default class StaticController {
         session = await new NormalRequest('/session', {id: id}).send();
         if (!session) throw new Error("Player has no session.");
         LoginController.setSession(session._id);
-        LoginController.setDM(session.owner === account._id);
+        LoginController.setDM(session.owner_id === account._id);
     }
 
     static async loadActions() {
@@ -89,6 +89,16 @@ export default class StaticController {
 
     static async loadMusic() {
         music = await new NormalRequest('/todo').send();
+    }
+
+    /** @return Account */
+    static getAccount() {
+        return account;
+    }
+
+    static isMyCharacter(character_id) {
+        const ids = account.characters_ids;
+        return Array.isArray(ids) && ids.includes(character_id);
     }
 
     /** @return RuleCharacter */
@@ -138,27 +148,6 @@ export default class StaticController {
 
     static notifySubscribed(id) {
         for (let i = 0; i < subscribers.length; i++) if (subscribers[i].id === id) subscribers[i].func();
-    }
-
-    static async update(id) {
-        if (LOG_LEVEL === StaticController.VERBOSE) alert("UPDATE: " + id);
-        console.log(`Update from websocket with id '${id}'`);
-        switch (id) {
-            case WsConstants.STATIC_CHAR:
-                await this.loadCharacter();
-                break;
-            case WsConstants.STATIC_MAP:
-                await this.loadMap();
-                break;
-            case WsConstants.STATIC_CHAT:
-                SoundController.playNewMessageSound();
-                await this.loadChat();
-                break;
-            case WsConstants.STATIC_MUSIC:
-                await this.loadMusic();
-                break;
-        }
-        StaticController.notifySubscribed(id);
     }
 
     static subscribe = obj => subscribers.push(obj);

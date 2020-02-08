@@ -14,9 +14,12 @@ export default class WebSocketUser {
         this.ws = [];
     }
 
-    /** @param {WebSocketMessage} message */
-    sendMessage(message) {
-        this.ws.forEach(ws => ws.readyState === WebSocket.OPEN ? ws.send(message.toJson()) : null);
+    /**
+     * @param {WebSocketMessage} message
+     * @param [wss] - websocket to exclude
+     */
+    sendMessage(message, wss) {
+        this.ws.forEach(ws => (!wss || wss !== ws) && ws.readyState === WebSocket.OPEN ? ws.send(message.toJson()) : null);
     }
 
     removeSocket(ws) {
@@ -42,11 +45,12 @@ export default class WebSocketUser {
     }
 
     /**
-     * @param {Account} account
+     * @param {Account|string} account
      * @return WebSocketUser
      */
     static findByUser(account) {
-        return users.find(user => user.access && user.account._id === account._id);
+        const id = (typeof account === "string" ? account : account._id).toString();
+        return users.find(user => user.account && user.account._id.toString() === id);
     }
 
     static removeUser(user) {
@@ -63,8 +67,18 @@ export default class WebSocketUser {
         AccountDB.getParticipantsInGameWithDM(session)
             .then(accounts => accounts.forEach(account => {
                 const webUser = WebSocketUser.findByUser(account);
-                if (webUser && webUser.ws !== ws) webUser.sendMessage(message);
+                if (webUser) webUser.sendMessage(message, ws);
             }))
             .catch(console.error);
+    }
+
+    /**
+     * @param {GameSession} session
+     * @param {WebSocketMessage} message
+     * @param [ws]
+     */
+    static sendToTheDM(session, message, ws) {
+        const webUser = WebSocketUser.findByUser(session.owner_id);
+        if (webUser) webUser.sendMessage(message, ws);
     }
 }

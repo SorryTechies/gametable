@@ -3,16 +3,25 @@
  */
 
 export default class WebSocketMessage {
-    constructor(type, data) {
+    /**
+     * @param {string} type - action type, {@link WebSocketMessage.TYPE_AUTH} for example.
+     * @param {object|string} [data] - data to transfer
+     * @param {string} [game_id] - id of the game
+     */
+    constructor(type, data, game_id) {
         if (!type) throw new Error("No message type given.");
         this.type = type;
+        this.game_id = game_id;
         this.data = data ? data : {};
+        this.action = undefined;
     }
 
     toJson() {
         return JSON.stringify({
             type: this.type,
-            data: this.data
+            data: this.data,
+            game_id: this.game_id,
+            action: this.action
         });
     }
 
@@ -25,6 +34,8 @@ export default class WebSocketMessage {
         if (typeof obj !== "object") throw new Error("Bad message.");
         const message = new WebSocketMessage(obj.type);
         message.data = obj.data;
+        message.game_id = obj.game_id;
+        message.action = obj.action;
         return message;
     }
 
