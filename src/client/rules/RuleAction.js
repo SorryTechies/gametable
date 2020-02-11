@@ -5,6 +5,7 @@
 import * as uuid from "uuid";
 import RuleActionsConstants from "./constants/RuleActionsConstants";
 import RuleTypes from "./constants/RuleTypes";
+import RuleActionKeyToImpl from "./RuleActionKeyToImpl";
 
 function findType(key) {
     const type = Object.keys(RuleActions.ACTION_TYPE_OBJECT).find(item => RuleActions.ACTION_TYPE_OBJECT[item].includes(key));
@@ -44,6 +45,12 @@ export default class RuleActions {
         } else {
             throw new Error("Wrong target.");
         }
+    }
+
+    doAction() {
+        const func = RuleActionKeyToImpl[this.key];
+        if (!func) return console.log("No impl.");
+        func(this);
     }
 }
 

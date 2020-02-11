@@ -12,6 +12,7 @@ import './express/SessionDispatcher';
 import './express/CharacterDispatcher';
 import './express/CharacterTemplateDispatcher';
 import './express/GameObjectDispatcher';
+import './express/RoundActionDispatcher';
 import './express/TodoDispatcher';
 
 import './wss/WebSocketServer';

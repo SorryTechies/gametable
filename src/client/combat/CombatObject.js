@@ -13,16 +13,16 @@ export default class CombatObject extends React.Component {
                 width: (this.props.size - 20).toString() + "px",
                 height: (this.props.size - 20).toString() + "px",
                 borderColor: this.props.borderColor,
-                backgroundColor: this.props.unit.img ? this.props.unit.color ? this.props.unit.color : undefined : undefined,
-                backgroundImage: this.props.unit.img ? "url('" + this.props.unit.img + "')" : undefined,
-                backgroundSize: this.props.unit.img ? "cover" : undefined,
+                backgroundColor: this.props.unit.icon ? this.props.unit.color ? this.props.unit.color : undefined : undefined,
+                backgroundImage: this.props.unit.icon ? "url('" + this.props.unit.icon + "')" : undefined,
+                backgroundSize: this.props.unit.icon ? "cover" : undefined,
                 marginLeft: "auto",
                 marginRight: "auto",
                 marginTop: "3px"
             }}
             className={rootScss.map_object}
             onClick={this.props.onClick}
-            key={this.props.unit.name}>{this.props.unit.img ? "" : this.props.unit.name}
+            key={this.props.unit.name}>{this.props.unit.icon ? "" : this.props.unit.name}
         </div>
     }
 }

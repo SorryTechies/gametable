@@ -42,6 +42,7 @@ export default class NormalRequest {
     send(json) {
         return new Promise((resolve, reject) => {
             const request = getAjax();
+            if (json && this.method === NormalRequest.METHOD.GET) this.method= NormalRequest.METHOD.POST;
             request.open(this.method, `http://${window.location.hostname}:${this.port}${this.path}${queryToString(this.query)}`);
             this.setHeaders(request);
             if (json) {

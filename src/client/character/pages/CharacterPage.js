@@ -18,11 +18,7 @@ export default class CharacterPage extends React.Component {
     }
 
     componentDidMount() {
-        this.loadCharacter();
-    }
-
-    loadCharacter() {
-        const character = StaticController.getCharacter();
+        const character = StaticController.getMyCharacter();
         character.recalculate();
         this.setState({character: character});
     }
@@ -38,10 +34,10 @@ export default class CharacterPage extends React.Component {
         const v = parseInt(value);
         if (isNaN(v)) return;
         this.state.character.setOriginal(key, v);
-        BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_CHARACTER, {
+        BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_CHARACTER, [{
             _id: this.state.character.id,
             [key]: v
-        }));
+        }]));
         this.state.character.recalculate();
         this.forceUpdate();
     }

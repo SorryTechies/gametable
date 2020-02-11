@@ -11,9 +11,9 @@ export default class GameObjectDB {
     }
 
     /** @return Promise<Array<GameObject>> */
-    static findByIdes(ids) {
-        const idArray = ids.map(id =>  typeof id === "string"?  MongoDB.ObjectID(id) : id);
-        return MongoController.select(GameObjectDB.DB_NAME,  {_id: {$in: idArray}});
+    static findByIds(ids) {
+        const idArray = ids.map(id => typeof id === "string" ? MongoDB.ObjectID(id) : id);
+        return MongoController.select(GameObjectDB.DB_NAME, {_id: {$in: idArray}});
     }
 }
 
@@ -24,3 +24,4 @@ GameObjectDB.INITIATIVE_FIELD = "initiative";
 GameObjectDB.TEMPLATE_FIELD = "template_id";
 GameObjectDB.DATA_FIELD = "data";
 GameObjectDB.NAME_FIELD = "name";
+GameObjectDB.ICON_FIELD = "icon";

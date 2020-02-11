@@ -54,7 +54,7 @@ export default class LoginController {
 
     static logOut() {
         login = null;
-        gamr = null;
+        game = null;
         isLogined = false;
         isDM = false;
         return new IndexedDDB().clearAuth();

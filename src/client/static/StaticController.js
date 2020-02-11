@@ -13,14 +13,17 @@ import RuleRound from "../rules/RuleRound";
 let account = null;
 let subscribers = [];
 let chat = null;
+/** @type Array<RuleCharacter> */
+let characters = [];
 /** @type RuleCharacter */
-let character = null;
+let myCharacter = null;
 /** @type SessionMap */
 let map = null;
 /** @type GameSession */
 let session = null;
 /** @type RuleRound */
 let round = null;
+/** @type Array<GameObject> */
 let objects = [];
 let participants = null;
 let music = null;
@@ -36,21 +39,25 @@ export default class StaticController {
         if (!acc) throw new Error("No account provided.");
         account = acc;
         await this.loadSession();
-        await this.loadCharacter();
         await this.loadChat();
         await this.loadMap();
         await this.loadObjects();
+        await this.loadCharacters();
+        await this.setMyCharacter();
         await this.loadActions();
         await this.loadParticipants();
         await this.loadMusic();
     }
 
-    static async loadCharacter() {
-        if (LoginController.isDM()) return;
-        // TODO multiple characters support
-        const id = Array.isArray(account.characters_ids) ? account.characters_ids[0] : null;
-        if (!id) return;
-        character = new RuleCharacter(await new NormalRequest('/character', {id: id}).send());
+    static async loadCharacters() {
+        let idArray = objects.map(obj => obj.character_id);
+        if (Array.isArray(account.characters_ids)) {
+            account.characters_ids.forEach(id => !idArray.includes(id) ? idArray.push(id) : null);
+        }
+        if (idArray.length > 0) {
+            const ans = await new NormalRequest('/character').send({ids: idArray});
+            if (ans && Array.isArray(ans.characters)) characters = ans.characters.map(character => new RuleCharacter(character));
+        }
     }
 
     static async loadMap() {
@@ -75,8 +82,14 @@ export default class StaticController {
         LoginController.setDM(session.owner_id === account._id);
     }
 
-    static async loadActions() {
+    static reloadActions() {
         round = new RuleRound(objects);
+    }
+
+    static async loadActions() {
+        this.reloadActions();
+        const actions = await new NormalRequest('/round').send();
+        if (Array.isArray(actions.round)) actions.round.forEach(action => round.addAction(action));
     }
 
     static async loadChat() {
@@ -91,6 +104,15 @@ export default class StaticController {
         music = await new NormalRequest('/todo').send();
     }
 
+    static setMyCharacter() {
+        if (Array.isArray(account.characters_ids)) myCharacter = StaticController.getCharacter(account.characters_ids[0]);
+    }
+
+    /** @return RuleCharacter */
+    static getMyCharacter() {
+        return myCharacter;
+    }
+
     /** @return Account */
     static getAccount() {
         return account;
@@ -101,10 +123,12 @@ export default class StaticController {
         return Array.isArray(ids) && ids.includes(character_id);
     }
 
-    /** @return RuleCharacter */
-    static getCharacter() {
-        if (LoginController.isDM()) throw new Error("DM have no stats).");
-        return character;
+    /**
+     * @param {string} id
+     * @return RuleCharacter
+     */
+    static getCharacter(id) {
+        return characters.find(character => character.id === id);
     }
 
     /** @return Array<Account> */
@@ -135,6 +159,11 @@ export default class StaticController {
     /** @return {RuleRound} */
     static getRound() {
         return round;
+    }
+
+    static finishRound() {
+        round.finish();
+        round = new RuleRound(objects);
     }
 
     /**

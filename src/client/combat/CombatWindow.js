@@ -15,6 +15,7 @@ import WebSocketMessage from "../../common/logic/WebSocketMessage";
 import ActionHighlight from "./menu/pc/ActionHighlight";
 import PopupManager from "../popup/PopupManager";
 import RuleActions from "../rules/RuleAction";
+import DmPanel from "./menu/pc/DmPanel";
 
 const BAR_STATUS = 'status';
 const ACTION_HIGHLIGHT = 'act';
@@ -174,7 +175,11 @@ export default class CombatWindow extends React.Component {
                     onActionDelete={this.onActionDelete.bind(this)}/>;
                 break;
             case ACTION_HIGHLIGHT:
-                statusBar = <ActionHighlight text="ВЫБЕРЕТЕ ЦЕЛЬ"/>
+                statusBar = <ActionHighlight text="ВЫБЕРЕТЕ ЦЕЛЬ"/>;
+                break;
+            case null:
+                if (LoginController.isDM()) statusBar = <DmPanel/>;
+                break;
         }
         if (map) {
             return <div>

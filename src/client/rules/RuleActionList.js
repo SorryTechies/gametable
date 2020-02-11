@@ -60,6 +60,10 @@ export default class RuleActionList {
         if (!this.canMove()) ans = ans.filter(key => !RuleActionList.MOVE_ACTIONS.includes(key));
         return ans;
     }
+
+    executeActions() {
+        this.list.forEach(action => action.doAction());
+    }
 }
 
 RuleActionList.REPOSITION_ACTIONS = [

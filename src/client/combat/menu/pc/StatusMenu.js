@@ -15,13 +15,14 @@ export default class StatusMenu extends React.Component {
         /** @type GameObject */
         const unit = this.props.unit;
         if (!unit) return null;
-        const myUnit = LoginController.isDM() || StaticController.isMyCharacter(unit.character_id);
+        const canControll = LoginController.isDM() || StaticController.isMyCharacter(unit.character_id);
         return <div className={`${rootScss.static_element} ${rootScss.combat_menu}`}>
-            {myUnit ? <ActionSelector doAimAction={action => {
+            {unit.name}
+            {canControll ? <ActionSelector doAimAction={action => {
                 action.performerId = unit._id;
                 this.props.doAimAction(action);
             }} allowedActions={this.props.actionList.getAllowedActionsList()}/> : null}
-            <ActionBar  actionList={this.props.actionList} onDelete={this.props.onActionDelete} isMine={myUnit}/>
+            <ActionBar  actionList={this.props.actionList} onDelete={this.props.onActionDelete} isMine={canControll}/>
         </div>
     }
 }

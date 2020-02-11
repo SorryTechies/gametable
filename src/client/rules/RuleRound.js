@@ -41,4 +41,8 @@ export default class RuleRound {
     removeAction(action) {
         this.getObject(action.performerId).actionList.removeAction(action);
     }
+
+    finish() {
+        this.stack.forEach(obj => obj.actionList.executeActions());
+    }
 }

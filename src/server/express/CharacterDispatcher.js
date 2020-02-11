@@ -10,3 +10,9 @@ express.wrapGet("/character", async req => {
     if (!id) throw new Error("No character id provided.");
     return CharacterDB.getById(id);
 });
+
+express.wrapPost("/character", async req => {
+    const ids = req.body.ids;
+    if (!Array.isArray(ids) || ids.length === 0) throw new Error("No character ids provided.");
+    return {characters: await CharacterDB.findByIds(ids)};
+});

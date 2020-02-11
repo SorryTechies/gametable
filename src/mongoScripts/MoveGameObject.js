@@ -11,10 +11,9 @@ import GameObjectDB from "../server/mongo/classes/GameObjectDB";
 
 (async () => {
     await MongoController.init();
-    const characters = await MongoController.update(GameObjectDB.DB_NAME, {_id: ObjectId("5e3ea0e72763d338d4b6b411")},
+    const characters = await MongoController.update(GameObjectDB.DB_NAME, {_id: ObjectId("5e39c9dc5f81a52fac11b6c3")},
         {
-            character_id: ObjectId("5e3ea18d4e8d6c311834f1b6"),
-            position: {x: 11, y: 10}
+            name: "Biba"
         });
     console.log(characters);
 })().catch(console.error);
