@@ -2,7 +2,9 @@
  * Created by LastBerserk on 27.01.2020.
  */
 
+import * as MongoDB from "mongodb";
 import MongoController from "../MongoController";
+import SessionMapDB from "./SessionMapDB";
 
 export default class GameSessionDB {
     /** @return Promise<GameSession> */
@@ -16,6 +18,18 @@ export default class GameSessionDB {
      */
     static findSessionsByCharacter(character_id) {
         return MongoController.select(GameSessionDB.DB_NAME, {[GameSessionDB.PARTICIPANTS_CHARACTER_FIELD]: [character_id]});
+    }
+
+    static findGameSessionsByGameObject(gameObjectId) {
+        return MongoController.aggregate(GameSessionDB.DB_NAME, {
+            $lookup: {
+                from: SessionMapDB.DB_NAME,
+                localField: GameSessionDB.SESSION_MAPS_FIELD,
+                foreignField: "_id",
+                as: "map"
+            },
+            $match: {"map.map_objects_id": MongoDB.ObjectID(gameObjectId)}
+        });
     }
 }
 

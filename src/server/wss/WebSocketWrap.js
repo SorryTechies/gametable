@@ -5,6 +5,7 @@
 import WebSocketMessage from "../../common/logic/WebSocketMessage";
 import * as WsCharacterDispatcher from "./dispatchers/WsCharacterDispatcher";
 import * as WsActionDispatcher from "./dispatchers/WsActionDispatcher";
+import * as WsObjectChangeDispatcher from "./dispatchers/WsObjectChangesDispatcher";
 
 const DEFAULT_TIMEOUT = 30 * 1000;
 const DELETE_TIMEOUT = DEFAULT_TIMEOUT + 5 * 1000;
@@ -36,6 +37,9 @@ export default class WebSocketWrap {
                         return; // TODO
                     case (WebSocketMessage.TYPE_INTENT):
                         await WsActionDispatcher.handleNewIntent(json, ws);
+                        break;
+                    case (WebSocketMessage.TYPE_OBJECT):
+                        await WsObjectChangeDispatcher.onGameObjectChange(json.data, ws);
                         break;
                     case (WebSocketMessage.TYPE_CHARACTER):
                         await WsCharacterDispatcher.onCharacterUpdate(json.data, ws);

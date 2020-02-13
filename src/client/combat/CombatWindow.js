@@ -44,15 +44,8 @@ export default class CombatWindow extends React.Component {
         };
     }
 
-    saveMoveAction(object) {
-        BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_OBJECT, {
-            _id: this.state.object._id,
-            x: object.position.x,
-            y: object.position.y
-        }));
-    }
-
     componentDidMount() {
+        StaticController.subscribe({id: WebSocketMessage.TYPE_OBJECT, func: this.forceUpdate.bind(this)});
         StaticController.subscribe({id: WebSocketMessage.TYPE_INTENT, func: this.forceUpdate.bind(this)});
         StaticKeyboardController.subscribe(StaticKeyboardController.ESCAPER, this.clearSelection.bind(this));
         this.setState({
@@ -63,6 +56,7 @@ export default class CombatWindow extends React.Component {
 
     componentWillUnmount() {
         StaticController.unSubscribe(WebSocketMessage.TYPE_INTENT);
+        StaticController.unSubscribe(WebSocketMessage.TYPE_OBJECT);
         StaticKeyboardController.unsubscribe(StaticKeyboardController.ESCAPER, this.clearSelection.bind(this));
     }
 
@@ -131,16 +125,6 @@ export default class CombatWindow extends React.Component {
                 this.clearAim(this.state.clickRuleAction)
             } catch (ignored) {
                 PopupManager.push("Нужно указать юнита.");
-            }
-        } else {
-            if (LoginController.isDM() && this.state.objectSelected) {
-                this.state.objectSelected.position.x = x;
-                this.state.objectSelected.position.y = y;
-                this.saveMoveAction(this.state.objectSelected);
-                this.setState({
-                    selected: null,
-                    objectSelected: null
-                })
             }
         }
     }

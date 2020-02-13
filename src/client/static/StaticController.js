@@ -11,6 +11,7 @@ import RuleRound from "../rules/RuleRound";
 import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import WebSocketMessage from "../../common/logic/WebSocketMessage";
 import RuleActions from "../rules/RuleAction";
+import RuleCharacterChangesBean from "../rules/RuleCharacterChangesBean";
 
 /** @type Account */
 let account = null;
@@ -172,10 +173,14 @@ export default class StaticController {
 
     static finishRound() {
         round.finish();
+        const message2 = new WebSocketMessage(WebSocketMessage.TYPE_OBJECT);
+        message2.data = RuleCharacterChangesBean.beansToJson();
+        BrowserWebSocket.sendMessage(message2);
         StaticController.reloadActions();
         const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
         message.action = "clear";
         BrowserWebSocket.sendMessage(message);
+        StaticController.notifySubscribed(WebSocketMessage.TYPE_OBJECT);
     }
 
     /**

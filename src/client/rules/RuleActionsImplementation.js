@@ -26,5 +26,5 @@ export const doMove = action => {
 export const doAttack = action => {
     const obj = getObj(action.target);
     obj.data[RuleGameObjectConstans.LETHAL_DAMAGE] += 1;
-    RuleCharacterChangesBean.addDataModification(action.performerId, RuleGameObjectConstans.LETHAL_DAMAGE, action.target);
+    RuleCharacterChangesBean.addDataModification(action.performerId, RuleGameObjectConstans.LETHAL_DAMAGE, obj.data[RuleGameObjectConstans.LETHAL_DAMAGE]);
 };

@@ -4,13 +4,21 @@
 
 import StaticController from "../../../static/StaticController";
 import WebSocketMessage from "../../../../common/logic/WebSocketMessage";
+import RuleActions from "../../../rules/RuleAction";
 
 function handleNewIntent(message, func) {
     /** @type RuleActions */
     const action = message.data;
     const game_id = message.game_id;
     if (!game_id) throw new Error("No game id provided.");
-    if (!action || !action.id || !action.key || !action.performerId) throw new Error("Broken action object.");
+    switch (message.action) {
+        case "new":
+            if (!action || !action.id || !action.key || !action.performerId) throw new Error("Broken action object.");
+            break;
+        case "rem":
+            if (!action || !action.id) throw new Error("Broken action object.");
+            break;
+    }
     if (typeof func === "function") func(action);
     StaticController.notifySubscribed(WebSocketMessage.TYPE_INTENT);
 }
@@ -20,7 +28,7 @@ function handleNewIntent(message, func) {
  */
 export function handleNewAction(message) {
     const round = StaticController.getRound();
-    handleNewIntent(message, round.addAction.bind(round));
+    handleNewIntent(message, json => round.addAction(RuleActions.fromJson(json)));
 }
 
 /**
@@ -32,5 +40,6 @@ export function handleRemoveAction(message) {
 }
 
 export function handleClearActions() {
+    StaticController.reloadActions();
     StaticController.notifySubscribed(WebSocketMessage.TYPE_INTENT);
 }
