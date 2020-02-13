@@ -12,6 +12,7 @@ let styleExtractorProd = new ExtractTextPlugin({ filename:'styles.css', allChunk
 let hotSwap = new webpack.HotModuleReplacementPlugin();
 
 const config = {
+    devtool: "source-map",
     context: APP,
     entry: {
         app: ['./src/client/index.js',

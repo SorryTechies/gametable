@@ -7,7 +7,7 @@ export interface GameObject {
     position: {x: number, y: number};
     character_id: string;
     initiative: number;
-    template_id: string;
     data: object;
     name: string;
+    buffs: Array<string>
 }

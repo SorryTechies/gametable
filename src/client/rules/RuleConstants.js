@@ -18,11 +18,6 @@ export default {
     MOD_CHARISMA: "mod_cha",
 
     BAB: "bab",
-    HEALTH: "hp",
-    MAX_HEALTH: "max_hp",
-    LETHAL_DAMAGE: "ldam",
-    NONLETHAL_DAMAGE: "nonldam",
-    SHIELD: "shield",
 
     HEALTH_DIE: "hp_die",
     HEALTH_DIE_PER_LEVEL: "lvl_hp_die",
@@ -33,7 +28,6 @@ export default {
     MOVE_SPEED: "speed",
 
     INITIATIVE: "initiative",
-    CURRENT_INITIATIVE: "cur_init",
 
     COMBAT_MANEUVER_BONUS: "cmb",
     COMBAT_MANEUVER_DEFENCE: "cmd",

@@ -35,8 +35,7 @@ export default class WebSocketWrap {
                     case (WebSocketMessage.TYPE_CHAT):
                         return; // TODO
                     case (WebSocketMessage.TYPE_INTENT):
-                        console.log(json);
-                        await WsActionDispatcher.onAddEvent(json, ws);
+                        await WsActionDispatcher.handleNewIntent(json, ws);
                         break;
                     case (WebSocketMessage.TYPE_CHARACTER):
                         await WsCharacterDispatcher.onCharacterUpdate(json.data, ws);

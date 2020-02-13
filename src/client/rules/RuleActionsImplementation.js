@@ -3,10 +3,28 @@
  */
 
 import RuleActionsConstants from "./RuleConstants";
+import RuleCharacterChangesBean from "./RuleCharacterChangesBean";
+import StaticController from "../static/StaticController";
+import RuleGameObjectConstans from "./constants/RuleGameObjectConstants";
+
+/** @return {GameObject} */
+function getObj(id) {
+    const obj = StaticController.getObject(id);
+    if (obj) {
+        return obj;
+    } else {
+        throw new Error("Cannot find GameObject");
+    }
+}
 
 export const doMove = action => {
-    action.unit.x = action.target.x;
-    action.unit.y = action.target.y;
+    const obj = getObj(action.performerId);
+    obj.position = action.target;
+    RuleCharacterChangesBean.addModification(action.performerId, "position", action.target);
 };
 
-export const doAttack = action => action.target.set(RuleActionsConstants.LETHAL_DAMAGE, action.additional.value);
+export const doAttack = action => {
+    const obj = getObj(action.target);
+    obj.data[RuleGameObjectConstans.LETHAL_DAMAGE] += 1;
+    RuleCharacterChangesBean.addDataModification(action.performerId, RuleGameObjectConstans.LETHAL_DAMAGE, action.target);
+};

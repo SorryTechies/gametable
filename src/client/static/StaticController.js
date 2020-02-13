@@ -8,6 +8,9 @@ import * as WsConstants from "../../common/WsConstants";
 import SoundController from "../logic/SoundController";
 import RuleCharacter from "../rules/RuleCharacter";
 import RuleRound from "../rules/RuleRound";
+import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
+import WebSocketMessage from "../../common/logic/WebSocketMessage";
+import RuleActions from "../rules/RuleAction";
 
 /** @type Account */
 let account = null;
@@ -71,6 +74,7 @@ export default class StaticController {
         const request = new NormalRequest('/object');
         request.method = NormalRequest.METHOD.POST;
         objects = (await request.send({ids: idArray})).objects;
+        objects.forEach(obj => !obj.data ? obj.data = {} : null);
     }
 
     static async loadSession() {
@@ -89,7 +93,7 @@ export default class StaticController {
     static async loadActions() {
         this.reloadActions();
         const actions = await new NormalRequest('/round').send();
-        if (Array.isArray(actions.round)) actions.round.forEach(action => round.addAction(action));
+        if (Array.isArray(actions.round)) actions.round.forEach(action => round.addAction(RuleActions.fromJson(action)));
     }
 
     static async loadChat() {
@@ -156,6 +160,11 @@ export default class StaticController {
         return objects;
     }
 
+    /** @return GameObject */
+    static getObject(id) {
+        return objects.find(obj => obj._id === id);
+    }
+
     /** @return {RuleRound} */
     static getRound() {
         return round;
@@ -163,7 +172,10 @@ export default class StaticController {
 
     static finishRound() {
         round.finish();
-        round = new RuleRound(objects);
+        StaticController.reloadActions();
+        const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
+        message.action = "clear";
+        BrowserWebSocket.sendMessage(message);
     }
 
     /**

@@ -11,7 +11,7 @@ import RoundActionCache from "../../logic/RoundActionCache";
  * @param ws
  * @return {Promise.<void>}
  */
-export async function onAddEvent(message, ws) {
+export async function handleNewIntent(message, ws) {
     const session = await GameSessionDB.getById(message.game_id);
     if (!session) throw new Error("No session found with id " + message.game_id);
     if (message.data.isHidden) {

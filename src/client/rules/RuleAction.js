@@ -52,6 +52,14 @@ export default class RuleActions {
         if (!func) return console.log("No impl.");
         func(this);
     }
+
+    static fromJson(json) {
+        const obj = new RuleActions(json.key, json.id);
+        obj.isHidden = json.isHidden;
+        obj.performerId = json.performerId;
+        obj.target = json.target;
+        return obj;
+    }
 }
 
 RuleActions.TARGET_TYPE = {

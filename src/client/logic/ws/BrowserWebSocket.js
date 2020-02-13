@@ -53,15 +53,18 @@ export default class BrowserWebSocket {
                     case WebSocketMessage.TYPE_CHAT:
                         return; //TODO
                     case WebSocketMessage.TYPE_INTENT:
-                        if (message.action === "new") {
-                            IntentHandler.handleNewAction(message);
-                        } else {
-                            IntentHandler.handleRemoveAction(message);
+                        switch (message.action) {
+                            case "new":
+                                return  IntentHandler.handleNewAction(message);
+                            case "rem":
+                                return IntentHandler.handleRemoveAction(message);
+                            case "clear":
+                                return IntentHandler.handleClearActions();
+                            default:
+                                return;
                         }
-                        return;
                     case WebSocketMessage.TYPE_CHARACTER:
-
-                        return;
+                        return; //TODO
                 }
             } catch (e) {
                 console.log(e);
