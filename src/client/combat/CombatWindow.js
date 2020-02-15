@@ -39,8 +39,7 @@ export default class CombatWindow extends React.Component {
             turn: null,
             gridSizeInt: DEFAULT,
             scale: 1,
-            coloredGrid: [],
-
+            coloredGrid: []
         };
     }
 
@@ -69,7 +68,19 @@ export default class CombatWindow extends React.Component {
         })
     }
 
+    validateAction(action) {
+        try {
+            action.validate();
+            return true;
+        } catch (e) {
+            console.error(e);
+            PopupManager.push(e.message);
+            return false;
+        }
+    }
+
     addNewCombatAction(action) {
+        if (!this.validateAction(action)) return;
         this.selectedActionList.addAction(action);
         const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
         message.data = action;

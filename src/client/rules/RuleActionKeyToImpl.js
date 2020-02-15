@@ -4,8 +4,14 @@
 
 import RuleActionsConstants from "./constants/RuleActionsConstants";
 import * as Impl from "./RuleActionsImplementation";
+import * as Val from "./RuleActionValidationImpl";
 
-export default {
+export const implementation = {
     [RuleActionsConstants.MOVE]: Impl.doMove,
     [RuleActionsConstants.ATTACK]: Impl.doAttack
+};
+
+export const validation = {
+    [RuleActionsConstants.MOVE]: Val.moveValidation,
+    [RuleActionsConstants.ATTACK]: Val.attackValidation
 };

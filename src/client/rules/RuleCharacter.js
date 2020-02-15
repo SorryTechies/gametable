@@ -42,7 +42,6 @@ export default class RuleCharacter {
         this.morale = new RuleEffectController(RuleEffect.TYPE_MORALE);
         this.luck = new RuleEffectController(RuleEffect.TYPE_LUCK);
         this.other = new RuleEffectController(RuleEffect.TYPE_OTHER);
-        this.buff = new RuleBuffController(this);
     }
 
     setOriginal(key, val) {
@@ -68,18 +67,6 @@ export default class RuleCharacter {
 
     removeEffect(effect) {
         getBuffArr(this, effect.type).remove(effect);
-    }
-
-    addBuff(buff) {
-        this.buff.add(buff);
-    }
-
-    removeBuff(buff) {
-        this.buff.remove(buff);
-    }
-
-    dispelBuff(key) {
-        this.buff.removeByKey(key);
     }
 
     recalculate() {

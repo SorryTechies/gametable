@@ -60,7 +60,11 @@ export default class StaticController {
         }
         if (idArray.length > 0) {
             const ans = await new NormalRequest('/character').send({ids: idArray});
-            if (ans && Array.isArray(ans.characters)) characters = ans.characters.map(character => new RuleCharacter(character));
+            if (ans && Array.isArray(ans.characters)) characters = ans.characters.map(character => {
+                const char = new RuleCharacter(character);
+                char.recalculate();
+                return char;
+            });
         }
     }
 

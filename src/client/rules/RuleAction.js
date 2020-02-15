@@ -5,7 +5,7 @@
 import * as uuid from "uuid";
 import RuleActionsConstants from "./constants/RuleActionsConstants";
 import RuleTypes from "./constants/RuleTypes";
-import RuleActionKeyToImpl from "./RuleActionKeyToImpl";
+import {implementation, validation} from "./RuleActionKeyToImpl";
 
 function findType(key) {
     const type = Object.keys(RuleActions.ACTION_TYPE_OBJECT).find(item => RuleActions.ACTION_TYPE_OBJECT[item].includes(key));
@@ -47,8 +47,14 @@ export default class RuleActions {
         }
     }
 
+    validate() {
+        const func = validation[this.key];
+        if (!func) throw new Error("No validation found for " + this.key);
+        func(this)
+    }
+
     doAction() {
-        const func = RuleActionKeyToImpl[this.key];
+        const func = implementation[this.key];
         if (!func) return console.log("No impl.");
         func(this);
     }
