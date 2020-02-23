@@ -62,5 +62,8 @@ export default {
     MODIFIER_ATTACK: "modif_att",
 
     MODIFIER_CMB: "mod_cmb",
-    MODIFIER_CMD: "mod_cmd"
+    MODIFIER_CMD: "mod_cmd",
+
+    CASTER_LEVEL: "c_level",
+    SPELL_ARRAY: "spell_array",
 };

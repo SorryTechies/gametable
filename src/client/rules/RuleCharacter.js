@@ -6,7 +6,7 @@ import RuleEffectController from "./RuleEffectController";
 import RuleEffect from "./RuleEffect";
 import RuleDefaultValues from "./RuleDefaultValues";
 import RuleBuffController from "./RuleBuffController";
-import * as RuleImplementation from "./RuleImplementation";
+import * as RuleImplementation from "./impl/RuleImplementation";
 
 function getBuffArr(self, type) {
     switch (type) {

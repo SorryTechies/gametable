@@ -22,10 +22,10 @@ export async function onGameObjectChange(objects, ws) {
         if (!db) throw new Error("No game object with id " + gameObject.id + " found.");
         const mod = gameObject.mod;
         if (mod.data) {
-            if (!db.data) db.mod = {};
+            if (!db.data) db.data = {};
             Object.keys(mod.data).forEach(key => {
-                if (key !== _id) {
-                    db.data[key] = gameObject.data[key]
+                if (key !== "_id") {
+                    db.data[key] = mod.data[key]
                 }
             });
         }

@@ -34,13 +34,14 @@ export default class DamageDice extends Dice {
     }
 
     roll() {
-        this.simpleRoll();
         if (this.prevRoll && this.prevRoll.critical && this.canBeCritical) {
             if (DamageDice.USE_FULL_CRIT_FORMULA) {
                 this.result = fullFormula(this);
             } else {
                 this.result = newFormula(this);
             }
+        } else {
+            this.simpleRoll();
         }
         this.rollNext();
         return this;

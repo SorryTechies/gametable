@@ -12,6 +12,7 @@ import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import WebSocketMessage from "../../common/logic/WebSocketMessage";
 import RuleActions from "../rules/RuleAction";
 import RuleCharacterChangesBean from "../rules/RuleCharacterChangesBean";
+import RuleDefaultValues from "../rules/RuleDefaultValues";
 
 /** @type Account */
 let account = null;
@@ -79,7 +80,7 @@ export default class StaticController {
         const request = new NormalRequest('/object');
         request.method = NormalRequest.METHOD.POST;
         objects = (await request.send({ids: idArray})).objects;
-        objects.forEach(obj => !obj.data ? obj.data = {} : null);
+        objects.forEach(RuleDefaultValues.setDefaultObjectValues);
     }
 
     static async loadSession() {

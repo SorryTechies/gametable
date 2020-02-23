@@ -4,6 +4,7 @@
 
 import RuleConstants from "./RuleConstants";
 import RuleSkillConstants from "./constants/RuleSkillConstants";
+import RuleGameObjectConstants from "./constants/RuleGameObjectConstants";
 
 export default class RuleDefaultValues {
     /**
@@ -28,5 +29,15 @@ export default class RuleDefaultValues {
         setIfNull(RuleConstants.MOVE_SPEED, 30);
 
         setIfNull(RuleSkillConstants.CLASS_SKILLS_ARRAY, []);
+        setIfNull(RuleConstants.SPELL_ARRAY, ["shock_grasp"])
+    }
+
+    /** @param {GameObject} obj */
+    static setDefaultObjectValues(obj) {
+        if (!obj.data) obj.data = {};
+        const setIfNull = (key, val) => !obj.data ? obj.data[key] = val : null;
+        Object.values(RuleGameObjectConstants).forEach(key => setIfNull(key, 0));
+        if (!Array.isArray(obj.buffs)) obj.buffs = [];
+        if (!obj.position) obj.position = {x: 1, y:1};
     }
 }

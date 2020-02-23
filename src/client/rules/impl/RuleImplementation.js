@@ -3,9 +3,9 @@
  */
 
 
-import RuleConstants from "./RuleConstants";
-import RuleSkillsStatConstants from "./constants/RuleSkillsStatConstants";
-import RuleSkillConstants from "./constants/RuleSkillConstants";
+import RuleConstants from "../RuleConstants";
+import RuleSkillsStatConstants from "../constants/RuleSkillsStatConstants";
+import RuleSkillConstants from "../constants/RuleSkillConstants";
 
 export const dodgeCalc = cha => cha.set(RuleConstants.DODGE, cha.get(RuleConstants.MODIFIER_DODGE) +
     cha.get(RuleConstants.MOD_DEXTERITY));

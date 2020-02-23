@@ -14,15 +14,18 @@ export default class ActionSelector extends React.Component {
     }
 
     onSelection(e) {
-        this.setState({selected: e.target.value});
-        this.props.doAimAction(new RuleActions(e.target.value));
+        const val = e.target.value;
+        this.setState({selected: val});
+        this.props.doAimAction(val);
     }
 
     render() {
-        return <select value={this.state.selected} onChange={this.onSelection.bind(this)}>
-            <option value={RuleActionsConstants.NO_ACTION}>NO ACTION</option>
-            {this.props.allowedActions.map(key => <option value={key} key={key}>{key}</option>)}
-        </select>
+        return <div>
+            <select value={this.state.selected} onChange={this.onSelection.bind(this)}>
+                <option value={RuleActionsConstants.NO_ACTION}>NO ACTION</option>
+                {this.props.allowedActions.map(key => <option value={key} key={key}>{key}</option>)}
+            </select>
+        </div>
     }
 }
 

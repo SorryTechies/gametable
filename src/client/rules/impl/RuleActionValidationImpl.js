@@ -2,10 +2,8 @@
  * Created by LastBerserk on 21.01.2020.
  */
 
-import RuleConstants from "./RuleConstants";
-import RuleCharacterChangesBean from "./RuleCharacterChangesBean";
-import StaticController from "../static/StaticController";
-import RuleGameObjectConstans from "./constants/RuleGameObjectConstants";
+import RuleConstants from "../RuleConstants";
+import StaticController from "../../static/StaticController";
 
 /** @return {GameObject} */
 function getObj(id) {
@@ -18,9 +16,7 @@ function getObj(id) {
 }
 
 function isSpaceOccupied(action) {
-    console.log(StaticController.getObjects());
-    console.log(action);
-    if (StaticController.getObjects().find(obj => obj.position.x === action.target.x && obj.position.y === action.target.x))
+    if (StaticController.getObjects().find(obj => obj.position.x === action.target.x && obj.position.y === action.target.y))
         throw new Error("Cannot move in occupied space.");
 }
 
@@ -29,7 +25,6 @@ function calculateMoveDistance(p1, p2) {
 }
 
 function checkTravelDistance(action) {
-
     const target = action.target;
     const performer = getObj(action.performerId);
     const squaresToMove = (StaticController.getCharacter(performer.character_id).get(RuleConstants.MOVE_SPEED)) / 5;
@@ -44,4 +39,10 @@ export const moveValidation = action => {
 
 export const attackValidation = action => {
 
+};
+
+export const touchCheck = action => {
+    const target = getObj(action.target);
+    const performer = getObj(action.performerId);
+    if (calculateMoveDistance(performer.position, target.position) > 1) throw new Error("Spell should be touch.");
 };

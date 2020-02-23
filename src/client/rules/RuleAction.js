@@ -33,6 +33,8 @@ export default class RuleActions {
         this.key = key;
         this.isHidden = false;
         this.performerId = "";
+        this.additional1 = null;
+        this.additional2 = null;
         this.id = id ? id : uuid.v1();
         this.target = null;
         this.targetType = actionKeyToTarget(key);
@@ -50,13 +52,21 @@ export default class RuleActions {
     validate() {
         const func = validation[this.key];
         if (!func) throw new Error("No validation found for " + this.key);
-        func(this)
+        if (typeof func === "function") func(this);
+        if (typeof func === "object") {
+            if (typeof func[this.additional1] !== "function") throw new Error("No validation found for " + this.additional1 + " in " + this.key);
+            func[this.additional1](this);
+        }
     }
 
     doAction() {
         const func = implementation[this.key];
-        if (!func) return console.log("No impl.");
-        func(this);
+        if (!func) throw new Error("No implementation found for " + this.key);
+        if (typeof func === "function") func(this);
+        if (typeof func === "object") {
+            if (typeof func[this.additional1] !== "function") throw new Error("No implementation found for " + this.additional1 + " in " + this.key);
+            func[this.additional1](this);
+        }
     }
 
     static fromJson(json) {
@@ -103,6 +113,6 @@ RuleActions.ACTION_TYPE_OBJECT = {
     [RuleTypes.TYPE_STANDARD]: RuleActions.STANDARD_ACTIONS,
     [RuleTypes.TYPE_FULL_ROUND]: RuleActions.FULL_ROUND_ACTIONS,
     [RuleTypes.TYPE_FREE]: RuleActions.FREE_ACTIONS,
-    [RuleTypes.TYPE_IMMEDIATE]:RuleActions.IMMIDIATE_ACTION,
+    [RuleTypes.TYPE_IMMEDIATE]: RuleActions.IMMIDIATE_ACTION,
     [RuleTypes.TYPE_SWIFT]: RuleActions.SWIFT_ACTION
 };
