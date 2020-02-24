@@ -14,13 +14,13 @@ export default class MapGrid extends React.Component {
     getColor(unit) {
         let color = "white";
         if (this.props.objectSelected) {
-            color = unit._id === this.props.objectSelected._id ? "red" : "white";
+            color = unit.id === this.props.objectSelected.id ? "red" : "white";
         }
         return color;
     }
 
     setCellContent(i, j) {
-        const unit = this.props.objects.find(unit => unit.position.x === i && unit.position.y === j);
+        const unit = this.props.objects.find(unit => unit.movePoints.isInFinalPosition({x: i, y: j}));
         if (!unit) return null;
         return <CombatObject key={unit.name}
                              size={this.props.size}

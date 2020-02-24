@@ -7,7 +7,7 @@ import RuleActionList from "./RuleActionList";
 
 class RoundObject {
     constructor(character) {
-        this.character = character;
+        this.gameObject = character;
         this.actionList = new RuleActionList();
     }
 }
@@ -23,8 +23,8 @@ export default class RuleRound {
      * @return {RoundObject}
      */
     getObject(id) {
-        const obj = this.stack.find(obj => obj.character._id === id);
-        if (!obj) throw new Error("Character not found in stack");
+        const obj = this.stack.find(obj => obj.gameObject.id === id);
+        if (!obj) throw new Error("RuleGameObject not found in stack");
         return obj;
     }
 
@@ -44,5 +44,10 @@ export default class RuleRound {
 
     finish() {
         this.stack.forEach(obj => obj.actionList.executeActions());
+    }
+
+    reset() {
+        this.stack.forEach(obj => obj.actionList.reset());
+        this.stack = [];
     }
 }

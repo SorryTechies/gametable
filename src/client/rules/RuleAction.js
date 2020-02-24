@@ -6,6 +6,7 @@ import * as uuid from "uuid";
 import RuleActionsConstants from "./constants/RuleActionsConstants";
 import RuleTypes from "./constants/RuleTypes";
 import {implementation, validation} from "./RuleActionKeyToImpl";
+import StaticController from "../static/StaticController";
 
 function findType(key) {
     const type = Object.keys(RuleActions.ACTION_TYPE_OBJECT).find(item => RuleActions.ACTION_TYPE_OBJECT[item].includes(key));
@@ -39,11 +40,29 @@ export default class RuleActions {
         this.target = null;
         this.targetType = actionKeyToTarget(key);
         this.type = findType(key);
+
+        this.targetObject = null;
+        this.performerObject = null;
+    }
+
+    setPerformer(data) {
+        if (typeof data !== "object") throw new Error("No game object provided.");
+        this.performerObject = data;
+        this.performerId = data.id;
     }
 
     setTarget(type, data) {
         if (this.targetType === type) {
-            this.target = data;
+            switch (this.targetType) {
+                case RuleActions.TARGET_TYPE.UNIT:
+                    if (typeof data !== "object") throw new Error("No game object provided.");
+                    this.targetObject = data;
+                    this.target = data.id;
+                    break;
+                case RuleActions.TARGET_TYPE.GROUND:
+                    this.target = data;
+                    break;
+            }
         } else {
             throw new Error("Wrong target.");
         }
@@ -69,12 +88,41 @@ export default class RuleActions {
         }
     }
 
-    static fromJson(json) {
+    /**
+     * @param {object} json - json object
+     * @param {object} loader - static loader containing other data that can be loaded, {@link StaticController} example.
+     * @return {RuleActions}
+     */
+    static fromJson(json, loader) {
+        if (!loader) throw new Error("No loader provided.");
         const obj = new RuleActions(json.key, json.id);
         obj.isHidden = json.isHidden;
-        obj.performerId = json.performerId;
-        obj.target = json.target;
+        obj.setPerformer(loader.getObject(json.performerId));
+        if (obj.targetType === RuleActions.TARGET_TYPE.UNIT) {
+            obj.setTarget(obj.targetType, loader.getObject(json.target));
+        } else {
+            obj.setTarget(obj.targetType, json.target);
+        }
+        if (json.additional1) obj.additional1 = json.additional1;
+        if (json.additional2) obj.additional2 = json.additional2;
         return obj;
+    }
+
+    toJson() {
+        return {
+            key: this.key,
+            isHidden: this.isHidden,
+            performerId: this.performerId,
+            additional1: this.additional1,
+            additional2: this.additional2,
+            id: this.id,
+            target: this.target
+        };
+    }
+
+    reset() {
+        if (this.performerObject) this.performerObject.reset();
+        if (this.targetObject) this.targetObject.reset();
     }
 }
 

@@ -16,11 +16,24 @@ import ActionHighlight from "./menu/pc/ActionHighlight";
 import PopupManager from "../popup/PopupManager";
 import RuleActions from "../rules/RuleAction";
 import DmPanel from "./menu/pc/DmPanel";
+import RuleActionsConstants from "../rules/constants/RuleActionsConstants";
 
 const BAR_STATUS = 'status';
 const ACTION_HIGHLIGHT = 'act';
 const DM_STATUS = 'dm';
 const DEFAULT = 60;
+
+function isRepositioning(key) {
+    switch (key) {
+        case RuleActionsConstants.MOVE:
+        case RuleActionsConstants.SPRINT:
+        case RuleActionsConstants.FIVE_FOOT_STEP:
+        case RuleActionsConstants.CHARGE:
+            return true;
+        default:
+            return false;
+    }
+}
 
 export default class CombatWindow extends React.Component {
     constructor(props) {
@@ -31,6 +44,7 @@ export default class CombatWindow extends React.Component {
             /** @type SessionMap */
             map: null,
             objects: [],
+            /** @type RuleGameObject */
             objectSelected: null,
             /** @type RuleActions */
             clickRuleAction: null,
@@ -79,16 +93,26 @@ export default class CombatWindow extends React.Component {
         }
     }
 
+    addGraphics(action) {
+        if (isRepositioning(action.key)) action.performerObject.movePoints.add(action.target);
+    }
+
+    removeGraphics(action) {
+        if (isRepositioning(action.key)) action.performerObject.movePoints.remove(action.target);
+    }
+
     addNewCombatAction(action) {
         if (!this.validateAction(action)) return;
+        this.addGraphics(action);
         this.selectedActionList.addAction(action);
         const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
-        message.data = action;
+        message.data = action.toJson();
         message.action = "new";
         BrowserWebSocket.sendMessage(message);
     }
 
     removeCombatAction(action) {
+        this.removeGraphics(action);
         this.selectedActionList.removeAction(action);
         const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
         message.data = {
@@ -112,7 +136,7 @@ export default class CombatWindow extends React.Component {
     clickObject(unit) {
         if (this.state.clickRuleAction) {
             try {
-                this.state.clickRuleAction.setTarget(RuleActions.TARGET_TYPE.UNIT, unit._id);
+                this.state.clickRuleAction.setTarget(RuleActions.TARGET_TYPE.UNIT, unit);
                 this.clearAim(this.state.clickRuleAction)
             } catch (ignored) {
                 PopupManager.push("Нужно указать юнита.");
@@ -158,7 +182,7 @@ export default class CombatWindow extends React.Component {
     }
 
     render() {
-        if (this.state.objectSelected) this.selectedActionList = StaticController.getRound().getObject(this.state.objectSelected._id).actionList;
+        if (this.state.objectSelected) this.selectedActionList = StaticController.getRound().getObject(this.state.objectSelected.id).actionList;
         const map = this.state.map;
         let statusBar = null;
         switch (this.state.statusBar) {

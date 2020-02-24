@@ -64,6 +64,10 @@ export default class RuleActionList {
     executeActions() {
         this.list.forEach(action => action.doAction());
     }
+
+    reset() {
+        this.list.forEach(action => action.reset());
+    }
 }
 
 RuleActionList.REPOSITION_ACTIONS = [

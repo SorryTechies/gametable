@@ -32,7 +32,7 @@ export default class GroupWindow extends React.Component {
     }
 
     async loadCharacter() {
-        let result = (await StaticController.getMap()).objects.map(obj => obj.character);
+        let result = (await StaticController.getMap()).objects.map(obj => obj.gameObject);
         this.setState({characters: result});
     }
 

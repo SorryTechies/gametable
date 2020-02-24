@@ -28,7 +28,7 @@ function handleNewIntent(message, func) {
  */
 export function handleNewAction(message) {
     const round = StaticController.getRound();
-    handleNewIntent(message, json => round.addAction(RuleActions.fromJson(json)));
+    handleNewIntent(message, json => round.addAction(RuleActions.fromJson(json, StaticController)));
 }
 
 /**

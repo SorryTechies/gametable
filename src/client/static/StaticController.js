@@ -13,6 +13,7 @@ import WebSocketMessage from "../../common/logic/WebSocketMessage";
 import RuleActions from "../rules/RuleAction";
 import RuleCharacterChangesBean from "../rules/RuleCharacterChangesBean";
 import RuleDefaultValues from "../rules/RuleDefaultValues";
+import RuleGameObject from "../rules/RuleGameObject";
 
 /** @type Account */
 let account = null;
@@ -28,7 +29,7 @@ let map = null;
 let session = null;
 /** @type RuleRound */
 let round = null;
-/** @type Array<GameObject> */
+/** @type Array<RuleGameObject> */
 let objects = [];
 let participants = null;
 let music = null;
@@ -63,6 +64,8 @@ export default class StaticController {
             const ans = await new NormalRequest('/character').send({ids: idArray});
             if (ans && Array.isArray(ans.characters)) characters = ans.characters.map(character => {
                 const char = new RuleCharacter(character);
+                const obj = StaticController.getObjects().find(obj => obj.character_id === char.id);
+                if (obj) obj.gameObject = char;
                 char.recalculate();
                 return char;
             });
@@ -79,7 +82,7 @@ export default class StaticController {
         const idArray = Array.isArray(map.map_objects_id) ? map.map_objects_id : [];
         const request = new NormalRequest('/object');
         request.method = NormalRequest.METHOD.POST;
-        objects = (await request.send({ids: idArray})).objects;
+        objects = (await request.send({ids: idArray})).objects.map(obj => RuleGameObject.fromJson(obj, this));
         objects.forEach(RuleDefaultValues.setDefaultObjectValues);
     }
 
@@ -93,13 +96,14 @@ export default class StaticController {
     }
 
     static reloadActions() {
+        if (round) round.reset();
         round = new RuleRound(objects);
     }
 
     static async loadActions() {
         this.reloadActions();
         const actions = await new NormalRequest('/round').send();
-        if (Array.isArray(actions.round)) actions.round.forEach(action => round.addAction(RuleActions.fromJson(action)));
+        if (Array.isArray(actions.round)) actions.round.forEach(action => round.addAction(RuleActions.fromJson(action, this)));
     }
 
     static async loadChat() {
@@ -161,14 +165,14 @@ export default class StaticController {
         return music;
     }
 
-    /** @return {Array<GameObject>} */
+    /** @return {Array<RuleGameObject>} */
     static getObjects() {
         return objects;
     }
 
-    /** @return GameObject */
+    /** @return RuleGameObject */
     static getObject(id) {
-        return objects.find(obj => obj._id === id);
+        return objects.find(obj => obj.id === id);
     }
 
     /** @return {RuleRound} */

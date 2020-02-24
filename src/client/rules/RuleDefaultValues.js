@@ -32,12 +32,9 @@ export default class RuleDefaultValues {
         setIfNull(RuleConstants.SPELL_ARRAY, ["shock_grasp"])
     }
 
-    /** @param {GameObject} obj */
+    /** @param {RuleGameObject} obj */
     static setDefaultObjectValues(obj) {
-        if (!obj.data) obj.data = {};
         const setIfNull = (key, val) => !obj.data ? obj.data[key] = val : null;
         Object.values(RuleGameObjectConstants).forEach(key => setIfNull(key, 0));
-        if (!Array.isArray(obj.buffs)) obj.buffs = [];
-        if (!obj.position) obj.position = {x: 1, y:1};
     }
 }

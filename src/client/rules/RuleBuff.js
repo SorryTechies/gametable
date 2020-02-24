@@ -11,7 +11,7 @@ export default class RuleBuff {
         this.duration = -1;
         this.timer = 0;
         this.key = key;
-        this.character = null;
+        this.gameObject = null;
     }
 }
 

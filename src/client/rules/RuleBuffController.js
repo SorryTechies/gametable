@@ -6,7 +6,7 @@ import RuleBuff from "./RuleBuff";
 
 export default class RuleBuffController {
     constructor(character) {
-        this.character = character;
+        this.gameObject = character;
         this.buffs = {};
     }
 
@@ -20,7 +20,7 @@ export default class RuleBuffController {
         if (oldBuff) {
             oldBuff.onRenew();
         } else {
-            buff.character = this.character;
+            buff.gameObject = this.gameObject;
             this.buffs[buff.key] = buff;
         }
         buff.onCreate(this);

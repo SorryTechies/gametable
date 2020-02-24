@@ -36,7 +36,7 @@ export default class StatusMenu extends React.Component {
     renderFirstSelector() {
         return <ActionSelector doAimAction={val1 => {
             const action = new RuleAction(val1);
-            action.performerId = this.props.unit._id;
+            action.setPerformer(this.props.unit);
             this.processAction(action);
         }} allowedActions={this.props.actionList.getAllowedActionsList()}/>
     }
@@ -73,11 +73,11 @@ export default class StatusMenu extends React.Component {
         /** @type GameObject */
         const unit = this.props.unit;
         if (!unit) return null;
-        const canControll = LoginController.isDM() || StaticController.isMyCharacter(unit.character_id);
+        const canControl = LoginController.isDM() || StaticController.isMyCharacter(unit.character_id);
         return <div className={`${rootScss.static_element} ${rootScss.combat_menu}`}>
             {unit.name}
-            {canControll ? this.renderSelectors() : null}
-            <ActionBar actionList={this.props.actionList} onDelete={this.props.onActionDelete} isMine={canControll}/>
+            {canControl ? this.renderSelectors() : null}
+            <ActionBar actionList={this.props.actionList} onDelete={this.props.onActionDelete} isMine={canControl}/>
         </div>
     }
 }

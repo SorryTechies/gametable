@@ -20,30 +20,30 @@ export default class CharacterPage extends React.Component {
     componentDidMount() {
         const character = StaticController.getMyCharacter();
         character.recalculate();
-        this.setState({character: character});
+        this.setState({gameObject: character});
     }
 
     getRollPop(obj) {
         const roller = new CheckDice();
         roller.name = obj.stat;
-        roller.bonus = this.state.character.get(obj.mod);
+        roller.bonus = this.state.gameObject.get(obj.mod);
         PopupManager.push(roller.roll().generateText());
     }
 
     saveCharacter(key, value) {
         const v = parseInt(value);
         if (isNaN(v)) return;
-        this.state.character.setOriginal(key, v);
+        this.state.gameObject.setOriginal(key, v);
         BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_CHARACTER, [{
-            _id: this.state.character.id,
+            _id: this.state.gameObject.id,
             [key]: v
         }]));
-        this.state.character.recalculate();
+        this.state.gameObject.recalculate();
         this.forceUpdate();
     }
 
     render() {
-        const character = this.state.character;
+        const character = this.state.gameObject;
         if (!character) return null;
         return <table>
             <tbody>
