@@ -22,7 +22,7 @@ export default class RuleState {
             character.removeEffect(dexEffect);
             RuleState.doFatigue(character);
         };
-        character.addBuff(buff);
+        character.buffs.add(buff);
     }
 
     static doFatigue(character) {
@@ -37,7 +37,7 @@ export default class RuleState {
             character.removeEffect(strEffect);
             character.removeEffect(dexEffect);
         };
-        character.addBuff(buff);
+        character.buffs.add(buff);
     }
 
     static doFightingDefensively(character) {
@@ -53,18 +53,18 @@ export default class RuleState {
             character.removeEffect(acEffect);
             character.removeEffect(attackEffect);
         };
-        character.addBuff(buff);
+        character.buffs.add(buff);
     }
 
     /** @param {RuleActions} action */
     static doTotalDefenceState(action) {
-        const character = action.performerObject.ruleCharacter;
+        const object = action.performerObject;
         const buff = new RuleBuff(RuleBuffConstants.TOTAL_DEFENSE);
-        buff.ruleCharacter = character;
-        const ranks = character.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS);
+        buff.gameObject = object;
+        const ranks = object.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS);
         const acEffect = new RuleEffect(RuleConstants.DODGE, ranks >= 3 ? 6 : 4);
-        buff.onCreate = () => character.addEffect(acEffect);
-        buff.onEnd = () => character.removeEffect(acEffect);
-        action.performerObject.addBuff(buff);
+        buff.onCreate = () => object.buffs.addEffect(acEffect);
+        buff.onEnd = () => object.buffs.removeEffect(acEffect);
+        action.performerObject.buffs.add(buff);
     }
 }

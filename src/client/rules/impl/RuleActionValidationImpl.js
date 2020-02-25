@@ -3,10 +3,10 @@
  */
 
 import RuleConstants from "../RuleConstants";
-import StaticController from "../../static/StaticController";
+import * as RuleLoader from "../RuleLoader";
 
 function isSpaceOccupied(action) {
-    if (StaticController.getObjects().find(obj => obj.id !== action.performerId && obj.movePoints.isInFinalPosition(action.target)))
+    if (RuleLoader.getLoader().getObjects().find(obj => obj.id !== action.performerId && obj.movePoints.isInFinalPosition(action.target)))
         throw new Error("Cannot move in occupied space.");
 }
 
@@ -20,12 +20,12 @@ function isInTouchRange(p1, p2) {
 
 function checkTravelDistance(action) {
     const performer = action.performerObject;
-    const squaresToMove = (StaticController.getCharacter(performer.character_id).get(RuleConstants.MOVE_SPEED)) / 5;
+    const squaresToMove = performer.get(RuleConstants.MOVE_SPEED) / 5;
     const distance = calculateMoveDistance(action.target, performer.movePoints.getFinalPoint());
     if (distance > squaresToMove) throw new Error("You cannot go so far, you can move only " + squaresToMove + " squares.");
 }
 
-export const moveValidation = action => {
+export const moveValidation = (action) => {
     isSpaceOccupied(action);
     checkTravelDistance(action);
 };

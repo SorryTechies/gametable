@@ -4,6 +4,8 @@
 
 import RuleDefaultValues from "./RuleDefaultValues";
 import MovePointController from "../logic/MovePointController";
+import RuleBuffController from "./RuleBuffController";
+import * as RuleImplementation from "./impl/RuleImplementation";
 
 export default class RuleGameObject {
     constructor(id) {
@@ -12,29 +14,19 @@ export default class RuleGameObject {
         this.character_id = "";
         this.initiative = 0;
         this.data = {};
-        RuleDefaultValues.setDefaultObjectValues(this);
         this.name = "";
-        this.buffs = {};
+        this.buffs = new RuleBuffController(this);
         this.icon = "";
 
+        this.calculatedData = {};
         this.movePoints = new MovePointController();
         this.movePoints.setStartingPoint(Object.assign({}, this.position));
         /** @type RuleCharacter */
         this.ruleCharacter = null;
     }
 
-    addBuff(buff) {
-        this.buffs[buff.name] = buff;
-        buff.onCreate();
-    }
-
-    removeBuff(name) {
-        if (this.buffs[name]) this.buffs[name].onEnd();
-        delete this.buffs[name];
-    }
-
     finish() {
-        Object.values(this.buffs).forEach(buff => buff.onRenew());
+        this.buffs.turn();
     }
 
     /** @return {{}} */
@@ -50,9 +42,43 @@ export default class RuleGameObject {
         };
     }
 
+    get(key) {
+        if (this.calculatedData[key]) {
+            return this.calculatedData[key];
+        } else {
+            return this.ruleCharacter.get(key);
+        }
+    }
+
+    set(key, val) {
+        let charVal = this.ruleCharacter.get(key);
+        if (typeof charVal === "number") {
+            if (this.calculatedData[key] === "number") {
+                charVal += this.calculatedData[key] + this.buffs.getBuffBonus(key);
+            } else {
+                charVal += this.buffs.getBuffBonus(key);
+            }
+            this.calculatedData[key] = val + charVal;
+        } else {
+            this.calculatedData[key] = val;
+        }
+
+    }
+
     reset() {
         this.movePoints = new MovePointController();
         this.movePoints.setStartingPoint(Object.assign({}, this.position));
+    }
+
+    recalculate() {
+        this.calculatedData = {};
+        RuleImplementation.statCalc(this);
+        RuleImplementation.dodgeCalc(this);
+        RuleImplementation.attackBonusCalc(this);
+        RuleImplementation.defenceCalc(this);
+        RuleImplementation.saveCalc(this);
+        RuleImplementation.combatManeuverCalc(this);
+        RuleImplementation.skillCalc(this);
     }
 
     /**

@@ -4,8 +4,6 @@
 
 import NormalRequest from "../logic/NormalRequest";
 import LoginController from "../logic/LoginController";
-import * as WsConstants from "../../common/WsConstants";
-import SoundController from "../logic/SoundController";
 import RuleCharacter from "../rules/RuleCharacter";
 import RuleRound from "../rules/RuleRound";
 import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
@@ -14,6 +12,7 @@ import RuleActions from "../rules/RuleAction";
 import RuleCharacterChangesBean from "../rules/RuleCharacterChangesBean";
 import RuleDefaultValues from "../rules/RuleDefaultValues";
 import RuleGameObject from "../rules/RuleGameObject";
+import * as RuleLoader from "../rules/RuleLoader";
 
 /** @type Account */
 let account = null;
@@ -221,4 +220,6 @@ StaticController.VERBOSE = "VERBOSE";
 StaticController.DEBUG = "DEBUG";
 StaticController.INFO = "INFO";
 StaticController.PROD = "PROD";
+
+RuleLoader.setLoader(StaticController);
 

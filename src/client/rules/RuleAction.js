@@ -6,7 +6,7 @@ import * as uuid from "uuid";
 import RuleActionsConstants from "./constants/RuleActionsConstants";
 import RuleTypes from "./constants/RuleTypes";
 import {implementation, validation} from "./RuleActionKeyToImpl";
-import StaticController from "../static/StaticController";
+import * as RuleLoader from "./RuleLoader";
 
 function findType(key) {
     const type = Object.keys(RuleActions.ACTION_TYPE_OBJECT).find(item => RuleActions.ACTION_TYPE_OBJECT[item].includes(key));
@@ -107,13 +107,13 @@ export default class RuleActions {
      * @param {object} loader - static loader containing other data that can be loaded, {@link StaticController} example.
      * @return {RuleActions}
      */
-    static fromJson(json, loader) {
+    static fromJson(json) {
         if (!loader) throw new Error("No loader provided.");
         const obj = new RuleActions(json.key, json.id);
         obj.isHidden = json.isHidden;
-        obj.setPerformer(loader.getObject(json.performerId));
+        obj.setPerformer(RuleLoader.getLoader().getObject(json.performerId));
         if (obj.targetType === RuleActions.TARGET_TYPE.UNIT) {
-            obj.setTarget(obj.targetType, loader.getObject(json.target));
+            obj.setTarget(obj.targetType, RuleLoader.getLoader().getObject(json.target));
         } else {
             obj.setTarget(obj.targetType, json.target);
         }

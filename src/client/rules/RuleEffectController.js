@@ -8,12 +8,12 @@ export default class RuleEffectController {
         this.arr = [];
     }
 
-    add(buff) {
-        this.arr.push(buff);
+    add(effect) {
+        this.arr.push(effect);
     }
 
-    remove(buff) {
-        this.arr.splice(this.arr.findIndex(item => item === buff), 1);
+    remove(effect) {
+        this.arr.splice(this.arr.findIndex(item => item === effect), 1);
     }
 
     getMaxValue(key) {
