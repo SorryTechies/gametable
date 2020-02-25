@@ -65,7 +65,7 @@ export default class StaticController {
             if (ans && Array.isArray(ans.characters)) characters = ans.characters.map(character => {
                 const char = new RuleCharacter(character);
                 const obj = StaticController.getObjects().find(obj => obj.character_id === char.id);
-                if (obj) obj.gameObject = char;
+                if (obj) obj.ruleCharacter = char;
                 char.recalculate();
                 return char;
             });

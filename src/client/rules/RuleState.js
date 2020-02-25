@@ -6,6 +6,7 @@ import RuleBuff from "./RuleBuff";
 import RuleEffect from "./RuleEffect";
 import RuleConstants from "./RuleConstants";
 import RuleBuffConstants from "./constants/RuleBuffConstants";
+import RuleSkillConstants from "./constants/RuleSkillConstants";
 
 export default class RuleState {
     static doRage(character) {
@@ -55,12 +56,15 @@ export default class RuleState {
         character.addBuff(buff);
     }
 
-    static doTotalDefence(character) {
-        const buff = new RuleBuff(RuleBuffConstants.TOTAL_DEFENSE, character);
-        const ranks = character.get("ranks_acrobatics");
+    /** @param {RuleActions} action */
+    static doTotalDefenceState(action) {
+        const character = action.performerObject.ruleCharacter;
+        const buff = new RuleBuff(RuleBuffConstants.TOTAL_DEFENSE);
+        buff.ruleCharacter = character;
+        const ranks = character.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS);
         const acEffect = new RuleEffect(RuleConstants.DODGE, ranks >= 3 ? 6 : 4);
         buff.onCreate = () => character.addEffect(acEffect);
         buff.onEnd = () => character.removeEffect(acEffect);
-        character.addBuff(buff);
+        action.performerObject.addBuff(buff);
     }
 }

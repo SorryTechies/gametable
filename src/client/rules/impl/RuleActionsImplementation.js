@@ -7,6 +7,7 @@ import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleGameObjectConstans from "../constants/RuleGameObjectConstants";
 import CheckDice from "../../logic/roll/CheckDice";
 import DamageDice from "../../logic/roll/DamageDice";
+import RuleState from "../RuleState";
 
 function getStrAttackRoll(character) {
     const roll = new CheckDice();
@@ -19,6 +20,10 @@ export const doMove = action => {
     RuleCharacterChangesBean.addModification(action.performerId, "position", action.target);
 };
 
+export const doTotalDefence = action => {
+    RuleState.doTotalDefenceState(action);
+};
+
 export const doAttack = action => {
     const obj = action.targetObject;
     obj.data[RuleGameObjectConstans.LETHAL_DAMAGE] += 1;
@@ -28,7 +33,7 @@ export const doAttack = action => {
 export const doShockGrasp = action => {
     const target = action.targetObject;
     const performer = action.performerObject;
-    const perfCharacter = performer.gameObject;
+    const perfCharacter = performer.ruleCharacter;
     let numberOfDices = perfCharacter.get(RuleConstants.CASTER_LEVEL);
     if (numberOfDices > 5) numberOfDices = 5;
     // TODO IMPLEMENT TOUCH BUFF INSTEAD OF DISCHARGE
@@ -39,7 +44,7 @@ export const doShockGrasp = action => {
     damageRoll.amountOfDices = numberOfDices;
     roll.nextDice.push(damageRoll);
     roll.roll();
-    if (roll.result >= target.gameObject.get(RuleConstants.DEFENCE_TOUCH_AC)) {
+    if (roll.result >= target.ruleCharacter.get(RuleConstants.DEFENCE_TOUCH_AC)) {
         target.data[RuleGameObjectConstans.LETHAL_DAMAGE] += damageRoll.result;
         RuleCharacterChangesBean.addDataModification(action.target, RuleGameObjectConstans.LETHAL_DAMAGE, target.data[RuleGameObjectConstans.LETHAL_DAMAGE]);
     }

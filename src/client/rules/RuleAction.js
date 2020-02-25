@@ -29,6 +29,18 @@ function actionKeyToTarget(key) {
     }
 }
 
+function isRepositioning(key) {
+    switch (key) {
+        case RuleActionsConstants.MOVE:
+        case RuleActionsConstants.SPRINT:
+        case RuleActionsConstants.FIVE_FOOT_STEP:
+        case RuleActionsConstants.CHARGE:
+            return true;
+        default:
+            return false;
+    }
+}
+
 export default class RuleActions {
     constructor(key, id) {
         this.key = key;
@@ -41,7 +53,9 @@ export default class RuleActions {
         this.targetType = actionKeyToTarget(key);
         this.type = findType(key);
 
+        /** @type RuleGameObject */
         this.targetObject = null;
+        /** @type RuleGameObject */
         this.performerObject = null;
     }
 
@@ -124,6 +138,10 @@ export default class RuleActions {
         if (this.performerObject) this.performerObject.reset();
         if (this.targetObject) this.targetObject.reset();
     }
+
+    isRepositionAction() {
+        return isRepositioning(this.key);
+    }
 }
 
 RuleActions.TARGET_TYPE = {
@@ -145,7 +163,8 @@ RuleActions.FULL_ROUND_ACTIONS = [
     RuleActionsConstants.CHARGE,
     RuleActionsConstants.SPRINT,
     RuleActionsConstants.FULL_ROUND_ATTACK,
-    RuleActionsConstants.FULL_ROUND_SPELL
+    RuleActionsConstants.FULL_ROUND_SPELL,
+    RuleActionsConstants.TOTAL_DEFENCE
 ];
 
 RuleActions.FREE_ACTIONS = [

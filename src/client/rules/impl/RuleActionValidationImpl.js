@@ -15,7 +15,7 @@ function calculateMoveDistance(p1, p2) {
 }
 
 function isInTouchRange(p1, p2) {
-    return (Math.abs(p1.x - p2.x) <= 1) && (Math.abs(p1.y - p2.y) <= 1)
+    if ((Math.abs(p1.x - p2.x) > 1) || (Math.abs(p1.y - p2.y) > 1)) throw new Error("Should be in touch range.");
 }
 
 function checkTravelDistance(action) {
@@ -30,10 +30,18 @@ export const moveValidation = action => {
     checkTravelDistance(action);
 };
 
+export const fiveFootValidation = action => {
+    isSpaceOccupied(action);
+    isInTouchRange(action.performerObject.movePoints.getFinalPoint(), action.target);
+};
+
 export const attackValidation = action => {
 
 };
 
 export const touchCheck = action => {
-    if (!isInTouchRange(action.performerObject.movePoints.getFinalPoint(), action.targetObject.movePoints.getFinalPoint())) throw new Error("Spell should be touch.");
+    isInTouchRange(action.performerObject.movePoints.getFinalPoint(), action.targetObject.movePoints.getFinalPoint());
+};
+
+export const noValidation = () => {
 };

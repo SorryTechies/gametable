@@ -2,7 +2,6 @@
  * Created by LastBerserk on 20.01.2020.
  */
 
-import RuleCharacter from "./RuleCharacter";
 import RuleActionList from "./RuleActionList";
 
 class RoundObject {
@@ -33,6 +32,7 @@ export default class RuleRound {
      */
     addAction(action) {
         this.getObject(action.performerId).actionList.addAction(action);
+        if (action.isRepositionAction()) action.performerObject.movePoints.add(action.target);
     }
 
     /**
@@ -40,10 +40,12 @@ export default class RuleRound {
      */
     removeAction(action) {
         this.getObject(action.performerId).actionList.removeAction(action);
+        if (action.isRepositionAction()) action.performerObject.movePoints.remove(action.target);
     }
 
     finish() {
         this.stack.forEach(obj => obj.actionList.executeActions());
+        this.stack.forEach(obj => obj.gameObject.ruleCharacter.recalculate());
     }
 
     reset() {

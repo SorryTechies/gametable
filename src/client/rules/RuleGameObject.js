@@ -14,12 +14,27 @@ export default class RuleGameObject {
         this.data = {};
         RuleDefaultValues.setDefaultObjectValues(this);
         this.name = "";
-        this.buffs = [];
+        this.buffs = {};
         this.icon = "";
 
         this.movePoints = new MovePointController();
         this.movePoints.setStartingPoint(Object.assign({}, this.position));
-        this.gameObject = null;
+        /** @type RuleCharacter */
+        this.ruleCharacter = null;
+    }
+
+    addBuff(buff) {
+        this.buffs[buff.name] = buff;
+        buff.onCreate();
+    }
+
+    removeBuff(name) {
+        if (this.buffs[name]) this.buffs[name].onEnd();
+        delete this.buffs[name];
+    }
+
+    finish() {
+        Object.values(this.buffs).forEach(buff => buff.onRenew());
     }
 
     /** @return {{}} */
@@ -31,7 +46,7 @@ export default class RuleGameObject {
             initiative: this.initiative,
             data: this.data,
             name: this.name,
-            buffs: this.buffs
+            //buffs: this.buffs
         };
     }
 
@@ -48,7 +63,7 @@ export default class RuleGameObject {
     static fromJson(json, loader) {
         const obj = new RuleGameObject();
         if (json.name) obj.name = json.name;
-        if (Array.isArray(json.buffs)) obj.buffs = json.buffs;
+        //if (json.buffs) obj.buffs = json.buffs;
         if (json.data) Object.keys(json.data).forEach(key => obj.data[key] = json.data[key]);
         if (json.initiative) obj.initiative = json.initiative;
         if (json.icon) obj.icon = json.icon;

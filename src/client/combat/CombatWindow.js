@@ -23,18 +23,6 @@ const ACTION_HIGHLIGHT = 'act';
 const DM_STATUS = 'dm';
 const DEFAULT = 60;
 
-function isRepositioning(key) {
-    switch (key) {
-        case RuleActionsConstants.MOVE:
-        case RuleActionsConstants.SPRINT:
-        case RuleActionsConstants.FIVE_FOOT_STEP:
-        case RuleActionsConstants.CHARGE:
-            return true;
-        default:
-            return false;
-    }
-}
-
 export default class CombatWindow extends React.Component {
     constructor(props) {
         super(props);
@@ -94,17 +82,15 @@ export default class CombatWindow extends React.Component {
     }
 
     addGraphics(action) {
-        if (isRepositioning(action.key)) action.performerObject.movePoints.add(action.target);
     }
 
     removeGraphics(action) {
-        if (isRepositioning(action.key)) action.performerObject.movePoints.remove(action.target);
     }
 
     addNewCombatAction(action) {
         if (!this.validateAction(action)) return;
         this.addGraphics(action);
-        this.selectedActionList.addAction(action);
+        StaticController.getRound().addAction(action);
         const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
         message.data = action.toJson();
         message.action = "new";
@@ -113,7 +99,7 @@ export default class CombatWindow extends React.Component {
 
     removeCombatAction(action) {
         this.removeGraphics(action);
-        this.selectedActionList.removeAction(action);
+        StaticController.getRound().removeAction(action);
         const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
         message.data = {
             id: action.id,

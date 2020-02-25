@@ -52,7 +52,7 @@ export default class RuleActionList {
     }
 
     getAllowedActionsList() {
-        let ans = [];
+        let ans = RuleActionList.FREE_ACTIONS;
         if (this.canDoFullRoundAction()) ans = ans.concat(RuleActionList.FULL_ROUND_ACTIONS);
         if (this.canDoStandardAction()) ans = ans.concat(RuleActionList.STANDARD_ACTIONS);
         if (this.canDoMoveAction()) ans = ans.concat(RuleActionList.MOVE_ACTIONS);
@@ -90,7 +90,8 @@ RuleActionList.FULL_ROUND_ACTIONS = [
     RuleActionsConstants.CHARGE,
     RuleActionsConstants.SPRINT,
     RuleActionsConstants.FULL_ROUND_ATTACK,
-    RuleActionsConstants.FULL_ROUND_SPELL
+    RuleActionsConstants.FULL_ROUND_SPELL,
+    RuleActionsConstants.TOTAL_DEFENCE
 ];
 
 RuleActionList.FREE_ACTIONS = [
