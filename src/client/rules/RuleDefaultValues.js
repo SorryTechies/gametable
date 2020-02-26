@@ -11,7 +11,7 @@ export default class RuleDefaultValues {
      * @param {RuleCharacter} character
      */
     static setDefault(character) {
-        const setIfNull = (key, val) => !character.set(key) ? character.set(key, val) : null;
+        const setIfNull = (key, val) => !character.get(key) ? character.set(key, val) : null;
         Object.values(RuleConstants).forEach(key => setIfNull(key, 0));
         Object.values(RuleSkillConstants).forEach(key => setIfNull(key, 0));
         setIfNull(RuleConstants.STAT_STRENGTH, 10);

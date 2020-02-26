@@ -30,7 +30,7 @@ export const defenceCalc = gameObject => {
 
     gameObject.set(RuleConstants.DEFENCE_AC, ac);
     gameObject.set(RuleConstants.DEFENCE_TOUCH_AC, setIfLesser(tac));
-    gameObject.set(RuleConstants.DEFENCE_TOUCH_FLAT_FOOTED_AC, setIfLesser(ffac));
+    gameObject.set(RuleConstants.DEFENCE_FLAT_FOOTED_AC, setIfLesser(ffac));
     gameObject.set(RuleConstants.DEFENCE_TFF_AC, setIfLesser(tffac));
 };
 

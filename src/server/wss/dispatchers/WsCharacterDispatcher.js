@@ -15,7 +15,7 @@ export async function onCharacterUpdate(characters, ws) {
         const db = await CharacterDB.getById(character._id);
         if (!db) throw new Error("No character with id " + character._id + " found.");
         Object.keys(character).forEach(key => {
-            if (key !== _id) {
+            if (key !== "_id") {
                 db.data[key] = character[key]
             }
         });

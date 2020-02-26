@@ -7,6 +7,7 @@ import RuleActionsConstants from "../../src/client/rules/constants/RuleActionsCo
 import {doTotalDefence} from "../../src/client/rules/impl/RuleActionsImplementation";
 import RuleConstants from "../../src/client/rules/RuleConstants";
 import TestWrapper from "../TestWrapper";
+import * as assert from "assert";
 
 export const SimpleCharacterDataTest = TestWrapper.wrap("SimpleCharacterDataTest",
     (async () => {
@@ -46,14 +47,10 @@ export const FullBuffPlusModifierTest = TestWrapper.wrap("FullBuffPlusModifierTe
         doTotalDefence(action);
         object.recalculate();
 
-        if (object.get(RuleConstants.DEFENCE_AC) !== RESULT)
-            throw new Error(`AC isn't equal ${RESULT}, but was ${object.get(RuleConstants.DEFENCE_AC)}`);
-        if (object.get(RuleConstants.DEFENCE_TOUCH_AC) !== RESULT)
-            throw new Error(`Touch AC isn't equal ${RESULT}, but was ${object.get(RuleConstants.DEFENCE_TOUCH_AC)}`);
-        if (object.get(RuleConstants.DEFENCE_TFF_AC) !== RESULT_2)
-            throw new Error(`Flat Footed AC isn't equal ${RESULT_2}, but was ${object.get(RuleConstants.DEFENCE_TFF_AC)}`);
-        if (object.get(RuleConstants.DEFENCE_TOUCH_FLAT_FOOTED_AC) !== RESULT_2)
-            throw new Error(`Touch Flat Footed AC isn't equal ${RESULT_2}, but was ${object.get(RuleConstants.DEFENCE_TOUCH_FLAT_FOOTED_AC)}`);
+        assert.equal(object.get(RuleConstants.DEFENCE_AC), RESULT);
+        assert.equal(object.get(RuleConstants.DEFENCE_TOUCH_AC), RESULT);
+        assert.equal(object.get(RuleConstants.DEFENCE_FLAT_FOOTED_AC), RESULT_2);
+        assert.equal(object.get(RuleConstants.DEFENCE_TFF_AC), RESULT_2);
     })());
 
 export const ALL_TESTS = [

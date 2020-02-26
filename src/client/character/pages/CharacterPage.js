@@ -14,13 +14,19 @@ import WebSocketMessage from "../../../common/logic/WebSocketMessage";
 export default class CharacterPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {character: null};
+        this.state = {
+            character: null,
+            gameObject: null
+        };
     }
 
     componentDidMount() {
         const character = StaticController.getMyCharacter();
-        character.recalculate();
-        this.setState({gameObject: character});
+        const gameObject = StaticController.getObjectByCharacter(character);
+        this.setState({
+            gameObject: gameObject,
+            character: character
+        });
     }
 
     getRollPop(obj) {
@@ -33,9 +39,9 @@ export default class CharacterPage extends React.Component {
     saveCharacter(key, value) {
         const v = parseInt(value);
         if (isNaN(v)) return;
-        this.state.gameObject.setOriginal(key, v);
+        this.state.character.set(key, v);
         BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_CHARACTER, [{
-            _id: this.state.gameObject.id,
+            _id: this.state.character.id,
             [key]: v
         }]));
         this.state.gameObject.recalculate();
@@ -43,15 +49,16 @@ export default class CharacterPage extends React.Component {
     }
 
     render() {
-        const character = this.state.gameObject;
-        if (!character) return null;
+        const gameObject = this.state.gameObject;
+        const character = this.state.character;
+        if (!character || !gameObject) return null;
         return <table>
             <tbody>
             {this.props.rows.map(obj =>
                 <CharacterRow key={obj.stat}
                               displayName={obj.stat}
-                              finalValue={character.get(obj.mod)}
-                              modifiedValue={character.getOriginal(obj.stat)}
+                              finalValue={gameObject.get(obj.mod)}
+                              modifiedValue={character.get(obj.stat)}
                               onSave={this.saveCharacter.bind(this, obj.stat)}
                               onClick={this.getRollPop.bind(this, obj)}/>)}
             </tbody>

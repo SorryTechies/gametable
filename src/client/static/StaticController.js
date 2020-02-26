@@ -35,6 +35,15 @@ let music = null;
 
 const LOG_LEVEL = "DEBUG";
 
+function linkCharacters() {
+    objects.forEach(obj => {
+        const char = characters.find(char => obj.character_id === char.id);
+        if (char) obj.ruleCharacter = char;
+        RuleDefaultValues.setDefaultObjectValues(obj);
+        obj.recalculate();
+    });
+}
+
 export default class StaticController {
     /**
      * @param {Account} acc
@@ -49,6 +58,7 @@ export default class StaticController {
         await this.loadObjects();
         await this.loadCharacters();
         await this.setMyCharacter();
+        linkCharacters();
         await this.loadActions();
         await this.loadParticipants();
         await this.loadMusic();
@@ -61,13 +71,9 @@ export default class StaticController {
         }
         if (idArray.length > 0) {
             const ans = await new NormalRequest('/character').send({ids: idArray});
-            if (ans && Array.isArray(ans.characters)) characters = ans.characters.map(character => {
-                const char = new RuleCharacter(character);
-                const obj = StaticController.getObjects().find(obj => obj.character_id === char.id);
-                if (obj) obj.ruleCharacter = char;
-                char.recalculate();
-                return char;
-            });
+            if (ans && Array.isArray(ans.characters)) {
+                characters = ans.characters.map(character => new RuleCharacter(character));
+            }
         }
     }
 
@@ -82,7 +88,6 @@ export default class StaticController {
         const request = new NormalRequest('/object');
         request.method = NormalRequest.METHOD.POST;
         objects = (await request.send({ids: idArray})).objects.map(obj => RuleGameObject.fromJson(obj, this));
-        objects.forEach(RuleDefaultValues.setDefaultObjectValues);
     }
 
     static async loadSession() {
@@ -118,7 +123,13 @@ export default class StaticController {
     }
 
     static setMyCharacter() {
+        // TODO multiple character support
         if (Array.isArray(account.characters_ids)) myCharacter = StaticController.getCharacter(account.characters_ids[0]);
+    }
+
+    static getObjectByCharacter(character) {
+        // TODO multiple objects with one template
+        return objects.find(obj => obj.character_id === character.id);
     }
 
     /** @return RuleCharacter */

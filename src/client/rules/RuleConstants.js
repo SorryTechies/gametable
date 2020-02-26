@@ -46,7 +46,7 @@ export default {
 
     DEFENCE_AC: "ac",
     DEFENCE_TOUCH_AC: "tac",
-    DEFENCE_TOUCH_FLAT_FOOTED_AC: "ffac",
+    DEFENCE_FLAT_FOOTED_AC: "ffac",
     DEFENCE_TFF_AC: "tffac",
 
     MODIFIER_DODGE: "modif_dodge",

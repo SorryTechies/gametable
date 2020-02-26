@@ -71,6 +71,7 @@ export default class RuleGameObject {
     }
 
     recalculate() {
+        if (!this.ruleCharacter) return;
         this.calculatedData = {};
         RuleImplementation.statCalc(this);
         RuleImplementation.dodgeCalc(this);
@@ -93,10 +94,7 @@ export default class RuleGameObject {
         if (json.data) Object.keys(json.data).forEach(key => obj.data[key] = json.data[key]);
         if (json.initiative) obj.initiative = json.initiative;
         if (json.icon) obj.icon = json.icon;
-        if (json.character_id) {
-            obj.character_id = json.character_id;
-            obj.gameObject = loader.getCharacter(json.character_id);
-        }
+        if (json.character_id) obj.character_id = json.character_id;
         if (json.position) {
             obj.position = json.position;
             obj.movePoints.setStartingPoint(Object.assign({}, json.position));
