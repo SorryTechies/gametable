@@ -8,6 +8,7 @@ import RuleGameObjectConstans from "../constants/RuleGameObjectConstants";
 import CheckDice from "../../logic/roll/CheckDice";
 import DamageDice from "../../logic/roll/DamageDice";
 import RuleState from "../RuleState";
+import StaticController from "../../static/StaticController";
 
 function getStrAttackRoll(character) {
     const roll = new CheckDice();
@@ -21,13 +22,21 @@ export const doMove = action => {
 };
 
 export const doTotalDefence = action => {
+    StaticController.sendActionDescription(
+        `${action.performerObject.name} starts raging!`,
+        action
+    );
     RuleState.doTotalDefenceState(action);
 };
-
 export const doAttack = action => {
     const obj = action.targetObject;
-    obj.data[RuleGameObjectConstans.LETHAL_DAMAGE] += 1;
-    RuleCharacterChangesBean.addDataModification(action.performerId, RuleGameObjectConstans.LETHAL_DAMAGE, obj.data[RuleGameObjectConstans.LETHAL_DAMAGE]);
+    const damage = 1;
+    obj.dealDamage(damage);
+    StaticController.sendActionDescription(
+        `${action.performerObject.name} attacks ${action.targetObject.name} for ${damage} damage.`,
+        action
+    );
+    RuleCharacterChangesBean.addDataModification(action.performerId, RuleGameObjectConstans.LETHAL_DAMAGE, damage);
 };
 
 export const doShockGrasp = action => {
@@ -45,7 +54,16 @@ export const doShockGrasp = action => {
     roll.nextDice.push(damageRoll);
     roll.roll();
     if (roll.result >= target.ruleCharacter.get(RuleConstants.DEFENCE_TOUCH_AC)) {
-        target.data[RuleGameObjectConstans.LETHAL_DAMAGE] += damageRoll.result;
-        RuleCharacterChangesBean.addDataModification(action.target, RuleGameObjectConstans.LETHAL_DAMAGE, target.data[RuleGameObjectConstans.LETHAL_DAMAGE]);
+        target.dealDamage(damageRoll.result);
+        StaticController.sendActionDescription(
+            `${action.performerObject.name} casts Shocking Grasps on ${action.targetObject.name} dealing ${damageRoll.result} electric damage.`,
+            action
+        );
+        RuleCharacterChangesBean.addDataModification(action.target, RuleGameObjectConstans.LETHAL_DAMAGE, damageRoll.result);
+    } else {
+        StaticController.sendActionDescription(
+            `${action.performerObject.name} casts Shocking Grasps on ${action.targetObject.name} and misses.`,
+            action
+        );
     }
 };

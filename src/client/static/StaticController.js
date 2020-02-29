@@ -44,6 +44,13 @@ function linkCharacters() {
     });
 }
 
+function sendBeans() {
+    const message = new WebSocketMessage(WebSocketMessage.TYPE_OBJECT);
+    message.data = RuleCharacterChangesBean.beansToJson();
+    if (message.data.length !== 0) BrowserWebSocket.sendMessage(message);
+    RuleCharacterChangesBean.init();
+}
+
 export default class StaticController {
     /**
      * @param {Account} acc
@@ -87,7 +94,7 @@ export default class StaticController {
         const idArray = Array.isArray(map.map_objects_id) ? map.map_objects_id : [];
         const request = new NormalRequest('/object');
         request.method = NormalRequest.METHOD.POST;
-        objects = (await request.send({ids: idArray})).objects.map(obj => RuleGameObject.fromJson(obj, this));
+        objects = (await request.send({ids: idArray})).objects.map(obj => RuleGameObject.fromJson(obj));
     }
 
     static async loadSession() {
@@ -192,13 +199,17 @@ export default class StaticController {
 
     static finishRound() {
         round.finish();
-        const message2 = new WebSocketMessage(WebSocketMessage.TYPE_OBJECT);
-        message2.data = RuleCharacterChangesBean.beansToJson();
-        BrowserWebSocket.sendMessage(message2);
+        sendBeans();
         StaticController.reloadActions();
         const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
         message.action = "clear";
         BrowserWebSocket.sendMessage(message);
+        StaticController.notifySubscribed(WebSocketMessage.TYPE_OBJECT);
+    }
+
+    static turnBuffs() {
+        round.turnBuffs();
+        sendBeans();
         StaticController.notifySubscribed(WebSocketMessage.TYPE_OBJECT);
     }
 
@@ -222,15 +233,16 @@ export default class StaticController {
         if (position !== -1) subscribers.splice(position, 1);
     }
 
-    static getLogLevel() {
-        return LOG_LEVEL;
+    static sendChatMessage(text, toWho) {
+        const message = new WebSocketMessage(WebSocketMessage.TYPE_CHAT);
+        message.data = {text: text, receiver: toWho};
+        BrowserWebSocket.sendMessage(message);
+    }
+
+    static sendActionDescription(text, action) {
+        StaticController.sendChatMessage(text, []);
     }
 }
-
-StaticController.VERBOSE = "VERBOSE";
-StaticController.DEBUG = "DEBUG";
-StaticController.INFO = "INFO";
-StaticController.PROD = "PROD";
 
 RuleLoader.setLoader(StaticController);
 

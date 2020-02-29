@@ -104,11 +104,9 @@ export default class RuleActions {
 
     /**
      * @param {object} json - json object
-     * @param {object} loader - static loader containing other data that can be loaded, {@link StaticController} example.
      * @return {RuleActions}
      */
     static fromJson(json) {
-        if (!loader) throw new Error("No loader provided.");
         const obj = new RuleActions(json.key, json.id);
         obj.isHidden = json.isHidden;
         obj.setPerformer(RuleLoader.getLoader().getObject(json.performerId));

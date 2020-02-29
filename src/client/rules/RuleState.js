@@ -2,69 +2,111 @@
  * Created by LastBerserk on 18.01.2020.
  */
 
-import RuleBuff from "./RuleBuff";
 import RuleEffect from "./RuleEffect";
 import RuleConstants from "./RuleConstants";
-import RuleBuffConstants from "./constants/RuleBuffConstants";
 import RuleSkillConstants from "./constants/RuleSkillConstants";
+import RuleCharacterChangesBean from "./RuleCharacterChangesBean";
+import RuleBuffConstants from "./constants/RuleBuffConstants";
+import RuleBuff from "./RuleBuff";
+
+function notifyBuffs(buff) {
+    RuleCharacterChangesBean.addBuffModification(buff.targetId, buff.toJson());
+}
+
+function notifyDeletion(buff) {
+    RuleCharacterChangesBean.addBuffModification(buff.targetId, buff.toJson(true));
+}
+
 
 export default class RuleState {
-    static doRage(character) {
-        const buff = new RuleBuff(RuleBuffConstants.RAGE, character);
-        const strEffect = new RuleEffect(RuleConstants.STAT_STRENGTH, 4);
-        const dexEffect = new RuleEffect(RuleConstants.STAT_DEXTERITY, 4);
+    /**
+     * @param {RuleActions} action
+     */
+    static doRage(action) {
+        const buff = new RuleBuff(RuleBuffConstants.RAGE);
+        // TODO add duration
+        buff.gameObject = action.performerObject;
+        const buffs = buff.gameObject.buffs;
         buff.onCreate = () => {
-            character.addEffect(strEffect);
-            character.addEffect(dexEffect);
+            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_STRENGTH, 4);
+            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_DEXTERITY, 4);
+            notifyBuffs(buff);
+            buff.gameObject.recalculate();
         };
         buff.onEnd = () => {
-            character.removeEffect(strEffect);
-            character.removeEffect(dexEffect);
-            RuleState.doFatigue(character);
+            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_STRENGTH, -4);
+            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_DEXTERITY, -4);
+            notifyDeletion(buff);
+            RuleState.doFatigue(action);
         };
-        character.buffs.add(buff);
+        buffs.addDM(buff);
     }
 
-    static doFatigue(character) {
-        const buff = new RuleBuff(RuleBuffConstants.FATIGUE, character);
+    /**
+     * @param {RuleActions} action
+     * @param {RuleBuff} buff
+     */
+    static doFatigue(action, buff) {
+        // TODO add duration
+        buff.gameObject = action.performerObject;
+        const buffs = buff.gameObject.buffs;
         const strEffect = new RuleEffect(RuleConstants.STAT_STRENGTH, -2);
         const dexEffect = new RuleEffect(RuleConstants.STAT_DEXTERITY, -2);
         buff.onCreate = () => {
-            character.addEffect(strEffect);
-            character.addEffect(dexEffect);
+            buffs.addEffect(strEffect);
+            buffs.addEffect(dexEffect);
         };
         buff.onEnd = () => {
-            character.removeEffect(strEffect);
-            character.removeEffect(dexEffect);
+            buffs.removeEffect(strEffect);
+            buffs.removeEffect(dexEffect);
         };
-        character.buffs.add(buff);
+        buffs.add(buff);
+        notifyBuffs(action, buff);
     }
 
-    static doFightingDefensively(character) {
-        const buff = new RuleBuff(RuleBuffConstants.FIGHTING_DEFENSIVELY, character);
-        const ranks = character.get("ranks_acrobatics");
+    /**
+     * @param {RuleActions} action
+     * @param {RuleBuff} buff
+     */
+    static doFightingDefensively(action, buff) {
+        buff.duration = 1;
+        buff.gameObject = action.performerObject;
+        const buffs = buff.gameObject.buffs;
+        const ranks = buff.gameObject.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS);
         const acEffect = new RuleEffect(RuleConstants.DODGE, ranks >= 3 ? 3 : 2);
         const attackEffect = new RuleEffect(RuleConstants.MODIFIER_ATTACK, -4);
         buff.onCreate = () => {
-            character.addEffect(acEffect);
-            character.addEffect(attackEffect);
+            buffs.addEffect(acEffect);
+            buffs.addEffect(attackEffect);
         };
         buff.onEnd = () => {
-            character.removeEffect(acEffect);
-            character.removeEffect(attackEffect);
+            buffs.removeEffect(acEffect);
+            buffs.removeEffect(attackEffect);
         };
-        character.buffs.add(buff);
+        buffs.add(buff);
+        notifyBuffs(action, buff);
     }
 
-    /** @param {RuleActions} action */
+    /**
+     * @param {RuleActions} action
+     */
     static doTotalDefenceState(action) {
-        const object = action.performerObject;
         const buff = new RuleBuff(RuleBuffConstants.TOTAL_DEFENSE);
-        buff.gameObject = object;
-        const ranks = object.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS);
-        const acEffect = new RuleEffect(RuleConstants.DODGE, ranks >= 3 ? 6 : 4);
-        buff.onCreate = () => object.buffs.addEffect(acEffect);
-        buff.onEnd = () => object.buffs.removeEffect(acEffect);
-        action.performerObject.buffs.add(buff);
+        buff.duration = 1;
+        buff.setTarget(action.performerObject);
+        const buffs = buff.gameObject.buffs;
+        const ranks = buff.gameObject.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS);
+        const acEffect = ranks >= 3 ? 6 : 4;
+        buff.onCreate = () =>  {
+            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, acEffect);
+            notifyBuffs(buff);
+            buff.gameObject.recalculate();
+        };
+        buff.onEnd = () => {
+            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, -acEffect);
+            notifyDeletion(buff);
+            buff.gameObject.recalculate();
+        };
+        buffs.addDM(buff);
     }
 }

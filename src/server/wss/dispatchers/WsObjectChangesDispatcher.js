@@ -25,12 +25,25 @@ export async function onGameObjectChange(objects, ws) {
             if (!db.data) db.data = {};
             Object.keys(mod.data).forEach(key => {
                 if (key !== "_id") {
-                    db.data[key] = mod.data[key]
+                    if (typeof db.data[key] === "number") {
+                        db.data[key] += mod.data[key]
+                    } else {
+                        db.data[key] = mod.data[key]
+                    }
                 }
             });
         }
         if (mod.position) db.position = mod.position;
-        if (mod.buffs) db.buffs = mod.buffs;
+        if (!db.buffs) db.buffs = {};
+        if (mod.buffs) {
+            Object.values(mod.buffs).forEach(buff => {
+                if (buff.duration === 0) {
+                    delete db.buffs[buff.key];
+                } else {
+                    db.buffs[buff.key] = buff;
+                }
+            });
+        }
         if (mod.initiative) db.initiative = mod.initiative;
         if (mod.name) db.name = mod.name;
         await MongoController.update(GameObjectDB.DB_NAME, {"_id": db._id}, db);

@@ -45,7 +45,14 @@ export default class RuleRound {
 
     finish() {
         this.stack.forEach(obj => obj.actionList.executeActions());
-        this.stack.forEach(obj => obj.gameObject.ruleCharacter.recalculate());
+        this.stack.forEach(obj => obj.gameObject.recalculate());
+    }
+
+    turnBuffs() {
+        this.stack.forEach(obj =>  {
+            obj.gameObject.buffs.turn();
+            obj.gameObject.recalculate();
+        });
     }
 
     reset() {

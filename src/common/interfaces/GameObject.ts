@@ -9,6 +9,6 @@ export interface GameObject {
     initiative: number;
     data: object;
     name: string;
-    buffs: Array<string>
+    buffs: object;
     icon: string;
 }

@@ -2,10 +2,10 @@
  * Created by LastBerserk on 23.02.2020.
  */
 
-import RuleDefaultValues from "./RuleDefaultValues";
 import MovePointController from "../logic/MovePointController";
 import RuleBuffController from "./RuleBuffController";
 import * as RuleImplementation from "./impl/RuleImplementation";
+import RuleGameObjectConstants from "./constants/RuleGameObjectConstants";
 
 export default class RuleGameObject {
     constructor(id) {
@@ -14,6 +14,7 @@ export default class RuleGameObject {
         this.character_id = "";
         this.initiative = 0;
         this.data = {};
+        this.isAlive = true;
         this.name = "";
         this.buffs = new RuleBuffController(this);
         this.icon = "";
@@ -25,10 +26,6 @@ export default class RuleGameObject {
         this.ruleCharacter = null;
     }
 
-    finish() {
-        this.buffs.turn();
-    }
-
     /** @return {{}} */
     toJson() {
         return {
@@ -38,7 +35,7 @@ export default class RuleGameObject {
             initiative: this.initiative,
             data: this.data,
             name: this.name,
-            //buffs: this.buffs
+            buffs: this.buffs.toJson()
         };
     }
 
@@ -53,16 +50,29 @@ export default class RuleGameObject {
     set(key, val) {
         let charVal = this.ruleCharacter.get(key);
         if (typeof charVal === "number") {
-            if (this.calculatedData[key] === "number") {
-                charVal += this.calculatedData[key] + this.buffs.getBuffBonus(key);
-            } else {
-                charVal += this.buffs.getBuffBonus(key);
-            }
+            if (typeof this.data[key] === "number") charVal += this.data[key];
             this.calculatedData[key] = val + charVal;
         } else {
             this.calculatedData[key] = val;
         }
+    }
 
+    addModification(key, val) {
+        if (key === "_id" || key === "id") return;
+        if (typeof this.data[key] === "number") {
+            this.data[key] += val;
+            if (this.data[key] === 0) delete this.data[key];
+        } else {
+            this.data[key] = val;
+        }
+    }
+
+    dealDamage(val, isNonLethal) {
+        if (isNonLethal) {
+            this.data[RuleGameObjectConstants.NONLETHAL_DAMAGE] += val;
+        } else {
+            this.data[RuleGameObjectConstants.LETHAL_DAMAGE] += val;
+        }
     }
 
     reset() {
@@ -84,13 +94,12 @@ export default class RuleGameObject {
 
     /**
      * @param {GameObject} json
-     * @param {object} loader
      * @return RuleGameObject
      */
-    static fromJson(json, loader) {
+    static fromJson(json) {
         const obj = new RuleGameObject();
         if (json.name) obj.name = json.name;
-        //if (json.buffs) obj.buffs = json.buffs;
+        if (json.buffs) obj.buffs.processJson(json.buffs);
         if (json.data) Object.keys(json.data).forEach(key => obj.data[key] = json.data[key]);
         if (json.initiative) obj.initiative = json.initiative;
         if (json.icon) obj.icon = json.icon;

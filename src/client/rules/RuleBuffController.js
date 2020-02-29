@@ -50,14 +50,18 @@ export default class RuleBuffController {
 
     add(buff) {
         if (!buff instanceof RuleBuff) throw new Error("Object passed isn't buff.");
+        buff.ruleCharacter = this.ruleCharacter;
+        this.buffs[buff.key] = buff;
+    }
+
+    addDM(buff) {
         const oldBuff = this.getBuff(buff.key);
         if (oldBuff) {
-            oldBuff.onRenew();
+            oldBuff.onRenew(oldBuff);
         } else {
-            buff.ruleCharacter = this.ruleCharacter;
-            this.buffs[buff.key] = buff;
+            buff.onCreate(buff);
         }
-        buff.onCreate(this);
+        this.add(buff);
     }
 
     removeByKey(str) {
@@ -66,11 +70,33 @@ export default class RuleBuffController {
     }
 
     remove(buff) {
-        buff.onEnd();
         delete this.buffs[buff.key];
     }
 
     turn() {
-        Object.values(this.buffs).forEach(item => item.onTurn());
+        Object.values(this.buffs).forEach(item => {
+            item.onTurn(item);
+            if (item.duration !== -1) item.duration -= 1;
+            if (item.duration === 0) {
+                item.onEnd(item);
+                this.remove(item);
+            }
+        });
+    }
+
+    toJson() {
+        return Object.values(this.buffs).map(val => val.toJson())
+    }
+
+    processJson(json) {
+        if (typeof json !== "object") throw new Error("Malformed json in RuleBuffController.");
+        Object.values(json).forEach(obj => {
+            const buff = RuleBuff.fromJson(obj, this.ruleCharacter);
+            if (buff.duration === 0) {
+                this.remove(buff);
+            } else {
+                this.add(buff)
+            }
+        });
     }
 }

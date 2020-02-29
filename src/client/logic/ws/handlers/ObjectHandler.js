@@ -16,14 +16,13 @@ export function handleObjectChange(message) {
         const mod = bean.mod;
         if (mod.data) {
             if (!object.data) db.mod = {};
-            Object.keys(mod.data).forEach(key => {
-                if (key !== _id) {
-                    object.data[key] = object.data[key]
-                }
-            });
+            Object.keys(mod.data).forEach(key => object.addModification(key, mod.data[key]));
         }
-        if (mod.position) object.position = mod.position;
-        if (mod.buffs) object.buffs = mod.buffs;
+        if (mod.position) {
+            object.position = mod.position;
+            object.movePoints.setStartingPoint(Object.assign({}, mod.position));
+        }
+        if (mod.buffs) object.buffs.processJson(mod.buffs);
         if (mod.initiative) object.initiative = mod.initiative;
         if (mod.name) object.name = mod.name;
     });

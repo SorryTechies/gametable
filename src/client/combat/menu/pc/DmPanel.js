@@ -10,7 +10,8 @@ import StaticController from "../../../static/StaticController";
 export default class DmPanel extends React.Component {
     render() {
         return <div className={`${rootScss.static_element} ${rootScss.combat_menu}`}>
-            <button onClick={StaticController.finishRound.bind(null)}>NEXT_ROUND</button>
+            <button onClick={StaticController.finishRound}>NEXT_ROUND</button>
+            <button onClick={StaticController.turnBuffs}>TURN_BUFFS</button>
         </div>
     }
 }
