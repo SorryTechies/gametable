@@ -7,6 +7,7 @@ import MongoController from "../../mongo/MongoController";
 import WebSocketUser from "../WebSocketUser";
 import WebSocketMessage from "../../../common/logic/WebSocketMessage";
 import GameSessionDB from "../../mongo/classes/GameSessionDB";
+import {handleCharacterChange} from "../../../common/logic/ws/WsCharacterChangeProcessor";
 
 export async function onCharacterUpdate(characters, ws) {
     let sessions = [];
@@ -14,11 +15,7 @@ export async function onCharacterUpdate(characters, ws) {
         const character = characters[i];
         const db = await CharacterDB.getById(character._id);
         if (!db) throw new Error("No character with id " + character._id + " found.");
-        Object.keys(character).forEach(key => {
-            if (key !== "_id") {
-                db.data[key] = character[key]
-            }
-        });
+        handleCharacterChange(db, character);
         await MongoController.update(CharacterDB.DB_NAME, {"_id": db._id}, db);
         sessions = sessions.concat(await GameSessionDB.findSessionsByCharacter(character._id));
     }

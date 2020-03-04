@@ -8,6 +8,7 @@ export default class RuleCharacter {
     constructor(character) {
         this.id = character._id;
         this.name = character.name;
+        this.feats = Array.isArray(character.feats) ? character.feats : [];
         if (character.data) {
             this.data = character.data;
         } else {

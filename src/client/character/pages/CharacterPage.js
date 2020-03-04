@@ -42,7 +42,7 @@ export default class CharacterPage extends React.Component {
         this.state.character.set(key, v);
         BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_CHARACTER, [{
             _id: this.state.character.id,
-            [key]: v
+            data: {[key]: v}
         }]));
         this.state.gameObject.recalculate();
         this.forceUpdate();
