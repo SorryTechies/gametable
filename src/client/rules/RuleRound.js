@@ -28,7 +28,7 @@ export default class RuleRound {
     }
 
     /**
-     * @param {RuleActions} action
+     * @param {RuleAction} action
      */
     addAction(action) {
         this.getObject(action.performerId).actionList.addAction(action);
@@ -36,7 +36,7 @@ export default class RuleRound {
     }
 
     /**
-     * @param {RuleActions} action
+     * @param {RuleAction} action
      */
     removeAction(action) {
         this.getObject(action.performerId).actionList.removeAction(action);

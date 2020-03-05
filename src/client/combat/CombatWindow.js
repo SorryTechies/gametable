@@ -34,7 +34,7 @@ export default class CombatWindow extends React.Component {
             objects: [],
             /** @type RuleGameObject */
             objectSelected: null,
-            /** @type RuleActions */
+            /** @type RuleAction */
             clickRuleAction: null,
             clickTarget: null,
             statusBar: null,

@@ -20,7 +20,7 @@ function notifyDeletion(buff) {
 
 export default class RuleState {
     /**
-     * @param {RuleActions} action
+     * @param {RuleAction} action
      */
     static doRage(action) {
         const buff = new RuleBuff(RuleBuffConstants.RAGE);
@@ -43,7 +43,7 @@ export default class RuleState {
     }
 
     /**
-     * @param {RuleActions} action
+     * @param {RuleAction} action
      * @param {RuleBuff} buff
      */
     static doFatigue(action, buff) {
@@ -65,7 +65,7 @@ export default class RuleState {
     }
 
     /**
-     * @param {RuleActions} action
+     * @param {RuleAction} action
      * @param {RuleBuff} buff
      */
     static doFightingDefensively(action, buff) {
@@ -88,7 +88,7 @@ export default class RuleState {
     }
 
     /**
-     * @param {RuleActions} action
+     * @param {RuleAction} action
      */
     static doTotalDefenceState(action) {
         const buff = new RuleBuff(RuleBuffConstants.TOTAL_DEFENSE);

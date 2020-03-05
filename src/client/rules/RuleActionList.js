@@ -12,7 +12,7 @@ export default class RuleActionList {
     }
 
     addAction(action) {
-        if (!action instanceof RuleActions) throw new Error("Action isn't instance of RuleActions");
+        if (!action instanceof RuleActions) throw new Error("Action isn't instance of RuleAction");
         this.list.push(action);
     }
 

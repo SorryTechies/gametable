@@ -2,7 +2,7 @@
  * Created by LastBerserk on 11.02.2020.
  */
 
-/** @type {Array<{id: string, actions: Array<RuleActions>, timeout: number}>} */
+/** @type {Array<{id: string, actions: Array<RuleAction>, timeout: number}>} */
 const data = [];
 
 const DEFAULT_CLEANUP_TIMEOUT = 60 * 60 * 1000;

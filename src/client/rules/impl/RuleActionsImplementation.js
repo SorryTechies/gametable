@@ -9,6 +9,7 @@ import CheckDice from "../../logic/roll/CheckDice";
 import DamageDice from "../../logic/roll/DamageDice";
 import RuleState from "../RuleState";
 import StaticController from "../../static/StaticController";
+import {calculateAttack} from "./RuleCommonImpl";
 
 function getStrAttackRoll(character) {
     const roll = new CheckDice();
@@ -30,6 +31,7 @@ export const doTotalDefence = action => {
 };
 export const doAttack = action => {
     const obj = action.targetObject;
+    const attack = calculateAttack(action);
     const damage = 1;
     obj.dealDamage(damage);
     StaticController.sendActionDescription(

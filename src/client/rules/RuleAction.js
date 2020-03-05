@@ -9,7 +9,7 @@ import {implementation, validation} from "./RuleActionKeyToImpl";
 import * as RuleLoader from "./RuleLoader";
 
 function findType(key) {
-    const type = Object.keys(RuleActions.ACTION_TYPE_OBJECT).find(item => RuleActions.ACTION_TYPE_OBJECT[item].includes(key));
+    const type = Object.keys(RuleAction.ACTION_TYPE_OBJECT).find(item => RuleAction.ACTION_TYPE_OBJECT[item].includes(key));
     if (type) return type;
     throw new Error(`Type ${key} isn't found.`);
 }
@@ -19,13 +19,13 @@ function actionKeyToTarget(key) {
         case RuleActionsConstants.MOVE:
         case RuleActionsConstants.SPRINT:
         case RuleActionsConstants.FIVE_FOOT_STEP:
-            return RuleActions.TARGET_TYPE.GROUND;
+            return RuleAction.TARGET_TYPE.GROUND;
         case RuleActionsConstants.ATTACK:
         case RuleActionsConstants.CHARGE:
         case RuleActionsConstants.CAST_SPELL:
-            return RuleActions.TARGET_TYPE.UNIT;
+            return RuleAction.TARGET_TYPE.UNIT;
         default:
-            return RuleActions.TARGET_TYPE.NONE;
+            return RuleAction.TARGET_TYPE.NONE;
     }
 }
 
@@ -41,7 +41,7 @@ function isRepositioning(key) {
     }
 }
 
-export default class RuleActions {
+export default class RuleAction {
     constructor(key, id) {
         this.key = key;
         this.isHidden = false;
@@ -68,12 +68,12 @@ export default class RuleActions {
     setTarget(type, data) {
         if (this.targetType === type) {
             switch (this.targetType) {
-                case RuleActions.TARGET_TYPE.UNIT:
+                case RuleAction.TARGET_TYPE.UNIT:
                     if (typeof data !== "object") throw new Error("No game object provided.");
                     this.targetObject = data;
                     this.target = data.id;
                     break;
-                case RuleActions.TARGET_TYPE.GROUND:
+                case RuleAction.TARGET_TYPE.GROUND:
                     this.target = data;
                     break;
             }
@@ -104,13 +104,13 @@ export default class RuleActions {
 
     /**
      * @param {object} json - json object
-     * @return {RuleActions}
+     * @return {RuleAction}
      */
     static fromJson(json) {
-        const obj = new RuleActions(json.key, json.id);
+        const obj = new RuleAction(json.key, json.id);
         obj.isHidden = json.isHidden;
         obj.setPerformer(RuleLoader.getLoader().getObject(json.performerId));
-        if (obj.targetType === RuleActions.TARGET_TYPE.UNIT) {
+        if (obj.targetType === RuleAction.TARGET_TYPE.UNIT) {
             obj.setTarget(obj.targetType, RuleLoader.getLoader().getObject(json.target));
         } else {
             obj.setTarget(obj.targetType, json.target);
@@ -142,22 +142,22 @@ export default class RuleActions {
     }
 }
 
-RuleActions.TARGET_TYPE = {
+RuleAction.TARGET_TYPE = {
     GROUND: "ground",
     UNIT: "unit",
     NONE: "none"
 };
 
-RuleActions.MOVE_ACTIONS = [
+RuleAction.MOVE_ACTIONS = [
     RuleActionsConstants.MOVE
 ];
 
-RuleActions.STANDARD_ACTIONS = [
+RuleAction.STANDARD_ACTIONS = [
     RuleActionsConstants.ATTACK,
     RuleActionsConstants.CAST_SPELL
 ];
 
-RuleActions.FULL_ROUND_ACTIONS = [
+RuleAction.FULL_ROUND_ACTIONS = [
     RuleActionsConstants.CHARGE,
     RuleActionsConstants.SPRINT,
     RuleActionsConstants.FULL_ROUND_ATTACK,
@@ -165,19 +165,19 @@ RuleActions.FULL_ROUND_ACTIONS = [
     RuleActionsConstants.TOTAL_DEFENCE
 ];
 
-RuleActions.FREE_ACTIONS = [
+RuleAction.FREE_ACTIONS = [
     RuleActionsConstants.FIVE_FOOT_STEP
 ];
 
-RuleActions.IMMEDIATE_ACTION = [];
+RuleAction.IMMEDIATE_ACTION = [];
 
-RuleActions.SWIFT_ACTION = [];
+RuleAction.SWIFT_ACTION = [];
 
-RuleActions.ACTION_TYPE_OBJECT = {
-    [RuleTypes.TYPE_MOVE]: RuleActions.MOVE_ACTIONS,
-    [RuleTypes.TYPE_STANDARD]: RuleActions.STANDARD_ACTIONS,
-    [RuleTypes.TYPE_FULL_ROUND]: RuleActions.FULL_ROUND_ACTIONS,
-    [RuleTypes.TYPE_FREE]: RuleActions.FREE_ACTIONS,
-    [RuleTypes.TYPE_IMMEDIATE]: RuleActions.IMMIDIATE_ACTION,
-    [RuleTypes.TYPE_SWIFT]: RuleActions.SWIFT_ACTION
+RuleAction.ACTION_TYPE_OBJECT = {
+    [RuleTypes.TYPE_MOVE]: RuleAction.MOVE_ACTIONS,
+    [RuleTypes.TYPE_STANDARD]: RuleAction.STANDARD_ACTIONS,
+    [RuleTypes.TYPE_FULL_ROUND]: RuleAction.FULL_ROUND_ACTIONS,
+    [RuleTypes.TYPE_FREE]: RuleAction.FREE_ACTIONS,
+    [RuleTypes.TYPE_IMMEDIATE]: RuleAction.IMMIDIATE_ACTION,
+    [RuleTypes.TYPE_SWIFT]: RuleAction.SWIFT_ACTION
 };

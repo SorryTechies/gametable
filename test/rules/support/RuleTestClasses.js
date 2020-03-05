@@ -30,6 +30,6 @@ export const getTestObject = char => {
 
 /**
  * @param {string} key
- * @return {RuleActions}
+ * @return {RuleAction}
  */
 export const getTestAction = key => new RuleActions(key);

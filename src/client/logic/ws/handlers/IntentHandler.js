@@ -7,7 +7,7 @@ import WebSocketMessage from "../../../../common/logic/WebSocketMessage";
 import RuleActions from "../../../rules/RuleAction";
 
 function handleNewIntent(message, func) {
-    /** @type RuleActions */
+    /** @type RuleAction */
     const action = message.data;
     const game_id = message.game_id;
     if (!game_id) throw new Error("No game id provided.");
