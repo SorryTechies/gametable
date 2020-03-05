@@ -10,6 +10,10 @@ export default {
         [RuleFeatsConstants.AXE_TO_GRIND]: {
             name: "Axe to grind",
             description: "You gain a +1 trait bonus on damage against foes who are threatened by only you."
-        }
+        },
+        [RuleFeatsConstants.CARETAKER]: {
+            name: "Caretaker",
+            description: "You gain a +1 trait bonus on Heal checks, and Heal is always a class skill for you."
+        },
     }
 };

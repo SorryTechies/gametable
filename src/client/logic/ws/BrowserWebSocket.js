@@ -7,6 +7,7 @@ import WebSocketMessage from "../../../common/logic/WebSocketMessage";
 import * as IntentHandler from "./handlers/IntentHandler";
 import LoginController from "../LoginController";
 import * as ObjectHandler from "./handlers/ObjectHandler";
+import * as BrowserCharacterHandler from "./handlers/BrowserCharacterHandler";
 
 let ws = null;
 let timeout = null;
@@ -67,7 +68,7 @@ export default class BrowserWebSocket {
                     case WebSocketMessage.TYPE_OBJECT:
                         return ObjectHandler.handleObjectChange(message);
                     case WebSocketMessage.TYPE_CHARACTER:
-                        return; //TODO
+                        return BrowserCharacterHandler.handle(message);
                 }
             } catch (e) {
                 console.log(e);

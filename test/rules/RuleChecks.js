@@ -8,6 +8,11 @@ import {doTotalDefence} from "../../src/client/rules/impl/RuleActionsImplementat
 import RuleConstants from "../../src/client/rules/RuleConstants";
 import TestWrapper from "../TestWrapper";
 import * as assert from "assert";
+import * as RuleLoader from "../../src/client/rules/RuleLoader";
+
+RuleLoader.setLoader({
+    sendActionDescription: () => {}
+});
 
 export const SimpleCharacterDataTest = TestWrapper.wrap("SimpleCharacterDataTest",
     (async () => {

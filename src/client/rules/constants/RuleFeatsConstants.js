@@ -3,5 +3,6 @@
  */
 
 export default {
-    AXE_TO_GRIND: "axe_ro_grind"
+    AXE_TO_GRIND: "axe_ro_grind",
+    CARETAKER: "caretaker"
 };

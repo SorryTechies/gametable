@@ -3,5 +3,11 @@
  */
 
 let loader = null;
+/**
+ * @param {{}} l
+ */
 export const setLoader = l => loader = l;
+/**
+ * @return {{}}
+ */
 export const getLoader = () => loader;
