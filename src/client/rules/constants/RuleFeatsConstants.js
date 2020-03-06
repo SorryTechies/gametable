@@ -4,5 +4,6 @@
 
 export default {
     AXE_TO_GRIND: "axe_ro_grind",
-    CARETAKER: "caretaker"
+    CARETAKER: "caretaker",
+    COMBAT_EXPERTISE: "combat_expertise"
 };

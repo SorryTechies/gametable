@@ -2,11 +2,11 @@
  * Created by LastBerserk on 27.02.2020.
  */
 
-import {getTestCharacter, getTestObject} from "../support/RuleTestClasses";
-import TestWrapper from "../../TestWrapper";
-import RuleConstants from "../../../src/client/rules/RuleConstants";
+import {getTestCharacter, getTestObject} from "../../support/RuleTestClasses";
+import TestWrapper from "../../../TestWrapper";
+import RuleConstants from "../../../../src/client/rules/RuleConstants";
 import * as assert from "assert";
-import RuleSkillConstants from "../../../src/client/rules/constants/RuleSkillConstants";
+import RuleSkillConstants from "../../../../src/client/rules/constants/RuleSkillConstants";
 
 export const SimpleSkillTest = TestWrapper.wrap("SimpleSkillTest",
     (async () => {

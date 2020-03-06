@@ -97,7 +97,7 @@ export default class RuleGameObject {
      * @return RuleGameObject
      */
     static fromJson(json) {
-        const obj = new RuleGameObject();
+        const obj = new RuleGameObject(json._id);
         if (json.name) obj.name = json.name;
         if (json.buffs) obj.buffs.processJson(json.buffs);
         if (json.data) Object.keys(json.data).forEach(key => obj.data[key] = json.data[key]);

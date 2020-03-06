@@ -2,11 +2,10 @@
  * Created by LastBerserk on 19.01.2020.
  */
 
-export default class RuleBuffConstants {
-    
+export default {
+    RAGE: "rage",
+    FATIGUE: "fatigue",
+    TOTAL_DEFENSE: "total_def",
+    COMBAT_EXPERTISE: "combat_expertise",
+    FIGHTING_DEFENSIVELY: "fight_def"
 }
-
-RuleBuffConstants.RAGE = "rage";
-RuleBuffConstants.FATIGUE = "fatigue";
-RuleBuffConstants.TOTAL_DEFENSE = "total_def";
-RuleBuffConstants.FIGHTING_DEFENSIVELY = "fight_def";

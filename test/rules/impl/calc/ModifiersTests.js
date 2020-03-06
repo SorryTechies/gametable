@@ -2,9 +2,9 @@
  * Created by LastBerserk on 27.02.2020.
  */
 
-import {getTestCharacter, getTestObject} from "../support/RuleTestClasses";
-import TestWrapper from "../../TestWrapper";
-import RuleConstants from "../../../src/client/rules/RuleConstants";
+import {getTestCharacter, getTestObject} from "../../support/RuleTestClasses";
+import TestWrapper from "../../../TestWrapper";
+import RuleConstants from "../../../../src/client/rules/RuleConstants";
 import * as assert from "assert";
 
 export const SimpleModifierTest = TestWrapper.wrap("SimpleModifierTest",

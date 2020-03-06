@@ -7,6 +7,7 @@ import * as Impl from "./impl/RuleActionsImplementation";
 import * as Val from "./impl/RuleActionValidationImpl";
 import RuleSpellNames from "./constants/RuleSpellNames";
 import RuleState from "./RuleState";
+import RuleBuffConstants from "./constants/RuleBuffConstants";
 
 export const implementation = {
     [RuleActionsConstants.MOVE]: Impl.doMove,
@@ -15,6 +16,14 @@ export const implementation = {
     [RuleActionsConstants.TOTAL_DEFENCE]: RuleState.doTotalDefenceState,
     [RuleActionsConstants.CAST_SPELL]: {
         [RuleSpellNames.SHOCKING_GRASP]: Impl.doShockGrasp
+    },
+    [RuleActionsConstants.ACTIVATE_STATE]: {
+        [RuleBuffConstants.COMBAT_EXPERTISE]: RuleState.activateCombatExpertise,
+        [RuleBuffConstants.FIGHTING_DEFENSIVELY]: RuleState.noValidation,
+    },
+    [RuleActionsConstants.DEACTIVATE_STATE]: {
+        [RuleBuffConstants.COMBAT_EXPERTISE]: RuleState.removeStateAction,
+        [RuleBuffConstants.FIGHTING_DEFENSIVELY]: RuleState.removeStateAction,
     }
 };
 
@@ -25,5 +34,13 @@ export const validation = {
     [RuleActionsConstants.TOTAL_DEFENCE]: Val.noValidation,
     [RuleActionsConstants.CAST_SPELL]: {
         [RuleSpellNames.SHOCKING_GRASP]: Val.touchCheck
+    },
+    [RuleActionsConstants.ACTIVATE_STATE]: {
+        [RuleBuffConstants.COMBAT_EXPERTISE]: Val.noValidation,
+        [RuleBuffConstants.FIGHTING_DEFENSIVELY]: Val.noValidation,
+    },
+    [RuleActionsConstants.DEACTIVATE_STATE]: {
+        [RuleBuffConstants.COMBAT_EXPERTISE]: Val.noValidation,
+        [RuleBuffConstants.FIGHTING_DEFENSIVELY]: Val.noValidation,
     }
 };

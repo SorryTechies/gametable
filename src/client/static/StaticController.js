@@ -40,6 +40,7 @@ function linkCharacters() {
         const char = characters.find(char => obj.character_id === char.id);
         if (char) obj.ruleCharacter = char;
         RuleDefaultValues.setDefaultObjectValues(obj);
+        obj.buffs.mountBuffs();
         obj.recalculate();
     });
 }

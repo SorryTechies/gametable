@@ -8,6 +8,7 @@ import RuleSkillConstants from "./constants/RuleSkillConstants";
 import RuleCharacterChangesBean from "./RuleCharacterChangesBean";
 import RuleBuffConstants from "./constants/RuleBuffConstants";
 import RuleBuff from "./RuleBuff";
+import {combatExpertiseImpl, fightingDefensively, totalDefenceImpl} from "./impl/RuleBuffImpl";
 
 function notifyBuffs(buff) {
     RuleCharacterChangesBean.addBuffModification(buff.targetId, buff.toJson());
@@ -64,49 +65,36 @@ export default class RuleState {
         notifyBuffs(action, buff);
     }
 
-    /**
-     * @param {RuleAction} action
-     * @param {RuleBuff} buff
-     */
-    static doFightingDefensively(action, buff) {
-        buff.duration = 1;
-        buff.gameObject = action.performerObject;
-        const buffs = buff.gameObject.buffs;
-        const ranks = buff.gameObject.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS);
-        const acEffect = new RuleEffect(RuleConstants.DODGE, ranks >= 3 ? 3 : 2);
-        const attackEffect = new RuleEffect(RuleConstants.MODIFIER_ATTACK, -4);
-        buff.onCreate = () => {
-            buffs.addEffect(acEffect);
-            buffs.addEffect(attackEffect);
-        };
-        buff.onEnd = () => {
-            buffs.removeEffect(acEffect);
-            buffs.removeEffect(attackEffect);
-        };
-        buffs.add(buff);
-        notifyBuffs(action, buff);
-    }
-
-    /**
-     * @param {RuleAction} action
-     */
+    /** @param {RuleAction} action */
     static doTotalDefenceState(action) {
         const buff = new RuleBuff(RuleBuffConstants.TOTAL_DEFENSE);
         buff.duration = 1;
         buff.setTarget(action.performerObject);
-        const buffs = buff.gameObject.buffs;
-        const ranks = buff.gameObject.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS);
-        const acEffect = ranks >= 3 ? 6 : 4;
-        buff.onCreate = () =>  {
-            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, acEffect);
-            notifyBuffs(buff);
-            buff.gameObject.recalculate();
-        };
-        buff.onEnd = () => {
-            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, -acEffect);
-            notifyDeletion(buff);
-            buff.gameObject.recalculate();
-        };
-        buffs.addDM(buff);
+        totalDefenceImpl(buff);
+        buff.gameObject.buffs.addDM(buff);
+    }
+
+    /** @param {RuleAction} action */
+    static activateCombatExpertise(action) {
+        const buff = new RuleBuff(RuleBuffConstants.COMBAT_EXPERTISE);
+        buff.setTarget(action.performerObject);
+        combatExpertiseImpl(buff);
+        buff.gameObject.buffs.addDM(buff);
+    }
+
+    /** param {RuleAction} action */
+    static activateFightingDefensively(action) {
+        const buff = new RuleBuff(RuleBuffConstants.FIGHTING_DEFENSIVELY);
+        buff.setTarget(action.performerObject);
+        fightingDefensively(buff);
+        buff.gameObject.buffs.addDM(buff);
+    }
+
+    static removeState(target, key) {
+        target.buffs.removeDmByKey(key);
+    }
+
+    static removeStateAction(action) {
+        RuleState.removeState(action.performerObject, action.additional1);
     }
 }

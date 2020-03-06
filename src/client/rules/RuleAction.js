@@ -7,6 +7,7 @@ import RuleActionsConstants from "./constants/RuleActionsConstants";
 import RuleTypes from "./constants/RuleTypes";
 import {implementation, validation} from "./RuleActionKeyToImpl";
 import * as RuleLoader from "./RuleLoader";
+import * as CONST from "./constants/RuleActionListConstants";
 
 function findType(key) {
     const type = Object.keys(RuleAction.ACTION_TYPE_OBJECT).find(item => RuleAction.ACTION_TYPE_OBJECT[item].includes(key));
@@ -148,36 +149,11 @@ RuleAction.TARGET_TYPE = {
     NONE: "none"
 };
 
-RuleAction.MOVE_ACTIONS = [
-    RuleActionsConstants.MOVE
-];
-
-RuleAction.STANDARD_ACTIONS = [
-    RuleActionsConstants.ATTACK,
-    RuleActionsConstants.CAST_SPELL
-];
-
-RuleAction.FULL_ROUND_ACTIONS = [
-    RuleActionsConstants.CHARGE,
-    RuleActionsConstants.SPRINT,
-    RuleActionsConstants.FULL_ROUND_ATTACK,
-    RuleActionsConstants.FULL_ROUND_SPELL,
-    RuleActionsConstants.TOTAL_DEFENCE
-];
-
-RuleAction.FREE_ACTIONS = [
-    RuleActionsConstants.FIVE_FOOT_STEP
-];
-
-RuleAction.IMMEDIATE_ACTION = [];
-
-RuleAction.SWIFT_ACTION = [];
-
 RuleAction.ACTION_TYPE_OBJECT = {
-    [RuleTypes.TYPE_MOVE]: RuleAction.MOVE_ACTIONS,
-    [RuleTypes.TYPE_STANDARD]: RuleAction.STANDARD_ACTIONS,
-    [RuleTypes.TYPE_FULL_ROUND]: RuleAction.FULL_ROUND_ACTIONS,
-    [RuleTypes.TYPE_FREE]: RuleAction.FREE_ACTIONS,
-    [RuleTypes.TYPE_IMMEDIATE]: RuleAction.IMMIDIATE_ACTION,
-    [RuleTypes.TYPE_SWIFT]: RuleAction.SWIFT_ACTION
+    [RuleTypes.TYPE_MOVE]: CONST.MOVE_ACTIONS,
+    [RuleTypes.TYPE_STANDARD]: CONST.STANDARD_ACTIONS,
+    [RuleTypes.TYPE_FULL_ROUND]: CONST.FULL_ROUND_ACTIONS,
+    [RuleTypes.TYPE_FREE]: CONST.FREE_ACTIONS,
+    [RuleTypes.TYPE_IMMEDIATE]: CONST.IMMEDIATE_ACTION,
+    [RuleTypes.TYPE_SWIFT]: CONST.SWIFT_ACTION
 };

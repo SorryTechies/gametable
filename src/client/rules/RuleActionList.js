@@ -5,10 +5,12 @@
 import RuleActions from "./RuleAction";
 import RuleActionsConstants from "./constants/RuleActionsConstants";
 import RuleTypes from "./constants/RuleTypes";
+import * as CONST from "./constants/RuleActionListConstants";
 
 export default class RuleActionList {
-    constructor() {
+    constructor(object) {
         this.list = [];
+        this.gameObject = object;
     }
 
     addAction(action) {
@@ -44,7 +46,7 @@ export default class RuleActionList {
     }
 
     canMove() {
-        return !this.list.some(item => RuleActionList.REPOSITION_ACTIONS.includes(item.key));
+        return !this.list.some(item => CONST.REPOSITION_ACTIONS.includes(item.key));
     }
 
     canDoSwiftAction() {
@@ -52,12 +54,12 @@ export default class RuleActionList {
     }
 
     getAllowedActionsList() {
-        let ans = RuleActionList.FREE_ACTIONS;
-        if (this.canDoFullRoundAction()) ans = ans.concat(RuleActionList.FULL_ROUND_ACTIONS);
-        if (this.canDoStandardAction()) ans = ans.concat(RuleActionList.STANDARD_ACTIONS);
-        if (this.canDoMoveAction()) ans = ans.concat(RuleActionList.MOVE_ACTIONS);
-        if (this.canDoSwiftAction()) ans = ans.concat(RuleActionList.SWIFT_ACTION);
-        if (!this.canMove()) ans = ans.filter(key => !RuleActionList.MOVE_ACTIONS.includes(key));
+        let ans = CONST.FREE_ACTIONS && CONST.IMMEDIATE_ACTION;
+        if (this.canDoFullRoundAction()) ans = ans.concat(CONST.FULL_ROUND_ACTIONS);
+        if (this.canDoStandardAction()) ans = ans.concat(CONST.STANDARD_ACTIONS);
+        if (this.canDoMoveAction()) ans = ans.concat(CONST.MOVE_ACTIONS);
+        if (this.canDoSwiftAction()) ans = ans.concat(CONST.SWIFT_ACTION);
+        if (!this.canMove()) ans = ans.filter(key => !CONST.MOVE_ACTIONS.includes(key));
         return ans;
     }
 
@@ -69,35 +71,3 @@ export default class RuleActionList {
         this.list.forEach(action => action.reset());
     }
 }
-
-RuleActionList.REPOSITION_ACTIONS = [
-    RuleActionsConstants.MOVE,
-    RuleActionsConstants.CHARGE,
-    RuleActionsConstants.SPRINT,
-    RuleActionsConstants.FIVE_FOOT_STEP
-];
-
-RuleActionList.MOVE_ACTIONS = [
-    RuleActionsConstants.MOVE
-];
-
-RuleActionList.STANDARD_ACTIONS = [
-    RuleActionsConstants.ATTACK,
-    RuleActionsConstants.CAST_SPELL
-];
-
-RuleActionList.FULL_ROUND_ACTIONS = [
-    RuleActionsConstants.CHARGE,
-    RuleActionsConstants.SPRINT,
-    RuleActionsConstants.FULL_ROUND_ATTACK,
-    RuleActionsConstants.FULL_ROUND_SPELL,
-    RuleActionsConstants.TOTAL_DEFENCE
-];
-
-RuleActionList.FREE_ACTIONS = [
-    RuleActionsConstants.FIVE_FOOT_STEP
-];
-
-RuleActionList.IMMIDIATE_ACTION = [];
-
-RuleActionList.SWIFT_ACTION = [];

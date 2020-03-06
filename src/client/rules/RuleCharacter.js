@@ -3,6 +3,8 @@
  */
 
 import RuleDefaultValues from "./RuleDefaultValues";
+import RuleFeatsToState from "./table/RuleFeatsToState";
+import RuleBuffConstants from "./constants/RuleBuffConstants";
 
 export default class RuleCharacter {
     constructor(character) {
@@ -23,5 +25,11 @@ export default class RuleCharacter {
 
     get(key) {
         return this.data[key];
+    }
+
+    getStateList() {
+        const ans = [RuleBuffConstants.FIGHTING_DEFENSIVELY];
+        this.feats.forEach(feat => RuleFeatsToState[feat] ? ans.push(RuleFeatsToState[feat]) : null);
+        return ans;
     }
 }

@@ -12,5 +12,7 @@ export default {
     FULL_ROUND_SPELL: "full_spell",
     FIVE_FOOT_STEP: "5ft",
     NO_ACTION: "no",
-    TOTAL_DEFENCE: "total_def"
+    TOTAL_DEFENCE: "total_def",
+    ACTIVATE_STATE: "activate_state",
+    DEACTIVATE_STATE: "deactivate_state"
 };

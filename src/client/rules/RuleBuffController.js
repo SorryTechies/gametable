@@ -5,6 +5,7 @@
 import RuleBuff from "./RuleBuff";
 import RuleEffectController from "./RuleEffectController";
 import RuleEffect from "./RuleEffect";
+import RuleBuffToImpl from "./table/RuleBuffToImpl";
 
 function getBuffArr(self, type) {
     switch (type) {
@@ -64,6 +65,10 @@ export default class RuleBuffController {
         this.add(buff);
     }
 
+    getDispellableDebuffs() {
+        return Object.values(this.buffs).filter(buff => buff.dispellable);
+    }
+
     removeByKey(str) {
         const buff = this.getBuff(str);
         if (buff) this.remove(buff);
@@ -71,6 +76,16 @@ export default class RuleBuffController {
 
     remove(buff) {
         delete this.buffs[buff.key];
+    }
+
+    removeDM(buff) {
+        buff.onEnd(buff);
+        this.remove(buff);
+    }
+
+    removeDmByKey(key) {
+        const buff = this.buffs[key];
+        if (buff) this.removeDM(buff);
     }
 
     turn() {
@@ -97,6 +112,13 @@ export default class RuleBuffController {
             } else {
                 this.add(buff)
             }
+        });
+    }
+
+    mountBuffs() {
+        Object.values(this.buffs).forEach(buff => {
+            const impl = RuleBuffToImpl[buff.key];
+            if (typeof impl === "function") impl(buff);
         });
     }
 }

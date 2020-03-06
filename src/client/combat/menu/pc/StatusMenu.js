@@ -14,7 +14,6 @@ import RuleActionsConstants from "../../../rules/constants/RuleActionsConstants"
 import RuleConstants from "../../../rules/RuleConstants";
 
 const NO = "no";
-const SPELLS = "spells";
 
 export default class StatusMenu extends React.Component {
     constructor(props) {
@@ -27,7 +26,9 @@ export default class StatusMenu extends React.Component {
         this.action = action;
         switch (action.key) {
             case RuleActionsConstants.CAST_SPELL:
-                return this.setState({nextSelector: SPELLS});
+            case RuleActionsConstants.ACTIVATE_STATE:
+            case RuleActionsConstants.DEACTIVATE_STATE:
+                return this.setState({nextSelector: action.key});
             default:
                 return this.props.doAimAction(action);
         }
@@ -43,8 +44,12 @@ export default class StatusMenu extends React.Component {
 
     getSecondActionList() {
         switch (this.state.nextSelector) {
-            case SPELLS:
-                return StaticController.getCharacter(this.props.unit.character_id).get(RuleConstants.SPELL_ARRAY);
+            case RuleActionsConstants.CAST_SPELL:
+                return this.props.unit.ruleCharacter.get(RuleConstants.SPELL_ARRAY);
+            case RuleActionsConstants.ACTIVATE_STATE:
+                return this.props.unit.ruleCharacter.getStateList();
+            case RuleActionsConstants.DEACTIVATE_STATE:
+                return this.props.unit.buffs.getDispellableDebuffs().map(buff => buff.key);
             default:
                 throw new Error("Cannot find action list for" + this.state.nextSelector);
         }
@@ -52,7 +57,9 @@ export default class StatusMenu extends React.Component {
 
     renderSecondSelector() {
         switch (this.state.nextSelector) {
-            case SPELLS:
+            case RuleActionsConstants.CAST_SPELL:
+            case RuleActionsConstants.ACTIVATE_STATE:
+            case RuleActionsConstants.DEACTIVATE_STATE:
                 return <ActionSelector doAimAction={val1 => {
                     this.action.additional1 = val1;
                     return this.props.doAimAction(this.action);

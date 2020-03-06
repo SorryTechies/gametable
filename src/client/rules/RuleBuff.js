@@ -2,8 +2,6 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-import * as RuleLoader from "./RuleLoader";
-
 export default class RuleBuff {
     constructor(key) {
         if (!key) throw new Error("No buff key provided.");
@@ -12,6 +10,7 @@ export default class RuleBuff {
         this.onTurn = RuleBuff.EMPTY_FUNCTION;
         this.onEnd = RuleBuff.EMPTY_FUNCTION;
         this.onRenew = RuleBuff.EMPTY_FUNCTION;
+        this.dispellable = false;
         this.duration = -1;
         this.additional1 = undefined;
         this.additional2 = undefined;

@@ -4,8 +4,10 @@
 
 import './rules/RuleChecks'
 
-import './rules/impl/ACTests';
-import './rules/impl/CombatManuversTests';
-import './rules/impl/ModifiersTests';
-import './rules/impl/SkillTests';
-import './rules/impl/feats/ClassSkillsFeats';
+import './rules/impl/calc/ACTests';
+import './rules/impl/calc/CombatManuversTests';
+import './rules/impl/calc/ModifiersTests';
+import './rules/impl/calc/SkillTests';
+
+import './rules/impl/feats/ClassSkillsFeatsTest';
+import './rules/impl/feats/CombatExpertiseTest';
