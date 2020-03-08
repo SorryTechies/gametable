@@ -33,8 +33,6 @@ let objects = [];
 let participants = null;
 let music = null;
 
-const LOG_LEVEL = "DEBUG";
-
 function linkCharacters() {
     objects.forEach(obj => {
         const char = characters.find(char => obj.character_id === char.id);

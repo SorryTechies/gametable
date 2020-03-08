@@ -8,6 +8,7 @@ import RuleTypes from "./constants/RuleTypes";
 import {implementation, validation} from "./RuleActionKeyToImpl";
 import * as RuleLoader from "./RuleLoader";
 import * as CONST from "./constants/RuleActionListConstants";
+import * as SUPP from "./constants/RuleActionListSupportConstants";
 
 function findType(key) {
     const type = Object.keys(RuleAction.ACTION_TYPE_OBJECT).find(item => RuleAction.ACTION_TYPE_OBJECT[item].includes(key));
@@ -18,27 +19,15 @@ function findType(key) {
 function actionKeyToTarget(key) {
     switch (key) {
         case RuleActionsConstants.MOVE:
+        case RuleActionsConstants.CHARGE:
         case RuleActionsConstants.SPRINT:
         case RuleActionsConstants.FIVE_FOOT_STEP:
             return RuleAction.TARGET_TYPE.GROUND;
         case RuleActionsConstants.ATTACK:
-        case RuleActionsConstants.CHARGE:
         case RuleActionsConstants.CAST_SPELL:
             return RuleAction.TARGET_TYPE.UNIT;
         default:
             return RuleAction.TARGET_TYPE.NONE;
-    }
-}
-
-function isRepositioning(key) {
-    switch (key) {
-        case RuleActionsConstants.MOVE:
-        case RuleActionsConstants.SPRINT:
-        case RuleActionsConstants.FIVE_FOOT_STEP:
-        case RuleActionsConstants.CHARGE:
-            return true;
-        default:
-            return false;
     }
 }
 
@@ -53,6 +42,8 @@ export default class RuleAction {
         this.target = null;
         this.targetType = actionKeyToTarget(key);
         this.type = findType(key);
+        this.consumeMoveSlot = false;
+        this.consumeStandartSlot = false;
 
         /** @type RuleGameObject */
         this.targetObject = null;
@@ -118,6 +109,8 @@ export default class RuleAction {
         }
         if (json.additional1) obj.additional1 = json.additional1;
         if (json.additional2) obj.additional2 = json.additional2;
+        obj.consumeMoveSlot = json.consumeMoveSlot;
+        obj.consumeStandartSlot = json.consumeStandartSlot;
         return obj;
     }
 
@@ -128,6 +121,8 @@ export default class RuleAction {
             performerId: this.performerId,
             additional1: this.additional1,
             additional2: this.additional2,
+            consumeMoveSlot: this.consumeMoveSlot,
+            consumeStandartSlot: this.consumeStandartSlot,
             id: this.id,
             target: this.target
         };
@@ -139,7 +134,7 @@ export default class RuleAction {
     }
 
     isRepositionAction() {
-        return isRepositioning(this.key);
+        return SUPP.REPOSITION_ACTIONS.includes(this.key);
     }
 }
 

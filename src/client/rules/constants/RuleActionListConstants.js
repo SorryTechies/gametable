@@ -4,28 +4,21 @@
 
 import RuleActionsConstants from "./RuleActionsConstants";
 
-export const REPOSITION_ACTIONS = [
-    RuleActionsConstants.MOVE,
-    RuleActionsConstants.CHARGE,
-    RuleActionsConstants.SPRINT,
-    RuleActionsConstants.FIVE_FOOT_STEP
-];
-
 export const MOVE_ACTIONS = [
-    RuleActionsConstants.MOVE
+    RuleActionsConstants.MOVE,
+    RuleActionsConstants.CHARGE
 ];
 
 export const STANDARD_ACTIONS = [
     RuleActionsConstants.ATTACK,
-    RuleActionsConstants.CAST_SPELL
+    RuleActionsConstants.CAST_SPELL,
+    RuleActionsConstants.TOTAL_DEFENCE
 ];
 
 export const FULL_ROUND_ACTIONS = [
-    RuleActionsConstants.CHARGE,
     RuleActionsConstants.SPRINT,
     RuleActionsConstants.FULL_ROUND_ATTACK,
-    RuleActionsConstants.FULL_ROUND_SPELL,
-    RuleActionsConstants.TOTAL_DEFENCE
+    RuleActionsConstants.FULL_ROUND_SPELL
 ];
 
 export const FREE_ACTIONS = [

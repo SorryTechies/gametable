@@ -11,6 +11,7 @@ import RuleBuffConstants from "./constants/RuleBuffConstants";
 
 export const implementation = {
     [RuleActionsConstants.MOVE]: Impl.doMove,
+    [RuleActionsConstants.CHARGE]: Impl.doCharge,
     [RuleActionsConstants.FIVE_FOOT_STEP]: Impl.doMove,
     [RuleActionsConstants.ATTACK]: Impl.doAttack,
     [RuleActionsConstants.TOTAL_DEFENCE]: RuleState.doTotalDefenceState,
@@ -29,6 +30,7 @@ export const implementation = {
 
 export const validation = {
     [RuleActionsConstants.MOVE]: Val.moveValidation,
+    [RuleActionsConstants.CHARGE]: Val.moveValidation,
     [RuleActionsConstants.FIVE_FOOT_STEP]: Val.fiveFootValidation,
     [RuleActionsConstants.ATTACK]: Val.noValidation,
     [RuleActionsConstants.TOTAL_DEFENCE]: Val.noValidation,

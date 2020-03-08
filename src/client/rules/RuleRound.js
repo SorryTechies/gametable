@@ -5,9 +5,9 @@
 import RuleActionList from "./RuleActionList";
 
 class RoundObject {
-    constructor(character) {
-        this.gameObject = character;
-        this.actionList = new RuleActionList();
+    constructor(gameObject) {
+        this.gameObject = gameObject;
+        this.actionList = new RuleActionList(gameObject);
     }
 }
 

@@ -8,7 +8,7 @@ import RuleSkillConstants from "./constants/RuleSkillConstants";
 import RuleCharacterChangesBean from "./RuleCharacterChangesBean";
 import RuleBuffConstants from "./constants/RuleBuffConstants";
 import RuleBuff from "./RuleBuff";
-import {combatExpertiseImpl, fightingDefensively, totalDefenceImpl} from "./impl/RuleBuffImpl";
+import {chargeBuffImpl, combatExpertiseImpl, fightingDefensively, totalDefenceImpl} from "./impl/RuleBuffImpl";
 
 function notifyBuffs(buff) {
     RuleCharacterChangesBean.addBuffModification(buff.targetId, buff.toJson());
@@ -71,6 +71,15 @@ export default class RuleState {
         buff.duration = 1;
         buff.setTarget(action.performerObject);
         totalDefenceImpl(buff);
+        buff.gameObject.buffs.addDM(buff);
+    }
+
+    /** @param {RuleAction} action */
+    static doChargeState(action) {
+        const buff = new RuleBuff(RuleBuffConstants.CHARGE);
+        buff.duration = 1;
+        buff.setTarget(action.performerObject);
+        chargeBuffImpl(buff);
         buff.gameObject.buffs.addDM(buff);
     }
 

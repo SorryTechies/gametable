@@ -125,7 +125,7 @@ export default class CombatWindow extends React.Component {
                 this.state.clickRuleAction.setTarget(RuleActions.TARGET_TYPE.UNIT, unit);
                 this.clearAim(this.state.clickRuleAction)
             } catch (ignored) {
-                PopupManager.push("Нужно указать юнита.");
+                PopupManager.push("Нужно указать свободную клетку.");
             }
         } else {
             if (this.state.objectSelected) {
@@ -152,8 +152,7 @@ export default class CombatWindow extends React.Component {
 
     doAimAction(action) {
         if (action.targetType === RuleActions.TARGET_TYPE.NONE) {
-            this.addNewCombatAction(action);
-            this.forceUpdate();
+            this.clearAim(action);
         } else {
             this.setState({
                 statusBar: ACTION_HIGHLIGHT,

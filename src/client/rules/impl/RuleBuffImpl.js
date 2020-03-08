@@ -27,6 +27,19 @@ export function totalDefenceImpl(buff) {
     };
 }
 
+export function chargeBuffImpl(buff) {
+    buff.onCreate = () =>  {
+        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, -2);
+        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.ATTACK_FLAT, 2);
+        notifyBuffs(buff);
+    };
+    buff.onEnd = () => {
+        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, 2);
+        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.ATTACK_FLAT, -2);
+        notifyDeletion(buff);
+    };
+}
+
 export function combatExpertiseImpl(buff) {
     buff.dispellable = true;
     const bab =  buff.gameObject.get(RuleConstants.BAB) >= 4;

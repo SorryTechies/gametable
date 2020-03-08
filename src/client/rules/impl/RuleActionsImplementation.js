@@ -41,6 +41,12 @@ export const doAttack = action => {
     RuleCharacterChangesBean.addDataModification(action.performerId, RuleGameObjectConstans.LETHAL_DAMAGE, damage);
 };
 
+export const doCharge = action => {
+    action.performerObject.position = action.target;
+    RuleState.doChargeState(action);
+    RuleCharacterChangesBean.addModification(action.performerId, "position", action.target);
+};
+
 export const doShockGrasp = action => {
     const target = action.targetObject;
     const performer = action.performerObject;

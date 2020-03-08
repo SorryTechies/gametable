@@ -25,7 +25,7 @@ function checkTravelDistance(action) {
     if (distance > squaresToMove) throw new Error("You cannot go so far, you can move only " + squaresToMove + " squares.");
 }
 
-export const moveValidation = (action) => {
+export const moveValidation = action => {
     isSpaceOccupied(action);
     checkTravelDistance(action);
 };
