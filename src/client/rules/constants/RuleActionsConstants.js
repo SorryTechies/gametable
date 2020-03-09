@@ -5,11 +5,10 @@
 export default {
     MOVE: "move",
     CHARGE: "charge",
-    ATTACK: "attack",
+    MELEE_ATTACK: "m_attack",
+    RANGED_ATTACK: "r_attack",
     SPRINT: "sprint",
-    FULL_ROUND_ATTACK: "full_attack",
     CAST_SPELL: "spell",
-    FULL_ROUND_SPELL: "full_spell",
     FIVE_FOOT_STEP: "5ft",
     NO_ACTION: "no",
     TOTAL_DEFENCE: "total_def",

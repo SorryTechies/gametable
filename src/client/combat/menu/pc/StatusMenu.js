@@ -12,6 +12,7 @@ import StaticController from "../../../static/StaticController";
 import RuleAction from "../../../rules/RuleAction";
 import RuleActionsConstants from "../../../rules/constants/RuleActionsConstants";
 import RuleConstants from "../../../rules/RuleConstants";
+import RuleWeaponConstants from "../../../rules/constants/RuleWeaponConstants";
 
 const NO = "no";
 
@@ -25,6 +26,8 @@ export default class StatusMenu extends React.Component {
     processAction(action) {
         this.action = action;
         switch (action.key) {
+            case RuleActionsConstants.MELEE_ATTACK:
+            case RuleActionsConstants.RANGED_ATTACK:
             case RuleActionsConstants.CAST_SPELL:
             case RuleActionsConstants.ACTIVATE_STATE:
             case RuleActionsConstants.DEACTIVATE_STATE:
@@ -44,6 +47,16 @@ export default class StatusMenu extends React.Component {
 
     getSecondActionList() {
         switch (this.state.nextSelector) {
+            case RuleActionsConstants.MELEE_ATTACK:
+                return  [
+                    RuleWeaponConstants.IMPROVISED,
+                    RuleWeaponConstants.UNARMED_STRIKE
+                ].concat(this.props.unit.items.map(item => item.key));
+            case RuleActionsConstants.RANGED_ATTACK:
+                return  [
+                    // TODO remove when weapons stored on server side
+                    RuleWeaponConstants.LASER_RIFLE,
+                ].concat(this.props.unit.items.map(item => item.key));
             case RuleActionsConstants.CAST_SPELL:
                 return this.props.unit.ruleCharacter.get(RuleConstants.SPELL_ARRAY);
             case RuleActionsConstants.ACTIVATE_STATE:
@@ -57,6 +70,8 @@ export default class StatusMenu extends React.Component {
 
     renderSecondSelector() {
         switch (this.state.nextSelector) {
+            case RuleActionsConstants.MELEE_ATTACK:
+            case RuleActionsConstants.RANGED_ATTACK:
             case RuleActionsConstants.CAST_SPELL:
             case RuleActionsConstants.ACTIVATE_STATE:
             case RuleActionsConstants.DEACTIVATE_STATE:

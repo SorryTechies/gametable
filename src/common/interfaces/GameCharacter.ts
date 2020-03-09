@@ -6,4 +6,5 @@ export interface GameCharacter {
     _id: string;
     data: object;
     name: string;
+    feats: object;
 }

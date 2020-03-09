@@ -10,5 +10,6 @@ export interface GameObject {
     data: object;
     name: string;
     buffs: object;
+    items: Array<object>;
     icon: string;
 }

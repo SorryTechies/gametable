@@ -10,15 +10,14 @@ export const MOVE_ACTIONS = [
 ];
 
 export const STANDARD_ACTIONS = [
-    RuleActionsConstants.ATTACK,
+    RuleActionsConstants.MELEE_ATTACK,
+    RuleActionsConstants.RANGED_ATTACK,
     RuleActionsConstants.CAST_SPELL,
     RuleActionsConstants.TOTAL_DEFENCE
 ];
 
 export const FULL_ROUND_ACTIONS = [
-    RuleActionsConstants.SPRINT,
-    RuleActionsConstants.FULL_ROUND_ATTACK,
-    RuleActionsConstants.FULL_ROUND_SPELL
+    RuleActionsConstants.SPRINT
 ];
 
 export const FREE_ACTIONS = [

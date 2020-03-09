@@ -8,8 +8,8 @@ import RuleGameObjectConstans from "../constants/RuleGameObjectConstants";
 import CheckDice from "../../logic/roll/CheckDice";
 import DamageDice from "../../logic/roll/DamageDice";
 import RuleState from "../RuleState";
-import {calculateAttack} from "./RuleCommonImpl";
 import * as RuleLoader from "../RuleLoader";
+import RuleWeaponToImpl from "../table/RuleWeaponToImpl";
 
 function getStrAttackRoll(character) {
     const roll = new CheckDice();
@@ -30,15 +30,8 @@ export const doTotalDefence = action => {
     RuleState.doTotalDefenceState(action);
 };
 export const doAttack = action => {
-    const obj = action.targetObject;
-    const attack = calculateAttack(action);
-    const damage = 1;
-    obj.dealDamage(damage);
-    RuleLoader.getLoader().sendActionDescription(
-        `${action.performerObject.name} attacks ${action.targetObject.name} for ${damage} damage.`,
-        action
-    );
-    RuleCharacterChangesBean.addDataModification(action.performerId, RuleGameObjectConstans.LETHAL_DAMAGE, damage);
+    const impl = RuleWeaponToImpl[action.additional1];
+    if (typeof impl === "function") impl(action);
 };
 
 export const doCharge = action => {
