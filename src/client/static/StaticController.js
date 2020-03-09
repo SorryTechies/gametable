@@ -17,7 +17,8 @@ import * as RuleLoader from "../rules/RuleLoader";
 /** @type Account */
 let account = null;
 let subscribers = [];
-let chat = null;
+/** @type Array<ChatMessage> */
+let chat = [];
 /** @type Array<RuleCharacter> */
 let characters = [];
 /** @type RuleCharacter */
@@ -48,6 +49,15 @@ function sendBeans() {
     message.data = RuleCharacterChangesBean.beansToJson();
     if (message.data.length !== 0) BrowserWebSocket.sendMessage(message);
     RuleCharacterChangesBean.init();
+}
+
+function pushMessage(text) {
+    chat.push({
+        stmp: new Date(),
+        text: text,
+        sender_id: account._id,
+        session_id: session._id
+    });
 }
 
 export default class StaticController {
@@ -118,6 +128,7 @@ export default class StaticController {
 
     static async loadChat() {
         chat = await new NormalRequest('/chat').send();
+        chat.forEach(message => (message.stmp = new Date(Date.parse(message.stmp))));
     }
 
     static async loadParticipants() {
@@ -233,6 +244,7 @@ export default class StaticController {
     }
 
     static sendChatMessage(text, toWho) {
+        pushMessage(text);
         const message = new WebSocketMessage(WebSocketMessage.TYPE_CHAT);
         message.data = {text: text, receiver: toWho};
         BrowserWebSocket.sendMessage(message);

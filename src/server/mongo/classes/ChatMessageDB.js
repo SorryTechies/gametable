@@ -15,7 +15,7 @@ export default class ChatMessageDB {
             $or: [
                 {[ChatMessageDB.SENDER_FIELD]: account._id},
                 {[ChatMessageDB.TARGET_FIELD]: account._id},
-                {[ChatMessageDB.TARGET_FIELD]: {$exists: false}},
+                {[ChatMessageDB.TARGET_FIELD]: null},
             ],
             [ChatMessageDB.SESSION_FIELD]: session._id
         });

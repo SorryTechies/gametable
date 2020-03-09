@@ -35,3 +35,6 @@ export const MOVE_BLOCK_ACTIONS = [
 export const MOVE_IN_PLACE_OF_STANDARD = [
     RuleActionsConstants.MOVE
 ];
+
+export const GRAPPLE_MOVES = [
+];

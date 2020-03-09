@@ -7,7 +7,6 @@ import RuleState from "../RuleState";
 
 export const buffImplementation = {
     [RuleBuffConstants.TOTAL_DEFENSE]: RuleState.doTotalDefenceState,
-    [RuleBuffConstants.FIGHTING_DEFENSIVELY]: RuleState.doFightingDefensively,
     [RuleBuffConstants.FATIGUE]: RuleState.doFatigue,
     [RuleBuffConstants.RAGE]: RuleState.doRage
 };

@@ -13,5 +13,10 @@ export default {
     NO_ACTION: "no",
     TOTAL_DEFENCE: "total_def",
     ACTIVATE_STATE: "activate_state",
-    DEACTIVATE_STATE: "deactivate_state"
+    DEACTIVATE_STATE: "deactivate_state",
+    GRAPPLE: "grapple",
+    DISARM: "disarm",
+    TRIP: "trip",
+    BULL_RUSH: "bull_rush",
+    SPECIAL: "special"
 };

@@ -18,12 +18,13 @@ export async function handleNewChatMessage(message, ws) {
     if (Array.isArray(message.data.receiver) && message.data.receiver.length > 0) {
         WebSocketUser.sendToTheDM(session, message, ws);
     } else {
+        delete message.data.receiver;
         WebSocketUser.sendToGameSession(session, message, ws);
     }
-    await MongoController.insert(ChatMessageDB.DB_NAME, {
+    await MongoController.insert(ChatMessageDB.DB_NAME, [{
         [ChatMessageDB.TIMESTAMP_FIELD]: new Date(),
         [ChatMessageDB.TEXT_FIELD]: message.data.text,
         [ChatMessageDB.SESSION_FIELD]: session._id,
         [ChatMessageDB.TARGET_FIELD]: message.data.receiver
-    });
+    }]);
 }

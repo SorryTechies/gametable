@@ -21,7 +21,7 @@ export const implementation = {
     },
     [RuleActionsConstants.ACTIVATE_STATE]: {
         [RuleBuffConstants.COMBAT_EXPERTISE]: RuleState.activateCombatExpertise,
-        [RuleBuffConstants.FIGHTING_DEFENSIVELY]: RuleState.noValidation,
+        [RuleBuffConstants.FIGHTING_DEFENSIVELY]: RuleState.activateFightingDefensively,
     },
     [RuleActionsConstants.DEACTIVATE_STATE]: {
         [RuleBuffConstants.COMBAT_EXPERTISE]: RuleState.removeStateAction,

@@ -13,7 +13,10 @@ export const STANDARD_ACTIONS = [
     RuleActionsConstants.MELEE_ATTACK,
     RuleActionsConstants.RANGED_ATTACK,
     RuleActionsConstants.CAST_SPELL,
-    RuleActionsConstants.TOTAL_DEFENCE
+    RuleActionsConstants.TOTAL_DEFENCE,
+    RuleActionsConstants.GRAPPLE,
+    RuleActionsConstants.DISARM,
+    RuleActionsConstants.TRIP
 ];
 
 export const FULL_ROUND_ACTIONS = [

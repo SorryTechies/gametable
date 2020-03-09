@@ -32,4 +32,8 @@ export default class RuleCharacter {
         this.feats.forEach(feat => RuleFeatsToState[feat] ? ans.push(RuleFeatsToState[feat]) : null);
         return ans;
     }
+
+    hasFeat(key) {
+        return this.feats.includes(key);
+    }
 }

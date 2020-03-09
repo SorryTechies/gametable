@@ -10,6 +10,7 @@ import DamageDice from "../../logic/roll/DamageDice";
 import RuleState from "../RuleState";
 import * as RuleLoader from "../RuleLoader";
 import RuleWeaponToImpl from "../table/RuleWeaponToImpl";
+import RuleBuffConstants from "../constants/RuleBuffConstants";
 
 function getStrAttackRoll(character) {
     const roll = new CheckDice();
@@ -23,10 +24,7 @@ export const doMove = action => {
 };
 
 export const doTotalDefence = action => {
-    RuleLoader.getLoader().sendActionDescription(
-        `${action.performerObject.name} starts raging!`,
-        action
-    );
+    RuleLoader.sendTranslatedDescription(action, RuleBuffConstants.TOTAL_DEFENSE, action.performerObject.name);
     RuleState.doTotalDefenceState(action);
 };
 export const doAttack = action => {
@@ -54,7 +52,7 @@ export const doShockGrasp = action => {
     damageRoll.amountOfDices = numberOfDices;
     roll.nextDice.push(damageRoll);
     roll.roll();
-    if (roll.result >= target.ruleCharacter.get(RuleConstants.DEFENCE_TOUCH_AC)) {
+    if (roll.result >= target.get(RuleConstants.DEFENCE_TOUCH_AC)) {
         target.dealDamage(damageRoll.result);
         RuleLoader.getLoader().sendActionDescription(
             `${action.performerObject.name} casts Shocking Grasps on ${action.targetObject.name} dealing ${damageRoll.result} electric damage.`,

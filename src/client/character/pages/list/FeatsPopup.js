@@ -12,7 +12,7 @@ export default class FeatsPopup extends React.Component {
         return <div>
             <div>Add feat</div>
             {Object.values(RuleFeatsConstants).map(key => {
-                const translation = TranslationModule.getTranslation(TranslationModule.MODULES.FEATS, key);
+                const translation = TranslationModule.getTranslation(key);
                 return <div key={key} onClick={() => this.props.onPicked(key)}>
                     <div>{translation.name}</div>
                     <div>{translation.description}</div>

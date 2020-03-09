@@ -7,6 +7,7 @@ import RuleBuffController from "./controllers/RuleBuffController";
 import * as RuleImplementation from "./impl/RuleImplementation";
 import RuleGameObjectConstants from "./constants/RuleGameObjectConstants";
 import RuleItem from "./RuleItem";
+import RuleDamageType from "./constants/RuleDamageType";
 
 export default class RuleGameObject {
     constructor(id) {
@@ -69,7 +70,7 @@ export default class RuleGameObject {
         }
     }
 
-    dealDamage(val, isNonLethal) {
+    dealDamage(val, type = RuleDamageType.BLUDGEONING, isNonLethal = false) {
         if (isNonLethal) {
             this.data[RuleGameObjectConstants.NONLETHAL_DAMAGE] += val;
         } else {

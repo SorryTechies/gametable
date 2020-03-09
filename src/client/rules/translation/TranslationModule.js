@@ -4,15 +4,36 @@
 
 import SupportedLanguages from "./SupportedLanguages";
 import FeatsTranslation from "./FeatsTranslation";
+import ActionDescriptionTranslation from "./ActionDescriptionTranslation";
+import ActionTranslation from "./ActionTranslation";
 
 let currentLanguage = SupportedLanguages.ENG;
 
-function getModule(module) {
-    switch (module) {
-        case TranslationModule.MODULES.FEATS:
-            return FeatsTranslation[currentLanguage];
-        default:
-            throw new Error(`No module ${module} found.`);
+const MODULES = [
+    FeatsTranslation,
+    ActionTranslation,
+    ActionDescriptionTranslation
+];
+
+function findInModule(key) {
+    const module = MODULES.find(module => Object.keys(module[currentLanguage]).find(item => item === key));
+    if (module) {
+        return module[currentLanguage][key];
+    } else {
+        console.warning("No translation found for " + key);
+        return key;
+    }
+}
+
+function process(key, val, ...args) {
+    if (typeof val === "function") {
+        return val(args);
+    } else {
+        if (val) {
+            return val;
+        } else {
+            return key;
+        }
     }
 }
 
@@ -28,8 +49,8 @@ export default class TranslationModule {
         currentLanguage = lang;
     }
 
-    static getTranslation(module, key) {
-        return getModule(module)[key];
+    static getTranslation(key, ...args) {
+        return process(key, findInModule(key), args);
     }
 
     /**
@@ -39,13 +60,9 @@ export default class TranslationModule {
      */
     static getFeatsTranslation(list) {
         return list.reduce((acc, key) => {
-                acc[key] = TranslationModule.getTranslation(TranslationModule.MODULES.FEATS, key);
+                acc[key] = process(key, FeatsTranslation[currentLanguage][key]);
                 return acc;
             }, {}
         );
     }
 }
-
-TranslationModule.MODULES = {
-    FEATS: "feats"
-};
