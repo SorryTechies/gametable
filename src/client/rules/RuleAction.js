@@ -5,7 +5,7 @@
 import * as uuid from "uuid";
 import RuleActionsConstants from "./constants/RuleActionsConstants";
 import RuleTypes from "./constants/RuleTypes";
-import {implementation, validation} from "./RuleActionKeyToImpl";
+import {implementation, validation} from "./table/RuleActionKeyToImpl";
 import * as RuleLoader from "./RuleLoader";
 import * as CONST from "./constants/RuleActionListConstants";
 import * as SUPP from "./constants/RuleActionListSupportConstants";

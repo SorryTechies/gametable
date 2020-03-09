@@ -5,7 +5,7 @@
 
 import {getAttackRoll} from "./RuleCommonImpl";
 import DamageDice from "../../logic/roll/DamageDice";
-import RuleConstants from "../RuleConstants";
+import RuleConstants from "../constants/RuleStatConstants";
 import * as RuleLoader from "../RuleLoader";
 import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleGameObjectConstans from "../constants/RuleGameObjectConstants";

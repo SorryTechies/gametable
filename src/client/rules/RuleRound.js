@@ -2,7 +2,7 @@
  * Created by LastBerserk on 20.01.2020.
  */
 
-import RuleActionList from "./RuleActionList";
+import RuleActionList from "./controllers/RuleActionList";
 
 class RoundObject {
     constructor(gameObject) {

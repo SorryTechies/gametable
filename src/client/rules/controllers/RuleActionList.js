@@ -2,12 +2,12 @@
  * Created by LastBerserk on 20.01.2020.
  */
 
-import RuleActions from "./RuleAction";
-import RuleActionsConstants from "./constants/RuleActionsConstants";
-import RuleTypes from "./constants/RuleTypes";
-import * as CONST from "./constants/RuleActionListConstants";
-import {filterActionByKey} from "./table/RuleActionFilter";
-import * as SUPP from "./constants/RuleActionListSupportConstants";
+import RuleActions from "../RuleAction";
+import RuleActionsConstants from "../constants/RuleActionsConstants";
+import RuleTypes from "../constants/RuleTypes";
+import * as CONST from "../constants/RuleActionListConstants";
+import {filterActionByKey} from "../table/RuleActionFilter";
+import * as SUPP from "../constants/RuleActionListSupportConstants";
 
 function isForcingAttackState(action) {
    if (SUPP.FORCE_ATTACK_BUFFS.includes(action.additional1)) return true;

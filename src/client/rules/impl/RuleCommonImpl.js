@@ -2,7 +2,7 @@
  * Created by LastBerserk on 05.03.2020.
  */
 
-import RuleConstants from "../RuleConstants";
+import RuleConstants from "../constants/RuleStatConstants";
 import RuleFeatsConstants from "../constants/RuleFeatsConstants";
 import {axeToGrindImpl} from "./RuleFeatsImpl";
 import CheckDice from "../../logic/roll/CheckDice";

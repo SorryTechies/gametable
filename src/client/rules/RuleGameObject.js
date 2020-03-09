@@ -3,7 +3,7 @@
  */
 
 import MovePointController from "../logic/MovePointController";
-import RuleBuffController from "./RuleBuffController";
+import RuleBuffController from "./controllers/RuleBuffController";
 import * as RuleImplementation from "./impl/RuleImplementation";
 import RuleGameObjectConstants from "./constants/RuleGameObjectConstants";
 import RuleItem from "./RuleItem";

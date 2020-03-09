@@ -11,7 +11,7 @@ import LoginController from "../../../logic/LoginController";
 import StaticController from "../../../static/StaticController";
 import RuleAction from "../../../rules/RuleAction";
 import RuleActionsConstants from "../../../rules/constants/RuleActionsConstants";
-import RuleConstants from "../../../rules/RuleConstants";
+import RuleConstants from "../../../rules/constants/RuleStatConstants";
 import RuleWeaponConstants from "../../../rules/constants/RuleWeaponConstants";
 
 const NO = "no";

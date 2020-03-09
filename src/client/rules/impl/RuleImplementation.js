@@ -3,7 +3,7 @@
  */
 
 
-import RuleConstants from "../RuleConstants";
+import RuleConstants from "../constants/RuleStatConstants";
 import RuleSkillsStatConstants from "../constants/RuleSkillsStatConstants";
 import RuleSkillConstants from "../constants/RuleSkillConstants";
 

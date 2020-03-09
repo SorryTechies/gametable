@@ -2,10 +2,10 @@
  * Created by LastBerserk on 18.01.2020.
  */
 
-import RuleBuff from "./RuleBuff";
+import RuleBuff from "../RuleBuff";
 import RuleEffectController from "./RuleEffectController";
-import RuleEffect from "./RuleEffect";
-import RuleBuffToImpl from "./table/RuleBuffToImpl";
+import RuleEffect from "../RuleEffect";
+import RuleBuffToImpl from "../table/RuleBuffToImpl";
 
 function getBuffArr(self, type) {
     switch (type) {

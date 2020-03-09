@@ -4,7 +4,7 @@
 
 import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleSkillConstants from "../constants/RuleSkillConstants";
-import RuleConstants from "../RuleConstants";
+import RuleConstants from "../constants/RuleStatConstants";
 
 function notifyBuffs(buff) {
     RuleCharacterChangesBean.addBuffModification(buff.targetId, buff.toJson());

@@ -4,7 +4,7 @@
 
 import {getTestCharacter, getTestObject} from "../../support/RuleTestClasses";
 import TestWrapper from "../../../TestWrapper";
-import RuleConstants from "../../../../src/client/rules/RuleConstants";
+import RuleConstants from "../../../../src/client/rules/constants/RuleStatConstants";
 import * as assert from "assert";
 
 export const CombatBonusTest = TestWrapper.wrap("CombatBonusTest",

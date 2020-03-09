@@ -2,7 +2,7 @@
  * Created by LastBerserk on 21.01.2020.
  */
 
-import RuleConstants from "../RuleConstants";
+import RuleConstants from "../constants/RuleStatConstants";
 import * as RuleLoader from "../RuleLoader";
 
 function isSpaceOccupied(action) {

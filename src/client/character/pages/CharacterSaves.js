@@ -3,7 +3,7 @@
  */
 
 import * as React from "react";
-import RuleConstants from "../../rules/RuleConstants";
+import RuleConstants from "../../rules/constants/RuleStatConstants";
 import CharacterPage from "./CharacterPage";
 
 const KEY_ARRAY = [

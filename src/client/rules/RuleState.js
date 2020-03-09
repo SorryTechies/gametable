@@ -3,8 +3,7 @@
  */
 
 import RuleEffect from "./RuleEffect";
-import RuleConstants from "./RuleConstants";
-import RuleSkillConstants from "./constants/RuleSkillConstants";
+import RuleConstants from "./constants/RuleStatConstants";
 import RuleCharacterChangesBean from "./RuleCharacterChangesBean";
 import RuleBuffConstants from "./constants/RuleBuffConstants";
 import RuleBuff from "./RuleBuff";

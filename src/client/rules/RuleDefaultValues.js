@@ -2,7 +2,7 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-import RuleConstants from "./RuleConstants";
+import RuleConstants from "./constants/RuleStatConstants";
 import RuleSkillConstants from "./constants/RuleSkillConstants";
 import RuleGameObjectConstants from "./constants/RuleGameObjectConstants";
 

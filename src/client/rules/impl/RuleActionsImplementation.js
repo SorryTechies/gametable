@@ -2,7 +2,7 @@
  * Created by LastBerserk on 21.01.2020.
  */
 
-import RuleConstants from "../RuleConstants";
+import RuleConstants from "../constants/RuleStatConstants";
 import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleGameObjectConstans from "../constants/RuleGameObjectConstants";
 import CheckDice from "../../logic/roll/CheckDice";

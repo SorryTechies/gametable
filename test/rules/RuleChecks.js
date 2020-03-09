@@ -5,7 +5,7 @@
 import {getTestAction, getTestCharacter, getTestObject} from "./support/RuleTestClasses";
 import RuleActionsConstants from "../../src/client/rules/constants/RuleActionsConstants";
 import {doTotalDefence} from "../../src/client/rules/impl/RuleActionsImplementation";
-import RuleConstants from "../../src/client/rules/RuleConstants";
+import RuleConstants from "../../src/client/rules/constants/RuleStatConstants";
 import TestWrapper from "../TestWrapper";
 import * as assert from "assert";
 import * as RuleLoader from "../../src/client/rules/RuleLoader";
