@@ -52,13 +52,7 @@ export default class ChatWindow extends React.Component {
     }
 
     sendMessage() {
-        const request = new NormalRequest();
-        request.method = "POST";
-        request.path = "/sendMessage";
-        request.send({message: this.state.input, to: this.state.to})
-            .then(() => this.setState({input: ""}))
-            .then(this.loadMessages.bind(this))
-            .catch(console.error)
+        StaticController.sendChatMessage(this.state.input);
     }
 
     render() {
@@ -72,12 +66,14 @@ export default class ChatWindow extends React.Component {
                             id={rootScss.chat_select}
                             onChange={event => this.setState({to: event.target.value})}>
                             <option>ALL</option>
-                            {Array.isArray(this.state.players) ? this.state.players.map(player => <option key={player}>{player}</option>) : null}
+                            {Array.isArray(this.state.players) ? this.state.players.map(player => <option
+                                key={player}>{player}</option>) : null}
                         </select> : null}
                     <button
                         id={rootScss.chat_button}
                         disabled={this.state.buttonDisabled}
-                        onClick={() => {
+                        onClick={e => {
+                            e.preventDefault();
                             this.setState({buttonDisabled: true});
                             setTimeout(() => this.setState({buttonDisabled: false}), 2000);
                             this.sendMessage();

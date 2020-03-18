@@ -2,7 +2,7 @@
  * Created by LastBerserk on 09.03.2020.
  */
 
-import RuleWeaponConstants from "../constants/RuleWeaponConstants";
+import RuleWeaponConstants from "../items/const/RuleWeaponConstants";
 import * as RuleWeaponImpl from "../impl/RuleWeaponImpl";
 
 export default {

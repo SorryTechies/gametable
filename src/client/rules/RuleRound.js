@@ -3,6 +3,7 @@
  */
 
 import RuleActionList from "./controllers/RuleActionList";
+import * as RuleActionListSupportConstants from "./constants/RuleActionListSupportConstants";
 
 class RoundObject {
     constructor(gameObject) {
@@ -32,15 +33,15 @@ export default class RuleRound {
      */
     addAction(action) {
         this.getObject(action.performerId).actionList.addAction(action);
-        if (action.isRepositionAction()) action.performerObject.movePoints.add(action.target);
+        if (RuleActionListSupportConstants.REPOSITION_ACTIONS.includes(action.key)) action.performerObject.movePoints.add(action.target);
     }
 
     /**
      * @param {RuleAction} action
      */
     removeAction(action) {
-        this.getObject(action.performerId).actionList.removeAction(action);
-        if (action.isRepositionAction()) action.performerObject.movePoints.remove(action.target);
+        const act = this.getObject(action.performerId).actionList.removeAction(action);
+        if (act && RuleActionListSupportConstants.REPOSITION_ACTIONS.includes(act.key)) act.performerObject.movePoints.remove(act.target);
     }
 
     finish() {

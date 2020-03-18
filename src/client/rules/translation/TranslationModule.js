@@ -8,6 +8,7 @@ import ActionDescriptionTranslation from "./ActionDescriptionTranslation";
 import ActionTranslation from "./ActionTranslation";
 
 let currentLanguage = SupportedLanguages.ENG;
+const translation = {};
 
 const MODULES = [
     FeatsTranslation,
@@ -25,7 +26,7 @@ function findInModule(key) {
     }
 }
 
-function process(key, val, ...args) {
+function process(key, val, args) {
     if (typeof val === "function") {
         return val(args);
     } else {
@@ -44,13 +45,20 @@ function process(key, val, ...args) {
  */
 
 export default class TranslationModule {
+    static init() {
+        MODULES.forEach(module =>
+            Object.keys(module[currentLanguage])
+                .forEach(key => translation[key] = module[currentLanguage][key])
+        );
+    }
+
     static setLanguage(lang) {
         if (!Object.values(SupportedLanguages).includes(lang)) throw new Error(`Language ${lang} does not supported.`);
         currentLanguage = lang;
     }
 
     static getTranslation(key, ...args) {
-        return process(key, findInModule(key), args);
+        return process(key, translation[key], args);
     }
 
     /**
@@ -60,7 +68,7 @@ export default class TranslationModule {
      */
     static getFeatsTranslation(list) {
         return list.reduce((acc, key) => {
-                acc[key] = process(key, FeatsTranslation[currentLanguage][key]);
+                acc[key] = process(key, translation[key]);
                 return acc;
             }, {}
         );

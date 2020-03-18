@@ -91,9 +91,11 @@ export default class RuleActionList {
 
     removeAction(action) {
         const index = this.list.findIndex(item => action.id === item.id);
+        const obj = this.list[index];
         if (index !== -1) {
             this.list.splice(index, 1);
             removeTriggers(this, action);
+            return obj;
         }
     }
 

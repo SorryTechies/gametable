@@ -6,8 +6,10 @@ import MovePointController from "../logic/MovePointController";
 import RuleBuffController from "./controllers/RuleBuffController";
 import * as RuleImplementation from "./impl/RuleImplementation";
 import RuleGameObjectConstants from "./constants/RuleGameObjectConstants";
-import RuleItem from "./RuleItem";
+import RuleItem from "./items/RuleItem";
 import RuleDamageType from "./constants/RuleDamageType";
+import RuleItemFactory from "./items/RuleItemFactory";
+import RuleItemController from "./items/RuleItemController";
 
 export default class RuleGameObject {
     constructor(id) {
@@ -20,7 +22,8 @@ export default class RuleGameObject {
         this.name = "";
         this.buffs = new RuleBuffController(this);
         this.icon = "";
-        this.items = [];
+        this.items = new RuleItemController(this);
+        this.weapons = [];
 
         this.calculatedData = {};
         this.movePoints = new MovePointController();
@@ -107,12 +110,11 @@ export default class RuleGameObject {
         if (json.initiative) obj.initiative = json.initiative;
         if (json.icon) obj.icon = json.icon;
         if (json.character_id) obj.character_id = json.character_id;
-        if (Array.isArray(json.items)) obj.items = json.items.map(item => RuleItem.fromJson(item));
+        if (Array.isArray(json.items)) obj.items = RuleItemController.fromJson(json.items);
         if (json.position) {
             obj.position = json.position;
             obj.movePoints.setStartingPoint(Object.assign({}, json.position));
         }
-        if (json._id) obj.id = json._id;
         return obj;
     }
 }

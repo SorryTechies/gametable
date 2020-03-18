@@ -13,6 +13,8 @@ import RuleCharacterChangesBean from "../rules/RuleCharacterChangesBean";
 import RuleDefaultValues from "../rules/RuleDefaultValues";
 import RuleGameObject from "../rules/RuleGameObject";
 import * as RuleLoader from "../rules/RuleLoader";
+import TranslationModule from "../rules/translation/TranslationModule";
+import SupportedLanguages from "../rules/translation/SupportedLanguages";
 
 /** @type Account */
 let account = null;
@@ -103,7 +105,7 @@ export default class StaticController {
         const idArray = Array.isArray(map.map_objects_id) ? map.map_objects_id : [];
         const request = new NormalRequest('/object');
         request.method = NormalRequest.METHOD.POST;
-        objects = (await request.send({ids: idArray})).objects.map(obj => RuleGameObject.fromJson(obj));
+        objects = (await request.send({ids: idArray})).objects.map(RuleGameObject.fromJson);
     }
 
     static async loadSession() {
@@ -244,6 +246,7 @@ export default class StaticController {
     }
 
     static sendChatMessage(text, toWho) {
+        if (!text) return;
         pushMessage(text);
         const message = new WebSocketMessage(WebSocketMessage.TYPE_CHAT);
         message.data = {text: text, receiver: toWho};
@@ -255,5 +258,7 @@ export default class StaticController {
     }
 }
 
+TranslationModule.setLanguage(SupportedLanguages.ENG);
+TranslationModule.init();
 RuleLoader.setLoader(StaticController);
 

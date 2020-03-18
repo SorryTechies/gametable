@@ -36,7 +36,6 @@ export const fiveFootValidation = action => {
 };
 
 export const attackValidation = action => {
-
 };
 
 export const touchCheck = action => {

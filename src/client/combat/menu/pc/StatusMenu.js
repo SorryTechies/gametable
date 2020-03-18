@@ -12,7 +12,7 @@ import StaticController from "../../../static/StaticController";
 import RuleAction from "../../../rules/RuleAction";
 import RuleActionsConstants from "../../../rules/constants/RuleActionsConstants";
 import RuleConstants from "../../../rules/constants/RuleStatConstants";
-import RuleWeaponConstants from "../../../rules/constants/RuleWeaponConstants";
+import RuleWeaponConstants from "../../../rules/items/const/RuleWeaponConstants";
 
 const NO = "no";
 
@@ -72,6 +72,11 @@ export default class StatusMenu extends React.Component {
         switch (this.state.nextSelector) {
             case RuleActionsConstants.MELEE_ATTACK:
             case RuleActionsConstants.RANGED_ATTACK:
+                return <ActionSelector doAimAction={val1 => {
+                    this.props.unit.weapons =
+                    this.action.additional1 = val1;
+                    return this.props.doAimAction(this.action);
+                }} allowedActions={this.getSecondActionList()}/>;
             case RuleActionsConstants.CAST_SPELL:
             case RuleActionsConstants.ACTIVATE_STATE:
             case RuleActionsConstants.DEACTIVATE_STATE:

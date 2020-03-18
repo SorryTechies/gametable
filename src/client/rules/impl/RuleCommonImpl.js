@@ -6,7 +6,7 @@ import RuleConstants from "../constants/RuleStatConstants";
 import RuleFeatsConstants from "../constants/RuleFeatsConstants";
 import {axeToGrindImpl} from "./RuleFeatsImpl";
 import CheckDice from "../../logic/roll/CheckDice";
-import RuleWeaponConstants from "../constants/RuleWeaponConstants";
+import RuleWeaponConstants from "../items/const/RuleWeaponConstants";
 
 export function calculateAttack(action, isRanged) {
     const attacker = action.performerObject;
