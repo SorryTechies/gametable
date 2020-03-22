@@ -5,74 +5,97 @@
 import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleSkillConstants from "../constants/RuleSkillConstants";
 import RuleConstants from "../constants/RuleStatConstants";
+import {
+    getChargeAC, getChargeAttack, getCombatExpertiseAC, getCombatExpertiseAttack, getFightingDefenseAC,
+    getFightingDefenseAttack,
+    getTotalDefenceAC
+} from "./RuleEffectImpl";
 
 function notifyBuffs(buff) {
-    RuleCharacterChangesBean.addBuffModification(buff.targetId, buff.toJson());
+    RuleCharacterChangesBean.addBuffModification(buff.gameObject, buff.toJson());
 }
 
-function notifyDeletion(buff) {
-    RuleCharacterChangesBean.addBuffModification(buff.targetId, buff.toJson(true));
+function notifyEffects(obj, effect) {
+    RuleCharacterChangesBean.addEffectInstantly(obj, effect.toJson());
+}
+
+function notifyEffectDeletion(obj, effect) {
+    RuleCharacterChangesBean.addEffectInstantly(obj, effect.toJson(true));
+}
+
+function notifyBuffAndEffect(buff, effect) {
+    notifyBuffs(buff);
+    notifyEffects(buff.gameObject, effect);
+}
+
+function notifyBuffDeletion(buff) {
+    RuleCharacterChangesBean.addBuffModification(buff.gameObject, buff.toJson(true));
+}
+
+function notifyDeletion(buff, effect) {
+    notifyBuffDeletion(buff);
+    notifyEffectDeletion(buff.gameObject, effect);
 }
 
 export function totalDefenceImpl(buff) {
-    const ranks = buff.gameObject.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS);
-    const acEffect = ranks >= 3 ? 6 : 4;
+    const effect = getTotalDefenceAC();
     buff.onCreate = () =>  {
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, acEffect);
-        notifyBuffs(buff);
+        effect.val = buff.gameObject.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS) >= 3 ? 6 : 4;
+        notifyBuffAndEffect(buff, effect);
     };
-    buff.onEnd = () => {
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, -acEffect);
-        notifyDeletion(buff);
-    };
+    buff.onEnd = () => notifyDeletion(buff, effect);
 }
 
 export function chargeBuffImpl(buff) {
+    const effectAC = getChargeAC();
+    const effectAttack = getChargeAttack();
     buff.onCreate = () =>  {
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, -2);
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.ATTACK_FLAT, 2);
+        effectAC.val = -2;
+        effectAttack.val = 2;
         notifyBuffs(buff);
+        notifyEffects(buff.gameObject, effectAC);
+        notifyEffects(buff.gameObject, effectAttack);
     };
     buff.onEnd = () => {
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, 2);
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.ATTACK_FLAT, -2);
-        notifyDeletion(buff);
+        notifyBuffDeletion(buff);
+        notifyEffectDeletion(buff.gameObject, effectAC);
+        notifyEffectDeletion(buff.gameObject, effectAttack);
     };
 }
 
 export function combatExpertiseImpl(buff) {
     buff.dispellable = true;
-    const bab =  buff.gameObject.get(RuleConstants.BAB) >= 4;
-    const bonus = bab ? 2 : 1;
-    const attack =  bab ? -2 : -1;
+    const effectAC = getCombatExpertiseAC();
+    const effectAttack = getCombatExpertiseAttack();
     buff.onCreate = () =>  {
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, bonus);
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.COMBAT_MANEUVER_BONUS, attack);
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.ATTACK_FLAT, attack);
+        const bab =  buff.gameObject.get(RuleConstants.BAB) >= 4;
+        effectAC.val = bab ? 2 : 1;
+        effectAttack.val =  bab ? -2 : -1;
         notifyBuffs(buff);
+        notifyEffects(buff.gameObject, effectAC);
+        notifyEffects(buff.gameObject, effectAttack);
     };
     buff.onEnd = () => {
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, -bonus);
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.COMBAT_MANEUVER_BONUS, -attack);
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.ATTACK_FLAT, -attack);
-        notifyDeletion(buff);
+        notifyBuffDeletion(buff);
+        notifyEffectDeletion(buff.gameObject, effectAC);
+        notifyEffectDeletion(buff.gameObject, effectAttack);
     };
 }
 
 export function fightingDefensively(buff) {
     buff.dispellable = true;
-    const acEffect = buff.gameObject.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS) >= 3 ? 3 : 2;
-    const attackEffect = -4;
+    const effectAC = getFightingDefenseAC();
+    const effectAttack = getFightingDefenseAttack();
     buff.onCreate = () =>  {
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, acEffect);
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.COMBAT_MANEUVER_BONUS, attackEffect);
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.ATTACK_FLAT, attackEffect);
+        effectAC.val = buff.gameObject.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS) >= 3 ? 3 : 2;
+        effectAttack.val = -4;
         notifyBuffs(buff);
+        notifyEffects(buff.gameObject, effectAC);
+        notifyEffects(buff.gameObject, effectAttack);
     };
     buff.onEnd = () => {
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.DODGE, -acEffect);
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.COMBAT_MANEUVER_BONUS, -attackEffect);
-        RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject,  RuleConstants.ATTACK_FLAT, -attackEffect);
-        notifyDeletion(buff);
+        notifyBuffDeletion(buff);
+        notifyEffectDeletion(buff.gameObject, effectAC);
+        notifyEffectDeletion(buff.gameObject, effectAttack);
     };
 }

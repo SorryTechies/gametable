@@ -16,6 +16,8 @@ export default class RuleBuff {
         this.additional2 = undefined;
         this.targetId = null;
 
+
+        this.effects = [];
         /** @type RuleGameObject */
         this.gameObject = null;
     }

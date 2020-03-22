@@ -2,21 +2,12 @@
  * Created by LastBerserk on 18.01.2020.
  */
 
-import RuleEffect from "./RuleEffect";
+import RuleEffect from "./buff/RuleEffect";
 import RuleConstants from "./constants/RuleStatConstants";
 import RuleCharacterChangesBean from "./RuleCharacterChangesBean";
 import RuleBuffConstants from "./constants/RuleBuffConstants";
 import RuleBuff from "./RuleBuff";
 import {chargeBuffImpl, combatExpertiseImpl, fightingDefensively, totalDefenceImpl} from "./impl/RuleBuffImpl";
-
-function notifyBuffs(buff) {
-    RuleCharacterChangesBean.addBuffModification(buff.targetId, buff.toJson());
-}
-
-function notifyDeletion(buff) {
-    RuleCharacterChangesBean.addBuffModification(buff.targetId, buff.toJson(true));
-}
-
 
 export default class RuleState {
     /**
@@ -30,13 +21,11 @@ export default class RuleState {
         buff.onCreate = () => {
             RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_STRENGTH, 4);
             RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_DEXTERITY, 4);
-            notifyBuffs(buff);
             buff.gameObject.recalculate();
         };
         buff.onEnd = () => {
             RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_STRENGTH, -4);
             RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_DEXTERITY, -4);
-            notifyDeletion(buff);
             RuleState.doFatigue(action);
         };
         buffs.addDM(buff);
@@ -61,7 +50,6 @@ export default class RuleState {
             buffs.removeEffect(dexEffect);
         };
         buffs.add(buff);
-        notifyBuffs(action, buff);
     }
 
     /** @param {RuleAction} action */

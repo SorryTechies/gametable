@@ -4,6 +4,7 @@
 
 import StaticController from "../../../static/StaticController";
 import WebSocketMessage from "../../../../common/logic/WebSocketMessage";
+import RuleEffect from "../../../rules/buff/RuleEffect";
 
 /** @param {WebSocketMessage} message */
 export function handleObjectChange(message) {
@@ -22,6 +23,14 @@ export function handleObjectChange(message) {
             object.position = mod.position;
             object.movePoints.setStartingPoint(Object.assign({}, mod.position));
         }
+        if (Array.isArray(mod.effects)) mod.effects.forEach(item => {
+            if (item.val === 0) {
+                object.effects.remove(RuleEffect.fromJson(item));
+            } else {
+                object.effects.add(RuleEffect.fromJson(item));
+            }
+        });
+
         if (mod.buffs) object.buffs.processJson(mod.buffs);
         if (mod.initiative) object.initiative = mod.initiative;
         if (mod.name) object.name = mod.name;

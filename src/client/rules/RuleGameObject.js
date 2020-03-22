@@ -10,6 +10,7 @@ import RuleItem from "./items/RuleItem";
 import RuleDamageType from "./constants/RuleDamageType";
 import RuleItemFactory from "./items/RuleItemFactory";
 import RuleItemController from "./items/RuleItemController";
+import RuleEffectController from "./controllers/RuleEffectController";
 
 export default class RuleGameObject {
     constructor(id) {
@@ -21,8 +22,9 @@ export default class RuleGameObject {
         this.isAlive = true;
         this.name = "";
         this.buffs = new RuleBuffController(this);
-        this.icon = "";
         this.items = new RuleItemController(this);
+        this.effects = new RuleEffectController(this);
+        this.icon = "";
         this.weapons = [];
 
         this.calculatedData = {};
@@ -46,10 +48,11 @@ export default class RuleGameObject {
     }
 
     get(key) {
+        const buffVal = this.effects.getBonus(key);
         if (this.calculatedData[key]) {
-            return this.calculatedData[key];
+            return buffVal + this.calculatedData[key];
         } else {
-            return this.ruleCharacter.get(key);
+            return buffVal + this.ruleCharacter.get(key);
         }
     }
 
@@ -70,6 +73,14 @@ export default class RuleGameObject {
             if (this.data[key] === 0) delete this.data[key];
         } else {
             this.data[key] = val;
+        }
+    }
+
+    addEffect(effect) {
+        if (effect.val === 0) {
+            this.effects.remove(effect);
+        } else {
+            this.effects.add(effect);
         }
     }
 
@@ -111,6 +122,7 @@ export default class RuleGameObject {
         if (json.icon) obj.icon = json.icon;
         if (json.character_id) obj.character_id = json.character_id;
         if (Array.isArray(json.items)) obj.items = RuleItemController.fromJson(json.items);
+        if (Array.isArray(json.effects)) obj.effects = RuleEffectController.fromJson(obj, json.effects);
         if (json.position) {
             obj.position = json.position;
             obj.movePoints.setStartingPoint(Object.assign({}, json.position));

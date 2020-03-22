@@ -34,13 +34,24 @@ export default class RuleCharacterChangesBean {
         }
     }
 
+    static addEffectModification(obj, effect) {
+        const bean = getOrCreateBean(obj.id);
+        if (!Array.isArray(bean.mod.effects)) bean.mod.effects = [];
+        bean.mod.effects.push(effect);
+    }
+
+    static addEffectInstantly(target, effect) {
+        RuleCharacterChangesBean.addEffectModification(target, effect);
+        target.addEffect(effect);
+    }
+
     static addDataModificationInstantly(obj, key, val) {
         RuleCharacterChangesBean.addDataModification(obj.id, key, val);
         obj.addModification(key, val);
     }
 
-    static addBuffModification(id, buff) {
-        const bean = getOrCreateBean(id);
+    static addBuffModification(obj, buff) {
+        const bean = getOrCreateBean(obj.id);
         if (!bean.mod.buffs) bean.mod.buffs = {};
         bean.mod.buffs[buff.key] = buff;
     }

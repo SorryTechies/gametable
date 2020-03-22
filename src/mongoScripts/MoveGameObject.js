@@ -13,6 +13,7 @@ import GameObjectDB from "../server/mongo/classes/GameObjectDB";
     await MongoController.init();
     const characters = await MongoController.update(GameObjectDB.DB_NAME, {_id: ObjectId("5e3ea0e72763d338d4b6b411")},
         {
+            effects: [],
             data: {},
             buffs: {},
             name: "Vatan"

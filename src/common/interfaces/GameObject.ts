@@ -10,6 +10,7 @@ export interface GameObject {
     data: object;
     name: string;
     buffs: object;
+    effects: object;
     items: Array<object>;
     icon: string;
 }

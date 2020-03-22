@@ -34,14 +34,27 @@ export async function onGameObjectChange(objects, ws) {
             });
         }
         if (mod.position) db.position = mod.position;
-        if (!db.buffs) db.buffs = {};
         if (mod.buffs) {
+            if (!db.buffs) db.buffs = {};
             Object.values(mod.buffs).forEach(buff => {
                 if (buff.duration === 0) {
                     delete db.buffs[buff.key];
                 } else {
                     db.buffs[buff.key] = buff;
                 }
+            });
+        }
+        if (Array.isArray(mod.effects)) {
+            if (!Array.isArray(db.effects)) db.effects = [];
+            db.effects = db.effects.filter(dbEffect =>
+                mod.effects.find(modEffect =>
+                    !(
+                        modEffect.val === 0 &&
+                        dbEffect.buffKey === modEffect.buffKey &&
+                        dbEffect.key === modEffect.key
+                    )));
+            mod.effects.forEach(effect => {
+                if (effect.val !== 0) db.effects.push(effect);
             });
         }
         if (mod.initiative) db.initiative = mod.initiative;
