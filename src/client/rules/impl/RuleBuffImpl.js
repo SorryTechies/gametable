@@ -99,3 +99,7 @@ export function fightingDefensively(buff) {
         notifyEffectDeletion(buff.gameObject, effectAttack);
     };
 }
+
+export function grappled(buff) {
+
+}

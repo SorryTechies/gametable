@@ -3,9 +3,11 @@
  */
 
 import RuleWearSlots from "./const/RuleWearSlots";
+import * as uuid from "uuid";
 export default class RuleItem {
     constructor(key) {
         if (!key) throw new Error("No key for item provided.");
+        this.id = uuid.v1();
         this.key = key;
         this.weight = 1;
         this.hardeness = 0;
@@ -18,11 +20,21 @@ export default class RuleItem {
         this.slot = RuleWearSlots.NO;
     }
 
-    toJson() {
+    isEquipped() {
+        return this.slot !== RuleWearSlots.NO;
+    }
+
+    /**
+     * @param {boolean} [toDelete]
+     * @return {ItemBean}
+     */
+    toJson(toDelete) {
         return {
+            id: this.id,
             key: this.key,
             health: this.health,
-            slot: this.slot
+            slot: this.slot,
+            toDelete: !!toDelete
         };
     }
 

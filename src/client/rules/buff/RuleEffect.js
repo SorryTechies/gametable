@@ -12,6 +12,7 @@ export default class RuleEffect {
         this.type = type;
     }
 
+    /** @returns {EffectBean} */
     toJson(isDeletion) {
         return {
             buffKey: this.buffKey,
@@ -21,6 +22,10 @@ export default class RuleEffect {
         };
     }
 
+    /**
+     * @param {EffectBean} json
+     * @return {RuleEffect}
+     */
     static fromJson(json) {
         return new RuleEffect(json.buffKey, json.key, json.val, json.type);
     }

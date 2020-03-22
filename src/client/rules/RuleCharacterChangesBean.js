@@ -34,6 +34,21 @@ export default class RuleCharacterChangesBean {
         }
     }
 
+    static addItemModification(obj, item) {
+        const bean = getOrCreateBean(obj.id);
+        let itemIndex = -1;
+        if (Array.isArray(bean.mod.items)) {
+            itemIndex = bean.mod.items.findIndex(i => i.id === item.id);
+        } else {
+            bean.mod.items = [];
+        }
+        if (itemIndex !== -1) {
+            bean.mod.items[itemIndex] = item;
+        } else {
+            bean.mod.items.push(item);
+        }
+    }
+
     static addEffectModification(obj, effect) {
         const bean = getOrCreateBean(obj.id);
         if (!Array.isArray(bean.mod.effects)) bean.mod.effects = [];

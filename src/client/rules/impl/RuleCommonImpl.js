@@ -32,3 +32,10 @@ export function getAttackRoll(action, isRanged) {
     roll.bonus = calculateAttack(action, isRanged);
     return roll;
 }
+
+export function getCombatManRoll(action) {
+    const roll = new CheckDice();
+    roll.name = "CombatM";
+    roll.bonus = action.performerObject.get(RuleConstants.COMBAT_MANEUVER_BONUS);
+    return roll;
+}

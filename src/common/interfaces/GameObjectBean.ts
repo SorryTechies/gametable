@@ -2,7 +2,7 @@
  * Created by LastBerserk on 02.02.2020.
  */
 
-export interface GameObject {
+export interface GameObjectBean {
     _id: string;
     position: {x: number, y: number};
     character_id: string;
@@ -10,7 +10,8 @@ export interface GameObject {
     data: object;
     name: string;
     buffs: object;
-    effects: object;
+    effects: Array<object>;
+    spells: Array<string>
     items: Array<object>;
     icon: string;
 }

@@ -13,6 +13,7 @@ import RuleAction from "../../../rules/RuleAction";
 import RuleActionsConstants from "../../../rules/constants/RuleActionsConstants";
 import RuleConstants from "../../../rules/constants/RuleStatConstants";
 import RuleWeaponConstants from "../../../rules/items/const/RuleWeaponConstants";
+import RuleCombatManuverList from "../../../rules/constants/RuleCombatManuverList";
 
 const NO = "no";
 
@@ -26,6 +27,7 @@ export default class StatusMenu extends React.Component {
     processAction(action) {
         this.action = action;
         switch (action.key) {
+            case RuleActionsConstants.COMBAT_MANEUVERS:
             case RuleActionsConstants.MELEE_ATTACK:
             case RuleActionsConstants.RANGED_ATTACK:
             case RuleActionsConstants.CAST_SPELL:
@@ -39,6 +41,7 @@ export default class StatusMenu extends React.Component {
 
     renderFirstSelector() {
         return <ActionSelector doAimAction={val1 => {
+            if (val1 === NO) return;
             const action = new RuleAction(val1);
             action.setPerformer(this.props.unit);
             this.processAction(action);
@@ -47,16 +50,18 @@ export default class StatusMenu extends React.Component {
 
     getSecondActionList() {
         switch (this.state.nextSelector) {
+            case RuleActionsConstants.COMBAT_MANEUVERS:
+                return Object.values(RuleCombatManuverList);
             case RuleActionsConstants.MELEE_ATTACK:
-                return  [
+                return [
                     RuleWeaponConstants.IMPROVISED,
                     RuleWeaponConstants.UNARMED_STRIKE
-                ].concat(this.props.unit.items.map(item => item.key));
+                ].concat(this.props.unit.items.getItemsFromHands());
             case RuleActionsConstants.RANGED_ATTACK:
                 return  [
                     // TODO remove when weapons stored on server side
                     RuleWeaponConstants.LASER_RIFLE,
-                ].concat(this.props.unit.items.map(item => item.key));
+                ].concat(this.props.unit.items.getItemsFromHands());
             case RuleActionsConstants.CAST_SPELL:
                 return this.props.unit.ruleCharacter.get(RuleConstants.SPELL_ARRAY);
             case RuleActionsConstants.ACTIVATE_STATE:
@@ -73,10 +78,10 @@ export default class StatusMenu extends React.Component {
             case RuleActionsConstants.MELEE_ATTACK:
             case RuleActionsConstants.RANGED_ATTACK:
                 return <ActionSelector doAimAction={val1 => {
-                    this.props.unit.weapons =
                     this.action.additional1 = val1;
                     return this.props.doAimAction(this.action);
                 }} allowedActions={this.getSecondActionList()}/>;
+            case RuleActionsConstants.COMBAT_MANEUVERS:
             case RuleActionsConstants.CAST_SPELL:
             case RuleActionsConstants.ACTIVATE_STATE:
             case RuleActionsConstants.DEACTIVATE_STATE:

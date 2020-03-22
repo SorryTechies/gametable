@@ -14,9 +14,7 @@ export const STANDARD_ACTIONS = [
     RuleActionsConstants.RANGED_ATTACK,
     RuleActionsConstants.CAST_SPELL,
     RuleActionsConstants.TOTAL_DEFENCE,
-    RuleActionsConstants.GRAPPLE,
-    RuleActionsConstants.DISARM,
-    RuleActionsConstants.TRIP
+    RuleActionsConstants.COMBAT_MANEUVERS
 ];
 
 export const FULL_ROUND_ACTIONS = [

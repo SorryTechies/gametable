@@ -23,6 +23,7 @@ function actionKeyToTarget(key) {
         case RuleActionsConstants.SPRINT:
         case RuleActionsConstants.FIVE_FOOT_STEP:
             return RuleAction.TARGET_TYPE.GROUND;
+        case RuleActionsConstants.COMBAT_MANEUVERS:
         case RuleActionsConstants.MELEE_ATTACK:
         case RuleActionsConstants.RANGED_ATTACK:
         case RuleActionsConstants.CAST_SPELL:

@@ -2,7 +2,6 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-import MalformedJsonError from "../../../common/type/MalformedJsonError";
 import RuleEffect from "../buff/RuleEffect";
 import RuleEffectTypeConstants from "../constants/RuleEffectTypeConstants";
 
@@ -48,7 +47,6 @@ export default class RuleEffectController {
     }
 
     static fromJson(obj, json) {
-        console.log(json);
         const controller = new RuleEffectController(obj);
         if (Array.isArray(json))  controller.arr = json.map(RuleEffect.fromJson);
         return controller;

@@ -10,6 +10,7 @@ export default class RuleBuffController {
     constructor(gameObject) {
         this.ruleCharacter = gameObject;
         this.buffs = {};
+        this.hasDispellable = false;
     }
 
     getBuff(key) {
@@ -20,6 +21,7 @@ export default class RuleBuffController {
         if (!buff instanceof RuleBuff) throw new Error("Object passed isn't buff.");
         buff.ruleCharacter = this.ruleCharacter;
         this.buffs[buff.key] = buff;
+        if (buff.dispellable) this.hasDispellable = true;
     }
 
     addDM(buff) {
@@ -43,6 +45,7 @@ export default class RuleBuffController {
 
     remove(buff) {
         delete this.buffs[buff.key];
+        if (!Object.values(this.buffs).find(item => item.dispellable)) this.hasDispellable = false;
     }
 
     removeDM(buff) {
@@ -86,6 +89,7 @@ export default class RuleBuffController {
         Object.values(this.buffs).forEach(buff => {
             const impl = RuleBuffToImpl[buff.key];
             if (typeof impl === "function") impl(buff);
+            if (buff.dispellable) buff.gameObject.buffs.hasDispellable = true;
         });
     }
 }

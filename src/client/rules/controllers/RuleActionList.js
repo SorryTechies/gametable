@@ -70,6 +70,7 @@ export default class RuleActionList {
     constructor(object) {
         /** @type {Array<RuleAction>} */
         this.list = [];
+        /** @type {RuleGameObject} */
         this.gameObject = object;
         this.canDoMoveAction = true;
         this.movedAlready = false;

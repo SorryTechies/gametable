@@ -8,6 +8,9 @@ import * as Val from "../impl/RuleActionValidationImpl";
 import RuleSpellNames from "../constants/RuleSpellNames";
 import RuleState from "../RuleState";
 import RuleBuffConstants from "../constants/RuleBuffConstants";
+import RuleCombatManuverList from "../constants/RuleCombatManuverList";
+import * as SpellImpl from "../impl/RuleSpellImpl";
+import * as CMBImpl from "../impl/RuleCombatManeuverImpl";
 
 export const implementation = {
     [RuleActionsConstants.MOVE]: Impl.doMove,
@@ -17,7 +20,14 @@ export const implementation = {
     [RuleActionsConstants.RANGED_ATTACK]: Impl.doAttack,
     [RuleActionsConstants.TOTAL_DEFENCE]: RuleState.doTotalDefenceState,
     [RuleActionsConstants.CAST_SPELL]: {
-        [RuleSpellNames.SHOCKING_GRASP]: Impl.doShockGrasp
+        [RuleSpellNames.SHOCKING_GRASP]: SpellImpl.doShockGrasp
+    },
+    [RuleActionsConstants.COMBAT_MANEUVERS]: {
+        [RuleCombatManuverList.GRAPPLE]: CMBImpl.doGrapple,
+        [RuleCombatManuverList.DISARM]: Val.noValidation,
+        [RuleCombatManuverList.TRIP]: Val.noValidation,
+        [RuleCombatManuverList.BULL_RUSH]: Val.noValidation,
+        [RuleCombatManuverList.DIRTY_TRICK]: Val.noValidation
     },
     [RuleActionsConstants.ACTIVATE_STATE]: {
         [RuleBuffConstants.COMBAT_EXPERTISE]: RuleState.activateCombatExpertise,
@@ -36,6 +46,13 @@ export const validation = {
     [RuleActionsConstants.MELEE_ATTACK]: Val.noValidation,
     [RuleActionsConstants.RANGED_ATTACK]: Val.noValidation,
     [RuleActionsConstants.TOTAL_DEFENCE]: Val.noValidation,
+    [RuleActionsConstants.COMBAT_MANEUVERS]: {
+        [RuleCombatManuverList.GRAPPLE]: Val.noValidation,
+        [RuleCombatManuverList.DISARM]: Val.noValidation,
+        [RuleCombatManuverList.TRIP]: Val.noValidation,
+        [RuleCombatManuverList.BULL_RUSH]: Val.noValidation,
+        [RuleCombatManuverList.DIRTY_TRICK]: Val.noValidation
+    },
     [RuleActionsConstants.CAST_SPELL]: {
         [RuleSpellNames.SHOCKING_GRASP]: Val.touchCheck
     },

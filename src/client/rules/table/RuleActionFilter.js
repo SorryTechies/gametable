@@ -3,6 +3,8 @@
  */
 
 import * as RuleActionListSupportConstants from "../constants/RuleActionListSupportConstants";
+import RuleActionsConstants from "../constants/RuleActionsConstants";
+import RuleConstants from "../constants/RuleStatConstants";
 
 function filterAttacksOnly(list, key) {
     return list.mustAttackOnThisRound && (
@@ -31,14 +33,20 @@ function filterAlreadyMoved(list, key) {
  * @return {boolean}
  */
 export function filterActionByKey(list, key) {
+    switch (key) {
+        case (RuleActionsConstants.CAST_SPELL):
+            const spells = list.gameObject.ruleCharacter.get(RuleConstants.SPELL_ARRAY);
+            if (!spells || spells.length === 0) return false;
+            break;
+        case (RuleActionsConstants.DEACTIVATE_STATE):
+            if (!list.gameObject.buffs.hasDispellable) return false;
+            break;
+    }
     if (!list) throw new Error("No list provided.");
     if (!key) throw new Error("No key provided.");
     if (filterAttacksOnly(list, key)) return false;
     if (filterReposition(list, key)) return false;
     if (filterMustHaveAttack(list, key)) return false;
     if (filterAlreadyMoved(list, key)) return false;
-    switch (key) {
-        default:
-            return true;
-    }
+    return true;
 }

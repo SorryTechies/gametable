@@ -110,7 +110,7 @@ export default class RuleGameObject {
     }
 
     /**
-     * @param {GameObject} json
+     * @param {GameObjectBean} json
      * @return RuleGameObject
      */
     static fromJson(json) {

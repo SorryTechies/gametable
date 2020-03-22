@@ -34,6 +34,7 @@ export function handleObjectChange(message) {
         if (mod.buffs) object.buffs.processJson(mod.buffs);
         if (mod.initiative) object.initiative = mod.initiative;
         if (mod.name) object.name = mod.name;
+        if (Array.isArray(mod.items)) mod.items.forEach(item => object.items.processJson(item));
     });
     StaticController.notifySubscribed(WebSocketMessage.TYPE_OBJECT);
 }

@@ -28,6 +28,10 @@ export default class RuleBuff {
         this.gameObject = gameObject;
     }
 
+    /**
+     * @param {boolean} doRemove
+     * @return {BuffBean}
+     */
     toJson(doRemove) {
         return {
             key: this.key,
@@ -38,6 +42,11 @@ export default class RuleBuff {
         };
     }
 
+    /**
+     * @param {BuffBean} json
+     * @param {RuleGameObject} obj
+     * @return {RuleBuff}
+     */
     static fromJson(json, obj) {
         const buff = new RuleBuff(json.key);
         buff.duration = typeof json.duration === "number" ? json.duration : -1;

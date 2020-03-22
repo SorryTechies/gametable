@@ -7,12 +7,13 @@ import RuleActionConstants from "../constants/RuleActionsConstants";
 
 export default {
     [SupportedLanguages.ENG]: {
-        [RuleActionConstants.ACTIVATE_STATE]: "Activate state",
-        [RuleActionConstants.DEACTIVATE_STATE]: "Deactivate state",
-        [RuleActionConstants.CAST_SPELL]: "Cast spell",
-        [RuleActionConstants.TOTAL_DEFENCE]: "Total defence",
-        [RuleActionConstants.FIVE_FOOT_STEP]: "Five foot step",
-        [RuleActionConstants.MELEE_ATTACK]: "Melee attack",
-        [RuleActionConstants.RANGED_ATTACK]: "Ranged attack",
+        [RuleActionConstants.ACTIVATE_STATE]: "Activate State",
+        [RuleActionConstants.DEACTIVATE_STATE]: "Deactivate State",
+        [RuleActionConstants.CAST_SPELL]: "Cast Spell",
+        [RuleActionConstants.TOTAL_DEFENCE]: "Total Defence",
+        [RuleActionConstants.FIVE_FOOT_STEP]: "Five Foot Step",
+        [RuleActionConstants.MELEE_ATTACK]: "Melee Attack",
+        [RuleActionConstants.RANGED_ATTACK]: "Ranged Attack",
+        [RuleActionConstants.COMBAT_MANEUVERS]: "Combat Maneuvers",
     }
 }

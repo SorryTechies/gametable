@@ -12,6 +12,7 @@ export default class RuleDefaultValues {
      */
     static setDefault(character) {
         const setIfNull = (key, val) => !character.get(key) ? character.set(key, val) : null;
+        const initArray = key => !Array.isArray(character.get(key)) ? character.set(key, []) : null;
         Object.values(RuleConstants).forEach(key => setIfNull(key, 0));
         Object.values(RuleSkillConstants).forEach(key => setIfNull(key, 0));
         setIfNull(RuleConstants.STAT_STRENGTH, 10);
@@ -28,8 +29,8 @@ export default class RuleDefaultValues {
 
         setIfNull(RuleConstants.MOVE_SPEED, 30);
 
-        setIfNull(RuleSkillConstants.CLASS_SKILLS_ARRAY, []);
-        setIfNull(RuleConstants.SPELL_ARRAY, ["shock_grasp"])
+        initArray(RuleSkillConstants.CLASS_SKILLS_ARRAY);
+        initArray(RuleConstants.SPELL_ARRAY)
     }
 
     /** @param {RuleGameObject} obj */
