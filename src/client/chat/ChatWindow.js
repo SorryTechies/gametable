@@ -21,7 +21,6 @@ export default class ChatWindow extends React.Component {
         this.state = {
             messages: [],
             input: "",
-            players: [],
             to: "ALL",
             buttonDisabled: false
         };
@@ -32,23 +31,15 @@ export default class ChatWindow extends React.Component {
 
     componentDidMount() {
         StaticController.subscribe({id: WsConstants.STATIC_CHAT, func: this.loadMessages.bind(this)});
-        this.loadMessages().catch(console.error);
-        if (LoginController.isDM()) this.getParticipants();
+        this.loadMessages();
     }
 
     componentWillUnmount() {
         StaticController.unSubscribe(WsConstants.STATIC_CHAT);
     }
 
-    getParticipants() {
-        this.setState({players: StaticController.getParticipants()})
-    }
-
-    async loadMessages() {
-        let messages = await StaticController.getChat();
-        messages.forEach(item => item.timestamp = new Date(Date.parse(item.timestamp)));
-        messages.sort((item1, item2) => item2.timestamp - item1.timestamp);
-        this.setState({messages: messages})
+    loadMessages() {
+        this.setState({messages: StaticController.getChat()})
     }
 
     sendMessage() {
@@ -56,6 +47,7 @@ export default class ChatWindow extends React.Component {
     }
 
     render() {
+        const participants = StaticController.getParticipants();
         return <div>
             <div id={rootScss.bottom_menu} className={rootScss.static_element}>
                 <form autoComplete="off">
@@ -66,8 +58,8 @@ export default class ChatWindow extends React.Component {
                             id={rootScss.chat_select}
                             onChange={event => this.setState({to: event.target.value})}>
                             <option>ALL</option>
-                            {Array.isArray(this.state.players) ? this.state.players.map(player => <option
-                                key={player}>{player}</option>) : null}
+                            {Array.isArray(participants) ? participants.map(player => <option
+                                key={player._id}>{player.username}</option>) : null}
                         </select> : null}
                     <button
                         id={rootScss.chat_button}

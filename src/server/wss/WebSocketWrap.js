@@ -17,6 +17,7 @@ export default class WebSocketWrap {
         if (!id) throw new Error("No id given.");
         this.ws = ws;
         this.id = id;
+        this.ws.user = null;
         this.onDelete = null;
         this.autoCloseTimeout = null;
         this.onAuth = null;

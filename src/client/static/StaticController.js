@@ -15,6 +15,7 @@ import RuleGameObject from "../rules/RuleGameObject";
 import * as RuleLoader from "../rules/RuleLoader";
 import TranslationModule from "../rules/translation/TranslationModule";
 import SupportedLanguages from "../rules/translation/SupportedLanguages";
+import BrowserChatMessage from "../logic/BrowserChatMessage";
 
 /** @type Account */
 let account = null;
@@ -53,13 +54,18 @@ function sendBeans() {
     RuleCharacterChangesBean.init();
 }
 
-function pushMessage(text) {
-    chat.push({
-        stmp: new Date(),
-        text: text,
-        sender_id: account._id,
-        session_id: session._id
-    });
+function getMessage(text, toWho = []) {
+    const chatMessage = new BrowserChatMessage();
+    chatMessage.text = text;
+    chatMessage.targets = toWho;
+    chatMessage.sessionId = session._id;
+    chatMessage.senderId = account._id;
+    chatMessage.init(StaticController);
+    return chatMessage;
+}
+
+function pushMessage(message) {
+    chat.unshift(message);
 }
 
 export default class StaticController {
@@ -71,6 +77,7 @@ export default class StaticController {
         if (!acc) throw new Error("No account provided.");
         account = acc;
         await this.loadSession();
+        await this.loadParticipants();
         await this.loadChat();
         await this.loadMap();
         await this.loadObjects();
@@ -78,7 +85,6 @@ export default class StaticController {
         await this.setMyCharacter();
         linkCharacters();
         await this.loadActions();
-        await this.loadParticipants();
         await this.loadMusic();
     }
 
@@ -129,12 +135,12 @@ export default class StaticController {
     }
 
     static async loadChat() {
-        chat = await new NormalRequest('/chat').send();
-        chat.forEach(message => (message.stmp = new Date(Date.parse(message.stmp))));
+        chat = (await new NormalRequest('/chat').send()).map(m => BrowserChatMessage.fromJson(m, StaticController));
+        chat.sort((item1, item2) => item2.timestamp - item1.timestamp);
     }
 
     static async loadParticipants() {
-        participants = await new NormalRequest('/todo').send();
+        participants = await new NormalRequest('/participants').send();
     }
 
     static async loadMusic() {
@@ -226,7 +232,7 @@ export default class StaticController {
     }
 
     /**
-     * @param {GameObject} unit
+     * @param {RuleGameObject} unit
      * @return {boolean}
      */
     static isOwnedGameObject(unit) {
@@ -247,14 +253,17 @@ export default class StaticController {
 
     static sendChatMessage(text, toWho) {
         if (!text) return;
-        pushMessage(text);
-        const message = new WebSocketMessage(WebSocketMessage.TYPE_CHAT);
-        message.data = {text: text, receiver: toWho};
-        BrowserWebSocket.sendMessage(message);
+        const chatMessage = getMessage(text, toWho);
+        chatMessage.isMessage = true;
+        chatMessage.send();
+        pushMessage(chatMessage);
     }
 
-    static sendActionDescription(text, action) {
-        StaticController.sendChatMessage(text, []);
+    static sendActionDescription(text) {
+        if (!text) return;
+        const chatMessage = getMessage(text);
+        chatMessage.send();
+        pushMessage(chatMessage);
     }
 }
 

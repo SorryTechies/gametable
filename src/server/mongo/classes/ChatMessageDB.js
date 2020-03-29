@@ -28,3 +28,4 @@ ChatMessageDB.SENDER_FIELD = "sender_id";
 ChatMessageDB.TARGET_FIELD = "target_id";
 ChatMessageDB.SESSION_FIELD = "session_id";
 ChatMessageDB.TIMESTAMP_FIELD = "stmp";
+ChatMessageDB.IS_MESSAGE = "is_message";

@@ -22,6 +22,7 @@ wss.on('connection', (ws, req) => {
     wrap.onAuth = async auth => {
         const account = await AccountDB.getByUsername(auth);
         if (account) {
+            wrap.ws.user = account;
             console.log("Authorized as " + account.username + " for" + ip);
             const user = WebSocketUser.findOrCreateByAccount(account, ws);
             wrap.onDelete = () => user.removeSocket(ws);
