@@ -8,6 +8,7 @@ import * as IntentHandler from "./handlers/IntentHandler";
 import LoginController from "../LoginController";
 import * as ObjectHandler from "./handlers/ObjectHandler";
 import * as BrowserCharacterHandler from "./handlers/BrowserCharacterHandler";
+import * as ChatHandler from "./handlers/ChatHandler";
 
 let ws = null;
 let timeout = null;
@@ -53,7 +54,7 @@ export default class BrowserWebSocket {
                         console.error(message.data);
                         return;
                     case WebSocketMessage.TYPE_CHAT:
-                        return; //TODO
+                        return ChatHandler.handle(message.data);
                     case WebSocketMessage.TYPE_INTENT:
                         switch (message.action) {
                             case "new":

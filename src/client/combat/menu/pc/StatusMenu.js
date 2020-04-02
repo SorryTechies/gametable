@@ -14,8 +14,18 @@ import RuleActionsConstants from "../../../rules/constants/RuleActionsConstants"
 import RuleConstants from "../../../rules/constants/RuleStatConstants";
 import RuleWeaponConstants from "../../../rules/items/const/RuleWeaponConstants";
 import RuleCombatManuverList from "../../../rules/constants/RuleCombatManuverList";
+import {MUST_DO_ATTACK_BUFFS} from "../../../rules/constants/RuleBuffGroupConstants";
 
 const NO = "no";
+
+function filterAllowedStates(unit) {
+    const actionList = StaticController.getRound().getObject(unit.id).actionList;
+    return unit.ruleCharacter.getStateList().filter(key => {
+        if (!actionList.canDoStandardAction && MUST_DO_ATTACK_BUFFS.includes(key)) return false;
+        return true;
+    });
+}
+
 
 export default class StatusMenu extends React.Component {
     constructor(props) {
@@ -65,7 +75,7 @@ export default class StatusMenu extends React.Component {
             case RuleActionsConstants.CAST_SPELL:
                 return this.props.unit.ruleCharacter.get(RuleConstants.SPELL_ARRAY);
             case RuleActionsConstants.ACTIVATE_STATE:
-                return this.props.unit.ruleCharacter.getStateList();
+                return filterAllowedStates(this.props.unit);
             case RuleActionsConstants.DEACTIVATE_STATE:
                 return this.props.unit.buffs.getDispellableDebuffs().map(buff => buff.key);
             default:

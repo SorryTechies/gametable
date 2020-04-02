@@ -18,13 +18,14 @@ export async function handleNewChatMessage(message, ws) {
     if (!session) throw new Error("No session found with id " + message.game_id);
     const m = ServerChatMessage.fromJson(message.data);
     m.sessionId = session._id;
-    m.senderId = ws.user._id;
+    if (!session.owner_id.equals(ws.user._id)) m.senderId = ws.user._id;
     m.timestamp = new Date();
+    message.data = m.toJson();
     if (Array.isArray(m.targets) && m.targets.length > 0) {
         WebSocketUser.sendToTheDM(session, message, ws);
     } else {
         delete m.targets;
-        WebSocketUser.sendToGameSession(session, m.toJson(), ws);
+        WebSocketUser.sendToGameSession(session, message, ws);
     }
     await MongoController.insert(ChatMessageDB.DB_NAME, [m.toJson()]);
 }

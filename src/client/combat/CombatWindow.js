@@ -17,6 +17,7 @@ import PopupManager from "../popup/PopupManager";
 import RuleActions from "../rules/RuleAction";
 import DmPanel from "./menu/pc/DmPanel";
 import RuleActionsConstants from "../rules/constants/RuleActionsConstants";
+import BrowserMessenger from "../logic/ws/messagers/BrowserMessenger";
 
 const BAR_STATUS = 'status';
 const ACTION_HIGHLIGHT = 'act';
@@ -91,22 +92,13 @@ export default class CombatWindow extends React.Component {
         if (!this.validateAction(action)) return;
         this.addGraphics(action);
         StaticController.getRound().addAction(action);
-        const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
-        message.data = action.toJson();
-        message.action = "new";
-        BrowserWebSocket.sendMessage(message);
+        BrowserMessenger.sendNewIntentMessage(action);
     }
 
     removeCombatAction(action) {
         this.removeGraphics(action);
         StaticController.getRound().removeAction(action);
-        const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
-        message.data = {
-            id: action.id,
-            performerId: action.performerId
-        };
-        message.action = "rem";
-        BrowserWebSocket.sendMessage(message);
+       BrowserMessenger.sendRemIntentMessage(action);
         this.forceUpdate();
     }
 

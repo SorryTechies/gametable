@@ -16,7 +16,7 @@ function fullFormula(self) {
 }
 
 function newFormula(self) {
-    return self.result + self.die * this.amountOfDices * self.criticalModifier;
+    return self.result + self.die * self.amountOfDices * self.criticalModifier;
 }
 
 export default class DamageDice extends Dice {

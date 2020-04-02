@@ -9,6 +9,7 @@ import NormalRequest from "../logic/NormalRequest";
 import LoginController from "../logic/LoginController";
 import StaticController from "../static/StaticController";
 import * as WsConstants from "../../common/WsConstants";
+import WebSocketMessage from "../../common/logic/WebSocketMessage";
 
 let id = 0;
 
@@ -30,12 +31,12 @@ export default class ChatWindow extends React.Component {
     }
 
     componentDidMount() {
-        StaticController.subscribe({id: WsConstants.STATIC_CHAT, func: this.loadMessages.bind(this)});
+        StaticController.subscribe({id: WebSocketMessage.TYPE_CHAT, func: this.loadMessages.bind(this)});
         this.loadMessages();
     }
 
     componentWillUnmount() {
-        StaticController.unSubscribe(WsConstants.STATIC_CHAT);
+        StaticController.unSubscribe(WebSocketMessage.TYPE_CHAT);
     }
 
     loadMessages() {
@@ -44,10 +45,12 @@ export default class ChatWindow extends React.Component {
 
     sendMessage() {
         StaticController.sendChatMessage(this.state.input);
+        this.state.input = "";
     }
 
     render() {
         const participants = StaticController.getParticipants();
+        let prevSender = "";
         return <div>
             <div id={rootScss.bottom_menu} className={rootScss.static_element}>
                 <form autoComplete="off">
@@ -73,7 +76,11 @@ export default class ChatWindow extends React.Component {
                     </button>
                 </form>
             </div>
-            {this.state.messages.map(obj => <Message key={id++} message={obj}/>)}
+            {this.state.messages.map(obj => {
+                const ui = <Message key={id++} message={obj} previousSender={prevSender}/>;
+                prevSender = obj.senderName;
+                return ui;
+            })}
         </div>
     }
 }

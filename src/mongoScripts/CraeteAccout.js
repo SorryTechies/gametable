@@ -5,6 +5,7 @@
 import MongoController from "../server/mongo/MongoController";
 import AccountDB from "../server/mongo/classes/AccountDB";
 import CharacterDB from "../server/mongo/classes/CharacterDB";
+import GameObjectDB from "../server/mongo/classes/GameObjectDB";
 import GameSessionDB from "../server/mongo/classes/GameSessionDB";
 import SessionMapDB from "../server/mongo/classes/SessionMapDB";
 
@@ -38,15 +39,31 @@ async function getMap() {
 (async () => {
     await MongoController.init();
     const map = (await getMap())[0];
+    const game = (await getGame(map))[0];
     const character = (await MongoController.insert(CharacterDB.DB_NAME, [{
         [CharacterDB.DATA_FIELD]: {},
-        [CharacterDB.NAME_FIELD]: "Vatan"
+        [CharacterDB.NAME_FIELD]: "Grul"
     }]))[0];
-    const game = (await getGame(map))[0];
+    const gameObject = (await MongoController.insert(GameObjectDB.DB_NAME, [{
+        [GameObjectDB.DATA_FIELD]: {},
+        [GameObjectDB.POSITION_FIELD]: {x: 4, y: 4},
+        [GameObjectDB.NAME_FIELD]: "Grul",
+        [GameObjectDB.CHARACTERS_FIELD]: character._id,
+        [GameObjectDB.ICON_FIELD]: '/icons/Temp.png'
+    }]))[0];
     const account = (await MongoController.insert(AccountDB.DB_NAME, [{
-        [AccountDB.USERNAME_FIELD]: "vatan",
+        [AccountDB.USERNAME_FIELD]: "sasha",
         [AccountDB.CHARACTERS_FIELD]: [character._id],
         [AccountDB.SESSION_FIELD]: [game._id]
     }]))[0];
-    MongoController.update(GameSessionDB.DB_NAME, {_id: game._id}, {[GameSessionDB.OWNER_FIELD]: account._id});
+    MongoController.updateRaw(
+        SessionMapDB.DB_NAME,
+        {_id: map._id},
+        {$push: {[SessionMapDB.MAP_OBJECTS_FIELD]: gameObject._id}}
+    );
+    MongoController.updateRaw(
+        GameSessionDB.DB_NAME,
+        {_id: game._id},
+        {$push: {[GameSessionDB.PARTICIPANTS_CHARACTER_FIELD]: account._id}}
+    );
 })().catch(console.error);

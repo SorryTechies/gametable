@@ -259,11 +259,16 @@ export default class StaticController {
         pushMessage(chatMessage);
     }
 
-    static sendActionDescription(text) {
+    static sendActionDescription(text, action) {
         if (!text) return;
         const chatMessage = getMessage(text);
+        delete chatMessage.senderId;
         chatMessage.send();
         pushMessage(chatMessage);
+    }
+
+    static pushChatMessage(message) {
+        pushMessage(message);
     }
 }
 

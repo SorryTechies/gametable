@@ -51,9 +51,13 @@ export default class MongoController {
         return db.collection(name).insertMany(arr).then(result => result.ops);
     }
 
-    static update(name, query, setObj) {
+    static updateRaw(name, query, obj) {
         throwIfNotInit();
-        return db.collection(name).updateMany(query, {$set: setObj});
+        return db.collection(name).updateMany(query, obj);
+    }
+
+    static update(name, query, setObj) {
+        return MongoController.updateRaw(name, query, {$set: setObj});
     }
 
     static pushInto(name, query, setObj) {
@@ -69,5 +73,9 @@ export default class MongoController {
     static remove(name, query) {
         throwIfNotInit();
         return db.collection(name).deleteMany(query);
+    }
+
+    static createId(str) {
+        return MongoDB.ObjectID(str);
     }
 }

@@ -24,18 +24,14 @@ function setTriggers(list, action) {
     switch (action.type) {
         case RuleTypes.TYPE_STANDARD:
             action.consumeStandartSlot = true;
-            list.canDoStandardAction = false;
             break;
         case RuleTypes.TYPE_MOVE:
             action.consumeMoveSlot = list.canDoMoveAction;
             action.consumeStandartSlot = !list.canDoMoveAction;
-            list.canDoMoveAction = false;
             break;
         case RuleTypes.TYPE_FULL_ROUND:
             action.consumeMoveSlot = true;
             action.consumeStandartSlot = true;
-            list.canDoMoveAction = false;
-            list.canDoStandardAction = false;
             break;
         case RuleTypes.TYPE_SWIFT:
             list.canDoSwiftAction = false;
@@ -46,6 +42,8 @@ function setTriggers(list, action) {
     if (isForcingAttackState(action)) list.mustAttackOnThisRound = true;
     if (SUPP.REPOSITION_ACTIONS.includes(action.key)) list.movedAlready = true;
     if (SUPP.MOVE_BLOCK_ACTIONS.includes(action.key)) list.canMove = false;
+    if (action.consumeMoveSlot) list.canDoMoveAction = false;
+    if (action.consumeStandartSlot) list.canDoStandardAction = false;
 }
 
 /**
