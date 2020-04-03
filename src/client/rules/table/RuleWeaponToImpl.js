@@ -6,6 +6,7 @@ import RuleWeaponConstants from "../items/const/RuleWeaponConstants";
 import * as RuleWeaponImpl from "../impl/RuleWeaponImpl";
 
 export default {
+    [RuleWeaponConstants.SPEAR]: RuleWeaponImpl.spearImpl,
     [RuleWeaponConstants.LASER_RIFLE]: RuleWeaponImpl.laserRifleImpl,
     [RuleWeaponConstants.UNARMED_STRIKE]: RuleWeaponImpl.unarmedImpl,
     [RuleWeaponConstants.IMPROVISED]: RuleWeaponImpl.improvisedWeaponImpl

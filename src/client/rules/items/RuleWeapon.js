@@ -15,6 +15,7 @@ export default class RuleWeapon extends RuleWearable {
 
     static fromJson(json) {
         const item = new RuleWeapon(json.key);
+        item.id = json.id;
         item.health = json.health;
         item.slot = json.slot;
         return item;

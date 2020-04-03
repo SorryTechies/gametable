@@ -9,11 +9,14 @@ import SessionMapDB from "../server/mongo/classes/SessionMapDB";
 
 (async () => {
     await MongoController.init();
-    const character = await MongoController.getOne(CharacterDB.DB_NAME, {[CharacterDB.NAME_FIELD]: "Biba"});
+    const character = await MongoController.getOne(CharacterDB.DB_NAME, {[CharacterDB.NAME_FIELD]: "Rat slave"});
     const gameObject = (await MongoController.insert(GameObjectDB.DB_NAME, [
         {
-            [GameObjectDB.POSITION_FIELD]: {x: 10, y: 10},
-            [GameObjectDB.CHARACTERS_FIELD]: character._id
+            [GameObjectDB.DATA_FIELD]: {},
+            [GameObjectDB.POSITION_FIELD]: {x: 1, y: 3},
+            [GameObjectDB.NAME_FIELD]: "Ratling",
+            [GameObjectDB.CHARACTERS_FIELD]: character._id,
+            [GameObjectDB.ICON_FIELD]: '/icons/Ratling.PNG'
         }
     ]))[0];
     await MongoController.pushInto(SessionMapDB.DB_NAME, {name: "test_map"}, {map_objects_id: gameObject._id});

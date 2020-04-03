@@ -6,15 +6,6 @@ import * as React from "react";
 import * as PropTypes from "prop-types";
 import StaticController from "../../../static/StaticController";
 
-function getName(id) {
-    const unit = StaticController.getObjects().find(obj => obj._id === id);
-    if (unit) {
-        return unit.name;
-    } else {
-        return id;
-    }
-}
-
 function toDisplay(action) {
     let result = action.key;
     switch (action.targetType) {
@@ -22,7 +13,7 @@ function toDisplay(action) {
             result += ` to {${action.target.x}, ${action.target.y}}`;
             break;
         case "unit":
-            result += " " + getName(action.target);
+            result += " " + action.targetObject.name;
             break;
         case "none":
             break;

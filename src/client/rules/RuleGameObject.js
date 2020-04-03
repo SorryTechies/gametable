@@ -121,7 +121,7 @@ export default class RuleGameObject {
         if (json.initiative) obj.initiative = json.initiative;
         if (json.icon) obj.icon = json.icon;
         if (json.character_id) obj.character_id = json.character_id;
-        if (Array.isArray(json.items)) obj.items = RuleItemController.fromJson(json.items);
+        if (Array.isArray(json.items)) obj.items = RuleItemController.fromJson(obj, json.items);
         if (Array.isArray(json.effects)) obj.effects = RuleEffectController.fromJson(obj, json.effects);
         if (json.position) {
             obj.position = json.position;

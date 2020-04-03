@@ -25,3 +25,4 @@ GameObjectDB.TEMPLATE_FIELD = "template_id";
 GameObjectDB.DATA_FIELD = "data";
 GameObjectDB.NAME_FIELD = "name";
 GameObjectDB.ICON_FIELD = "icon";
+GameObjectDB.ITEMS_FIELD = "items";

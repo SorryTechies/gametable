@@ -12,6 +12,7 @@ export default class RuleShield extends RuleItem {
 
     static fromJson(json) {
         const item = new RuleShield(json.key);
+        item.id = json.id;
         item.health = json.health;
         item.slot = json.slot;
         return item;

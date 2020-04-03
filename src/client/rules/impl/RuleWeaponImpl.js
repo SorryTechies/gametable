@@ -77,3 +77,7 @@ export function laserRifleImpl(action) {
     }
     RuleLoader.getLoader().sendActionDescription(str, action);
 }
+
+export function spearImpl(action) {
+    simpleMeleeAttack(action);
+}

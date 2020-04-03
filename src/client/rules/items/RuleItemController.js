@@ -19,7 +19,7 @@ export default class RuleItemController {
             this.items = arr;
             this.items.forEach(item => {
                 if (typeof item.slot === "number") {
-                    this.slots.equip(item);
+                    this.slots.equip(item, item.slot);
                 }
             });
         } else {
@@ -47,8 +47,8 @@ export default class RuleItemController {
         const r = this.slots.getSlot(RuleWearSlots.RIGHT_HAND);
         const l = this.slots.getSlot(RuleWearSlots.LEFT_HAND);
         if (r && l) return [r, l];
-        if (r) return r;
-        if (l) return l;
+        if (r) return [r];
+        if (l) return [l];
         return [];
     }
 
@@ -71,9 +71,9 @@ export default class RuleItemController {
         this.removeItem(itemOrSlot);
     }
 
-    static fromJson(arr) {
+    static fromJson(obj, arr) {
         if (!Array.isArray(arr)) throw new Error("Malformed json.");
-        return new RuleItemController(arr.map(RuleItemFactory.fromJson));
+        return new RuleItemController(obj, arr.map(RuleItemFactory.fromJson));
     }
 
     /** @param {ItemBean} json */

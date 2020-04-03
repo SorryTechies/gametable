@@ -8,15 +8,18 @@ const ObjectId = MongoDB.ObjectID;
 
 import MongoController from "../server/mongo/MongoController";
 import GameObjectDB from "../server/mongo/classes/GameObjectDB";
+import * as uuid from "uuid";
 
 (async () => {
     await MongoController.init();
-    const characters = await MongoController.update(GameObjectDB.DB_NAME, {_id: ObjectId("5e3ea0e72763d338d4b6b411")},
+    const characters = await MongoController.update(GameObjectDB.DB_NAME, {name: "Ratling"},
         {
-            effects: [],
-            data: {},
-            buffs: {},
-            name: "Vatan"
+            [GameObjectDB.ITEMS_FIELD]: [{
+                "id": uuid.v1(),
+                "key": "spear",
+                "health": 1,
+                "slot": 3
+            }]
         });
     console.log(characters);
 })().catch(console.error);

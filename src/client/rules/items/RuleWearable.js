@@ -13,6 +13,7 @@ export default class RuleWearable extends RuleItem {
 
     static fromJson(json) {
         const item = new RuleWearable(json.key);
+        item.id = json.id;
         item.health = json.health;
         item.slot = json.slot;
         return item;
