@@ -3,16 +3,25 @@
  */
 
 import SupportedLanguages from "./SupportedLanguages";
-import RuleTranslationConstants from "../constants/RuleTranslationConstants";
 import RuleBuffConstants from "../constants/RuleBuffConstants";
+import RuleActionConstants from "../constants/RuleActionsConstants";
 
 export default {
     [SupportedLanguages.ENG]: {
-        [RuleTranslationConstants.ATTACK_HIT]: v =>
-            `${v[0]} attacks ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} ${v[5]} damage.`,
-        [RuleTranslationConstants.ATTACK_MISS]: v =>
-            `${v[0]} attacks ${v[1]} ${v[2]} with ${v[3]} and misses.`,
-        [RuleBuffConstants.TOTAL_DEFENSE]: v =>
-            `${v[0]} enters total defence!`
+        [true]: {
+            [RuleActionConstants.MELEE_ATTACK]: v =>
+                `${v[0]} melee attacks ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} ${v[5]} damage.`,
+            [RuleActionConstants.RANGED_ATTACK]: v =>
+                `${v[0]} shoots ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} ${v[5]} damage.`,
+            [RuleBuffConstants.TOTAL_DEFENSE]: v =>
+                `${v[0]} enters total defence!`
+        },
+        [false]: {
+            [RuleActionConstants.MELEE_ATTACK]: v =>
+                `${v[0]} melee attacks ${v[1]} ${v[2]} with ${v[3]} and misses.`,
+            [RuleActionConstants.RANGED_ATTACK]: v =>
+                `${v[0]} shoots ${v[1]} ${v[2]} with ${v[3]} and misses.`,
+
+        }
     }
 }

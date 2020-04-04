@@ -2,82 +2,60 @@
  * Created by LastBerserk on 09.03.2020.
  */
 
-
-import {getAttackRoll} from "./RuleCommonImpl";
+import {
+    acCheck, touchCheck, flatFootedCheck, flatFootedTouchCheck,
+    getRangedAttackRoll, getMeleeAttackImpl, getThrowAttack, getImprovisedAttack
+} from "./RuleCommonImpl";
 import DamageDice from "../../logic/roll/DamageDice";
 import RuleConstants from "../constants/RuleStatConstants";
-import * as RuleLoader from "../RuleLoader";
+import RuleACType from "../constants/RuleACType";
 import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleGameObjectConstants from "../constants/RuleGameObjectConstants";
-import RuleDamageType from "../constants/RuleDamageType";
-import TranslationModule from "../translation/TranslationModule";
-import RuleTranslationConstants from "../constants/RuleTranslationConstants";
 
-function getAttackText(action, attackRoll, damage, type) {
-    return TranslationModule.getTranslation(
-        RuleTranslationConstants.ATTACK_HIT,
-        action.performerObject.name,
-        action.targetObject.name,
-        attackRoll,
-        action.additional1,
-        damage,
-        type
-    );
-}
-
-function getMissText(action, attackRoll) {
-    return TranslationModule.getTranslation(
-        RuleTranslationConstants.ATTACK_MISS,
-        action.performerObject.name,
-        action.targetObject.name,
-        attackRoll,
-        action.additional1
-    );
-}
-
-function simpleMeleeAttack(action, dmgDice = 6) {
-    const attackRoll = getAttackRoll(action, false);
+function doAttack(action, damage) {
     const damageRoll = new DamageDice();
-    damageRoll.bonus = action.performerObject.get(RuleConstants.MOD_STRENGTH);
-    damageRoll.dice = dmgDice;
-    attackRoll.nextDice.push(damageRoll);
-    attackRoll.roll();
-    let str;
-    if (attackRoll.result >= action.targetObject.get(RuleConstants.DEFENCE_AC)) {
-        action.targetObject.dealDamage(damageRoll.result);
-        str = getAttackText(action, attackRoll.result, damageRoll.result);
-        RuleCharacterChangesBean.addDataModification(action.target, RuleGameObjectConstants.LETHAL_DAMAGE, damageRoll.result);
-    } else {
-        str = getMissText(action, attackRoll.result);
+    damageRoll.bonus = action.performerObject.get(RuleConstants.MOD_DEXTERITY);
+    damageRoll.dice = damage ? damage : action.additional1.damageDie;
+    damageRoll.amountOfDices = action.additional1.amountOfDice;
+    action.roll.nextDice.push(damageRoll);
+    action.roll.roll();
+    switch (action.additional1.acType) {
+        case RuleACType.NORMAL:
+            acCheck(action);
+            break;
+        case RuleACType.TOUCH:
+            touchCheck(action);
+            break;
+        case RuleACType.FLAT_FOOTED:
+            flatFootedCheck(action);
+            break;
+            flatFootedTouchCheck(action);
+            break;
     }
-    RuleLoader.getLoader().sendActionDescription(str, action);
-}
-
-export function improvisedWeaponImpl(action) {
-    simpleMeleeAttack(action);
-}
-
-export function unarmedImpl(action) {
-    simpleMeleeAttack(action, 3);
-}
-
-export function laserRifleImpl(action) {
-    const attackRoll = getAttackRoll(action, true);
-    const damageRoll = new DamageDice();
-    damageRoll.amountOfDices = 2;
-    attackRoll.nextDice.push(damageRoll);
-    attackRoll.roll();
-    let str;
-    if (attackRoll.result >= action.targetObject.get(RuleConstants.DEFENCE_FLAT_FOOTED_AC)) {
-        action.targetObject.dealDamage(damageRoll.result, RuleDamageType.ENERGY);
-        str = getAttackText(action, attackRoll.result, damageRoll.result, RuleDamageType.ENERGY);
+    if (action.isSuccessfull) {
+        action.targetObject.dealDamage(damageRoll.result, action.additional1.damageType);
         RuleCharacterChangesBean.addDataModification(action.target, RuleGameObjectConstants.LETHAL_DAMAGE, damageRoll.result);
-    } else {
-        str = getMissText(action, attackRoll.result);
     }
-    RuleLoader.getLoader().sendActionDescription(str, action);
+    action.isExecuted = true;
+    action.sendDescriptionText();
 }
 
-export function spearImpl(action) {
-    simpleMeleeAttack(action);
+export function simpleRangedImpl(action) {
+    action.roll = getRangedAttackRoll(action);
+    doAttack(action);
+}
+
+export function simpleMeleeAttackImpl(action) {
+    action.roll = getMeleeAttackImpl(action);
+    doAttack(action);
+}
+
+export function simpleThrowAttackImpl(action) {
+    action.roll = getThrowAttack(action);
+    doAttack(action);
+}
+
+export function simpleImprovisedAttackImpl(action) {
+    action.roll = getImprovisedAttack(action);
+    doAttack(action, 3);
 }

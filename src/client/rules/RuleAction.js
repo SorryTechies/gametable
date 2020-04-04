@@ -9,6 +9,7 @@ import {implementation, validation} from "./table/RuleActionKeyToImpl";
 import * as RuleLoader from "./RuleLoader";
 import * as CONST from "./constants/RuleActionListConstants";
 import * as SUPP from "./constants/RuleActionListSupportConstants";
+import TranslationModule from "./translation/TranslationModule";
 
 function findType(key) {
     const type = Object.keys(RuleAction.ACTION_TYPE_OBJECT).find(item => RuleAction.ACTION_TYPE_OBJECT[item].includes(key));
@@ -51,6 +52,10 @@ export default class RuleAction {
         this.targetObject = null;
         /** @type RuleGameObject */
         this.performerObject = null;
+        /** @type {Dice} */
+        this.roll = null;
+        this.isExecuted = false;
+        this.isSuccessfull = false;
     }
 
     setPerformer(data) {
@@ -92,7 +97,9 @@ export default class RuleAction {
         if (typeof func === "function") func(this);
         if (typeof func === "object") {
             if (typeof func[this.additional1] !== "function") throw new Error("No implementation found for " + this.additional1 + " in " + this.key);
+            this.isSuccessfull = true;
             func[this.additional1](this);
+            this.isExecuted = true;
         }
     }
 
@@ -137,6 +144,11 @@ export default class RuleAction {
 
     isRepositionAction() {
         return SUPP.REPOSITION_ACTIONS.includes(this.key);
+    }
+
+    sendDescriptionText() {
+        if (!this.isExecuted) throw new Error("Action isn't finished.");
+        RuleLoader.sendDescription(TranslationModule.getActionTranslation(this), this)
     }
 }
 

@@ -21,15 +21,13 @@ export default class ActionSelector extends React.Component {
     }
 
     render() {
-        const arr = [RuleActionsConstants.NO_ACTION]
-            .concat(this.props.allowedActions)
-            .map(key => ({
-                key: key,
-                val: TranslationModule.getTranslation(key)
-            }));
         return <div>
             <select value={this.state.selected} onChange={this.onSelection.bind(this)}>
-                {arr.map(obj => <option value={obj.key} key={obj.key}>{obj.val}</option>)}
+                {[RuleActionsConstants.NO_ACTION, ...this.props.allowedActions]
+                    .map(obj => {
+                        const key = typeof obj === "object" ? obj.key : obj;
+                        return <option value={obj} key={key}>{TranslationModule.getTranslation(key)}</option>;
+                    })}
             </select>
         </div>
     }

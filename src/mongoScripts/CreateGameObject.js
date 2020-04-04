@@ -6,6 +6,7 @@ import MongoController from "../server/mongo/MongoController";
 import GameObjectDB from "../server/mongo/classes/GameObjectDB";
 import CharacterDB from "../server/mongo/classes/CharacterDB";
 import SessionMapDB from "../server/mongo/classes/SessionMapDB";
+import * as uuid from "uuid";
 
 (async () => {
     await MongoController.init();
@@ -16,7 +17,13 @@ import SessionMapDB from "../server/mongo/classes/SessionMapDB";
             [GameObjectDB.POSITION_FIELD]: {x: 1, y: 3},
             [GameObjectDB.NAME_FIELD]: "Ratling",
             [GameObjectDB.CHARACTERS_FIELD]: character._id,
-            [GameObjectDB.ICON_FIELD]: '/icons/Ratling.PNG'
+            [GameObjectDB.ICON_FIELD]: '/icons/Ratling.PNG',
+            [GameObjectDB.ITEMS_FIELD]: [{
+                "id": uuid.v1(),
+                "key": "spear",
+                "health": 1,
+                "slot": 3
+            }]
         }
     ]))[0];
     await MongoController.pushInto(SessionMapDB.DB_NAME, {name: "test_map"}, {map_objects_id: gameObject._id});

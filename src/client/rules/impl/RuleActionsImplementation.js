@@ -5,7 +5,6 @@
 import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleState from "../RuleState";
 import * as RuleLoader from "../RuleLoader";
-import RuleWeaponToImpl from "../table/RuleWeaponToImpl";
 import RuleBuffConstants from "../constants/RuleBuffConstants";
 
 export const doMove = action => {
@@ -16,10 +15,6 @@ export const doMove = action => {
 export const doTotalDefence = action => {
     RuleLoader.sendTranslatedDescription(action, RuleBuffConstants.TOTAL_DEFENSE, action.performerObject.name);
     RuleState.doTotalDefenceState(action);
-};
-export const doAttack = action => {
-    const impl = RuleWeaponToImpl[action.additional1];
-    if (typeof impl === "function") impl(action);
 };
 
 export const doCharge = action => {

@@ -8,6 +8,8 @@ export default {
     COMBAT_MANEUVERS: "comb_man",
     MELEE_ATTACK: "m_attack",
     RANGED_ATTACK: "r_attack",
+    IMPROVISED_ATTACK: "i_attack",
+    THROW_ATTACK: "t_attack",
     SPRINT: "sprint",
     CAST_SPELL: "spell",
     FIVE_FOOT_STEP: "5ft",

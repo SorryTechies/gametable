@@ -6,25 +6,15 @@ import SupportedLanguages from "./SupportedLanguages";
 import FeatsTranslation from "./FeatsTranslation";
 import ActionDescriptionTranslation from "./ActionDescriptionTranslation";
 import ActionTranslation from "./ActionTranslation";
+import {sendDescription} from "../RuleLoader";
 
 let currentLanguage = SupportedLanguages.ENG;
 const translation = {};
 
 const MODULES = [
     FeatsTranslation,
-    ActionTranslation,
-    ActionDescriptionTranslation
+    ActionTranslation
 ];
-
-function findInModule(key) {
-    const module = MODULES.find(module => Object.keys(module[currentLanguage]).find(item => item === key));
-    if (module) {
-        return module[currentLanguage][key];
-    } else {
-        console.warning("No translation found for " + key);
-        return key;
-    }
-}
 
 function process(key, val, args) {
     if (typeof val === "function") {
@@ -72,5 +62,19 @@ export default class TranslationModule {
                 return acc;
             }, {}
         );
+    }
+
+    /**
+     * @param {RuleAction} action
+     */
+    static getActionTranslation(action) {
+        const func =  ActionDescriptionTranslation[currentLanguage][action.isSuccessfull][action.key];
+        if (typeof func !== "function") return action.key;
+        const args = [action.performerObject.name, action.targetObject.name];
+        if (action.roll) args.push(action.roll.result);
+        if (action.additional1 && action.additional1.key) args.push(action.additional1.key);
+        if (action.roll && action.roll.nextDice.length !== 0) args.push(action.roll.nextDice[0].result);
+        if (action.additional2) args.push(action.additional2);
+        sendDescription(func(args), action);
     }
 }

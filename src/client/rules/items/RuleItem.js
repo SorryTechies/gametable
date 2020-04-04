@@ -10,6 +10,7 @@ export default class RuleItem {
         this.id = uuid.v1();
         this.key = key;
         this.weight = 1;
+        this.maxHealth = 1;
         this.hardeness = 0;
         this.isWearable = false;
         this.isWeapon = false;

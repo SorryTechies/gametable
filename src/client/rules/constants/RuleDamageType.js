@@ -3,10 +3,10 @@
  */
 
 export default {
-    PIERCING: "p",
-    BLUDGEONING: "b",
-    SLASHING: "s",
-    ENERGY: "e",
-    ICE: "i",
-    FIRE: "f"
+    PIERCING: 0,
+    BLUDGEONING: 1,
+    SLASHING: 2,
+    ENERGY: 3,
+    ICE: 4,
+    FIRE: 5
 };

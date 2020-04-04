@@ -12,8 +12,7 @@ import * as uuid from "uuid";
 
 (async () => {
     await MongoController.init();
-    const characters = await MongoController.update(GameObjectDB.DB_NAME, {name: "Ratling"},
-        {
+    const characters = await MongoController.update(GameObjectDB.DB_NAME, {name: "Ratling"},        {
             [GameObjectDB.ITEMS_FIELD]: [{
                 "id": uuid.v1(),
                 "key": "spear",
