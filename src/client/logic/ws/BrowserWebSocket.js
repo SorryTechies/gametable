@@ -36,8 +36,8 @@ export default class BrowserWebSocket {
         };
         ws.onclose = () => {
             console.log("Ws closed.");
-            timeout = setInterval(() => {
-                if (ws !== null) {
+            timeout = setTimeout(() => {
+                if (ws) {
                     ws.onclose = undefined;
                     ws.close();
                 }
