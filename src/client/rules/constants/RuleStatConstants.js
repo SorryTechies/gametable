@@ -66,4 +66,6 @@ export default {
 
     CASTER_LEVEL: "c_level",
     SPELL_ARRAY: "spell_array",
+
+    SIZE: "size"
 };

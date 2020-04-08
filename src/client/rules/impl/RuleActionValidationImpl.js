@@ -14,6 +14,14 @@ function calculateMoveDistance(p1, p2) {
     return Math.max(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y)) + Math.floor(Math.min(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y)) / 2);
 }
 
+function reachValidation(item) {
+    if (item.reach) {
+        calculateMoveDistance(action);
+    } else {
+        touchCheck(action);
+    }
+}
+
 function isInTouchRange(p1, p2) {
     if ((Math.abs(p1.x - p2.x) > 1) || (Math.abs(p1.y - p2.y) > 1)) throw new Error("Should be in touch range.");
 }
@@ -36,6 +44,15 @@ export const fiveFootValidation = action => {
 };
 
 export const attackValidation = action => {
+    /** @type {RuleWeapon} */
+    const item = action.additional1;
+    if (!item.isRanged) {
+        if (item.reach === 1) {
+            touchCheck(action);
+        } else {
+            calculateMoveDistance(action);
+        }
+    }
 };
 
 export const touchCheck = action => {

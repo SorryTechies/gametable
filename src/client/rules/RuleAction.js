@@ -37,7 +37,8 @@ function actionKeyToTarget(key) {
 export default class RuleAction {
     constructor(key, id) {
         this.key = key;
-        this.isHidden = false;
+        this.isHidden = 0;
+        this.dmOnly = false;
         this.performerId = "";
         this.additional1 = null;
         this.additional2 = null;
@@ -109,7 +110,7 @@ export default class RuleAction {
      */
     static fromJson(json) {
         const obj = new RuleAction(json.key, json.id);
-        obj.isHidden = json.isHidden;
+        obj.isHidden = json.isHidden ? json.isHidden : 0;
         obj.setPerformer(RuleLoader.getLoader().getObject(json.performerId));
         if (obj.targetType === RuleAction.TARGET_TYPE.UNIT) {
             obj.setTarget(obj.targetType, RuleLoader.getLoader().getObject(json.target));
@@ -133,7 +134,8 @@ export default class RuleAction {
             consumeMoveSlot: this.consumeMoveSlot,
             consumeStandartSlot: this.consumeStandartSlot,
             id: this.id,
-            target: this.target
+            target: this.target,
+            dmOnly: this.dmOnly
         };
     }
 

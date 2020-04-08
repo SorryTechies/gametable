@@ -44,7 +44,7 @@ export default class ChatWindow extends React.Component {
     }
 
     sendMessage() {
-        StaticController.sendChatMessage(this.state.input);
+        StaticController.sendChatMessage(this.state.input, this.state.to === "ALL" ? [] : this.state.to);
         this.state.input = "";
     }
 

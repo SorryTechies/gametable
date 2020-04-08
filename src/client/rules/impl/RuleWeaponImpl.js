@@ -11,12 +11,25 @@ import RuleConstants from "../constants/RuleStatConstants";
 import RuleACType from "../constants/RuleACType";
 import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleGameObjectConstants from "../constants/RuleGameObjectConstants";
+import * as RuelDamageToSizeTable from "../table/RuleDamageToSizeTable";
 
-function doAttack(action, damage) {
+function doAttack(action) {
+    /** @type {RuleWeapon} */
+    const weapon = action.additional1;
     const damageRoll = new DamageDice();
     damageRoll.bonus = action.performerObject.get(RuleConstants.MOD_DEXTERITY);
-    damageRoll.dice = damage ? damage : action.additional1.damageDie;
-    damageRoll.amountOfDices = action.additional1.amountOfDice;
+    let damageDice;
+    if (weapon.isWeapon) {
+        damageDice = RuelDamageToSizeTable.getDiceForSize(
+            {amount: weapon.amountOfDice, dice: weapon.damageDie},
+            action.performerObject.get(RuleConstants.SIZE));
+    } else {
+        damageDice = RuelDamageToSizeTable.getDiceForSize(
+            {amount: 1, dice: 6},
+            action.performerObject.get(RuleConstants.SIZE));
+    }
+    damageRoll.dice = damageDice.dice;
+    damageRoll.amountOfDices = damageDice.amount;
     action.roll.nextDice.push(damageRoll);
     action.roll.roll();
     switch (action.additional1.acType) {
@@ -57,5 +70,5 @@ export function simpleThrowAttackImpl(action) {
 
 export function simpleImprovisedAttackImpl(action) {
     action.roll = getImprovisedAttack(action);
-    doAttack(action, 3);
+    doAttack(action);
 }

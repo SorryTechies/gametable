@@ -18,6 +18,7 @@ import RuleActions from "../rules/RuleAction";
 import DmPanel from "./menu/pc/DmPanel";
 import RuleActionsConstants from "../rules/constants/RuleActionsConstants";
 import BrowserMessenger from "../logic/ws/messagers/BrowserMessenger";
+import RuleCharacterChangesBean from "../rules/RuleCharacterChangesBean";
 
 const BAR_STATUS = 'status';
 const ACTION_HIGHLIGHT = 'act';
@@ -98,7 +99,7 @@ export default class CombatWindow extends React.Component {
     removeCombatAction(action) {
         this.removeGraphics(action);
         StaticController.getRound().removeAction(action);
-       BrowserMessenger.sendRemIntentMessage(action);
+        BrowserMessenger.sendRemIntentMessage(action);
         this.forceUpdate();
     }
 
@@ -138,6 +139,14 @@ export default class CombatWindow extends React.Component {
                 this.clearAim(this.state.clickRuleAction)
             } catch (ignored) {
                 PopupManager.push("Нужно указать юнита.");
+            }
+        } else {
+            if (this.state.objectSelected && LoginController.isDM()) {
+                const pos = {x: x, y: y};
+                this.state.objectSelected.movePoints.setStartingPoint(pos);
+                RuleCharacterChangesBean.addPositionModification(this.state.objectSelected.id, pos);
+                StaticController.sendBeans();
+                this.clearSelection();
             }
         }
     }

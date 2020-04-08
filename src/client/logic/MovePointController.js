@@ -15,6 +15,10 @@ export default class MovePointController {
         }
     }
 
+    reset() {
+        this.points = [];
+    }
+
     add(position) {
         this.points.push(position);
     }

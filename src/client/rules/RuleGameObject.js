@@ -11,6 +11,7 @@ import RuleDamageType from "./constants/RuleDamageType";
 import RuleItemFactory from "./items/RuleItemFactory";
 import RuleItemController from "./items/RuleItemController";
 import RuleEffectController from "./controllers/RuleEffectController";
+import CheckDice from "../logic/roll/CheckDice";
 
 export default class RuleGameObject {
     constructor(id) {
@@ -19,6 +20,7 @@ export default class RuleGameObject {
         this.character_id = "";
         this.initiative = 0;
         this.data = {};
+        this.hidden = false;
         this.isAlive = true;
         this.name = "";
         this.buffs = new RuleBuffController(this);
@@ -30,8 +32,10 @@ export default class RuleGameObject {
         this.calculatedData = {};
         this.movePoints = new MovePointController();
         this.movePoints.setStartingPoint(Object.assign({}, this.position));
-        /** @type RuleCharacter */
+        /** @type {RuleCharacter} */
         this.ruleCharacter = null;
+        /** @type {Account} */
+        this.owner = null;
     }
 
     /** @return {{}} */
@@ -107,6 +111,19 @@ export default class RuleGameObject {
         RuleImplementation.saveCalc(this);
         RuleImplementation.combatManeuverCalc(this);
         RuleImplementation.skillCalc(this);
+    }
+
+    rollValue(key) {
+        const val = this.get(key);
+        if (typeof val === "number") {
+            const roller= new CheckDice();
+            roller.bonus = val;
+            roller.name = key;
+            roller.roll();
+            return roller.result;
+        } else {
+            return -1;
+        }
     }
 
     /**

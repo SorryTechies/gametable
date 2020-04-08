@@ -71,6 +71,10 @@ export default class RuleCharacterChangesBean {
         bean.mod.buffs[buff.key] = buff;
     }
 
+    static addPositionModification(key, target) {
+        RuleCharacterChangesBean.addModification(key, "position", target);
+    }
+
     static initFromJson(json) {
         if (!Array.isArray(json)) throw new Error("Cannot create rule character bean.");
         beans = json;

@@ -11,7 +11,10 @@ export default class RuleWeapon extends RuleWearable {
         super(key);
         this.isWeapon = true;
         this.isRanged = false;
-        this.reach = 1;
+        this.critRange = 20;
+        this.critMultiplier = 2;
+        this.reach = false;
+        this.range = 30;
         this.damageDie = 6;
         this.damageType = RuleDamageType.BLUDGEONING;
         this.amountOfDice = 1;

@@ -17,6 +17,7 @@ express.wrapGet("/participants", async req => {
     if (!session) throw new Error("No session provided.");
     return (await AccountDB.getParticipantsInGameWithDM(session)).map(account => ({
         username: account.username,
-        _id: account._id
+        _id: account._id,
+        characters_ids: account.characters_ids
     }));
 });

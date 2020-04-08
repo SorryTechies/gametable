@@ -15,18 +15,13 @@ export const dodgeCalc = cha => cha.set(RuleConstants.DODGE, cha.get(RuleConstan
  * @param {RuleGameObject} gameObject
  */
 export const defenceCalc = gameObject => {
-    const ac = 10 +
+    const tffac = 10 + gameObject.get(RuleConstants.MODIFIER_DEFLECT) - gameObject.get(RuleConstants.SIZE);
+    const ac = tffac +
         gameObject.get(RuleConstants.MODIFIER_ARMOR) +
-        gameObject.get(RuleConstants.DODGE) +
-        gameObject.get(RuleConstants.MODIFIER_DEFLECT);
+        gameObject.get(RuleConstants.DODGE);
     const setIfLesser = val => ac > val ? val : ac;
-    const tac = 10 +
-        gameObject.get(RuleConstants.DODGE) +
-        gameObject.get(RuleConstants.MODIFIER_DEFLECT);
-    const ffac = 10 +
-        gameObject.get(RuleConstants.MODIFIER_ARMOR) +
-        gameObject.get(RuleConstants.MODIFIER_DEFLECT);
-    const tffac = 10 + gameObject.get(RuleConstants.MODIFIER_DEFLECT);
+    const tac = tffac + gameObject.get(RuleConstants.DODGE);
+    const ffac = tffac + gameObject.get(RuleConstants.MODIFIER_ARMOR);
 
     gameObject.set(RuleConstants.DEFENCE_AC, ac);
     gameObject.set(RuleConstants.DEFENCE_TOUCH_AC, setIfLesser(tac));
