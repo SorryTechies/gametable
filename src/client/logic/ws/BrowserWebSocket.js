@@ -9,6 +9,7 @@ import LoginController from "../LoginController";
 import * as ObjectHandler from "./handlers/ObjectHandler";
 import * as BrowserCharacterHandler from "./handlers/BrowserCharacterHandler";
 import * as ChatHandler from "./handlers/ChatHandler";
+import StaticController from "../../static/StaticController";
 
 let ws = null;
 let timeout = null;
@@ -42,6 +43,7 @@ export default class BrowserWebSocket {
                     ws.close();
                 }
                 BrowserWebSocket.init(username);
+                StaticController.reinit();
             }, DEFAULT_TIMEOUT);
         };
 
@@ -58,7 +60,7 @@ export default class BrowserWebSocket {
                     case WebSocketMessage.TYPE_INTENT:
                         switch (message.action) {
                             case "new":
-                                return  IntentHandler.handleNewAction(message);
+                                return IntentHandler.handleNewAction(message);
                             case "rem":
                                 return IntentHandler.handleRemoveAction(message);
                             case "clear":

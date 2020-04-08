@@ -16,9 +16,12 @@ import * as RuleLoader from "../rules/RuleLoader";
 import TranslationModule from "../rules/translation/TranslationModule";
 import SupportedLanguages from "../rules/translation/SupportedLanguages";
 import BrowserChatMessage from "../logic/BrowserChatMessage";
+import RuleConstants from "../rules/constants/RuleSkillConstants";
 
-/** @type Account */
+/** @type {Account} */
 let account = null;
+/** @type {Account} */
+let dm = null;
 let subscribers = [];
 /** @type Array<ChatMessage> */
 let chat = [];
@@ -34,26 +37,32 @@ let session = null;
 let round = null;
 /** @type Array<RuleGameObject> */
 let objects = [];
-let participants = null;
+let participants = [];
 let music = null;
 
 function linkCharacters() {
+    dm =  participants.find(acc => acc._id === session.owner_id);
     objects.forEach(obj => {
         const char = characters.find(char => obj.character_id === char.id);
-        if (char) obj.ruleCharacter = char;
+        if (!char) throw new Error("Cannot find character for object.");
+        obj.ruleCharacter = char;
         RuleDefaultValues.setDefaultObjectValues(obj);
+        const owner = participants.find(acc => acc.characters_ids.includes(char.id));
+        if (owner) {
+            obj.owner = owner;
+            if (!Array.isArray(owner.characters)) owner.characters = [];
+            owner.characters.push(owner);
+        }
         obj.buffs.mountBuffs();
         obj.recalculate();
     });
 }
 
-function sendBeans() {
-    const message = new WebSocketMessage(WebSocketMessage.TYPE_OBJECT);
-    message.data = RuleCharacterChangesBean.beansToJson();
-    if (message.data.length !== 0) BrowserWebSocket.sendMessage(message);
-    RuleCharacterChangesBean.init();
-}
-
+/**
+ * @param {string} text
+ * @param {Array.<string>} toWho
+ * @return {BrowserChatMessage}
+ */
 function getMessage(text, toWho = []) {
     const chatMessage = new BrowserChatMessage();
     chatMessage.text = text;
@@ -86,6 +95,11 @@ export default class StaticController {
         linkCharacters();
         await this.loadActions();
         await this.loadMusic();
+    }
+
+    static reinit() {
+        StaticController.init(account);
+        for (let i = 0; i < subscribers.length; i++) subscribers[i].func();
     }
 
     static async loadCharacters() {
@@ -215,19 +229,27 @@ export default class StaticController {
         return round;
     }
 
+    static sendBeans() {
+        const message = new WebSocketMessage(WebSocketMessage.TYPE_OBJECT);
+        message.data = RuleCharacterChangesBean.beansToJson();
+        if (message.data.length !== 0) BrowserWebSocket.sendMessage(message);
+        RuleCharacterChangesBean.init();
+    }
+
     static finishRound() {
         round.finish();
-        sendBeans();
+        StaticController.sendBeans();
         StaticController.reloadActions();
         const message = new WebSocketMessage(WebSocketMessage.TYPE_INTENT);
         message.action = "clear";
         BrowserWebSocket.sendMessage(message);
         StaticController.notifySubscribed(WebSocketMessage.TYPE_OBJECT);
+        StaticController.sendActionDescription("-----------------New round------------------", {isHidden: false, dmOnly: false});
     }
 
     static turnBuffs() {
         round.turnBuffs();
-        sendBeans();
+        StaticController.sendBeans();
         StaticController.notifySubscribed(WebSocketMessage.TYPE_OBJECT);
     }
 
@@ -255,14 +277,32 @@ export default class StaticController {
         if (!text) return;
         const chatMessage = getMessage(text, toWho);
         chatMessage.isMessage = true;
+        chatMessage.targets = Array.from(new Set(toWho));
         chatMessage.send();
         pushMessage(chatMessage);
     }
 
+    /**
+     * @param {string} text
+     * @param {RuleAction} action
+     */
     static sendActionDescription(text, action) {
         if (!text) return;
-        const chatMessage = getMessage(text);
-        delete chatMessage.senderId;
+        const receiver = new Set();
+        if (action.isHidden || action.dmOnly) {
+            receiver.add(dm._id);
+            if (action.isHidden > 0) {
+                text += `(Stealth ${action.isHidden}) `;
+                if (action.performerObject.owner) receiver.add(action.performerObject.owner._id);
+                objects.forEach(obj => {
+                    if (obj.owner && obj.rollValue(RuleConstants.SKILL_PERCEPTION) >= action.isHidden) {
+                        receiver.add(obj.owner._id);
+                    }
+                });
+            }
+        }
+        const chatMessage = getMessage(text, Array.from(receiver));
+        if (chatMessage.senderId === dm._id) delete chatMessage.senderId;
         chatMessage.send();
         pushMessage(chatMessage);
     }
