@@ -41,7 +41,7 @@ let participants = [];
 let music = null;
 
 function linkCharacters() {
-    dm =  participants.find(acc => acc._id === session.owner_id);
+    dm = participants.find(acc => acc._id === session.owner_id);
     objects.forEach(obj => {
         const char = characters.find(char => obj.character_id === char.id);
         if (!char) throw new Error("Cannot find character for object.");
@@ -244,13 +244,20 @@ export default class StaticController {
         message.action = "clear";
         BrowserWebSocket.sendMessage(message);
         StaticController.notifySubscribed(WebSocketMessage.TYPE_OBJECT);
-        StaticController.sendActionDescription("-----------------New round------------------", {isHidden: false, dmOnly: false});
+        StaticController.sendActionDescription("-----------------New round------------------", {
+            isHidden: false,
+            dmOnly: false
+        });
     }
 
     static turnBuffs() {
         round.turnBuffs();
         StaticController.sendBeans();
         StaticController.notifySubscribed(WebSocketMessage.TYPE_OBJECT);
+    }
+
+    static massiveRollCheck(key, threshold) {
+        return objects.filter(item => !item.isHidden && item.owner && item.rollValue(key) >= threshold);
     }
 
     /**
