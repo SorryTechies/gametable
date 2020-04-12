@@ -34,12 +34,6 @@ export default class RuleItemController {
     }
 
     addItemAndNotify(item) {
-        this.addItem(item);
-        RuleCharacterChangesBean.addItemModification(this.gameObject, item.toJson());
-    }
-
-    equipItem(item, slot) {
-        this.slots.equip(item, slot);
         RuleCharacterChangesBean.addItemModification(this.gameObject, item.toJson());
     }
 
@@ -69,6 +63,10 @@ export default class RuleItemController {
         if (itemOrSlot.isEquipped()) this.slots.unequip(itemOrSlot.slot);
         // TODO move to map
         this.removeItem(itemOrSlot);
+    }
+
+    getBackpack() {
+        return this.items.filter(item => item.slot === RuleWearSlots.NO);
     }
 
     static fromJson(obj, arr) {

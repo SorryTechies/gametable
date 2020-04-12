@@ -40,7 +40,9 @@ export default class RuleAction {
         this.isHidden = 0;
         this.dmOnly = false;
         this.performerId = "";
+        /** @type {*} */
         this.additional1 = null;
+        /** @type {*} */
         this.additional2 = null;
         this.id = id ? id : uuid.v1();
         this.target = null;

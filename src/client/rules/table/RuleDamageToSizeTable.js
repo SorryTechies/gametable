@@ -9,7 +9,7 @@
  */
 
 const AMOUNT_ARR = [1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 6, 6, 8, 8, 12, 12, 16];
-const DICE_ARR = [1, 2, 3, 4, 6, 8, 10, 6, 8, 6, 8, 6, 8, 6, 8, 6, 8, 6, 8, 6,];
+const DICE_ARR = [1, 2, 3, 4, 6, 8, 10, 6, 8, 6, 8, 6, 8, 6, 8, 6, 8, 6, 8, 6];
 
 const SIZE_THRESHOLD = 0;
 const DAMAGE_THRESHOLD = 5;

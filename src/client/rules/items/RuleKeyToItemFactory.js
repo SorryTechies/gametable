@@ -4,22 +4,32 @@
 
 import WEAPONS from "./const/RuleWeaponConstants";
 import RuleDamageType from "../constants/RuleDamageType";
+import WEARABLE from "./const/RuleWearableList";
+import SLOTS from "./const/RuleWearSlots";
 
 const itemTable = {
     [WEAPONS.LASER_RIFLE]: {
         maxHealth: 20,
         damageType: RuleDamageType.ENERGY,
         amountOfDice: 2,
-        hardeness: 5
+        hardeness: 5,
+        allowedSlots: [SLOTS.RIGHT_HAND]
     },
     [WEAPONS.SPEAR]: {
+        reach: true,
         maxHealth: 5,
-        damageType: RuleDamageType.PIERCING
+        damageType: RuleDamageType.PIERCING,
+        allowedSlots: [SLOTS.RIGHT_HAND]
     },
     [WEAPONS.IMPROVISED]: {
         maxHealth: -1,
         damageDie: 3,
         hardeness: -1,
+    },
+    [WEARABLE.SPLINT_MAIL]: {
+        maxHealth: 20,
+        hardeness: 20,
+        allowedSlots: [SLOTS.ARMOR]
     }
 };
 

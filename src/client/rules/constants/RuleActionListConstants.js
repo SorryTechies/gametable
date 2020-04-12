@@ -18,7 +18,9 @@ export const STANDARD_ACTIONS = [
 ];
 
 export const FULL_ROUND_ACTIONS = [
-    RuleActionsConstants.SPRINT
+    RuleActionsConstants.SPRINT,
+    RuleActionsConstants.EQUIP,
+    RuleActionsConstants.UNEQUIP
 ];
 
 export const FREE_ACTIONS = [

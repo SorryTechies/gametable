@@ -6,5 +6,6 @@ export default {
     LASER_RIFLE: "laser_rifle",
     UNARMED_STRIKE: "unarmed",
     IMPROVISED: "improvised",
-    SPEAR: "spear"
+    SPEAR: "spear",
+
 };

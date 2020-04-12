@@ -12,6 +12,12 @@ export const doMove = action => {
     RuleCharacterChangesBean.addModification(action.performerId, "position", action.target);
 };
 
+export const doEquip = action => action.performerObject.items.slots.equipDM(action.target, action.additional1);
+
+export function doUnequip(action) {
+    action.performerObject.items.slots.unequipDM(action.additional1);
+}
+
 export const doTotalDefence = action => {
     RuleLoader.sendTranslatedDescription(action, RuleBuffConstants.TOTAL_DEFENSE, action.performerObject.name);
     RuleState.doTotalDefenceState(action);

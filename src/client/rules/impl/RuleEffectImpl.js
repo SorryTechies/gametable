@@ -5,6 +5,7 @@
 import RuleEffect from "../buff/RuleEffect";
 import RuleBuffConstants from "../constants/RuleBuffConstants";
 import RuleConstants from "../constants/RuleStatConstants";
+import RuleEffectTypeConstants from "../constants/RuleEffectTypeConstants";
 
 export function getTotalDefenceAC() {
     return new RuleEffect(
@@ -53,4 +54,12 @@ export function getFightingDefenseAttack() {
         RuleBuffConstants.FIGHTING_DEFENSIVELY,
         RuleConstants.ATTACK_FLAT
     );
+}
+
+export function getArmorPenalty(item, val) {
+    return new RuleEffect(item, RuleConstants.ARMOR_PENALTY, val);
+}
+
+export function getArmorEffect(item, val) {
+    return new RuleEffect(item, RuleConstants.MODIFIER_ARMOR, val, RuleEffectTypeConstants.TYPE_ARMOR);
 }

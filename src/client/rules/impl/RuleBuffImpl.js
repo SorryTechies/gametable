@@ -6,10 +6,13 @@ import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleSkillConstants from "../constants/RuleSkillConstants";
 import RuleConstants from "../constants/RuleStatConstants";
 import {
+    getArmorEffect, getArmorPenalty,
     getChargeAC, getChargeAttack, getCombatExpertiseAC, getCombatExpertiseAttack, getFightingDefenseAC,
     getFightingDefenseAttack,
     getTotalDefenceAC
 } from "./RuleEffectImpl";
+import RuleEffect from "../buff/RuleEffect";
+import RuleEffectTypeConstants from "../constants/RuleEffectTypeConstants";
 
 function notifyBuffs(buff) {
     RuleCharacterChangesBean.addBuffModification(buff.gameObject, buff.toJson());
@@ -102,4 +105,19 @@ export function fightingDefensively(buff) {
 
 export function grappled(buff) {
 
+}
+
+export function armorBuff(itemName, val, penalty, buff) {
+    const effect =  getArmorEffect(itemName, val);
+    const penalty = getArmorPenalty(itemName, penalty);
+    buff.onCreate = () =>  {
+        notifyBuffs(buff);
+        notifyEffects(buff.gameObject, effect);
+        notifyEffects(buff.gameObject, penalty);
+    };
+    buff.onEnd = () => {
+        notifyBuffDeletion(buff);
+        notifyEffectDeletion(buff.gameObject, effect);
+        notifyEffectDeletion(buff.gameObject, penalty);
+    };
 }

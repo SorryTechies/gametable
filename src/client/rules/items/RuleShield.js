@@ -2,9 +2,9 @@
  * Created by LastBerserk on 09.03.2020.
  */
 
-import RuleItem from "./RuleItem";
+import RuleWearable from "./RuleWearable";
 
-export default class RuleShield extends RuleItem {
+export default class RuleShield extends RuleWearable {
     constructor(key) {
         super(key);
         this.isShield = true;

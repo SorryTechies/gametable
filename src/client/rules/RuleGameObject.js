@@ -6,12 +6,12 @@ import MovePointController from "../logic/MovePointController";
 import RuleBuffController from "./controllers/RuleBuffController";
 import * as RuleImplementation from "./impl/RuleImplementation";
 import RuleGameObjectConstants from "./constants/RuleGameObjectConstants";
-import RuleItem from "./items/RuleItem";
 import RuleDamageType from "./constants/RuleDamageType";
-import RuleItemFactory from "./items/RuleItemFactory";
 import RuleItemController from "./items/RuleItemController";
 import RuleEffectController from "./controllers/RuleEffectController";
 import CheckDice from "../logic/roll/CheckDice";
+import RuleArea from "./objects/RuleArea";
+import RuleReach from "./objects/RuleReach";
 
 export default class RuleGameObject {
     constructor(id) {
@@ -22,6 +22,8 @@ export default class RuleGameObject {
         this.data = {};
         this.hidden = false;
         this.isAlive = true;
+        this.isHidden = false;
+        this.stealth = 0;
         this.name = "";
         this.buffs = new RuleBuffController(this);
         this.items = new RuleItemController(this);
@@ -29,6 +31,7 @@ export default class RuleGameObject {
         this.icon = "";
         this.weapons = [];
 
+        this.threatArea = new RuleReach();
         this.calculatedData = {};
         this.movePoints = new MovePointController();
         this.movePoints.setStartingPoint(Object.assign({}, this.position));
@@ -117,7 +120,7 @@ export default class RuleGameObject {
         const val = this.get(key);
         if (typeof val === "number") {
             const roller= new CheckDice();
-            roller.bonus = val;
+            roller.bonus = val ? val : 0;
             roller.name = key;
             roller.roll();
             return roller.result;

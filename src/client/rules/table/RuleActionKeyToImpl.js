@@ -22,6 +22,8 @@ export const implementation = {
     [RAC.IMPROVISED_ATTACK]: Weapon.simpleImprovisedAttackImpl,
     [RAC.THROW_ATTACK]: Weapon.simpleThrowAttackImpl,
     [RAC.TOTAL_DEFENCE]: RuleState.doTotalDefenceState,
+    [RAC.EQUIP]: Impl.doEquip,
+    [RAC.UNEQUIP]: Impl.doUnequip,
     [RAC.CAST_SPELL]: {
         [RSN.SHOCKING_GRASP]: SpellImpl.doShockGrasp
     },
@@ -46,11 +48,13 @@ export const validation = {
     [RAC.MOVE]: Val.moveValidation,
     [RAC.CHARGE]: Val.moveValidation,
     [RAC.FIVE_FOOT_STEP]: Val.fiveFootValidation,
-    [RAC.MELEE_ATTACK]: Val.noValidation,
+    [RAC.MELEE_ATTACK]: Val.attackValidation,
     [RAC.RANGED_ATTACK]: Val.noValidation,
     [RAC.TOTAL_DEFENCE]: Val.noValidation,
     [RAC.IMPROVISED_ATTACK]: Val.noValidation,
     [RAC.THROW_ATTACK]: Val.noValidation,
+    [RAC.EQUIP]: Val.noValidation,
+    [RAC.UNEQUIP]: Val.noValidation,
     [RAC.COMBAT_MANEUVERS]: {
         [RCML.GRAPPLE]: Val.noValidation,
         [RCML.DISARM]: Val.noValidation,

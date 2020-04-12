@@ -3,12 +3,12 @@
  */
 
 import RuleItem from "./RuleItem";
-import RuleWearSlots from "./const/RuleWearSlots";
 
 export default class RuleWearable extends RuleItem {
     constructor(key) {
         super(key);
         this.isWearable = true;
+        this.allowedSlots = [];
     }
 
     static fromJson(json) {

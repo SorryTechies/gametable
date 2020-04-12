@@ -67,5 +67,6 @@ export default {
     CASTER_LEVEL: "c_level",
     SPELL_ARRAY: "spell_array",
 
-    SIZE: "size"
+    SIZE: "size",
+    ARMOR_PENALTY: "armor_penalty"
 };

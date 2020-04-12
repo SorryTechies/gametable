@@ -17,5 +17,8 @@ export default {
     TOTAL_DEFENCE: "total_def",
     ACTIVATE_STATE: "activate_state",
     DEACTIVATE_STATE: "deactivate_state",
-    SPECIAL: "special"
+    SPECIAL: "special",
+    EQUIP: "equip",
+    UNEQUIP: "unequip",
+    PICK_UP: "pick_up"
 };

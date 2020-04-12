@@ -4,5 +4,6 @@
 
 export default {
     RING_OF_PROTECTION: "protring",
-    LEATHER_ARMOR: "leather_armor"
+    LEATHER_ARMOR: "leather_armor",
+    SPLINT_MAIL: "splint_mail"
 };

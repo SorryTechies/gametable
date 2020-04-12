@@ -4,6 +4,7 @@
 
 import RuleWearSlots from "./const/RuleWearSlots";
 import * as uuid from "uuid";
+
 export default class RuleItem {
     constructor(key) {
         if (!key) throw new Error("No key for item provided.");
@@ -16,6 +17,7 @@ export default class RuleItem {
         this.isWeapon = false;
         this.isShield = false;
         this.isRanged = false;
+        this.onUse = RuleItem.EMPTY_FUNC;
 
         this.health = 1;
         this.slot = RuleWearSlots.NO;
@@ -47,3 +49,5 @@ export default class RuleItem {
        return item;
     }
 }
+
+RuleItem.EMPTY_FUNC = () => {};

@@ -59,6 +59,8 @@ export default class StatusMenu extends React.Component {
     }
 
     getSecondActionList() {
+        /** @type {RuleGameObject} */
+        const unit = this.props.unit;
         switch (this.state.nextSelector) {
             case RuleActionsConstants.COMBAT_MANEUVERS:
                 return Object.values(RuleCombatManuverList);
@@ -66,18 +68,19 @@ export default class StatusMenu extends React.Component {
                 return [
                     RuleWeaponConstants.IMPROVISED,
                     RuleWeaponConstants.UNARMED_STRIKE
-                ].concat(this.props.unit.items.getItemsFromHands().map(item => item.key));
+                ].concat(unit.items.getItemsFromHands().map(item => item.key));
             case RuleActionsConstants.RANGED_ATTACK:
-                return  [
-                    // TODO remove when weapons stored on server side
-                    RuleWeaponConstants.LASER_RIFLE,
-                ].concat(this.props.unit.items.getItemsFromHands().map(item => item.key));
+                return  unit.items.getItemsFromHands().map(item => item.key);
             case RuleActionsConstants.CAST_SPELL:
-                return this.props.unit.ruleCharacter.get(RuleConstants.SPELL_ARRAY);
+                return unit.ruleCharacter.get(RuleConstants.SPELL_ARRAY);
             case RuleActionsConstants.ACTIVATE_STATE:
                 return filterAllowedStates(this.props.unit);
             case RuleActionsConstants.DEACTIVATE_STATE:
-                return this.props.unit.buffs.getDispellableDebuffs().map(buff => buff.key);
+                return unit.buffs.getDispellableDebuffs().map(buff => buff.key);
+            case RuleActionsConstants.EQUIP:
+                return unit.items.getBackpack().map(item => item.key);
+            case RuleActionsConstants.UNEQUIP:
+                return unit.items.slots.getItems().map(item => item.key);
             default:
                 throw new Error("Cannot find action list for" + this.state.nextSelector);
         }
@@ -85,6 +88,14 @@ export default class StatusMenu extends React.Component {
 
     renderSecondSelector() {
         switch (this.state.nextSelector) {
+            case RuleActionsConstants.UNEQUIP:
+            case RuleActionsConstants.EQUIP:
+                return <ActionSelector doAimAction={val1 => {
+                    this.action.target = val1;
+                    // TODO select slot
+                    this.action.additional1 = val1.allowedSlots[0];
+                    return this.props.doAimAction(this.action);
+                }} allowedActions={this.getSecondActionList()}/>;
             case RuleActionsConstants.MELEE_ATTACK:
             case RuleActionsConstants.RANGED_ATTACK:
                 return <ActionSelector doAimAction={val1 => {

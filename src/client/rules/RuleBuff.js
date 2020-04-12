@@ -23,7 +23,7 @@ export default class RuleBuff {
     }
 
     setTarget(gameObject) {
-        if (!gameObject) throw new Error("No target id provided.");
+        if (!gameObject) throw new Error("No target provided.");
         this.targetId = gameObject.id;
         this.gameObject = gameObject;
     }
