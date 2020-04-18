@@ -20,5 +20,6 @@ export default {
     SPECIAL: "special",
     EQUIP: "equip",
     UNEQUIP: "unequip",
-    PICK_UP: "pick_up"
+    GRAB: "grab",
+    DROP: "drop"
 };

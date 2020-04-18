@@ -31,7 +31,7 @@ export default class RuleGameObject {
         this.icon = "";
         this.weapons = [];
 
-        this.threatArea = new RuleReach();
+        this.threatArea = new RuleReach(this);
         this.calculatedData = {};
         this.movePoints = new MovePointController();
         this.movePoints.setStartingPoint(Object.assign({}, this.position));
@@ -114,6 +114,7 @@ export default class RuleGameObject {
         RuleImplementation.saveCalc(this);
         RuleImplementation.combatManeuverCalc(this);
         RuleImplementation.skillCalc(this);
+        RuleImplementation.healthCalc(this);
     }
 
     rollValue(key) {

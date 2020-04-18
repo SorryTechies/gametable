@@ -5,6 +5,7 @@
 import RuleActionsConstants from "./RuleActionsConstants";
 
 export const MOVE_ACTIONS = [
+    RuleActionsConstants.GRAB,
     RuleActionsConstants.MOVE,
     RuleActionsConstants.CHARGE
 ];
@@ -28,6 +29,7 @@ export const FREE_ACTIONS = [
 ];
 
 export const IMMEDIATE_ACTION = [
+    RuleActionsConstants.DROP,
     RuleActionsConstants.ACTIVATE_STATE,
     RuleActionsConstants.DEACTIVATE_STATE
 ];

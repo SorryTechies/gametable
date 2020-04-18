@@ -38,12 +38,7 @@ export default class RuleItemController {
     }
 
     getItemsFromHands() {
-        const r = this.slots.getSlot(RuleWearSlots.RIGHT_HAND);
-        const l = this.slots.getSlot(RuleWearSlots.LEFT_HAND);
-        if (r && l) return [r, l];
-        if (r) return [r];
-        if (l) return [l];
-        return [];
+        const r = this.slots.getGrabbed();
     }
 
     removeItem(r) {
@@ -81,7 +76,7 @@ export default class RuleItemController {
             if (json.toDelete) {
                 this.removeItem(item);
             } else {
-                item.health = json.health;
+                if (json.damaged) item.damaged = json.damaged;
                 if (item.slot !== json.slot) {
                     if (item.isEquipped()) this.slots.unequip(item.slot);
                     this.slots.equip(item, json.slot);

@@ -10,11 +10,12 @@ import ActionBar from "./ActionBar";
 import LoginController from "../../../logic/LoginController";
 import StaticController from "../../../static/StaticController";
 import RuleAction from "../../../rules/RuleAction";
-import RuleActionsConstants from "../../../rules/constants/RuleActionsConstants";
+import CONST from "../../../rules/constants/RuleActionsConstants";
 import RuleConstants from "../../../rules/constants/RuleStatConstants";
 import RuleWeaponConstants from "../../../rules/items/const/RuleWeaponConstants";
 import RuleCombatManuverList from "../../../rules/constants/RuleCombatManuverList";
 import {MUST_DO_ATTACK_BUFFS} from "../../../rules/constants/RuleBuffGroupConstants";
+import SLOTS from "../../../rules/items/const/RuleWearSlots";
 
 const NO = "no";
 
@@ -26,7 +27,6 @@ function filterAllowedStates(unit) {
     });
 }
 
-
 export default class StatusMenu extends React.Component {
     constructor(props) {
         super(props);
@@ -37,12 +37,16 @@ export default class StatusMenu extends React.Component {
     processAction(action) {
         this.action = action;
         switch (action.key) {
-            case RuleActionsConstants.COMBAT_MANEUVERS:
-            case RuleActionsConstants.MELEE_ATTACK:
-            case RuleActionsConstants.RANGED_ATTACK:
-            case RuleActionsConstants.CAST_SPELL:
-            case RuleActionsConstants.ACTIVATE_STATE:
-            case RuleActionsConstants.DEACTIVATE_STATE:
+            case CONST.COMBAT_MANEUVERS:
+            case CONST.MELEE_ATTACK:
+            case CONST.RANGED_ATTACK:
+            case CONST.CAST_SPELL:
+            case CONST.ACTIVATE_STATE:
+            case CONST.DEACTIVATE_STATE:
+            case CONST.EQUIP:
+            case CONST.UNEQUIP:
+            case CONST.DROP:
+            case CONST.GRAB:
                 return this.setState({nextSelector: action.key});
             default:
                 return this.props.doAimAction(action);
@@ -62,54 +66,73 @@ export default class StatusMenu extends React.Component {
         /** @type {RuleGameObject} */
         const unit = this.props.unit;
         switch (this.state.nextSelector) {
-            case RuleActionsConstants.COMBAT_MANEUVERS:
+            case CONST.COMBAT_MANEUVERS:
                 return Object.values(RuleCombatManuverList);
-            case RuleActionsConstants.MELEE_ATTACK:
+            case CONST.MELEE_ATTACK:
                 return [
                     RuleWeaponConstants.IMPROVISED,
                     RuleWeaponConstants.UNARMED_STRIKE
-                ].concat(unit.items.getItemsFromHands().map(item => item.key));
-            case RuleActionsConstants.RANGED_ATTACK:
-                return  unit.items.getItemsFromHands().map(item => item.key);
-            case RuleActionsConstants.CAST_SPELL:
+                ].concat(unit.items.getItemsFromHands());
+            case CONST.RANGED_ATTACK:
+                return  unit.items.getItemsFromHands().filter(item => item.isRanged);
+            case CONST.CAST_SPELL:
                 return unit.ruleCharacter.get(RuleConstants.SPELL_ARRAY);
-            case RuleActionsConstants.ACTIVATE_STATE:
+            case CONST.ACTIVATE_STATE:
                 return filterAllowedStates(this.props.unit);
-            case RuleActionsConstants.DEACTIVATE_STATE:
-                return unit.buffs.getDispellableDebuffs().map(buff => buff.key);
-            case RuleActionsConstants.EQUIP:
-                return unit.items.getBackpack().map(item => item.key);
-            case RuleActionsConstants.UNEQUIP:
-                return unit.items.slots.getItems().map(item => item.key);
+            case CONST.DEACTIVATE_STATE:
+                return unit.buffs.getDispellableDebuffs();
+            case CONST.EQUIP:
+            case CONST.GRAB:
+                return unit.items.getBackpack();
+            case CONST.UNEQUIP:
+                return unit.items.slots.getEquipped();
+            case CONST.DROP:
+                return unit.items.slots.getGrabbed();
             default:
                 throw new Error("Cannot find action list for" + this.state.nextSelector);
         }
     }
 
+    renderAction(func) {
+        return <ActionSelector doAimAction={func} allowedActions={this.getSecondActionList()}/>;
+    }
+
     renderSecondSelector() {
         switch (this.state.nextSelector) {
-            case RuleActionsConstants.UNEQUIP:
-            case RuleActionsConstants.EQUIP:
-                return <ActionSelector doAimAction={val1 => {
+            case CONST.DROP:
+            case CONST.UNEQUIP:
+                return this.renderAction(val1 => {
+                    this.action.target = val1;
+                    this.action.additional1 = val1.slot;
+                    return this.props.doAimAction(this.action);
+                });
+            case CONST.GRAB:
+                return this.renderAction(val1 => {
+                    this.action.target = val1;
+                    this.action.additional1 = SLOTS.RIGHT_HAND;
+                    return this.props.doAimAction(this.action);
+                });
+            case CONST.EQUIP:
+                return this.renderAction(val1 => {
                     this.action.target = val1;
                     // TODO select slot
                     this.action.additional1 = val1.allowedSlots[0];
                     return this.props.doAimAction(this.action);
-                }} allowedActions={this.getSecondActionList()}/>;
-            case RuleActionsConstants.MELEE_ATTACK:
-            case RuleActionsConstants.RANGED_ATTACK:
-                return <ActionSelector doAimAction={val1 => {
+                });
+            case CONST.MELEE_ATTACK:
+            case CONST.RANGED_ATTACK:
+                return this.renderAction(val1 => {
                     this.action.additional1 = val1;
                     return this.props.doAimAction(this.action);
-                }} allowedActions={this.getSecondActionList()}/>;
-            case RuleActionsConstants.COMBAT_MANEUVERS:
-            case RuleActionsConstants.CAST_SPELL:
-            case RuleActionsConstants.ACTIVATE_STATE:
-            case RuleActionsConstants.DEACTIVATE_STATE:
-                return <ActionSelector doAimAction={val1 => {
+                });
+            case CONST.COMBAT_MANEUVERS:
+            case CONST.CAST_SPELL:
+            case CONST.ACTIVATE_STATE:
+            case CONST.DEACTIVATE_STATE:
+                return this.renderAction(val1 => {
                     this.action.additional1 = val1;
                     return this.props.doAimAction(this.action);
-                }} allowedActions={this.getSecondActionList()}/>;
+                });
             default:
                 return null;
         }

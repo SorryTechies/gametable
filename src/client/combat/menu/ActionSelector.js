@@ -17,7 +17,8 @@ export default class ActionSelector extends React.Component {
     onSelection(e) {
         const val = e.target.value;
         this.setState({selected: val});
-        this.props.doAimAction(val);
+        const obj = this.props.allowedActions.find(obj => typeof obj === "object" ? obj.key === val : obj === val);
+        this.props.doAimAction(obj);
     }
 
     render() {
@@ -26,7 +27,7 @@ export default class ActionSelector extends React.Component {
                 {[RuleActionsConstants.NO_ACTION, ...this.props.allowedActions]
                     .map(obj => {
                         const key = typeof obj === "object" ? obj.key : obj;
-                        return <option value={obj} key={key}>{TranslationModule.getTranslation(key)}</option>;
+                        return <option value={key} key={key}>{TranslationModule.getTranslation(key)}</option>;
                     })}
             </select>
         </div>

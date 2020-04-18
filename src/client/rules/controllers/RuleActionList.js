@@ -3,7 +3,6 @@
  */
 
 import RuleActions from "../RuleAction";
-import RuleActionsConstants from "../constants/RuleActionsConstants";
 import RuleTypes from "../constants/RuleTypes";
 import * as CONST from "../constants/RuleActionListConstants";
 import {filterActionByKey} from "../table/RuleActionFilter";

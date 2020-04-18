@@ -3,30 +3,31 @@
  */
 
 
-import RuleConstants from "../constants/RuleStatConstants";
-import RuleSkillsStatConstants from "../constants/RuleSkillsStatConstants";
-import RuleSkillConstants from "../constants/RuleSkillConstants";
+import CONST from "../constants/RuleStatConstants";
+import SKILL_CONST from "../constants/RuleSkillsStatConstants";
+import SKILLS from "../constants/RuleSkillConstants";
+import FEATS from "../constants/RuleFeatsConstants";
 
-export const dodgeCalc = cha => cha.set(RuleConstants.DODGE, cha.get(RuleConstants.MODIFIER_DODGE) +
-    cha.get(RuleConstants.MOD_DEXTERITY));
+export const dodgeCalc = cha => cha.set(CONST.DODGE, cha.get(CONST.MODIFIER_DODGE) +
+    cha.get(CONST.MOD_DEXTERITY));
 
 /**
  * AC calculation.
  * @param {RuleGameObject} gameObject
  */
 export const defenceCalc = gameObject => {
-    const tffac = 10 + gameObject.get(RuleConstants.MODIFIER_DEFLECT) - gameObject.get(RuleConstants.SIZE);
+    const tffac = 10 + gameObject.get(CONST.MODIFIER_DEFLECT) - gameObject.get(CONST.SIZE);
     const ac = tffac +
-        gameObject.get(RuleConstants.MODIFIER_ARMOR) +
-        gameObject.get(RuleConstants.DODGE);
+        gameObject.get(CONST.MODIFIER_ARMOR) +
+        gameObject.get(CONST.DODGE);
     const setIfLesser = val => ac > val ? val : ac;
-    const tac = tffac + gameObject.get(RuleConstants.DODGE);
-    const ffac = tffac + gameObject.get(RuleConstants.MODIFIER_ARMOR);
+    const tac = tffac + gameObject.get(CONST.DODGE);
+    const ffac = tffac + gameObject.get(CONST.MODIFIER_ARMOR);
 
-    gameObject.set(RuleConstants.DEFENCE_AC, ac);
-    gameObject.set(RuleConstants.DEFENCE_TOUCH_AC, setIfLesser(tac));
-    gameObject.set(RuleConstants.DEFENCE_FLAT_FOOTED_AC, setIfLesser(ffac));
-    gameObject.set(RuleConstants.DEFENCE_TFF_AC, setIfLesser(tffac));
+    gameObject.set(CONST.DEFENCE_AC, ac);
+    gameObject.set(CONST.DEFENCE_TOUCH_AC, setIfLesser(tac));
+    gameObject.set(CONST.DEFENCE_FLAT_FOOTED_AC, setIfLesser(ffac));
+    gameObject.set(CONST.DEFENCE_TFF_AC, setIfLesser(tffac));
 };
 
 /**
@@ -38,108 +39,122 @@ export const statCalc = gameObject => {
         const mod = (val - 10) / 2;
         return mod < 0 ? Math.floor(mod) : Math.floor(mod);
     };
-    gameObject.set(RuleConstants.MOD_STRENGTH, calcStats(gameObject.get(RuleConstants.STAT_STRENGTH)));
-    gameObject.set(RuleConstants.MOD_DEXTERITY, calcStats(gameObject.get(RuleConstants.STAT_DEXTERITY)));
-    gameObject.set(RuleConstants.MOD_CONSTITUTION, calcStats(gameObject.get(RuleConstants.STAT_CONSTITUTION)));
-    gameObject.set(RuleConstants.MOD_INTELLIGENCE, calcStats(gameObject.get(RuleConstants.STAT_INTELLIGENCE)));
-    gameObject.set(RuleConstants.MOD_WISDOM, calcStats(gameObject.get(RuleConstants.STAT_WISDOM)));
-    gameObject.set(RuleConstants.MOD_CHARISMA, calcStats(gameObject.get(RuleConstants.STAT_CHARISMA)));
+    gameObject.set(CONST.MOD_STRENGTH, calcStats(gameObject.get(CONST.STAT_STRENGTH)));
+    gameObject.set(CONST.MOD_DEXTERITY, calcStats(gameObject.get(CONST.STAT_DEXTERITY)));
+    gameObject.set(CONST.MOD_CONSTITUTION, calcStats(gameObject.get(CONST.STAT_CONSTITUTION)));
+    gameObject.set(CONST.MOD_INTELLIGENCE, calcStats(gameObject.get(CONST.STAT_INTELLIGENCE)));
+    gameObject.set(CONST.MOD_WISDOM, calcStats(gameObject.get(CONST.STAT_WISDOM)));
+    gameObject.set(CONST.MOD_CHARISMA, calcStats(gameObject.get(CONST.STAT_CHARISMA)));
 };
 
-export const attackBonusCalc = gameObject => {
-    gameObject.set(RuleConstants.ATTACK_STR,
-        gameObject.get(RuleConstants.BAB) +
-        gameObject.get(RuleConstants.MOD_STRENGTH) +
-        gameObject.get(RuleConstants.MODIFIER_ATTACK));
-    gameObject.set(RuleConstants.ATTACK_DEX,
-        gameObject.get(RuleConstants.BAB) +
-        gameObject.get(RuleConstants.MOD_DEXTERITY) +
-        gameObject.get(RuleConstants.MODIFIER_ATTACK));
-    gameObject.set(RuleConstants.ATTACK_FLAT,
-        gameObject.get(RuleConstants.BAB) +
-        gameObject.get(RuleConstants.MODIFIER_ATTACK));
-    gameObject.set(RuleConstants.INITIATIVE, gameObject.get(RuleConstants.MOD_DEXTERITY));
+export const healthCalc = gm => {
+    gm.set(CONST.HEALTH_DIE_PER_LEVEL, gm.get(CONST.MOD_CONSTITUTION));
+    let addHP = 0;
+    const lvl = gm.get(CONST.LEVEL);
+    if (gm.ruleCharacter.hasFeat(FEATS.TOUGHNESS)) addHP += lvl > 3 ? lvl : 3;
+    gm.set(CONST.MAX_HEALTH, addHP + gm.get(CONST.HEALTH_DIE) + ((gm.get(CONST.HEALTH_DIE_PER_LEVEL - 1) * lvl)));
+};
+
+export const attackBonusCalc = gm => {
+    gm.set(CONST.ATTACK_STR,
+        gm.get(CONST.BAB) +
+        gm.get(CONST.MOD_STRENGTH) +
+        gm.get(CONST.MODIFIER_ATTACK));
+    gm.set(CONST.ATTACK_DEX,
+        gm.get(CONST.BAB) +
+        gm.get(CONST.MOD_DEXTERITY) +
+        gm.get(CONST.MODIFIER_ATTACK));
+    gm.set(CONST.ATTACK_FLAT,
+        gm.get(CONST.BAB) +
+        gm.get(CONST.MODIFIER_ATTACK));
+    gm.set(CONST.INITIATIVE, gm.get(CONST.MOD_DEXTERITY));
 };
 
 export const saveCalc = gameObject => {
-    gameObject.set(RuleConstants.SAVE_FORTITUDE,
-        gameObject.get(RuleConstants.MODIFIER_SAVE_FORTITUDE) +
-        gameObject.get(RuleConstants.CLASS_SAVE_FORTITUDE) +
-        gameObject.get(RuleConstants.MOD_CONSTITUTION));
-    gameObject.set(RuleConstants.SAVE_REFLEX,
-        gameObject.get(RuleConstants.MODIFIER_SAVE_REFLEX) +
-        gameObject.get(RuleConstants.CLASS_SAVE_REFLEX) +
-        gameObject.get(RuleConstants.MOD_DEXTERITY));
-    gameObject.set(RuleConstants.SAVE_WILL,
-        gameObject.get(RuleConstants.MODIFIER_SAVE_WILL) +
-        gameObject.get(RuleConstants.CLASS_SAVE_WILL) +
-        gameObject.get(RuleConstants.MOD_WISDOM));
+    gameObject.set(CONST.SAVE_FORTITUDE,
+        gameObject.get(CONST.MODIFIER_SAVE_FORTITUDE) +
+        gameObject.get(CONST.CLASS_SAVE_FORTITUDE) +
+        gameObject.get(CONST.MOD_CONSTITUTION));
+    gameObject.set(CONST.SAVE_REFLEX,
+        gameObject.get(CONST.MODIFIER_SAVE_REFLEX) +
+        gameObject.get(CONST.CLASS_SAVE_REFLEX) +
+        gameObject.get(CONST.MOD_DEXTERITY));
+    gameObject.set(CONST.SAVE_WILL,
+        gameObject.get(CONST.MODIFIER_SAVE_WILL) +
+        gameObject.get(CONST.CLASS_SAVE_WILL) +
+        gameObject.get(CONST.MOD_WISDOM));
 };
 
 export const combatManeuverCalc = gameObject => {
-    gameObject.set(RuleConstants.COMBAT_MANEUVER_BONUS, gameObject.get(RuleConstants.BAB) +
-        gameObject.get(RuleConstants.MOD_STRENGTH) +
-        gameObject.get(RuleConstants.MODIFIER_CMB));
-    gameObject.set(RuleConstants.COMBAT_MANEUVER_DEFENCE, 10 + gameObject.get(RuleConstants.BAB) +
-        gameObject.get(RuleConstants.MOD_STRENGTH) +
-        gameObject.get(RuleConstants.DODGE) +
-        gameObject.get(RuleConstants.MODIFIER_DEFLECT) +
-        gameObject.get(RuleConstants.MODIFIER_CMD));
+    gameObject.set(CONST.COMBAT_MANEUVER_BONUS, gameObject.get(CONST.BAB) +
+        gameObject.get(CONST.MOD_STRENGTH) +
+        gameObject.get(CONST.MODIFIER_CMB));
+    gameObject.set(CONST.COMBAT_MANEUVER_DEFENCE, 10 + gameObject.get(CONST.BAB) +
+        gameObject.get(CONST.MOD_STRENGTH) +
+        gameObject.get(CONST.DODGE) +
+        gameObject.get(CONST.MODIFIER_DEFLECT) +
+        gameObject.get(CONST.MODIFIER_CMD));
 };
 
-export const skillCalc = gameObject => {
+export const skillCalc = gm => {
+    gm.set(CONST.SKILL_RANKS_PER_LEVEL, gm.get(CONST.MOD_INTELLIGENCE));
+    gm.set(CONST.SKILL_RANKS, gm.get(CONST.SKILL_RANKS_PER_LEVEL) * gm.get(CONST.LEVEL));
+
     const getSkillModifier = key => {
-        if (RuleSkillsStatConstants.SKILLS_STR.includes(key)) return gameObject.get(RuleConstants.MOD_STRENGTH);
-        if (RuleSkillsStatConstants.SKILLS_DEX.includes(key)) return gameObject.get(RuleConstants.MOD_DEXTERITY);
-        if (RuleSkillsStatConstants.SKILLS_INT.includes(key)) return gameObject.get(RuleConstants.MOD_INTELLIGENCE);
-        if (RuleSkillsStatConstants.SKILLS_WIS.includes(key)) return gameObject.get(RuleConstants.MOD_WISDOM);
-        if (RuleSkillsStatConstants.SKILLS_CHA.includes(key)) return gameObject.get(RuleConstants.MOD_CHARISMA);
+        if (SKILL_CONST.SKILLS_STR.includes(key)) return gm.get(CONST.MOD_STRENGTH) + gm.get(CONST.ARMOR_PENALTY);
+        if (SKILL_CONST.SKILLS_DEX.includes(key)) return gm.get(CONST.MOD_DEXTERITY) + gm.get(CONST.ARMOR_PENALTY);
+        if (SKILL_CONST.SKILLS_INT.includes(key)) return gm.get(CONST.MOD_INTELLIGENCE);
+        if (SKILL_CONST.SKILLS_WIS.includes(key)) return gm.get(CONST.MOD_WISDOM);
+        if (SKILL_CONST.SKILLS_CHA.includes(key)) return gm.get(CONST.MOD_CHARISMA);
     };
     const processRanks = key => {
-        const ranks = gameObject.get(key);
-        if (gameObject.get(RuleSkillConstants.CLASS_SKILLS_ARRAY).includes(key) && ranks > 0) {
+        const ranks = gm.get(key);
+        if (gm.get(SKILLS.CLASS_SKILLS_ARRAY).includes(key) && ranks > 0) {
             return ranks + 2;
         } else {
             return ranks;
         }
     };
 
-    gameObject.set(RuleSkillConstants.SKILL_ACROBATICS, processRanks(RuleSkillConstants.SKILL_ACROBATICS_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_ACROBATICS));
-    gameObject.set(RuleSkillConstants.SKILL_APPRAISE, processRanks(RuleSkillConstants.SKILL_APPRAISE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_APPRAISE));
-    gameObject.set(RuleSkillConstants.SKILL_BLUFF, processRanks(RuleSkillConstants.SKILL_BLUFF_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_BLUFF));
-    gameObject.set(RuleSkillConstants.SKILL_CLIMB, processRanks(RuleSkillConstants.SKILL_CLIMB_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_CLIMB));
-    gameObject.set(RuleSkillConstants.SKILL_CRAFT, processRanks(RuleSkillConstants.SKILL_CRAFT_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_CRAFT));
-    gameObject.set(RuleSkillConstants.SKILL_DIPLOMACY, processRanks(RuleSkillConstants.SKILL_DIPLOMACY_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_DIPLOMACY));
-    gameObject.set(RuleSkillConstants.SKILL_DISABLE_DEVICE, processRanks(RuleSkillConstants.SKILL_DISABLE_DEVICE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_DISABLE_DEVICE));
-    gameObject.set(RuleSkillConstants.SKILL_DISGUISE, processRanks(RuleSkillConstants.SKILL_DISGUISE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_DISGUISE));
-    gameObject.set(RuleSkillConstants.SKILL_ESCAPE_ARTIST, processRanks(RuleSkillConstants.SKILL_ESCAPE_ARTIST_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_ESCAPE_ARTIST));
-    gameObject.set(RuleSkillConstants.SKILL_FLY, processRanks(RuleSkillConstants.SKILL_FLY_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_FLY));
-    gameObject.set(RuleSkillConstants.SKILL_HANDLE_ANIMAL, processRanks(RuleSkillConstants.SKILL_HANDLE_ANIMAL_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_HANDLE_ANIMAL));
-    gameObject.set(RuleSkillConstants.SKILL_HEAL, processRanks(RuleSkillConstants.SKILL_HEAL_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_HEAL));
-    gameObject.set(RuleSkillConstants.SKILL_INTIMIDATE, processRanks(RuleSkillConstants.SKILL_INTIMIDATE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_INTIMIDATE));
-    gameObject.set(RuleSkillConstants.SKILL_LINGUISTICS, processRanks(RuleSkillConstants.SKILL_LINGUISTICS_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_LINGUISTICS));
-    gameObject.set(RuleSkillConstants.SKILL_PERCEPTION, processRanks(RuleSkillConstants.SKILL_PERCEPTION_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_PERCEPTION));
-    gameObject.set(RuleSkillConstants.SKILL_PERFORM, processRanks(RuleSkillConstants.SKILL_PERFORM_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_PERFORM));
-    gameObject.set(RuleSkillConstants.SKILL_PROFESSION, processRanks(RuleSkillConstants.SKILL_PROFESSION_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_PROFESSION));
-    gameObject.set(RuleSkillConstants.SKILL_RIDE, processRanks(RuleSkillConstants.SKILL_RIDE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_RIDE));
-    gameObject.set(RuleSkillConstants.SKILL_SENSE_MOTIVE, processRanks(RuleSkillConstants.SKILL_SENSE_MOTIVE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SENSE_MOTIVE));
-    gameObject.set(RuleSkillConstants.SKILL_SLEIGHT_OF_HAND, processRanks(RuleSkillConstants.SKILL_SLEIGHT_OF_HAND_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SLEIGHT_OF_HAND));
-    gameObject.set(RuleSkillConstants.SKILL_SPELLCRAFT, processRanks(RuleSkillConstants.SKILL_SPELLCRAFT_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SPELLCRAFT));
-    gameObject.set(RuleSkillConstants.SKILL_STEALTH, processRanks(RuleSkillConstants.SKILL_STEALTH_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_STEALTH));
-    gameObject.set(RuleSkillConstants.SKILL_SURVIVAL, processRanks(RuleSkillConstants.SKILL_SURVIVAL_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SURVIVAL));
-    gameObject.set(RuleSkillConstants.SKILL_SWIM, processRanks(RuleSkillConstants.SKILL_SWIM_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SWIM));
-    gameObject.set(RuleSkillConstants.SKILL_USE_MAGIC_DEVICE, processRanks(RuleSkillConstants.SKILL_USE_MAGIC_DEVICE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_USE_MAGIC_DEVICE));
+    const setGM = (key, ranks) => gm.set(key, processRanks(ranks) + getSkillModifier(key));
+    // @formatter:off
+    setGM(SKILLS.SKILL_ACROBATICS,          SKILLS.SKILL_ACROBATICS_RANKS);
+    setGM(SKILLS.SKILL_APPRAISE,            SKILLS.SKILL_APPRAISE_RANKS);
+    setGM(SKILLS.SKILL_BLUFF,               SKILLS.SKILL_BLUFF_RANKS);
+    setGM(SKILLS.SKILL_CLIMB,               SKILLS.SKILL_CLIMB_RANKS);
+    setGM(SKILLS.SKILL_CRAFT,               SKILLS.SKILL_CRAFT_RANKS);
+    setGM(SKILLS.SKILL_DIPLOMACY,           SKILLS.SKILL_DIPLOMACY_RANKS);
+    setGM(SKILLS.SKILL_DISABLE_DEVICE,      SKILLS.SKILL_DISABLE_DEVICE_RANKS);
+    setGM(SKILLS.SKILL_DISGUISE,            SKILLS.SKILL_ESCAPE_ARTIST_RANKS);
+    setGM(SKILLS.SKILL_ESCAPE_ARTIST,       SKILLS.SKILL_BLUFF_RANKS);
+    setGM(SKILLS.SKILL_FLY,                 SKILLS.SKILL_FLY_RANKS);
+    setGM(SKILLS.SKILL_HANDLE_ANIMAL,       SKILLS.SKILL_HANDLE_ANIMAL_RANKS);
+    setGM(SKILLS.SKILL_HEAL,                SKILLS.SKILL_HEAL_RANKS);
+    setGM(SKILLS.SKILL_INTIMIDATE,          SKILLS.SKILL_INTIMIDATE_RANKS);
+    setGM(SKILLS.SKILL_LINGUISTICS,         SKILLS.SKILL_LINGUISTICS_RANKS);
+    setGM(SKILLS.SKILL_PERCEPTION,          SKILLS.SKILL_PERCEPTION_RANKS);
+    setGM(SKILLS.SKILL_PERFORM,             SKILLS.SKILL_PERFORM_RANKS);
+    setGM(SKILLS.SKILL_PROFESSION,          SKILLS.SKILL_PROFESSION_RANKS);
+    setGM(SKILLS.SKILL_RIDE,                SKILLS.SKILL_RIDE_RANKS);
+    setGM(SKILLS.SKILL_SENSE_MOTIVE,        SKILLS.SKILL_SENSE_MOTIVE_RANKS);
+    setGM(SKILLS.SKILL_SLEIGHT_OF_HAND,     SKILLS.SKILL_SLEIGHT_OF_HAND_RANKS);
+    setGM(SKILLS.SKILL_SPELLCRAFT,          SKILLS.SKILL_SPELLCRAFT);
+    setGM(SKILLS.SKILL_STEALTH,             SKILLS.SKILL_STEALTH_RANKS);
+    setGM(SKILLS.SKILL_SURVIVAL,            SKILLS.SKILL_SURVIVAL_RANKS);
+    setGM(SKILLS.SKILL_SWIM,                SKILLS.SKILL_SWIM_RANKS);
+    setGM(SKILLS.SKILL_USE_MAGIC_DEVICE,    SKILLS.SKILL_USE_MAGIC_DEVICE_RANKS);
 
-    gameObject.set(RuleSkillConstants.SKILL_KNOWLEDGE_ARCANA, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_ARCANA_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_ARCANA));
-    gameObject.set(RuleSkillConstants.SKILL_KNOWLEDGE_DUNGEONEERING, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_DUNGEONEERING_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_DUNGEONEERING));
-    gameObject.set(RuleSkillConstants.SKILL_KNOWLEDGE_GEOGRAPHY, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_GEOGRAPHY_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_GEOGRAPHY));
-    gameObject.set(RuleSkillConstants.SKILL_KNOWLEDGE_ENGINEERING, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_ENGINEERING_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_ENGINEERING));
-    gameObject.set(RuleSkillConstants.SKILL_KNOWLEDGE_HISTORY, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_HISTORY_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_HISTORY));
-    gameObject.set(RuleSkillConstants.SKILL_KNOWLEDGE_LOCAL, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_LOCAL_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_LOCAL));
-    gameObject.set(RuleSkillConstants.SKILL_KNOWLEDGE_NOBILITY, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_NOBILITY_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_NOBILITY));
-    gameObject.set(RuleSkillConstants.SKILL_KNOWLEDGE_NATURE, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_NATURE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_NATURE));
-    gameObject.set(RuleSkillConstants.SKILL_KNOWLEDGE_PLANES, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_PLANES_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_PLANES));
-    gameObject.set(RuleSkillConstants.SKILL_KNOWLEDGE_RELIGION, processRanks(RuleSkillConstants.SKILL_KNOWLEDGE_RELIGION_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_KNOWLEDGE_RELIGION));
+    setGM(SKILLS.SKILL_KNOWLEDGE_ARCANA,            SKILLS.SKILL_KNOWLEDGE_ARCANA_RANKS);
+    setGM(SKILLS.SKILL_KNOWLEDGE_DUNGEONEERING,     SKILLS.SKILL_KNOWLEDGE_DUNGEONEERING_RANKS);
+    setGM(SKILLS.SKILL_KNOWLEDGE_GEOGRAPHY,         SKILLS.SKILL_KNOWLEDGE_GEOGRAPHY_RANKS);
+    setGM(SKILLS.SKILL_KNOWLEDGE_ENGINEERING,       SKILLS.SKILL_KNOWLEDGE_ENGINEERING_RANKS);
+    setGM(SKILLS.SKILL_KNOWLEDGE_HISTORY,           SKILLS.SKILL_KNOWLEDGE_HISTORY_RANKS);
+    setGM(SKILLS.SKILL_KNOWLEDGE_LOCAL,             SKILLS.SKILL_KNOWLEDGE_LOCAL_RANKS);
+    setGM(SKILLS.SKILL_KNOWLEDGE_NOBILITY,          SKILLS.SKILL_KNOWLEDGE_NOBILITY_RANKS);
+    setGM(SKILLS.SKILL_KNOWLEDGE_NATURE,            SKILLS.SKILL_KNOWLEDGE_NATURE_RANKS);
+    setGM(SKILLS.SKILL_KNOWLEDGE_PLANES,            SKILLS.SKILL_KNOWLEDGE_PLANES_RANKS);
+    setGM(SKILLS.SKILL_KNOWLEDGE_RELIGION,          SKILLS.SKILL_KNOWLEDGE_RELIGION_RANKS);
 
-    gameObject.set(RuleSkillConstants.SKILL_SCIENCE, processRanks(RuleSkillConstants.SKILL_SCIENCE_RANKS) + getSkillModifier(RuleSkillConstants.SKILL_SCIENCE));
+    setGM(SKILLS.SKILL_SCIENCE,                     SKILLS.SKILL_SCIENCE_RANKS);
+    // @formatter:on
 };

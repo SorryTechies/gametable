@@ -12,14 +12,12 @@ const itemTable = {
         maxHealth: 20,
         damageType: RuleDamageType.ENERGY,
         amountOfDice: 2,
-        hardeness: 5,
-        allowedSlots: [SLOTS.RIGHT_HAND]
+        hardeness: 5
     },
     [WEAPONS.SPEAR]: {
         reach: true,
         maxHealth: 5,
-        damageType: RuleDamageType.PIERCING,
-        allowedSlots: [SLOTS.RIGHT_HAND]
+        damageType: RuleDamageType.PIERCING
     },
     [WEAPONS.IMPROVISED]: {
         maxHealth: -1,
@@ -30,6 +28,11 @@ const itemTable = {
         maxHealth: 20,
         hardeness: 20,
         allowedSlots: [SLOTS.ARMOR]
+    },
+    [WEARABLE.BELT_OF_DEXTERITY]: {
+        maxHealth: 20,
+        hardeness: 20,
+        allowedSlots: [SLOTS.BELT]
     }
 };
 

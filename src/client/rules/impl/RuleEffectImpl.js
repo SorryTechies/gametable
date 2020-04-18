@@ -60,6 +60,22 @@ export function getArmorPenalty(item, val) {
     return new RuleEffect(item, RuleConstants.ARMOR_PENALTY, val);
 }
 
+export function getMaxAgility(item, val) {
+    return new RuleEffect(item, RuleConstants.MAX_DEXTERITY, val);
+}
+
+export function getArcanaFailChance(item, val) {
+    return new RuleEffect(item, RuleConstants.ARCANA_FAIL_CHANCE, val);
+}
+
 export function getArmorEffect(item, val) {
     return new RuleEffect(item, RuleConstants.MODIFIER_ARMOR, val, RuleEffectTypeConstants.TYPE_ARMOR);
+}
+
+export function getDexEffect(item, val) {
+    return new RuleEffect(item, RuleConstants.STAT_DEXTERITY, val, RuleEffectTypeConstants.TYPE_ENCHANTED);
+}
+
+export function getShieldEffect(item, val) {
+    return new RuleEffect(item, RuleConstants.MODIFIER_SHIELD, val, RuleEffectTypeConstants.TYPE_ARMOR);
 }

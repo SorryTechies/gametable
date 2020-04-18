@@ -19,7 +19,7 @@ export default class RuleItem {
         this.isRanged = false;
         this.onUse = RuleItem.EMPTY_FUNC;
 
-        this.health = 1;
+        this.damaged = 0;
         this.slot = RuleWearSlots.NO;
     }
 
@@ -32,20 +32,22 @@ export default class RuleItem {
      * @return {ItemBean}
      */
     toJson(toDelete) {
-        return {
+        const obj = {
             id: this.id,
-            key: this.key,
-            health: this.health,
-            slot: this.slot,
-            toDelete: !!toDelete
+            key: this.key
         };
+        if (this.damaged) obj.damaged = this.damaged;
+        if (this.isEquipped()) obj.slot = this.slot;
+        if (toDelete) obj.toDelete = toDelete;
+        return obj;
     }
 
     static fromJson(json) {
        const item = new RuleItem(json.key);
+       if (!json.id) throw new Error("No id for item.");
        item.id = json.id;
-       item.health = json.health;
-       item.slot = json.slot;
+       if (json.damaged) item.damaged = json.damaged;
+       if (json.slot) item.slot = json.slot;
        return item;
     }
 }

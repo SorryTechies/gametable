@@ -13,9 +13,10 @@ export default class RuleWearable extends RuleItem {
 
     static fromJson(json) {
         const item = new RuleWearable(json.key);
+        if (!json.id) throw new Error("No id for item.");
         item.id = json.id;
-        item.health = json.health;
-        item.slot = json.slot;
+        if (json.damaged) item.damaged = json.damaged;
+        if (json.slot) item.slot = json.slot;
         return item;
     }
 }

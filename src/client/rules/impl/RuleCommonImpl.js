@@ -16,9 +16,7 @@ export function calculateAttack(action, isRanged) {
     } else {
         bonus += attacker.get(RuleConstants.ATTACK_STR);
         if (action.targetObject) {
-            if (action.additional1 === RuleWeaponConstants.UNARMED_STRIKE) {
-                if (!attacker.ruleCharacter.hasFeat(RuleFeatsConstants.IMPROVED_UNARMED_STRIKE)) bonus -= 4;
-            }
+
             if (attacker.ruleCharacter.hasFeat(RuleFeatsConstants.AXE_TO_GRIND)) bonus += axeToGrindImpl(action)
         }
     }
@@ -34,14 +32,20 @@ export function getAttackRoll(action, isRanged) {
 }
 
 function isProficient(action) {
-    return true;
+    const attacker = action.performerObject;
+    switch (action.additional1) {
+        case RuleWeaponConstants.UNARMED_STRIKE:
+            return attacker.ruleCharacter.hasFeat(RuleFeatsConstants.IMPROVED_UNARMED_STRIKE);
+        case RuleWeaponConstants.IMPROVISED:
+            return attacker.ruleCharacter.hasFeat(RuleFeatsConstants.CATCH_OF_GUARD);
+    }
 }
 
 export function getRangedAttackRoll(action) {
     const roll = new CheckDice();
     roll.name = "Ranged Attack";
     roll.bonus = action.performerObject.get(RuleConstants.ATTACK_DEX);
-    if (isProficient(action)) roll.bonus -= 4;
+    if (!isProficient(action)) roll.bonus -= 4;
     return roll;
 }
 
@@ -49,7 +53,7 @@ export function getMeleeAttackImpl(action) {
     const roll = new CheckDice();
     roll.name = "Melee Attack";
     roll.bonus = action.performerObject.get(RuleConstants.ATTACK_STR);
-    if (isProficient(action)) roll.bonus -= 4;
+    if (!isProficient(action)) roll.bonus -= 4;
     return roll;
 }
 
@@ -65,7 +69,7 @@ export function getImprovisedAttack(action) {
     const roll = new CheckDice();
     roll.name = "Improvised Attack";
     roll.bonus = action.performerObject.get(RuleConstants.ATTACK_STR);
-    if (isProficient(action)) roll.bonus -= 4;
+    if (!isProficient(action)) roll.bonus -= 4;
     return roll;
 }
 

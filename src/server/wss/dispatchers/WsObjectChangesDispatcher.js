@@ -57,7 +57,7 @@ function processItems(db, mod) {
         db.items = db.items.filter(dbItem =>
             !mod.items.find(modItem => modItem.toDelete && modItem.id === dbItem.id));
         mod.items.forEach(item => {
-            if (!item.toDelete) db.item.push(item);
+            if (!item.toDelete) db.items.push(item);
         });
     }
 }

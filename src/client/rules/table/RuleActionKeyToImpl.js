@@ -24,6 +24,8 @@ export const implementation = {
     [RAC.TOTAL_DEFENCE]: RuleState.doTotalDefenceState,
     [RAC.EQUIP]: Impl.doEquip,
     [RAC.UNEQUIP]: Impl.doUnequip,
+    [RAC.GRAB]: Impl.doEquip,
+    [RAC.DROP]: Impl.doUnequip,
     [RAC.CAST_SPELL]: {
         [RSN.SHOCKING_GRASP]: SpellImpl.doShockGrasp
     },
@@ -55,6 +57,8 @@ export const validation = {
     [RAC.THROW_ATTACK]: Val.noValidation,
     [RAC.EQUIP]: Val.noValidation,
     [RAC.UNEQUIP]: Val.noValidation,
+    [RAC.DROP]: Val.noValidation,
+    [RAC.GRAB]: Val.noValidation,
     [RAC.COMBAT_MANEUVERS]: {
         [RCML.GRAPPLE]: Val.noValidation,
         [RCML.DISARM]: Val.noValidation,

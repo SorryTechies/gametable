@@ -4,9 +4,9 @@
 
 export interface ItemBean {
     id: string;
-    toDelete: boolean;
+    key: string;
 
-    key?: string;
-    health?: number;
+    toDelete?: boolean;
+    damaged?: number;
     slot?: number;
 }

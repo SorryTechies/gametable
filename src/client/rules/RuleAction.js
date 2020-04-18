@@ -36,6 +36,7 @@ function actionKeyToTarget(key) {
 
 export default class RuleAction {
     constructor(key, id) {
+        if (!key) throw new Error("No key provided.");
         this.key = key;
         this.isHidden = 0;
         this.dmOnly = false;

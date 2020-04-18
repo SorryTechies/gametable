@@ -27,8 +27,6 @@ export default {
 
     MOVE_SPEED: "speed",
 
-    INITIATIVE: "initiative",
-
     COMBAT_MANEUVER_BONUS: "cmb",
     COMBAT_MANEUVER_DEFENCE: "cmd",
 
@@ -52,6 +50,7 @@ export default {
     MODIFIER_DODGE: "modif_dodge",
     MODIFIER_DEFLECT: "modif_deflect",
     MODIFIER_ARMOR: "modif_armor",
+    MODIFIER_SHIELD: "mod_shield",
 
     MODIFIER_SAVE_REFLEX: "mod_ref",
     MODIFIER_SAVE_FORTITUDE: "mod_for",
@@ -68,5 +67,16 @@ export default {
     SPELL_ARRAY: "spell_array",
 
     SIZE: "size",
-    ARMOR_PENALTY: "armor_penalty"
+    ARMOR_PENALTY: "armor_penalty",
+    MAX_DEXTERITY: "max_dex",
+    ARCANA_FAIL_CHANCE: "arcana_fail",
+
+    INITIATIVE: "initiative",
+    SKILL_RANKS: "skill_ranks",
+    SKILL_RANKS_PER_LEVEL: "skill_ranks_per_lvl",
+
+    MAX_HEALTH: "max_health",
+    TEMPORARY_HEALTH: "temp_health",
+
+    MODIFIER_DAMAGE: "mod_damage"
 };

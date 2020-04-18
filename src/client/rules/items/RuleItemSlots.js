@@ -37,7 +37,7 @@ export default class RuleItemSlots {
     equip(item, slot) {
         if (this.getSlot(slot)) throw new Error("There is already item in this slot.");
         if (item.isWearable) {
-            if (!item.allowedSlots.includes(slot))
+            if (!isHandSlot(slot) && !item.allowedSlots.includes(slot))
                 throw new Error("This item cannot be equipped in this slot.");
         } else {
             if (!isHandSlot(slot))throw new Error("This item cannot be equipped.");
@@ -72,6 +72,14 @@ export default class RuleItemSlots {
     }
 
     getItems() {
-        return Object.values(this.slots);
+        return Object.values(this.slots).filter(item => !!item);
+    }
+
+    getEquipped() {
+        return Object.values(this.slots).filter(item => !!item && !isHandSlot(item.slot));
+    }
+
+    getGrabbed() {
+        return Object.values(this.slots).filter(item => !!item && isHandSlot(item.slot));
     }
 }

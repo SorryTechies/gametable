@@ -116,7 +116,7 @@ export default class CombatWindow extends React.Component {
         if (this.state.clickRuleAction) {
             try {
                 this.state.clickRuleAction.setTarget(RuleActions.TARGET_TYPE.UNIT, unit);
-                this.clearAim(this.state.clickRuleAction)
+                this.clearAim(this.state.clickRuleAction);
             } catch (ignored) {
                 PopupManager.push("Нужно указать свободную клетку.");
             }
