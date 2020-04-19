@@ -29,6 +29,15 @@ const itemTable = {
         hardeness: 20,
         allowedSlots: [SLOTS.ARMOR]
     },
+    [WEARABLE.AGILE_BREASTPLATE]: {
+        maxHealth: 20,
+        hardeness: 20,
+        allowedSlots: [SLOTS.ARMOR]
+    },
+    [WEARABLE.SNARLSHIELD]: {
+        maxHealth: 20,
+        hardeness: 20
+    },
     [WEARABLE.BELT_OF_DEXTERITY]: {
         maxHealth: 20,
         hardeness: 20,
@@ -39,6 +48,6 @@ const itemTable = {
 export function fillItemWithValues(item) {
     const stats = itemTable[item.key];
     if (!stats) throw new Error("Item stats not found " + item.key);
-    Object.keys(key => item[key] = stats[key]);
+    Object.keys(stats).forEach(key => item[key] = stats[key]);
     return item;
 }

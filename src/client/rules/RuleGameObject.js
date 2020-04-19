@@ -10,7 +10,6 @@ import RuleDamageType from "./constants/RuleDamageType";
 import RuleItemController from "./items/RuleItemController";
 import RuleEffectController from "./controllers/RuleEffectController";
 import CheckDice from "../logic/roll/CheckDice";
-import RuleArea from "./objects/RuleArea";
 import RuleReach from "./objects/RuleReach";
 
 export default class RuleGameObject {
@@ -56,11 +55,10 @@ export default class RuleGameObject {
 
     get(key) {
         const buffVal = this.effects.getBonus(key);
-        if (this.calculatedData[key]) {
-            return buffVal + this.calculatedData[key];
-        } else {
-            return buffVal + this.ruleCharacter.get(key);
-        }
+        const  val = this.calculatedData[key] ? this.calculatedData[key] : this.ruleCharacter.get(key);
+        if (typeof val === "number") return buffVal + val;
+        if (Array.isArray(val)) return val.concat(buffVal);
+        return val;
     }
 
     set(key, val) {
@@ -120,7 +118,7 @@ export default class RuleGameObject {
     rollValue(key) {
         const val = this.get(key);
         if (typeof val === "number") {
-            const roller= new CheckDice();
+            const roller = new CheckDice();
             roller.bonus = val ? val : 0;
             roller.name = key;
             roller.roll();

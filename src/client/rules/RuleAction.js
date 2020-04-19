@@ -10,6 +10,7 @@ import * as RuleLoader from "./RuleLoader";
 import * as CONST from "./constants/RuleActionListConstants";
 import * as SUPP from "./constants/RuleActionListSupportConstants";
 import TranslationModule from "./translation/TranslationModule";
+import TARGET_TYPE from "./constants/RuleActionTargetType";
 
 function findType(key) {
     const type = Object.keys(RuleAction.ACTION_TYPE_OBJECT).find(item => RuleAction.ACTION_TYPE_OBJECT[item].includes(key));
@@ -23,15 +24,24 @@ function actionKeyToTarget(key) {
         case RuleActionsConstants.CHARGE:
         case RuleActionsConstants.SPRINT:
         case RuleActionsConstants.FIVE_FOOT_STEP:
-            return RuleAction.TARGET_TYPE.GROUND;
+            return TARGET_TYPE.GROUND;
         case RuleActionsConstants.COMBAT_MANEUVERS:
         case RuleActionsConstants.MELEE_ATTACK:
         case RuleActionsConstants.RANGED_ATTACK:
         case RuleActionsConstants.CAST_SPELL:
-            return RuleAction.TARGET_TYPE.UNIT;
+            return TARGET_TYPE.UNIT;
+        case RuleActionsConstants.GRAB:
+        case  RuleActionsConstants.DROP:
+        case RuleActionsConstants.UNEQUIP:
+        case RuleActionsConstants.EQUIP:
+                return TARGET_TYPE.ITEM;
         default:
-            return RuleAction.TARGET_TYPE.NONE;
+            return TARGET_TYPE.NONE;
     }
+}
+
+function getJSON(obj) {
+    return obj && typeof obj.toJson === "function" ? obj.toJson() : obj;
 }
 
 export default class RuleAction {
@@ -54,6 +64,8 @@ export default class RuleAction {
 
         /** @type RuleGameObject */
         this.targetObject = null;
+        /** @type RuleItem */
+        this.targetItem = null;
         /** @type RuleGameObject */
         this.performerObject = null;
         /** @type {Dice} */
@@ -71,13 +83,18 @@ export default class RuleAction {
     setTarget(type, data) {
         if (this.targetType === type) {
             switch (this.targetType) {
-                case RuleAction.TARGET_TYPE.UNIT:
+                case TARGET_TYPE.UNIT:
                     if (typeof data !== "object") throw new Error("No game object provided.");
                     this.targetObject = data;
                     this.target = data.id;
                     break;
-                case RuleAction.TARGET_TYPE.GROUND:
+                case TARGET_TYPE.GROUND:
                     this.target = data;
+                    break;
+                case TARGET_TYPE.ITEM:
+                    if (typeof data !== "object") throw new Error("No item object provided.");
+                    this.targetItem = data;
+                    this.target = data.id;
                     break;
             }
         } else {
@@ -115,10 +132,15 @@ export default class RuleAction {
         const obj = new RuleAction(json.key, json.id);
         obj.isHidden = json.isHidden ? json.isHidden : 0;
         obj.setPerformer(RuleLoader.getLoader().getObject(json.performerId));
-        if (obj.targetType === RuleAction.TARGET_TYPE.UNIT) {
-            obj.setTarget(obj.targetType, RuleLoader.getLoader().getObject(json.target));
-        } else {
-            obj.setTarget(obj.targetType, json.target);
+        switch (obj.targetType) {
+            case TARGET_TYPE.UNIT:
+                obj.setTarget(obj.targetType, RuleLoader.getLoader().getObject(json.target));
+                break;
+            case TARGET_TYPE.ITEM:
+                obj.setTarget(obj.targetType, obj.performerObject.items.getByID(json.target));
+                break;
+            default:
+                obj.setTarget(obj.targetType, json.target);
         }
         if (json.additional1) obj.additional1 = json.additional1;
         if (json.additional2) obj.additional2 = json.additional2;
@@ -132,12 +154,12 @@ export default class RuleAction {
             key: this.key,
             isHidden: this.isHidden,
             performerId: this.performerId,
-            additional1: this.additional1,
-            additional2: this.additional2,
+            additional1: getJSON(this.additional1),
+            additional2: getJSON(this.additional2),
             consumeMoveSlot: this.consumeMoveSlot,
             consumeStandartSlot: this.consumeStandartSlot,
             id: this.id,
-            target: this.target,
+            target: getJSON(this.target),
             dmOnly: this.dmOnly
         };
     }

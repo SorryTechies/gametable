@@ -127,7 +127,7 @@ export function armorBuff(itemName, val, penalty, arcana, dex, buff) {
     const arr = [EFF.getArmorEffect(itemName, val)];
     if (penalty) {
         let pen = penalty;
-        if (buff.gameObject.hasFeat(FEATS.ARMOR_EXPERT_TRAIT)) --pen;
+        if (buff.gameObject.ruleCharacter.hasFeat(FEATS.ARMOR_EXPERT_TRAIT)) --pen;
         if (pen > 0) arr.push(EFF.getArmorPenalty(itemName, penalty));
     }
     if (arcana) arr.push(EFF.getArcanaFailChance(itemName, arcana));

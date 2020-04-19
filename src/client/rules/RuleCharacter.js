@@ -2,9 +2,9 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-import RuleDefaultValues from "./RuleDefaultValues";
 import RuleFeatsToState from "./table/RuleFeatsToState";
 import RuleBuffConstants from "./constants/RuleBuffConstants";
+import RuleDefaultValues from "./RuleDefaultValues";
 
 export default class RuleCharacter {
     constructor(character) {
@@ -16,7 +16,6 @@ export default class RuleCharacter {
         } else {
             this.data = {};
         }
-        RuleDefaultValues.setDefault(this);
     }
 
     set(key, val) {
@@ -24,7 +23,11 @@ export default class RuleCharacter {
     }
 
     get(key) {
-        return this.data[key];
+        if (this.data[key]) {
+            return this.data[key];
+        } else {
+            return RuleDefaultValues.getDefault(key);
+        }
     }
 
     getStateList() {

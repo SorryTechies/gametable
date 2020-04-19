@@ -78,5 +78,7 @@ export default {
     MAX_HEALTH: "max_health",
     TEMPORARY_HEALTH: "temp_health",
 
-    MODIFIER_DAMAGE: "mod_damage"
+    MODIFIER_DAMAGE: "mod_damage",
+    MODIFIER_SNEAK_DAMAGE: "mod_sneak_damage",
+    MODIFIER_SHIELD_BASH_DAMAGE: "mod_shield_bash_damage"
 };

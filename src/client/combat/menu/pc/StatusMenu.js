@@ -16,6 +16,7 @@ import RuleWeaponConstants from "../../../rules/items/const/RuleWeaponConstants"
 import RuleCombatManuverList from "../../../rules/constants/RuleCombatManuverList";
 import {MUST_DO_ATTACK_BUFFS} from "../../../rules/constants/RuleBuffGroupConstants";
 import SLOTS from "../../../rules/items/const/RuleWearSlots";
+import TARGET_TYPE from "../../../rules/constants/RuleActionTargetType";
 
 const NO = "no";
 
@@ -102,19 +103,19 @@ export default class StatusMenu extends React.Component {
             case CONST.DROP:
             case CONST.UNEQUIP:
                 return this.renderAction(val1 => {
-                    this.action.target = val1;
+                    this.action.setTarget(TARGET_TYPE.ITEM, val1);
                     this.action.additional1 = val1.slot;
                     return this.props.doAimAction(this.action);
                 });
             case CONST.GRAB:
                 return this.renderAction(val1 => {
-                    this.action.target = val1;
+                    this.action.setTarget(TARGET_TYPE.ITEM, val1);
                     this.action.additional1 = SLOTS.RIGHT_HAND;
                     return this.props.doAimAction(this.action);
                 });
             case CONST.EQUIP:
                 return this.renderAction(val1 => {
-                    this.action.target = val1;
+                    this.action.setTarget(TARGET_TYPE.ITEM, val1);
                     // TODO select slot
                     this.action.additional1 = val1.allowedSlots[0];
                     return this.props.doAimAction(this.action);

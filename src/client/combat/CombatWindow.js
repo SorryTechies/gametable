@@ -19,6 +19,7 @@ import DmPanel from "./menu/pc/DmPanel";
 import RuleActionsConstants from "../rules/constants/RuleActionsConstants";
 import BrowserMessenger from "../logic/ws/messagers/BrowserMessenger";
 import RuleCharacterChangesBean from "../rules/RuleCharacterChangesBean";
+import TARGET_TYPE from "../rules/constants/RuleActionTargetType";
 
 const BAR_STATUS = 'status';
 const ACTION_HIGHLIGHT = 'act';
@@ -115,7 +116,7 @@ export default class CombatWindow extends React.Component {
     clickObject(unit) {
         if (this.state.clickRuleAction) {
             try {
-                this.state.clickRuleAction.setTarget(RuleActions.TARGET_TYPE.UNIT, unit);
+                this.state.clickRuleAction.setTarget(TARGET_TYPE.UNIT, unit);
                 this.clearAim(this.state.clickRuleAction);
             } catch (ignored) {
                 PopupManager.push("Нужно указать свободную клетку.");
@@ -135,7 +136,7 @@ export default class CombatWindow extends React.Component {
     clickTable(x, y) {
         if (this.state.clickRuleAction) {
             try {
-                this.state.clickRuleAction.setTarget(RuleActions.TARGET_TYPE.GROUND, {x: x, y: y});
+                this.state.clickRuleAction.setTarget(TARGET_TYPE.GROUND, {x: x, y: y});
                 this.clearAim(this.state.clickRuleAction)
             } catch (ignored) {
                 PopupManager.push("Нужно указать юнита.");
@@ -152,7 +153,7 @@ export default class CombatWindow extends React.Component {
     }
 
     doAimAction(action) {
-        if (action.targetType === RuleActions.TARGET_TYPE.NONE) {
+        if (action.targetType === TARGET_TYPE.NONE || action.targetType === TARGET_TYPE.ITEM) {
             this.clearAim(action);
         } else {
             this.setState({

@@ -60,7 +60,7 @@ export default class MapGrid extends React.Component {
             style={{
                 backgroundSize: "100% 100%",
                 backgroundRepeat: "no-repeat",
-                backgroundImage: `url(${this.props.map.dm_url ? this.props.map.dm_url : this.props.map.url})`,
+                backgroundImage: `url(${this.props.map.backgroundDMUrl ? this.props.map.backgroundDMUrl : this.props.map.backgroundUrl})`,
                 width: size,
                 height: size,
             }}>
@@ -74,7 +74,6 @@ export default class MapGrid extends React.Component {
 MapGrid.propTypes = {
     size: PropTypes.number.isRequired,
     map: PropTypes.object.isRequired,
-    /** @type {Array<GameObject>} */
     objects: PropTypes.array.isRequired,
     onClickObject: PropTypes.func.isRequired,
     onClickGrid: PropTypes.func.isRequired,

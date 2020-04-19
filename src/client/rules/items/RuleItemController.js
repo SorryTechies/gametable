@@ -18,9 +18,7 @@ export default class RuleItemController {
             /** @type {Array<RuleItem>} */
             this.items = arr;
             this.items.forEach(item => {
-                if (typeof item.slot === "number") {
-                    this.slots.equip(item, item.slot);
-                }
+                if (item.isEquipped()) this.slots.equip(item, item.slot);
             });
         } else {
             /** @type {Array<RuleItem>} */
@@ -39,6 +37,10 @@ export default class RuleItemController {
 
     getItemsFromHands() {
         const r = this.slots.getGrabbed();
+    }
+
+    getByID(id) {
+        return this.items.find(item => item.id === id);
     }
 
     removeItem(r) {

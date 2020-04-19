@@ -10,13 +10,13 @@ import BrowserWebSocket from "../logic/ws/BrowserWebSocket";
 import WebSocketMessage from "../../common/logic/WebSocketMessage";
 import RuleActions from "../rules/RuleAction";
 import RuleCharacterChangesBean from "../rules/RuleCharacterChangesBean";
-import RuleDefaultValues from "../rules/RuleDefaultValues";
 import RuleGameObject from "../rules/RuleGameObject";
 import * as RuleLoader from "../rules/RuleLoader";
 import TranslationModule from "../rules/translation/TranslationModule";
 import SupportedLanguages from "../rules/translation/SupportedLanguages";
 import BrowserChatMessage from "../logic/BrowserChatMessage";
 import RuleConstants from "../rules/constants/RuleSkillConstants";
+import RuleMap from "../rules/map/RuleMap";
 
 /** @type {Account} */
 let account = null;
@@ -29,7 +29,7 @@ let chat = [];
 let characters = [];
 /** @type RuleCharacter */
 let myCharacter = null;
-/** @type SessionMap */
+/** @type {RuleMap} */
 let map = null;
 /** @type GameSession */
 let session = null;
@@ -46,7 +46,6 @@ function linkCharacters() {
         const char = characters.find(char => obj.character_id === char.id);
         if (!char) throw new Error("Cannot find character for object.");
         obj.ruleCharacter = char;
-        RuleDefaultValues.setDefaultObjectValues(obj);
         const owner = participants.find(acc => acc.characters_ids.includes(char.id));
         if (owner) {
             obj.owner = owner;
@@ -118,11 +117,11 @@ export default class StaticController {
     static async loadMap() {
         const id = Array.isArray(session.session_maps_id) ? session.session_maps_id[0] : null;
         if (!id) return;
-        map = await new NormalRequest('/map', {id: id}).send();
+        map = RuleMap.fromJson(await new NormalRequest('/map', {id: id}).send());
     }
 
     static async loadObjects() {
-        const idArray = Array.isArray(map.map_objects_id) ? map.map_objects_id : [];
+        const idArray = Array.isArray(map.objectsIds) ? map.objectsIds : [];
         const request = new NormalRequest('/object');
         request.method = NormalRequest.METHOD.POST;
         objects = (await request.send({ids: idArray})).objects.map(RuleGameObject.fromJson);
@@ -199,7 +198,7 @@ export default class StaticController {
         return participants;
     }
 
-    /** @return SessionMap */
+    /** @return RuleMap */
     static getMap() {
         return map;
     }

@@ -2,40 +2,35 @@
  * Created by LastBerserk on 17.01.2020.
  */
 
-import RuleConstants from "./constants/RuleStatConstants";
-import RuleSkillConstants from "./constants/RuleSkillConstants";
-import RuleGameObjectConstants from "./constants/RuleGameObjectConstants";
+import CONST from "./constants/RuleStatConstants";
+import SKILLS from "./constants/RuleSkillConstants";
+import OBJ_CONST from "./constants/RuleGameObjectConstants";
+
+const DEFAULT_VALUES = {
+    [CONST.STAT_STRENGTH]: 10,
+    [CONST.STAT_DEXTERITY]: 10,
+    [CONST.STAT_CONSTITUTION]: 10,
+    [CONST.STAT_INTELLIGENCE]: 10,
+    [CONST.STAT_WISDOM]: 10,
+    [CONST.STAT_CHARISMA]: 10,
+
+    [CONST.LEVEL]: 1,
+    [CONST.MOVE_SPEED]: 30,
+
+    [CONST.HEALTH_DIE]: 8,
+    [CONST.HEALTH_DIE_PER_LEVEL]: 6,
+
+    [SKILLS.CLASS_SKILLS_ARRAY]: [],
+    [CONST.SPELL_ARRAY]: [],
+};
+
+const setIfNull = (key, val) => !DEFAULT_VALUES[key] ? DEFAULT_VALUES[key] = val : null;
+Object.values(CONST).forEach(key => setIfNull(key, 0));
+Object.values(SKILLS).forEach(key => setIfNull(key, 0));
+Object.values(OBJ_CONST).forEach(key => setIfNull(key, 0));
 
 export default class RuleDefaultValues {
-    /**
-     * @param {RuleCharacter} character
-     */
-    static setDefault(character) {
-        const setIfNull = (key, val) => !character.get(key) ? character.set(key, val) : null;
-        const initArray = key => !Array.isArray(character.get(key)) ? character.set(key, []) : null;
-        Object.values(RuleConstants).forEach(key => setIfNull(key, 0));
-        Object.values(RuleSkillConstants).forEach(key => setIfNull(key, 0));
-        setIfNull(RuleConstants.STAT_STRENGTH, 10);
-        setIfNull(RuleConstants.STAT_DEXTERITY, 10);
-        setIfNull(RuleConstants.STAT_CONSTITUTION, 10);
-        setIfNull(RuleConstants.STAT_INTELLIGENCE, 10);
-        setIfNull(RuleConstants.STAT_WISDOM, 10);
-        setIfNull(RuleConstants.STAT_CHARISMA, 10);
-
-        setIfNull(RuleConstants.LEVEL, 1);
-
-        setIfNull(RuleConstants.HEALTH_DIE, 8);
-        setIfNull(RuleConstants.HEALTH_DIE_PER_LEVEL, 6);
-
-        setIfNull(RuleConstants.MOVE_SPEED, 30);
-
-        initArray(RuleSkillConstants.CLASS_SKILLS_ARRAY);
-        initArray(RuleConstants.SPELL_ARRAY)
-    }
-
-    /** @param {RuleGameObject} obj */
-    static setDefaultObjectValues(obj) {
-        const setIfNull = (key, val) => !obj.data ? obj.data[key] = val : null;
-        Object.values(RuleGameObjectConstants).forEach(key => setIfNull(key, 0));
+    static getDefault(key) {
+        return DEFAULT_VALUES[key];
     }
 }

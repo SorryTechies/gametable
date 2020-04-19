@@ -33,7 +33,7 @@ export default class RuleRound {
     addAction(action) {
         this.getObject(action.performerId).actionList.addAction(action);
         if (SUP_CONST.REPOSITION_ACTIONS.includes(action.key)) action.performerObject.movePoints.add(action.target);
-        if (action.key === ACT_CONST.EQUIP || action.key === ACT_CONST.GRAB) action.performerObject.items.slots.equip(action.target, action.additional1);
+        if (action.key === ACT_CONST.EQUIP || action.key === ACT_CONST.GRAB) action.performerObject.items.slots.equip(action.targetItem, action.additional1);
         if (action.key === ACT_CONST.UNEQUIP || action.key === ACT_CONST.DROP) action.performerObject.items.slots.unequip(action.additional1);
     }
 
@@ -43,7 +43,7 @@ export default class RuleRound {
         if (act) {
             if (SUP_CONST.REPOSITION_ACTIONS.includes(act.key)) act.performerObject.movePoints.remove(act.target);
             if (act.key === ACT_CONST.EQUIP || action.key === ACT_CONST.GRAB) action.performerObject.items.slots.unequip(action.additional1);
-            if (act.key === ACT_CONST.UNEQUIP || action.key === ACT_CONST.DROP) action.performerObject.items.slots.equip(action.target, action.additional1);
+            if (act.key === ACT_CONST.UNEQUIP || action.key === ACT_CONST.DROP) action.performerObject.items.slots.equip(action.targetItem, action.additional1);
         }
     }
 

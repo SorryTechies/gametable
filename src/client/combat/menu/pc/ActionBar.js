@@ -5,17 +5,16 @@
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import StaticController from "../../../static/StaticController";
+import TARGET_TYPE from "../../../rules/constants/RuleActionTargetType";
 
 function toDisplay(action) {
     let result = action.key;
     switch (action.targetType) {
-        case "ground":
+        case TARGET_TYPE.GROUND:
             result += ` to {${action.target.x}, ${action.target.y}}`;
             break;
-        case "unit":
+        case TARGET_TYPE.UNIT:
             result += " " + action.targetObject.name;
-            break;
-        case "none":
             break;
     }
     return result;

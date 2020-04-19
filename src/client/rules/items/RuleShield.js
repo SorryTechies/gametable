@@ -14,8 +14,7 @@ export default class RuleShield extends RuleWearable {
 
     static fromJson(json) {
         const item = new RuleShield(json.key);
-        if (!json.id) throw new Error("No id for item.");
-        item.id = json.id;
+        if (json.id) item.id = json.id;
         if (json.damaged) item.damaged = json.damaged;
         if (json.slot) item.slot = json.slot;
         return item;

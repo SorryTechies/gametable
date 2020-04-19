@@ -11,8 +11,10 @@ import {fillItemWithValues} from "./RuleKeyToItemFactory";
 
 export default class RuleItemFactory {
     static fromJson(json) {
-        if (Object.values(RuleWeaponConstants).includes(json.key)) return RuleWeapon.fromJson(json);
-        if (Object.values(RuleWearableList).includes(json.key)) return RuleWearable.fromJson(json);
-        return fillItemWithValues(RuleItem.fromJson(json));
+        let item = null;
+        if (Object.values(RuleWeaponConstants).includes(json.key)) item = RuleWeapon.fromJson(json);
+        if (Object.values(RuleWearableList).includes(json.key)) item = RuleWearable.fromJson(json);
+        if (!item) item = RuleItem.fromJson(json);
+        return fillItemWithValues(item);
     }
 }
