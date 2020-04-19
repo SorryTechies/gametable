@@ -3,7 +3,8 @@
  */
 
 export default class MovePointController {
-    constructor() {
+    constructor(obj) {
+        this.gameObject = obj;
         this.points = [];
     }
 

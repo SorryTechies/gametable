@@ -6,6 +6,7 @@ import RuleWearable from "./RuleWearable";
 import RuleDamageType from "../constants/RuleDamageType";
 import RuleAcType from "../constants/RuleACType";
 import SLOTS from "./const/RuleWearSlots";
+import DamageDice from "../../logic/roll/DamageDice";
 
 export default class RuleWeapon extends RuleWearable {
     constructor(key) {
@@ -18,9 +19,20 @@ export default class RuleWeapon extends RuleWearable {
         this.range = 30;
         this.damageDie = 6;
         this.damageType = RuleDamageType.BLUDGEONING;
+        this.additionalTags = [];
         this.amountOfDice = 1;
+        this.twoHanded = false;
         this.acType = RuleAcType.NORMAL;
         this.allowedSlots = [SLOTS.RIGHT_HAND];
+    }
+
+    getDamageRoll() {
+        const roll = new DamageDice();
+        roll.name = this.key;
+        roll.amountOfDices = this.amountOfDice;
+        roll.criticalModifier = this.critMultiplier;
+        roll.die = this.damageDie;
+        return roll;
     }
 
     static fromJson(json) {

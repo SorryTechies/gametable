@@ -6,8 +6,13 @@ export default class RulePoint {
     constructor(x, y) {
         this.x = 0;
         this.y = 0;
-        if (typeof x === "number") this.x = x;
-        if (typeof y === "number") this.y = y;
+        if (typeof x === "object") {
+            this.x = x.x;
+            this.y = x.y;
+        } else {
+            if (typeof x === "number") this.x = x;
+            if (typeof y === "number") this.y = y;
+        }
     }
 
     add(x, y) {

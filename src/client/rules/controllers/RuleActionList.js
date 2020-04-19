@@ -7,6 +7,7 @@ import RuleTypes from "../constants/RuleTypes";
 import * as CONST from "../constants/RuleActionListConstants";
 import {filterActionByKey} from "../table/RuleActionFilter";
 import * as SUPP from "../constants/RuleActionListSupportConstants";
+import STATS from "../constants/RuleStatConstants";
 
 function isForcingAttackState(action) {
    if (SUPP.FORCE_ATTACK_BUFFS.includes(action.additional1)) return true;
@@ -37,6 +38,16 @@ function setTriggers(list, action) {
             break;
         case RuleTypes.TYPE_IMMEDIATE:
             break;
+        case RuleTypes.TYPE_ATTACK:
+            if (list.canDoStandardAction) {
+                action.consumeStandartSlot = true;
+            } else {
+                action.consumeMoveSlot = true;
+            }
+            ++list.attacks;
+            if (action.additional1.twoHanded) list.twoWeaponAttack = false;
+            break;
+
     }
     if (isForcingAttackState(action)) list.mustAttackOnThisRound = true;
     if (SUPP.REPOSITION_ACTIONS.includes(action.key)) list.movedAlready = true;
@@ -57,10 +68,22 @@ function removeTriggers(list, deletedAction) {
         case RuleTypes.TYPE_SWIFT:
             list.canDoSwiftAction = true;
             break;
+        case RuleTypes.TYPE_ATTACK:
+            --list.attacks;
+            if (!list.list.find(action => action.additional1 && action.additional1.twoWeaponAttack)) list.twoWeaponAttack = true;
+            break;
     }
     if (!list.list.find(isForcingAttackState)) list.mustAttackOnThisRound = false;
     if (!list.list.find(action => SUPP.MOVE_BLOCK_ACTIONS.includes(action.key))) list.canMove = true;
     if (!list.list.find(action => SUPP.REPOSITION_ACTIONS.includes(action.key))) list.movedAlready = false;
+}
+
+function canAttack(obj) {
+    if (!obj.canDoMoveAction && obj.attacks === 1) {
+        return false;
+    } else {
+        return obj.gameObject.get(STATS.AMOUNT_OF_ATTACKS) > obj.attacks || obj.twoWeaponAttack;
+    }
 }
 
 export default class RuleActionList {
@@ -75,6 +98,8 @@ export default class RuleActionList {
         this.canDoStandardAction = true;
         this.canDoSwiftAction = true;
         this.mustAttackOnThisRound = false;
+        this.attacks = 0;
+        this.twoWeaponAttack = true;
     }
 
     addAction(action) {
@@ -92,19 +117,27 @@ export default class RuleActionList {
         const obj = this.list[index];
         if (index !== -1) {
             this.list.splice(index, 1);
-            removeTriggers(this, action);
+            removeTriggers(this, obj);
             return obj;
         }
     }
 
     getAllowedActionsList() {
-        let ans = [...CONST.FREE_ACTIONS, ...CONST.IMMEDIATE_ACTION];
-        if (this.canDoStandardAction && this.canDoMoveAction) ans = ans.concat(CONST.FULL_ROUND_ACTIONS);
-        if (this.canDoStandardAction) ans = ans.concat(CONST.STANDARD_ACTIONS);
-        if (this.canDoMoveAction || this.canDoStandardAction) ans = ans.concat(CONST.MOVE_ACTIONS);
-        if (this.canDoSwiftAction) ans = ans.concat(CONST.SWIFT_ACTION);
-        ans = ans.filter(filterActionByKey.bind(null, this));
-        return ans;
+        const ans = new Set([...CONST.FREE_ACTIONS, ...CONST.IMMEDIATE_ACTION]);
+        if (this.canDoStandardAction && this.canDoMoveAction) CONST.FULL_ROUND_ACTIONS.forEach(ans.add, ans);
+        if (this.canDoStandardAction) CONST.STANDARD_ACTIONS.forEach(ans.add, ans);
+        if (canAttack(this)) CONST.ATTACK_ACTIONS.forEach(ans.add, ans);
+        if (this.canDoMoveAction || this.canDoStandardAction) CONST.MOVE_ACTIONS.forEach(ans.add, ans);
+        if (this.canDoSwiftAction) CONST.SWIFT_ACTION.forEach(ans.add, ans);
+        return Array.from(ans).filter(filterActionByKey.bind(null, this));
+    }
+
+    /**
+     * @param {RuleItem} item
+     * @return boolean
+     */
+    canAttackWithWeapon(item) {
+        return this.list.filter(action => action.additional1 === item).length < this.gameObject.get(STATS.AMOUNT_OF_ATTACKS);
     }
 
     executeActions() {

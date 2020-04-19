@@ -41,6 +41,7 @@ export default class StatusMenu extends React.Component {
             case CONST.COMBAT_MANEUVERS:
             case CONST.MELEE_ATTACK:
             case CONST.RANGED_ATTACK:
+            case CONST.IMPROVISED_ATTACK:
             case CONST.CAST_SPELL:
             case CONST.ACTIVATE_STATE:
             case CONST.DEACTIVATE_STATE:
@@ -69,13 +70,19 @@ export default class StatusMenu extends React.Component {
         switch (this.state.nextSelector) {
             case CONST.COMBAT_MANEUVERS:
                 return Object.values(RuleCombatManuverList);
+            case CONST.IMPROVISED_ATTACK:
+                return unit.items.getItemsFromHands()
+                    .filter(item => this.props.actionList.canAttackWithWeapon(item));
             case CONST.MELEE_ATTACK:
-                return [
-                    RuleWeaponConstants.IMPROVISED,
-                    RuleWeaponConstants.UNARMED_STRIKE
-                ].concat(unit.items.getItemsFromHands());
+                return [RuleWeaponConstants.UNARMED_STRIKE]
+                    .concat(unit.items.getItemsFromHands()
+                        .filter(item => item.isWeapon &&
+                        this.props.actionList.canAttackWithWeapon(item)));
             case CONST.RANGED_ATTACK:
-                return  unit.items.getItemsFromHands().filter(item => item.isRanged);
+                return  unit.items.getItemsFromHands()
+                    .filter(item => item.isWeapon &&
+                    item.isRanged &&
+                    this.props.actionList.canAttackWithWeapon(item));
             case CONST.CAST_SPELL:
                 return unit.ruleCharacter.get(RuleConstants.SPELL_ARRAY);
             case CONST.ACTIVATE_STATE:
@@ -120,6 +127,7 @@ export default class StatusMenu extends React.Component {
                     this.action.additional1 = val1.allowedSlots[0];
                     return this.props.doAimAction(this.action);
                 });
+            case CONST.IMPROVISED_ATTACK:
             case CONST.MELEE_ATTACK:
             case CONST.RANGED_ATTACK:
                 return this.renderAction(val1 => {

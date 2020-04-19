@@ -15,5 +15,6 @@ export default {
         [RuleActionConstants.MELEE_ATTACK]: "Melee Attack",
         [RuleActionConstants.RANGED_ATTACK]: "Ranged Attack",
         [RuleActionConstants.COMBAT_MANEUVERS]: "Combat Maneuvers",
+        [RuleActionConstants.IMPROVISED_ATTACK]: "Improvised attack",
     }
 }

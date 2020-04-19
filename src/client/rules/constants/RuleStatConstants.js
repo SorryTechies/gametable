@@ -80,5 +80,8 @@ export default {
 
     MODIFIER_DAMAGE: "mod_damage",
     MODIFIER_SNEAK_DAMAGE: "mod_sneak_damage",
-    MODIFIER_SHIELD_BASH_DAMAGE: "mod_shield_bash_damage"
+    MODIFIER_SHIELD_BASH_DAMAGE: "mod_shield_bash_damage",
+
+    AMOUNT_OF_ATTACKS: "attacks_amount",
+    ATTACKS_OF_OPPORTUNITY: "attacks_opportunity"
 };

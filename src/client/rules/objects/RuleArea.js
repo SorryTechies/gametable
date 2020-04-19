@@ -5,10 +5,10 @@
 import RulePoint from "./RulePoint";
 
 function isInRange(center, radius, point) {
-    return (center.x - radius >= point.x) &&
-        (center.x + radius <= point.x) &&
-        (center.y - radius >= point.y) &&
-        (center.y + radius <= point.y)
+    return (center.x - radius <= point.x) &&
+        (center.x + radius >= point.x) &&
+        (center.y - radius <= point.y) &&
+        (center.y + radius >= point.y)
 }
 
 export default class RuleArea {

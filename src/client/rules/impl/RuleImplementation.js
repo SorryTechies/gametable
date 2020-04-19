@@ -56,6 +56,7 @@ export const healthCalc = gm => {
 };
 
 export const attackBonusCalc = gm => {
+    gm.set(CONST.AMOUNT_OF_ATTACKS, Math.floor(gm.get(CONST.BAB)/5) + 1);
     gm.set(CONST.ATTACK_STR,
         gm.get(CONST.BAB) +
         gm.get(CONST.MOD_STRENGTH) +

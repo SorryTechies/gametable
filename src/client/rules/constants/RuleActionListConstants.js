@@ -11,11 +11,15 @@ export const MOVE_ACTIONS = [
 ];
 
 export const STANDARD_ACTIONS = [
-    RuleActionsConstants.MELEE_ATTACK,
-    RuleActionsConstants.RANGED_ATTACK,
     RuleActionsConstants.CAST_SPELL,
     RuleActionsConstants.TOTAL_DEFENCE,
     RuleActionsConstants.COMBAT_MANEUVERS
+];
+
+export const ATTACK_ACTIONS = [
+    RuleActionsConstants.IMPROVISED_ATTACK,
+    RuleActionsConstants.MELEE_ATTACK,
+    RuleActionsConstants.RANGED_ATTACK,
 ];
 
 export const FULL_ROUND_ACTIONS = [

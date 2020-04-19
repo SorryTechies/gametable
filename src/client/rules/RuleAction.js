@@ -14,7 +14,7 @@ import TARGET_TYPE from "./constants/RuleActionTargetType";
 
 function findType(key) {
     const type = Object.keys(RuleAction.ACTION_TYPE_OBJECT).find(item => RuleAction.ACTION_TYPE_OBJECT[item].includes(key));
-    if (type) return type;
+    if (type) return parseInt(type);
     throw new Error(`Type ${key} isn't found.`);
 }
 
@@ -179,17 +179,12 @@ export default class RuleAction {
     }
 }
 
-RuleAction.TARGET_TYPE = {
-    GROUND: "ground",
-    UNIT: "unit",
-    NONE: "none"
-};
-
 RuleAction.ACTION_TYPE_OBJECT = {
     [RuleTypes.TYPE_MOVE]: CONST.MOVE_ACTIONS,
     [RuleTypes.TYPE_STANDARD]: CONST.STANDARD_ACTIONS,
     [RuleTypes.TYPE_FULL_ROUND]: CONST.FULL_ROUND_ACTIONS,
     [RuleTypes.TYPE_FREE]: CONST.FREE_ACTIONS,
     [RuleTypes.TYPE_IMMEDIATE]: CONST.IMMEDIATE_ACTION,
-    [RuleTypes.TYPE_SWIFT]: CONST.SWIFT_ACTION
+    [RuleTypes.TYPE_SWIFT]: CONST.SWIFT_ACTION,
+    [RuleTypes.TYPE_ATTACK]: CONST.ATTACK_ACTIONS
 };

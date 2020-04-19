@@ -15,11 +15,12 @@ function calculateMoveDistance(p1, p2) {
 }
 
 function reachValidation(action) {
-    if (action.additional1.reach === 1) {
-        touchCheck(action);
-    } else {
+    if (action.additional1.reach) {
+        action.performerObject.threatArea.calculate(action.additional1.reach);
         if (!action.performerObject.threatArea.isInArea(action.targetObject.position))
             throw new Error("You cannot attack that far.");
+    } else {
+        touchCheck(action);
     }
 }
 
@@ -48,10 +49,10 @@ export const attackValidation = action => {
     /** @type {RuleWeapon} */
     const item = action.additional1;
     if (!item.isRanged) {
-        if (item.reach === 1) {
-            touchCheck(action);
-        } else {
+        if (item.reach) {
             reachValidation(action);
+        } else {
+            touchCheck(action);
         }
     }
 };

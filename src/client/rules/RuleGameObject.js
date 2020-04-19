@@ -11,6 +11,7 @@ import RuleItemController from "./items/RuleItemController";
 import RuleEffectController from "./controllers/RuleEffectController";
 import CheckDice from "../logic/roll/CheckDice";
 import RuleReach from "./objects/RuleReach";
+import RulePoint from "./objects/RulePoint";
 
 export default class RuleGameObject {
     constructor(id) {
@@ -143,8 +144,9 @@ export default class RuleGameObject {
         if (Array.isArray(json.items)) obj.items = RuleItemController.fromJson(obj, json.items);
         if (Array.isArray(json.effects)) obj.effects = RuleEffectController.fromJson(obj, json.effects);
         if (json.position) {
-            obj.position = json.position;
-            obj.movePoints.setStartingPoint(Object.assign({}, json.position));
+            const position = new RulePoint(json.position);
+            obj.position = position;
+            obj.movePoints.setStartingPoint(Object.assign({}, position));
         }
         return obj;
     }

@@ -36,7 +36,7 @@ export default class RuleItemController {
     }
 
     getItemsFromHands() {
-        const r = this.slots.getGrabbed();
+        return this.slots.getGrabbed();
     }
 
     getByID(id) {
