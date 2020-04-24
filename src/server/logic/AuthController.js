@@ -23,6 +23,7 @@ function excludePublicPaths(path) {
 
 EXPRESS_SERVER.use(async (req, res, next) => {
     try {
+        console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
         if (excludePublicPaths(req.path)) return next();
         const login = req.headers[Headers.LOGIN_HEADER.toLowerCase()];
         const sessionID = req.headers[Headers.X_SESSION_HEADER.toLowerCase()];

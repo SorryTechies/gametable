@@ -12,7 +12,7 @@ const itemTable = {
         maxHealth: 20,
         damageType: RuleDamageType.ENERGY,
         amountOfDice: 2,
-        hardeness: 5
+        hardeness: 10
     },
     [WEAPONS.SPEAR]: {
         reach: true,
@@ -26,22 +26,26 @@ const itemTable = {
     },
     [WEARABLE.SPLINT_MAIL]: {
         maxHealth: 20,
-        hardeness: 20,
+        hardeness: 10,
         allowedSlots: [SLOTS.ARMOR]
     },
     [WEARABLE.AGILE_BREASTPLATE]: {
         maxHealth: 20,
-        hardeness: 20,
+        hardeness: 10,
         allowedSlots: [SLOTS.ARMOR]
     },
     [WEARABLE.SNARLSHIELD]: {
         maxHealth: 20,
-        hardeness: 20
+        hardeness: 10
     },
     [WEARABLE.BELT_OF_DEXTERITY]: {
         maxHealth: 20,
         hardeness: 20,
         allowedSlots: [SLOTS.BELT]
+    },
+    [WEAPONS.DRAGON_SLAYER]: {
+        maxHealth: 200,
+        hardeness: 10
     }
 };
 

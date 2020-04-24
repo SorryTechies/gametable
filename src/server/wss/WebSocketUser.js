@@ -53,9 +53,27 @@ export default class WebSocketUser {
         return users.find(user => user.account && user.account._id.toString() === id);
     }
 
+    /**
+     * @param {Array.<Account|string>} accounts
+     * @return {Array.<WebSocketUser>}
+     */
+    static findByUsers(accounts) {
+        return users.filter(user => !!accounts.find(acc =>
+        (typeof acc === "string" ? acc : acc._id) === user.account._id));
+    }
+
     static removeUser(user) {
         const index = users.findIndex(item => user === item);
         if (index !== -1) users.splice(index, 1);
+    }
+
+    /**
+     * @param {WebSocketMessage} message
+     * @param {Array.<Account>} accounts
+     * @param [ws]
+     */
+    static sendToUsers(message, accounts, ws) {
+        WebSocketUser.findByUsers(accounts).forEach(user => user.sendMessage(message, ws));
     }
 
     /**

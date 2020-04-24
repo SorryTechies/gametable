@@ -79,3 +79,7 @@ export function getDexEffect(item, val) {
 export function getShieldEffect(item, val) {
     return new RuleEffect(item, RuleConstants.MODIFIER_SHIELD, val, RuleEffectTypeConstants.TYPE_ARMOR);
 }
+
+export function getAttackModifier(key, val) {
+    return new RuleEffect(key, RuleConstants.MODIFIER_ATTACK, val);
+}

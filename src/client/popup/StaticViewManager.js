@@ -17,17 +17,25 @@ export default class StaticViewManager extends React.Component {
 
     componentDidMount() {
         StaticViewManager.addView = view => this.setState({view: view});
+        StaticViewManager.unMount = view => this.removeView(view);
     }
 
     unMount() {
         this.setState({view: null});
     }
 
+    removeView(view) {
+        if (this.state.view === view) this.unMount();
+    }
+
     render() {
         if (this.state.view) {
             const view = React.cloneElement(this.state.view.obj, {exitCallback: this.unMount.bind(this)});
             return <div className={rootScss.global_popup}>
-                <div id={rootScss.global_popup_menu}><div>{this.state.view.title}</div><button onClick={this.unMount.bind(this)}>X</button></div>
+                <div id={rootScss.global_popup_menu}>
+                    <div>{this.state.view.title}</div>
+                    <button onClick={this.unMount.bind(this)}>X</button>
+                </div>
                 <div>{view}</div>
             </div>;
         } else {
@@ -37,4 +45,7 @@ export default class StaticViewManager extends React.Component {
 }
 
 StaticViewManager.addView = () => {
+};
+
+StaticViewManager.unMount = () => {
 };

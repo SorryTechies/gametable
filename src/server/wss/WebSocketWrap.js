@@ -7,6 +7,7 @@ import * as WsCharacterDispatcher from "./dispatchers/WsCharacterDispatcher";
 import * as WsActionDispatcher from "./dispatchers/WsActionDispatcher";
 import * as WsObjectChangeDispatcher from "./dispatchers/WsObjectChangesDispatcher";
 import * as WsChatDispatcher from "./dispatchers/WsChatDispatcher";
+import * as WsDemandDispatcher from "./dispatchers/WsDemandDispatcher";
 
 const DEFAULT_TIMEOUT = 30 * 1000;
 const DELETE_TIMEOUT = DEFAULT_TIMEOUT + 5 * 1000;
@@ -45,6 +46,9 @@ export default class WebSocketWrap {
                         break;
                     case (WebSocketMessage.TYPE_CHARACTER):
                         await WsCharacterDispatcher.onCharacterUpdate(json.data, ws);
+                        break;
+                    case WebSocketMessage.TYPE_ACTION_DEMAND:
+                        await WsDemandDispatcher.onDMDemand(json, ws);
                         break;
                     default:
                         throw new Error("Unrecognized message type.");

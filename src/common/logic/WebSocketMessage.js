@@ -48,3 +48,4 @@ WebSocketMessage.TYPE_INTENT = "intent";
 WebSocketMessage.TYPE_MAP = "map";
 WebSocketMessage.TYPE_OBJECT = "object";
 WebSocketMessage.TYPE_CHARACTER = "character";
+WebSocketMessage.TYPE_ACTION_DEMAND = "demand";

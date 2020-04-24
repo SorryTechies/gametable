@@ -17,7 +17,8 @@ function doAttack(action) {
     /** @type {RuleWeapon} */
     const weapon = action.additional1;
     const damageRoll = new DamageDice();
-    damageRoll.bonus = action.performerObject.get(RuleConstants.MOD_DEXTERITY);
+    if (!weapon.isRanged) damageRoll.bonus = action.performerObject.get(RuleConstants.MOD_STRENGTH);
+    damageRoll.bonus += action.performerObject.get(RuleConstants.MODIFIER_DAMAGE);
     let damageDice;
     if (weapon.isWeapon) {
         damageDice = RuelDamageToSizeTable.getDiceForSize(
@@ -25,7 +26,7 @@ function doAttack(action) {
             action.performerObject.get(RuleConstants.SIZE));
     } else {
         damageDice = RuelDamageToSizeTable.getDiceForSize(
-            {amount: 1, dice: 6},
+            RuelDamageToSizeTable.getImprovisedDieFromWeight(weapon.weight),
             action.performerObject.get(RuleConstants.SIZE));
     }
     damageRoll.dice = damageDice.dice;

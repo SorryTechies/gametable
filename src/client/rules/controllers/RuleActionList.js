@@ -8,6 +8,7 @@ import * as CONST from "../constants/RuleActionListConstants";
 import {filterActionByKey} from "../table/RuleActionFilter";
 import * as SUPP from "../constants/RuleActionListSupportConstants";
 import STATS from "../constants/RuleStatConstants";
+import SLOTS from "../items/const/RuleWearSlots";
 
 function isForcingAttackState(action) {
    if (SUPP.FORCE_ATTACK_BUFFS.includes(action.additional1)) return true;
@@ -141,7 +142,30 @@ export default class RuleActionList {
     }
 
     executeActions() {
-        this.list.forEach(action => action.doAction());
+        let attacksCount = 0;
+        let left = false;
+        let right = false;
+        this.list.forEach(action => {
+            if (CONST.ATTACK_ACTIONS.includes(action.key)) {
+                if (action.targetItem) {
+                    if (action.targetItem.slot === SLOTS.RIGHT_HAND) {
+                        if (right) {
+                            ++attacksCount;
+                        } else {
+                            right = true;
+                        }
+                    } else {
+                        if (left) {
+                            ++attacksCount;
+                        } else {
+                            left = true;
+                        }
+                    }
+                }
+                action.consecutiveAction = attacksCount;
+            }
+            action.doAction();
+        });
     }
 
     reset() {

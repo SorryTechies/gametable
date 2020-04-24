@@ -146,3 +146,11 @@ export function shieldBuff(itemName, val, penalty, arcana, dex, buff) {
     if (dex) arr.push(EFF.getMaxAgility(itemName, dex));
     setupBuff(buff, arr);
 }
+
+export function towerShieldBuff(itemName, val, penalty, arcana, dex, buff) {
+    const arr = [EFF.getShieldEffect(itemName, val), EFF.getAttackModifier(itemName, -2)];
+    if (penalty) arr.push(EFF.getArmorPenalty(itemName, penalty));
+    if (arcana) arr.push(EFF.getArcanaFailChance(itemName, arcana));
+    if (dex) arr.push(EFF.getMaxAgility(itemName, dex));
+    setupBuff(buff, arr);
+}

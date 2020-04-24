@@ -48,3 +48,17 @@ export function getDiceForSize(initialDice, size) {
     if (result < 0) result = 0;
     return {amount: AMOUNT_ARR[result], dice: DICE_ARR[result]};
 }
+
+/**
+ * @param {number} weight
+ * @return {DamageDiceSup}
+ */
+export function getImprovisedDieFromWeight(weight) {
+    if (weight === 1) return {amount: 1, dice: 2};
+    if (weight  < 5) return {amount: 1, dice: 4};
+    if (weight < 10) return {amount: 1, dice: 6};
+    if (weight < 15) return {amount: 1, dice: 8};
+    if (weight < 20) return {amount: 1, dice: 10};
+    if (weight < 50) return {amount: 2, dice: 6};
+    return {amount: 3, dice: 6};
+}

@@ -17,6 +17,7 @@ import SupportedLanguages from "../rules/translation/SupportedLanguages";
 import BrowserChatMessage from "../logic/BrowserChatMessage";
 import RuleConstants from "../rules/constants/RuleSkillConstants";
 import RuleMap from "../rules/map/RuleMap";
+import BadArgumentsError from "../../common/type/BadArgumentsError";
 
 /** @type {Account} */
 let account = null;
@@ -255,8 +256,22 @@ export default class StaticController {
         StaticController.notifySubscribed(WebSocketMessage.TYPE_OBJECT);
     }
 
-    static massiveRollCheck(key, threshold) {
-        return objects.filter(item => !item.isHidden && item.owner && item.rollValue(key) >= threshold);
+    static massiveLocalRollCheck(key, threshold, participants) {
+        const playerObjects = objects.filter(item => !item.isHidden && item.owner);
+        if (Array.isArray(participants) && participants.length > 0) {
+            return playerObjects.filter(item => participants.includes(item.owner) && item.rollValue(key) >= threshold);
+        } else {
+            return playerObjects.filter(item => item.rollValue(key) >= threshold);
+        }
+    }
+
+    static massiveRollCheck(key, threshold, participants) {
+        const message = new WebSocketMessage(WebSocketMessage.TYPE_ACTION_DEMAND, {
+            key: key,
+            threshold: threshold
+        });
+        if (Array.isArray(participants) && participants.length > 0) message.participants = participants.map(acc => acc._id);
+        BrowserWebSocket.sendMessage(message);
     }
 
     /**
@@ -311,6 +326,16 @@ export default class StaticController {
         if (chatMessage.senderId === dm._id) delete chatMessage.senderId;
         chatMessage.send();
         pushMessage(chatMessage);
+    }
+
+    static sendRollMessage(char, key, value, passed) {
+        if (!char || !key || !value) throw new BadArgumentsError();
+        let text = `${char} rolled ${value} on ${key} check`;
+        if (typeof passed === "boolean") text += ` and ${passed ? "passed" : "failed"}`;
+        const chatMessage = getMessage(text);
+        chatMessage.send();
+        pushMessage(chatMessage);
+        StaticController.notifySubscribed(WebSocketMessage.TYPE_CHAT);
     }
 
     static pushChatMessage(message) {

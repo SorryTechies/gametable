@@ -10,6 +10,7 @@ import * as ObjectHandler from "./handlers/ObjectHandler";
 import * as BrowserCharacterHandler from "./handlers/BrowserCharacterHandler";
 import * as ChatHandler from "./handlers/ChatHandler";
 import StaticController from "../../static/StaticController";
+import * as BrowserDemandHandler from "./handlers/BrowserDemandHandler";
 
 let ws = null;
 let timeout = null;
@@ -72,6 +73,8 @@ export default class BrowserWebSocket {
                         return ObjectHandler.handleObjectChange(message);
                     case WebSocketMessage.TYPE_CHARACTER:
                         return BrowserCharacterHandler.handle(message);
+                    case WebSocketMessage.TYPE_ACTION_DEMAND:
+                        return BrowserDemandHandler.handle(message);
                 }
             } catch (e) {
                 console.log(e);

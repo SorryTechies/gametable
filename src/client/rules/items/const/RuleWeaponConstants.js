@@ -7,5 +7,5 @@ export default {
     UNARMED_STRIKE: "unarmed",
     IMPROVISED: "improvised",
     SPEAR: "spear",
-
+    DRAGON_SLAYER: "dragon_slayer"
 };

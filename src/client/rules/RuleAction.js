@@ -61,6 +61,7 @@ export default class RuleAction {
         this.type = findType(key);
         this.consumeMoveSlot = false;
         this.consumeStandartSlot = false;
+        this.consecutiveAction = 0;
 
         /** @type RuleGameObject */
         this.targetObject = null;
@@ -144,6 +145,7 @@ export default class RuleAction {
         }
         if (json.additional1) obj.additional1 = json.additional1;
         if (json.additional2) obj.additional2 = json.additional2;
+        if (json.consecutiveAction) obj.consecutiveAction = json.consecutiveAction;
         obj.consumeMoveSlot = json.consumeMoveSlot;
         obj.consumeStandartSlot = json.consumeStandartSlot;
         return obj;
@@ -160,7 +162,8 @@ export default class RuleAction {
             consumeStandartSlot: this.consumeStandartSlot,
             id: this.id,
             target: getJSON(this.target),
-            dmOnly: this.dmOnly
+            dmOnly: this.dmOnly,
+            consecutiveAction: this.consecutiveAction
         };
     }
 
