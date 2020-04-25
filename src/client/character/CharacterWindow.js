@@ -10,7 +10,6 @@ import CharacterStats from "./pages/CharacterStats";
 import CharacterDefense from "./pages/CharacterDefense";
 import CharacterOffense from "./pages/CharacterOffense";
 import CharacterSkills from "./pages/CharacterSkills";
-import CharacterKnowledges from "./pages/CharacterKnowledges";
 import CharacterFeatsList from "./pages/CharacterFeatsList";
 
 export default class CharacterWindow extends React.Component {
@@ -44,11 +43,6 @@ export default class CharacterWindow extends React.Component {
                     <h3>Skills</h3>
                     <CharacterSkills/>
                 </div>;
-            case "knowledge":
-                return <div>
-                    <h3>Knowledge</h3>
-                    <CharacterKnowledges/>
-                </div>;
             case "states":
                 return <div>
                     <h3>States</h3>
@@ -69,10 +63,9 @@ export default class CharacterWindow extends React.Component {
                 <option value="offense">Offense</option>
                 <option value="defense">Saves</option>
                 <option value="skills">Skills</option>
-                <option value="knowledge">Knowledge</option>
                 <option value="states">States</option>
                 <option value="feats">Feats</option>
-                <option value="">Items</option>
+                <option value="items">Items</option>
             </select>
         </div>;
     }

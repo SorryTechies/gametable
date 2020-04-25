@@ -83,5 +83,7 @@ export default {
     MODIFIER_SHIELD_BASH_DAMAGE: "mod_shield_bash_damage",
 
     AMOUNT_OF_ATTACKS: "attacks_amount",
-    ATTACKS_OF_OPPORTUNITY: "attacks_opportunity"
+    ATTACKS_OF_OPPORTUNITY: "attacks_opportunity",
+
+    CLASS_SKILLS_ARRAY: "c_skills_array",
 };

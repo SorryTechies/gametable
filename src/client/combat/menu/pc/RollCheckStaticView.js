@@ -3,9 +3,10 @@
  */
 
 import * as React from "react";
-import * as PropTypes from "prop-types";
 import StaticController from "../../../static/StaticController";
 import PopupManager from "../../../popup/PopupManager";
+import SKILLS from "../../../rules/constants/RuleSkillConstants";
+import TranslationModule from "../../../rules/translation/TranslationModule";
 
 export default class RollCheckStaticView extends React.Component {
     constructor(props) {
@@ -63,7 +64,9 @@ export default class RollCheckStaticView extends React.Component {
 
     render() {
         return <div>
-            <input type="text" value={this.state.key} onChange={this.onKeyChange.bind(this)}/>
+            <select onChange={this.onKeyChange.bind(this)}>
+                {Object.values(SKILLS).map(key => <option key={key} value={key}>{TranslationModule.getTranslation(key)}</option>)}
+            </select>
             <input type="text" value={this.state.val} onChange={this.onValueChange.bind(this)}/>
             <div>
                 For:

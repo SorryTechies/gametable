@@ -12,7 +12,7 @@ const KEY_ARRAY = [
     {stat: RuleConstants.STAT_CONSTITUTION, mod: RuleConstants.MOD_CONSTITUTION},
     {stat: RuleConstants.STAT_INTELLIGENCE, mod: RuleConstants.MOD_INTELLIGENCE},
     {stat: RuleConstants.STAT_WISDOM, mod: RuleConstants.MOD_WISDOM},
-    {stat: RuleConstants.STAT_CHARISMA, mod: RuleConstants.MOD_WISDOM}
+    {stat: RuleConstants.STAT_CHARISMA, mod: RuleConstants.MOD_CHARISMA}
 ];
 
 export default class CharacterStats extends React.Component {

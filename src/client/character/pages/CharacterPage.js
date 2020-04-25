@@ -10,6 +10,7 @@ import PopupManager from "../../popup/PopupManager";
 import CheckDice from "../../logic/roll/CheckDice";
 import BrowserWebSocket from "../../logic/ws/BrowserWebSocket";
 import WebSocketMessage from "../../../common/logic/WebSocketMessage";
+import TranslationModule from "../../rules/translation/TranslationModule";
 
 export default class CharacterPage extends React.Component {
     constructor(props) {
@@ -54,9 +55,8 @@ export default class CharacterPage extends React.Component {
         if (!character || !gameObject) return null;
         return <table>
             <tbody>
-            {this.props.rows.map(obj =>
-                <CharacterRow key={obj.stat}
-                              displayName={obj.stat}
+            {this.props.rows.map(obj => <CharacterRow key={obj.stat}
+                              displayName={TranslationModule.getTranslation(obj.displayName ? obj.displayName: obj.stat)}
                               finalValue={gameObject.get(obj.mod)}
                               modifiedValue={character.get(obj.stat)}
                               onSave={this.saveCharacter.bind(this, obj.stat)}

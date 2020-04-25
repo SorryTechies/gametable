@@ -2,7 +2,8 @@
  * Created by LastBerserk on 05.03.2020.
  */
 
-import RuleSkillConstants from "../constants/RuleSkillConstants";
+import SKILLS from "../constants/RuleSkillConstants";
+import CONST from "../constants/RuleStatConstants";
 
 export function axeToGrindImpl(action) {
     // TODO implement map search
@@ -10,11 +11,11 @@ export function axeToGrindImpl(action) {
 }
 
 function makeClassSkill(character, skill) {
-    character.get(RuleSkillConstants.CLASS_SKILLS_ARRAY).push(skill);
+    character.get(CONST.CLASS_SKILLS_ARRAY).push(skill);
 }
 
 function removeClassSkill(character, skill) {
-    const arr = character.get(RuleSkillConstants.CLASS_SKILLS_ARRAY);
+    const arr = character.get(CONST.CLASS_SKILLS_ARRAY);
     const index = arr.findIndex(item => item === skill);
     if (index !== -1) arr.splice(index, 1);
 }
@@ -24,11 +25,11 @@ function addValToSkill(character, skill, value) {
 }
 
 export function applyCaretaker(character) {
-    makeClassSkill(character, RuleSkillConstants.SKILL_HEAL_RANKS);
-    addValToSkill(character, RuleSkillConstants.SKILL_HEAL, 1);
+    makeClassSkill(character, SKILLS.SKILL_HEAL);
+    addValToSkill(character, SKILLS.SKILL_HEAL, 1);
 }
 
 export function removeCaretaker(character) {
-    removeClassSkill(character, RuleSkillConstants.SKILL_HEAL_RANKS);
-    addValToSkill(character, RuleSkillConstants.SKILL_HEAL, -1);
+    removeClassSkill(character, SKILLS.SKILL_HEAL);
+    addValToSkill(character, SKILLS.SKILL_HEAL, -1);
 }

@@ -7,13 +7,15 @@ import FeatsTranslation from "./FeatsTranslation";
 import ActionDescriptionTranslation from "./ActionDescriptionTranslation";
 import ActionTranslation from "./ActionTranslation";
 import {sendDescription} from "../RuleLoader";
+import SkillTranslation from "./SkillTranslation";
 
 let currentLanguage = SupportedLanguages.ENG;
 const translation = {};
 
 const MODULES = [
     FeatsTranslation,
-    ActionTranslation
+    ActionTranslation,
+    SkillTranslation
 ];
 
 function process(key, val, args) {

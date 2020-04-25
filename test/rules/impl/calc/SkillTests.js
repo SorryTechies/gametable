@@ -4,9 +4,10 @@
 
 import {getTestCharacter, getTestObject} from "../../support/RuleTestClasses";
 import TestWrapper from "../../../TestWrapper";
-import RuleConstants from "../../../../src/client/rules/constants/RuleStatConstants";
+import CONST from "../../../../src/client/rules/constants/RuleStatConstants";
 import * as assert from "assert";
-import RuleSkillConstants from "../../../../src/client/rules/constants/RuleSkillConstants";
+import SKILLS from "../../../../src/client/rules/constants/RuleSkillConstants";
+import * as SUPP from "../../../../src/client/rules/constants/RuleSkillSupportConst";
 
 export const SimpleSkillTest = TestWrapper.wrap("SimpleSkillTest",
     (async () => {
@@ -15,12 +16,12 @@ export const SimpleSkillTest = TestWrapper.wrap("SimpleSkillTest",
         const DEX = 14;
 
         const character = getTestCharacter("char1");
-        character.set(RuleSkillConstants.SKILL_ACROBATICS_RANKS, RANKS);
-        character.set(RuleConstants.STAT_DEXTERITY, DEX);
+        character.set(SKILLS.SKILL_ACROBATICS_RANKS, RANKS);
+        character.set(CONST.STAT_DEXTERITY, DEX);
         const object = getTestObject(character);
         object.recalculate();
 
-        assert.equal(object.get(RuleSkillConstants.SKILL_ACROBATICS), ACROB);
+        assert.equal(object.get(SKILLS.SKILL_ACROBATICS), ACROB);
     })());
 
 export const ClassSkillTest = TestWrapper.wrap("ClassSkillTest",
@@ -30,11 +31,11 @@ export const ClassSkillTest = TestWrapper.wrap("ClassSkillTest",
         const STR = 16;
 
         const character = getTestCharacter("char1");
-        character.set(RuleSkillConstants.SKILL_CLIMB_RANKS, RANKS);
-        character.set(RuleConstants.STAT_STRENGTH, STR);
-        character.get(RuleSkillConstants.CLASS_SKILLS_ARRAY).push(RuleSkillConstants.SKILL_CLIMB_RANKS);
+        character.set(SKILLS.SKILL_CLIMB_RANKS, RANKS);
+        character.set(CONST.STAT_STRENGTH, STR);
+        character.get(CONST.CLASS_SKILLS_ARRAY).push(SUPP.getRankKey(SKILLS.SKILL_CLIMB));
         const object = getTestObject(character);
         object.recalculate();
 
-        assert.equal(object.get(RuleSkillConstants.SKILL_CLIMB), CLIMB);
+        assert.equal(object.get(SKILLS.SKILL_CLIMB), CLIMB);
     })());

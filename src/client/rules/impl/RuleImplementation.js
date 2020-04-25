@@ -7,6 +7,7 @@ import CONST from "../constants/RuleStatConstants";
 import SKILL_CONST from "../constants/RuleSkillsStatConstants";
 import SKILLS from "../constants/RuleSkillConstants";
 import FEATS from "../constants/RuleFeatsConstants";
+import * as SKILL_SUP from "../constants/RuleSkillSupportConst";
 
 export const dodgeCalc = cha => cha.set(CONST.DODGE, cha.get(CONST.MODIFIER_DODGE) +
     cha.get(CONST.MOD_DEXTERITY));
@@ -109,53 +110,13 @@ export const skillCalc = gm => {
         if (SKILL_CONST.SKILLS_CHA.includes(key)) return gm.get(CONST.MOD_CHARISMA);
     };
     const processRanks = key => {
-        const ranks = gm.get(key);
-        if (gm.get(SKILLS.CLASS_SKILLS_ARRAY).includes(key) && ranks > 0) {
+        const ranks = gm.get(SKILL_SUP.getRankKey(key));
+        if (gm.get(CONST.CLASS_SKILLS_ARRAY).includes(key) && ranks > 0) {
             return ranks + 2;
         } else {
             return ranks;
         }
     };
 
-    const setGM = (key, ranks) => gm.set(key, processRanks(ranks) + getSkillModifier(key));
-    // @formatter:off
-    setGM(SKILLS.SKILL_ACROBATICS,          SKILLS.SKILL_ACROBATICS_RANKS);
-    setGM(SKILLS.SKILL_APPRAISE,            SKILLS.SKILL_APPRAISE_RANKS);
-    setGM(SKILLS.SKILL_BLUFF,               SKILLS.SKILL_BLUFF_RANKS);
-    setGM(SKILLS.SKILL_CLIMB,               SKILLS.SKILL_CLIMB_RANKS);
-    setGM(SKILLS.SKILL_CRAFT,               SKILLS.SKILL_CRAFT_RANKS);
-    setGM(SKILLS.SKILL_DIPLOMACY,           SKILLS.SKILL_DIPLOMACY_RANKS);
-    setGM(SKILLS.SKILL_DISABLE_DEVICE,      SKILLS.SKILL_DISABLE_DEVICE_RANKS);
-    setGM(SKILLS.SKILL_DISGUISE,            SKILLS.SKILL_ESCAPE_ARTIST_RANKS);
-    setGM(SKILLS.SKILL_ESCAPE_ARTIST,       SKILLS.SKILL_BLUFF_RANKS);
-    setGM(SKILLS.SKILL_FLY,                 SKILLS.SKILL_FLY_RANKS);
-    setGM(SKILLS.SKILL_HANDLE_ANIMAL,       SKILLS.SKILL_HANDLE_ANIMAL_RANKS);
-    setGM(SKILLS.SKILL_HEAL,                SKILLS.SKILL_HEAL_RANKS);
-    setGM(SKILLS.SKILL_INTIMIDATE,          SKILLS.SKILL_INTIMIDATE_RANKS);
-    setGM(SKILLS.SKILL_LINGUISTICS,         SKILLS.SKILL_LINGUISTICS_RANKS);
-    setGM(SKILLS.SKILL_PERCEPTION,          SKILLS.SKILL_PERCEPTION_RANKS);
-    setGM(SKILLS.SKILL_PERFORM,             SKILLS.SKILL_PERFORM_RANKS);
-    setGM(SKILLS.SKILL_PROFESSION,          SKILLS.SKILL_PROFESSION_RANKS);
-    setGM(SKILLS.SKILL_RIDE,                SKILLS.SKILL_RIDE_RANKS);
-    setGM(SKILLS.SKILL_SENSE_MOTIVE,        SKILLS.SKILL_SENSE_MOTIVE_RANKS);
-    setGM(SKILLS.SKILL_SLEIGHT_OF_HAND,     SKILLS.SKILL_SLEIGHT_OF_HAND_RANKS);
-    setGM(SKILLS.SKILL_SPELLCRAFT,          SKILLS.SKILL_SPELLCRAFT);
-    setGM(SKILLS.SKILL_STEALTH,             SKILLS.SKILL_STEALTH_RANKS);
-    setGM(SKILLS.SKILL_SURVIVAL,            SKILLS.SKILL_SURVIVAL_RANKS);
-    setGM(SKILLS.SKILL_SWIM,                SKILLS.SKILL_SWIM_RANKS);
-    setGM(SKILLS.SKILL_USE_MAGIC_DEVICE,    SKILLS.SKILL_USE_MAGIC_DEVICE_RANKS);
-
-    setGM(SKILLS.SKILL_KNOWLEDGE_ARCANA,            SKILLS.SKILL_KNOWLEDGE_ARCANA_RANKS);
-    setGM(SKILLS.SKILL_KNOWLEDGE_DUNGEONEERING,     SKILLS.SKILL_KNOWLEDGE_DUNGEONEERING_RANKS);
-    setGM(SKILLS.SKILL_KNOWLEDGE_GEOGRAPHY,         SKILLS.SKILL_KNOWLEDGE_GEOGRAPHY_RANKS);
-    setGM(SKILLS.SKILL_KNOWLEDGE_ENGINEERING,       SKILLS.SKILL_KNOWLEDGE_ENGINEERING_RANKS);
-    setGM(SKILLS.SKILL_KNOWLEDGE_HISTORY,           SKILLS.SKILL_KNOWLEDGE_HISTORY_RANKS);
-    setGM(SKILLS.SKILL_KNOWLEDGE_LOCAL,             SKILLS.SKILL_KNOWLEDGE_LOCAL_RANKS);
-    setGM(SKILLS.SKILL_KNOWLEDGE_NOBILITY,          SKILLS.SKILL_KNOWLEDGE_NOBILITY_RANKS);
-    setGM(SKILLS.SKILL_KNOWLEDGE_NATURE,            SKILLS.SKILL_KNOWLEDGE_NATURE_RANKS);
-    setGM(SKILLS.SKILL_KNOWLEDGE_PLANES,            SKILLS.SKILL_KNOWLEDGE_PLANES_RANKS);
-    setGM(SKILLS.SKILL_KNOWLEDGE_RELIGION,          SKILLS.SKILL_KNOWLEDGE_RELIGION_RANKS);
-
-    setGM(SKILLS.SKILL_SCIENCE,                     SKILLS.SKILL_SCIENCE_RANKS);
-    // @formatter:on
+    Object.values(SKILLS).forEach(key => gm.set(key, processRanks(key) + getSkillModifier(key)));
 };
