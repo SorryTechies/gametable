@@ -11,7 +11,7 @@ function getSlotObject() {
     return Object.values(RuleWearSlots).reduce((acc, slot) => {
         acc[slot] = null;
         return acc;
-    },{});
+    }, {});
 }
 
 function isHandSlot(slot) {
@@ -47,8 +47,8 @@ export default class RuleItemSlots {
     }
 
     equipDM(item, slot) {
-        //this.equip(item, slot);
         if (item.isWearable && item.allowedSlots.includes(slot)) equipBuff(this.gameObject, item);
+        this.gameObject.recalculate();
         if (isHandSlot(slot)) this.gameObject.threatArea.calculate(item.reach);
         RuleCharacterChangesBean.addItemModification(this.gameObject, item.toJson());
     }
@@ -62,13 +62,11 @@ export default class RuleItemSlots {
         }
     }
 
-    unequipDM(slot) {
-        const item = this.getSlot(slot);
-        if (item) {
-            //this.unequip(slot);
-            unequipBuff(this.gameObject, item);
-            if (isHandSlot(slot)) this.gameObject.threatArea.calculate();
-        }
+    unequipDM(item, slot) {
+        unequipBuff(this.gameObject, item);
+        this.gameObject.recalculate();
+        if (isHandSlot(slot)) this.gameObject.threatArea.calculate();
+        RuleCharacterChangesBean.addItemModification(this.gameObject, item.toJson());
     }
 
     getItems() {
@@ -76,7 +74,7 @@ export default class RuleItemSlots {
     }
 
     getEquipped() {
-        return Object.values(this.slots).filter(item => !!item && !isHandSlot(item.slot));
+        return Object.values(this.slots).filter(item => !!item && item.isWearable);
     }
 
     getGrabbed() {

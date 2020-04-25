@@ -3,8 +3,9 @@
  */
 
 import WEARABLE from "./const/RuleWearableList";
-import * as IMPL from "../impl/RuleBuffImpl";
 import WEAPONS from "./const/RuleWeaponConstants";
+import SHIELDS from "./const/RuleShieldList";
+import * as IMPL from "../impl/RuleBuffImpl";
 
 export default {
     onUse: {},
@@ -16,8 +17,8 @@ export default {
         [WEARABLE.AGILE_BREASTPLATE]: IMPL.armorBuff.bind(null, WEARABLE.AGILE_BREASTPLATE, 6, 4, 25, 3),
 
         [WEARABLE.BELT_OF_DEXTERITY]: IMPL.dexBuff.bind(null, WEARABLE.BELT_OF_DEXTERITY, 2),
-        [WEARABLE.SNARLSHIELD]: IMPL.shieldBuff.bind(null, WEARABLE.SNARLSHIELD, 2, 0, 0, 0),
 
-        [WEAPONS.DRAGON_SLAYER]: IMPL.towerShieldBuff.bind(null, WEAPONS.DRAGON_SLAYER, 4, 10, 50, 2),
+        [SHIELDS.SNARLSHIELD]: IMPL.shieldBuff.bind(null, SHIELDS.SNARLSHIELD, 2, 0, 0, 0),
+        [SHIELDS.DRAGON_SLAYER]: IMPL.towerShieldBuff.bind(null, SHIELDS.DRAGON_SLAYER, 4, 10, 50, 2),
     }
 };

@@ -18,12 +18,12 @@ export const dodgeCalc = cha => cha.set(CONST.DODGE, cha.get(CONST.MODIFIER_DODG
  */
 export const defenceCalc = gameObject => {
     const tffac = 10 + gameObject.get(CONST.MODIFIER_DEFLECT) - gameObject.get(CONST.SIZE);
-    const ac = tffac +
-        gameObject.get(CONST.MODIFIER_ARMOR) +
-        gameObject.get(CONST.DODGE);
+    const ARMOR =  gameObject.get(CONST.MODIFIER_ARMOR) + gameObject.get(CONST.MODIFIER_SHIELD);
+    const DODGE = gameObject.get(CONST.DODGE);
+    const ac = tffac + ARMOR + DODGE;
     const setIfLesser = val => ac > val ? val : ac;
-    const tac = tffac + gameObject.get(CONST.DODGE);
-    const ffac = tffac + gameObject.get(CONST.MODIFIER_ARMOR);
+    const tac = tffac + DODGE;
+    const ffac = tffac + ARMOR;
 
     gameObject.set(CONST.DEFENCE_AC, ac);
     gameObject.set(CONST.DEFENCE_TOUCH_AC, setIfLesser(tac));

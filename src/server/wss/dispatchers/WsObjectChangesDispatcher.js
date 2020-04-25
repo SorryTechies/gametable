@@ -7,6 +7,7 @@ import MongoController from "../../mongo/MongoController";
 import GameSessionDB from "../../mongo/classes/GameSessionDB";
 import WebSocketUser from "../WebSocketUser";
 import WebSocketMessage from "../../../common/logic/WebSocketMessage";
+import RuleWearSlots from "../../../client/rules/items/const/RuleWearSlots";
 
 function processData(db, mod) {
     if (mod.data) {
@@ -57,7 +58,25 @@ function processItems(db, mod) {
         db.items = db.items.filter(dbItem =>
             !mod.items.find(modItem => modItem.toDelete && modItem.id === dbItem.id));
         mod.items.forEach(item => {
-            if (!item.toDelete) db.items.push(item);
+            if (!item.toDelete) {
+                /** @type ItemBean */
+                const dbItem = db.items.find(dbItem => dbItem.id === item.id);
+                if (dbItem) {
+                    dbItem.key = item.key;
+                    if (typeof item.slot !== "number" || item.slot === RuleWearSlots.NO) {
+                        delete dbItem.slot;
+                    } else {
+                        dbItem.slot = item.slot;
+                    }
+                    if (typeof item.damaged === "number") {
+                        dbItem.damaged = item.damaged;
+                    } else {
+                        delete dbItem.damaged ;
+                    }
+                } else {
+                    db.items.push(item);
+                }
+            }
         });
     }
 }

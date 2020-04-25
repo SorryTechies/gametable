@@ -10,6 +10,4 @@ export default {
     SPLINT_MAIL: "splint_mail",
 
     BELT_OF_DEXTERITY: "belt_of_dex",
-
-    SNARLSHIELD: "snarlshield"
 };

@@ -6,6 +6,7 @@ import WEAPONS from "./const/RuleWeaponConstants";
 import RuleDamageType from "../constants/RuleDamageType";
 import WEARABLE from "./const/RuleWearableList";
 import SLOTS from "./const/RuleWearSlots";
+import SHIELDS from "./const/RuleShieldList";
 
 const itemTable = {
     [WEAPONS.LASER_RIFLE]: {
@@ -34,16 +35,16 @@ const itemTable = {
         hardeness: 10,
         allowedSlots: [SLOTS.ARMOR]
     },
-    [WEARABLE.SNARLSHIELD]: {
-        maxHealth: 20,
-        hardeness: 10
-    },
     [WEARABLE.BELT_OF_DEXTERITY]: {
         maxHealth: 20,
         hardeness: 20,
         allowedSlots: [SLOTS.BELT]
     },
-    [WEAPONS.DRAGON_SLAYER]: {
+    [SHIELDS.SNARLSHIELD]: {
+        maxHealth: 20,
+        hardeness: 10
+    },
+    [SHIELDS.DRAGON_SLAYER]: {
         maxHealth: 200,
         hardeness: 10
     }

@@ -15,7 +15,7 @@ export const doMove = action => {
 export const doEquip = action => action.performerObject.items.slots.equipDM(action.targetItem, action.additional1);
 
 export function doUnequip(action) {
-    action.performerObject.items.slots.unequipDM(action.additional1);
+    action.performerObject.items.slots.unequipDM(action.targetItem, action.additional1);
 }
 
 export const doTotalDefence = action => {
