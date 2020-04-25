@@ -77,6 +77,10 @@ export default class RuleItemSlots {
         return Object.values(this.slots).filter(item => !!item && item.isWearable);
     }
 
+    equipmentHasTag(tag) {
+        return Object.values(this.slots).find(item => item && Array.isArray(item.additionalTags) && item.additionalTags.includes(tag));
+    }
+
     getGrabbed() {
         return Object.values(this.slots).filter(item => !!item && isHandSlot(item.slot));
     }

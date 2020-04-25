@@ -83,7 +83,7 @@ function canAttack(obj) {
     if (!obj.canDoMoveAction && obj.attacks === 1) {
         return false;
     } else {
-        return obj.gameObject.get(STATS.AMOUNT_OF_ATTACKS) > obj.attacks || obj.twoWeaponAttack;
+        return obj.gameObject.get(STATS.AMOUNT_OF_ATTACKS) + (obj.twoWeaponAttack ? 1 : 0)> obj.attacks;
     }
 }
 

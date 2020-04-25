@@ -91,6 +91,6 @@ export default class RuleState {
     }
 
     static removeStateAction(action) {
-        RuleState.removeState(action.performerObject, action.additional1);
+        RuleState.removeState(action.performerObject, action.additional1.key);
     }
 }

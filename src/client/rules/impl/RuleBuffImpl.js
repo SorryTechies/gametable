@@ -7,6 +7,8 @@ import RuleSkillConstants from "../constants/RuleSkillConstants";
 import RuleConstants from "../constants/RuleStatConstants";
 import * as EFF from "./RuleEffectImpl";
 import FEATS from "../constants/RuleFeatsConstants";
+import * as SUPP from "../constants/RuleSkillSupportConst";
+import TAGS from "../constants/RuleWeaponTags";
 
 function notifyBuffs(buff) {
     RuleCharacterChangesBean.addBuffModification(buff.gameObject, buff.toJson());
@@ -106,7 +108,8 @@ export function fightingDefensively(buff) {
     const effectAC = EFF.getFightingDefenseAC();
     const effectAttack = EFF.getFightingDefenseAttack();
     buff.onCreate = () =>  {
-        effectAC.val = buff.gameObject.get(RuleSkillConstants.SKILL_ACROBATICS_RANKS) >= 3 ? 3 : 2;
+        effectAC.val = buff.gameObject.get(SUPP.getRankKey(RuleSkillConstants.SKILL_ACROBATICS)) >= 3 ? 3 : 2;
+        if (buff.gameObject.items.slots.equipmentHasTag(TAGS.BLOCKING)) ++effectAC.val;
         effectAttack.val = -4;
         notifyBuffs(buff);
         notifyEffects(buff.gameObject, effectAC);

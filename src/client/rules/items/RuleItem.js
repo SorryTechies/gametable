@@ -13,6 +13,7 @@ export default class RuleItem {
         this.weight = 1;
         this.maxHealth = 1;
         this.hardeness = 0;
+        this.isItem = true;
         this.isWearable = false;
         this.isWeapon = false;
         this.isShield = false;

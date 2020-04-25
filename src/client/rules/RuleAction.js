@@ -25,6 +25,7 @@ function actionKeyToTarget(key) {
         case RuleActionsConstants.SPRINT:
         case RuleActionsConstants.FIVE_FOOT_STEP:
             return TARGET_TYPE.GROUND;
+        case RuleActionsConstants.IMPROVISED_ATTACK:
         case RuleActionsConstants.COMBAT_MANEUVERS:
         case RuleActionsConstants.MELEE_ATTACK:
         case RuleActionsConstants.RANGED_ATTACK:
@@ -34,7 +35,7 @@ function actionKeyToTarget(key) {
         case  RuleActionsConstants.DROP:
         case RuleActionsConstants.UNEQUIP:
         case RuleActionsConstants.EQUIP:
-                return TARGET_TYPE.ITEM;
+            return TARGET_TYPE.ITEM;
         default:
             return TARGET_TYPE.NONE;
     }
@@ -106,22 +107,42 @@ export default class RuleAction {
     validate() {
         const func = validation[this.key];
         if (!func) throw new Error("No validation found for " + this.key);
-        if (typeof func === "function") func(this);
-        if (typeof func === "object") {
-            if (typeof func[this.additional1] !== "function") throw new Error("No validation found for " + this.additional1 + " in " + this.key);
-            func[this.additional1](this);
+        if (typeof func === "function") {
+            func(this);
+        } else {
+            if (typeof func === "object") {
+                let impl;
+                if (typeof this.additional1 === "object") {
+                    impl = func[this.additional1.key];
+                } else {
+                    impl = func[this.additional1];
+                }
+                if (!impl) throw new Error("No validation found for " + this.additional1 + " in " + this.key);
+                impl(this);
+            }
         }
     }
 
     doAction() {
         const func = implementation[this.key];
         if (!func) throw new Error("No implementation found for " + this.key);
-        if (typeof func === "function") func(this);
-        if (typeof func === "object") {
-            if (typeof func[this.additional1] !== "function") throw new Error("No implementation found for " + this.additional1 + " in " + this.key);
+        if (typeof func === "function") {
             this.isSuccessfull = true;
-            func[this.additional1](this);
+            func(this);
             this.isExecuted = true;
+        } else {
+            if (typeof func === "object") {
+                let impl;
+                if (typeof this.additional1 === "object") {
+                    impl = func[this.additional1.key];
+                } else {
+                    impl = func[this.additional1];
+                }
+                if (!impl) throw new Error("No implementation found for " + this.additional1 + " in " + this.key);
+                this.isSuccessfull = true;
+                impl(this);
+                this.isExecuted = true;
+            }
         }
     }
 

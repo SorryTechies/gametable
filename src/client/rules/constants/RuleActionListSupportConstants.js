@@ -7,6 +7,9 @@ import RuleBuffConstants from "./RuleBuffConstants";
 
 export const ATTACK_ACTIONS = [
     RuleActionsConstants.MELEE_ATTACK,
+    RuleActionsConstants.IMPROVISED_ATTACK,
+    RuleActionsConstants.RANGED_ATTACK,
+    RuleActionsConstants.THROW_ATTACK,
     RuleActionsConstants.CHARGE
 ];
 

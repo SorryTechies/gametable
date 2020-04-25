@@ -20,6 +20,7 @@ export const ATTACK_ACTIONS = [
     RuleActionsConstants.IMPROVISED_ATTACK,
     RuleActionsConstants.MELEE_ATTACK,
     RuleActionsConstants.RANGED_ATTACK,
+    RuleActionsConstants.THROW_ATTACK
 ];
 
 export const FULL_ROUND_ACTIONS = [

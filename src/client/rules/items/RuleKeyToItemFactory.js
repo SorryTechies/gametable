@@ -7,6 +7,7 @@ import RuleDamageType from "../constants/RuleDamageType";
 import WEARABLE from "./const/RuleWearableList";
 import SLOTS from "./const/RuleWearSlots";
 import SHIELDS from "./const/RuleShieldList";
+import TAGS from "../constants/RuleWeaponTags";
 
 const itemTable = {
     [WEAPONS.LASER_RIFLE]: {
@@ -19,6 +20,12 @@ const itemTable = {
         reach: true,
         maxHealth: 5,
         damageType: RuleDamageType.PIERCING
+    },
+    [WEAPONS.MANOPLE]: {
+        maxHealth: 5,
+        damageDie: 8,
+        damageType: RuleDamageType.SLASHING,
+        additionalTags: [TAGS.BLOCKING, TAGS.DISARM]
     },
     [WEAPONS.IMPROVISED]: {
         maxHealth: -1,

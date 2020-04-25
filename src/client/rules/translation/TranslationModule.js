@@ -8,6 +8,7 @@ import ActionDescriptionTranslation from "./ActionDescriptionTranslation";
 import ActionTranslation from "./ActionTranslation";
 import {sendDescription} from "../RuleLoader";
 import SkillTranslation from "./SkillTranslation";
+import DamageTypeTranslation from "./DamageTypeTranslation";
 
 let currentLanguage = SupportedLanguages.ENG;
 const translation = {};
@@ -76,7 +77,19 @@ export default class TranslationModule {
         if (action.roll) args.push(action.roll.result);
         if (action.additional1 && action.additional1.key) args.push(action.additional1.key);
         if (action.roll && action.roll.nextDice.length !== 0) args.push(action.roll.nextDice[0].result);
+        if (action.additional1 && action.additional1.isItem) {
+            args.push(TranslationModule.getDamageTypeTranslation(action.additional1.damageType));
+        }
         if (action.additional2) args.push(action.additional2);
         sendDescription(func(args), action);
+    }
+
+    static getDamageTypeTranslation(damageType) {
+        const str =  DamageTypeTranslation[currentLanguage][damageType];
+        if (str) {
+            return str;
+        }  else {
+            return damageType;
+        }
     }
 }
