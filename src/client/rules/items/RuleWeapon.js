@@ -7,6 +7,7 @@ import RuleDamageType from "../constants/RuleDamageType";
 import RuleAcType from "../constants/RuleACType";
 import SLOTS from "./const/RuleWearSlots";
 import DamageDice from "../../logic/roll/DamageDice";
+import RuleWeaponProficiency from "../constants/RuleWeaponProficiency";
 
 export default class RuleWeapon extends RuleWearable {
     constructor(key) {
@@ -22,7 +23,9 @@ export default class RuleWeapon extends RuleWearable {
         this.additionalTags = [];
         this.amountOfDice = 1;
         this.twoHanded = false;
+        this.isThrown = false;
         this.acType = RuleAcType.NORMAL;
+        this.proficiency = RuleWeaponProficiency.SIMPLE;
         this.allowedSlots = [SLOTS.RIGHT_HAND];
     }
 

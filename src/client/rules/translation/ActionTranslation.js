@@ -14,6 +14,7 @@ export default {
         [RuleActionConstants.FIVE_FOOT_STEP]: "Five Foot Step",
         [RuleActionConstants.MELEE_ATTACK]: "Melee Attack",
         [RuleActionConstants.RANGED_ATTACK]: "Ranged Attack",
+        [RuleActionConstants.THROW_ATTACK]: "Throw",
         [RuleActionConstants.COMBAT_MANEUVERS]: "Combat Maneuvers",
         [RuleActionConstants.IMPROVISED_ATTACK]: "Improvised attack",
     }

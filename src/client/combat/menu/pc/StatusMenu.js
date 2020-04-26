@@ -40,6 +40,7 @@ export default class StatusMenu extends React.Component {
         switch (action.key) {
             case CONST.COMBAT_MANEUVERS:
             case CONST.MELEE_ATTACK:
+            case CONST.THROW_ATTACK:
             case CONST.RANGED_ATTACK:
             case CONST.IMPROVISED_ATTACK:
             case CONST.CAST_SPELL:
@@ -70,6 +71,7 @@ export default class StatusMenu extends React.Component {
         switch (this.state.nextSelector) {
             case CONST.COMBAT_MANEUVERS:
                 return Object.values(RuleCombatManuverList);
+            case CONST.THROW_ATTACK:
             case CONST.IMPROVISED_ATTACK:
                 return unit.items.getItemsFromHands()
                     .filter(item => this.props.actionList.canAttackWithWeapon(item));
@@ -130,6 +132,7 @@ export default class StatusMenu extends React.Component {
             case CONST.IMPROVISED_ATTACK:
             case CONST.MELEE_ATTACK:
             case CONST.RANGED_ATTACK:
+            case CONST.THROW_ATTACK:
                 return this.renderAction(val1 => {
                     this.action.additional1 = val1;
                     return this.props.doAimAction(this.action);

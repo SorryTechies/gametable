@@ -15,6 +15,7 @@ export default {
 
         [WEARABLE.LAMELLAR]: IMPL.armorBuff.bind(null, WEARABLE.LAMELLAR, 4, 2, 20, 3),
         [WEARABLE.AGILE_BREASTPLATE]: IMPL.armorBuff.bind(null, WEARABLE.AGILE_BREASTPLATE, 6, 4, 25, 3),
+        [WEARABLE.ARMORED_COAT]: IMPL.armorBuff.bind(null, WEARABLE.ARMORED_COAT, 4, 2, 20, 3),
 
         [WEARABLE.BELT_OF_DEXTERITY]: IMPL.dexBuff.bind(null, WEARABLE.BELT_OF_DEXTERITY, 2),
 

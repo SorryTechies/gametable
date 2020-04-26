@@ -8,13 +8,16 @@ import WEARABLE from "./const/RuleWearableList";
 import SLOTS from "./const/RuleWearSlots";
 import SHIELDS from "./const/RuleShieldList";
 import TAGS from "../constants/RuleWeaponTags";
+import RuleWeaponProficiency from "../constants/RuleWeaponProficiency";
+import RuleArmorType from "../constants/RuleArmorType";
 
 const itemTable = {
     [WEAPONS.LASER_RIFLE]: {
         maxHealth: 20,
         damageType: RuleDamageType.ENERGY,
         amountOfDice: 2,
-        hardeness: 10
+        hardeness: 10,
+        proficiency: RuleWeaponProficiency.MARTIAL
     },
     [WEAPONS.SPEAR]: {
         reach: true,
@@ -24,8 +27,14 @@ const itemTable = {
     [WEAPONS.MANOPLE]: {
         maxHealth: 5,
         damageDie: 8,
+        proficiency: RuleWeaponProficiency.MARTIAL,
         damageType: RuleDamageType.SLASHING,
         additionalTags: [TAGS.BLOCKING, TAGS.DISARM]
+    },
+    [WEAPONS.JAVELIN] : {
+        maxHealth: 5,
+        isThrown: true,
+        damageType: RuleDamageType.PIERCING
     },
     [WEAPONS.IMPROVISED]: {
         maxHealth: -1,
@@ -33,17 +42,21 @@ const itemTable = {
         hardeness: -1,
     },
     [WEARABLE.SPLINT_MAIL]: {
-        maxHealth: 20,
-        hardeness: 10,
+        weight: 45,
+        proficiency: RuleArmorType.HEAVY,
         allowedSlots: [SLOTS.ARMOR]
     },
     [WEARABLE.AGILE_BREASTPLATE]: {
-        maxHealth: 20,
-        hardeness: 10,
+        weight: 25,
+        proficiency: RuleArmorType.MEDIUM,
+        allowedSlots: [SLOTS.ARMOR]
+    },
+    [WEARABLE.ARMORED_COAT]: {
+        weight: 20,
+        proficiency: RuleArmorType.MEDIUM,
         allowedSlots: [SLOTS.ARMOR]
     },
     [WEARABLE.BELT_OF_DEXTERITY]: {
-        maxHealth: 20,
         hardeness: 20,
         allowedSlots: [SLOTS.BELT]
     },
@@ -53,13 +66,17 @@ const itemTable = {
     },
     [SHIELDS.DRAGON_SLAYER]: {
         maxHealth: 200,
+        proficiency: RuleArmorType.TOWER_SHIELD,
         hardeness: 10
     }
 };
 
 export function fillItemWithValues(item) {
     const stats = itemTable[item.key];
-    if (!stats) throw new Error("Item stats not found " + item.key);
-    Object.keys(stats).forEach(key => item[key] = stats[key]);
+    if (stats) {
+        Object.keys(stats).forEach(key => item[key] = stats[key]);
+    } else {
+        console.warn("Item stats not found for " + item.key);
+    }
     return item;
 }

@@ -11,10 +11,14 @@ export default {
     DIEHARD: "diehard",
     CATCH_OF_GUARD: "catch_of_guard",
     IMPROVISATIONAL_FOCUS: "improv_focus",
+    THROW_ANYTHING: "throw_anything",
     TOUGHNESS: "toughness",
     POWER_ATTACK: "power_attack",
     CLEAVE: "cleave",
     GREAT_CLEAVE: "great_cleave",
     VITAL_STRIKE: "vital_strike",
-    ARMOR_EXPERT_TRAIT: "armor_expert_trait"
+    ARMOR_EXPERT_TRAIT: "armor_expert_trait",
+    SHIPS_SURGEON: "ships_surgeon",
+    POINT_BLANK_SHOT: "point_blank_shot",
+    STARTOSS_STYLE: "startoss_style"
 };

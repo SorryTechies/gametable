@@ -86,4 +86,7 @@ export default {
     ATTACKS_OF_OPPORTUNITY: "attacks_opportunity",
 
     CLASS_SKILLS_ARRAY: "c_skills_array",
+
+    WEAPON_PROFICIENCY: "w_prof",
+    ARMOR_PROFICIENCY: "a_prof"
 };

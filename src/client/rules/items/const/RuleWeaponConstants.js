@@ -7,5 +7,6 @@ export default {
     UNARMED_STRIKE: "unarmed",
     IMPROVISED: "improvised",
     SPEAR: "spear",
-    MANOPLE: "manople"
+    MANOPLE: "manople",
+    JAVELIN: "javelin"
 };

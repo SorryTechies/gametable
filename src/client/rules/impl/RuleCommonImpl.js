@@ -7,6 +7,8 @@ import RuleFeatsConstants from "../constants/RuleFeatsConstants";
 import {axeToGrindImpl} from "./RuleFeatsImpl";
 import CheckDice from "../../logic/roll/CheckDice";
 import RuleWeaponConstants from "../items/const/RuleWeaponConstants";
+import ACTION from "../constants/RuleActionsConstants";
+import PROF from "../constants/RuleWeaponProficiency";
 
 export function calculateAttack(action, isRanged) {
     const attacker = action.performerObject;
@@ -32,19 +34,33 @@ export function getAttackRoll(action, isRanged) {
 }
 
 function isProficient(action) {
-    const attacker = action.performerObject;
-    switch (action.additional1) {
+    const character = action.performerObject.ruleCharacter;
+    const weapon = action.additional1.key;
+    if (action.performerObject.get(RuleConstants.WEAPON_PROFICIENCY).includes(PROF.ALL)) return true;
+    if (action.key === ACTION.THROW_ATTACK) return !weapon.isThrown || character.hasFeat(RuleFeatsConstants.THROW_ANYTHING);
+    if (typeof weapon.proficiency === "number" &&
+        !action.performerObject.get(RuleConstants.WEAPON_PROFICIENCY).includes(weapon.proficiency))return false;
+    switch (weapon.key) {
         case RuleWeaponConstants.UNARMED_STRIKE:
-            return attacker.ruleCharacter.hasFeat(RuleFeatsConstants.IMPROVED_UNARMED_STRIKE);
+            return character.hasFeat(RuleFeatsConstants.IMPROVED_UNARMED_STRIKE);
         case RuleWeaponConstants.IMPROVISED:
-            return attacker.ruleCharacter.hasFeat(RuleFeatsConstants.CATCH_OF_GUARD);
+            return character.hasFeat(RuleFeatsConstants.CATCH_OF_GUARD);
     }
+}
+
+export function calculateMoveDistance(p1, p2) {
+    return Math.max(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y)) + Math.floor(Math.min(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y)) / 2);
 }
 
 export function getRangedAttackRoll(action) {
     const roll = new CheckDice();
     roll.name = "Ranged Attack";
     roll.bonus = action.performerObject.get(RuleConstants.ATTACK_DEX);
+    if (action.performerObject.ruleCharacter.hasFeat(RuleFeatsConstants.POINT_BLANK_SHOT)) {
+        if (calculateMoveDistance(action.performerObject.position, action.targetObject.position)) {
+            ++roll.bonus;
+        }
+    }
     if (!isProficient(action)) roll.bonus -= 4;
     return roll;
 }

@@ -23,6 +23,9 @@ const DEFAULT_VALUES = {
 
     [CONST.CLASS_SKILLS_ARRAY]: [],
     [CONST.SPELL_ARRAY]: [],
+
+    [CONST.WEAPON_PROFICIENCY]: [],
+    [CONST.ARMOR_PROFICIENCY]: []
 };
 
 const setIfNull = (key, val) => !DEFAULT_VALUES[key] ? DEFAULT_VALUES[key] = val : null;

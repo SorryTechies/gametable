@@ -28,6 +28,7 @@ function actionKeyToTarget(key) {
         case RuleActionsConstants.IMPROVISED_ATTACK:
         case RuleActionsConstants.COMBAT_MANEUVERS:
         case RuleActionsConstants.MELEE_ATTACK:
+        case RuleActionsConstants.THROW_ATTACK:
         case RuleActionsConstants.RANGED_ATTACK:
         case RuleActionsConstants.CAST_SPELL:
             return TARGET_TYPE.UNIT;

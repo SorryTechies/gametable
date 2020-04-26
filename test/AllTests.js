@@ -9,5 +9,4 @@ import './rules/impl/calc/CombatManuversTests';
 import './rules/impl/calc/ModifiersTests';
 import './rules/impl/calc/SkillTests';
 
-import './rules/impl/feats/ClassSkillsFeatsTest';
 import './rules/impl/feats/CombatExpertiseTest';

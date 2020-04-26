@@ -15,6 +15,8 @@ export default {
                 `${v[0]} shoots ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} ${v[5]} damage.`,
             [RuleActionConstants.IMPROVISED_ATTACK]: v =>
                 `${v[0]} improvised attacks ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} ${v[5]} damage.`,
+            [RuleActionConstants.THROW_ATTACK]: v =>
+                `${v[0]} throws ${v[3]} at ${v[1]} ${v[2]} dealing ${v[4]} ${v[5]} damage.`,
             [RuleBuffConstants.TOTAL_DEFENSE]: v =>
                 `${v[0]} enters total defence!`
         },
@@ -23,7 +25,10 @@ export default {
                 `${v[0]} melee attacks ${v[1]} ${v[2]} with ${v[3]} and misses.`,
             [RuleActionConstants.RANGED_ATTACK]: v =>
                 `${v[0]} shoots ${v[1]} ${v[2]} with ${v[3]} and misses.`,
-
+            [RuleActionConstants.IMPROVISED_ATTACK]: v =>
+                `${v[0]} improvised attacks ${v[1]} ${v[2]} with ${v[3]} and misses.`,
+            [RuleActionConstants.THROW_ATTACK]: v =>
+                `${v[0]} throws ${v[3]} at ${v[1]} ${v[2]} and misses.`,
         }
     }
 }

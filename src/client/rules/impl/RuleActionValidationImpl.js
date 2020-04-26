@@ -4,14 +4,11 @@
 
 import RuleConstants from "../constants/RuleStatConstants";
 import * as RuleLoader from "../RuleLoader";
+import {calculateMoveDistance} from "./RuleCommonImpl";
 
 function isSpaceOccupied(action) {
     if (RuleLoader.getLoader().getObjects().find(obj => obj.id !== action.performerId && obj.movePoints.isInFinalPosition(action.target)))
         throw new Error("Cannot move in occupied space.");
-}
-
-function calculateMoveDistance(p1, p2) {
-    return Math.max(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y)) + Math.floor(Math.min(Math.abs(p1.x - p2.x), Math.abs(p1.y - p2.y)) / 2);
 }
 
 function reachValidation(action) {
