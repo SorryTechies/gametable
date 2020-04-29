@@ -63,7 +63,6 @@ export default class RuleAction {
         this.type = findType(key);
         this.consumeMoveSlot = false;
         this.consumeStandartSlot = false;
-        this.consecutiveAction = 0;
 
         /** @type RuleGameObject */
         this.targetObject = null;
@@ -75,6 +74,7 @@ export default class RuleAction {
         this.roll = null;
         this.isExecuted = false;
         this.isSuccessfull = false;
+        this.consecutiveActionPenalty = 0;
     }
 
     setPerformer(data) {
@@ -184,8 +184,7 @@ export default class RuleAction {
             consumeStandartSlot: this.consumeStandartSlot,
             id: this.id,
             target: getJSON(this.target),
-            dmOnly: this.dmOnly,
-            consecutiveAction: this.consecutiveAction
+            dmOnly: this.dmOnly
         };
     }
 

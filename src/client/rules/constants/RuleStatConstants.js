@@ -38,8 +38,6 @@ export default {
     CLASS_SAVE_REFLEX: "class_ref",
     CLASS_SAVE_WILL: "class_wil",
 
-    ATTACK_STR: "att_str",
-    ATTACK_DEX: "att_dex",
     ATTACK_FLAT: "att_flat",
 
     DEFENCE_AC: "ac",

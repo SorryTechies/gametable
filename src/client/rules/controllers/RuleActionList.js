@@ -9,6 +9,7 @@ import {filterActionByKey} from "../table/RuleActionFilter";
 import * as SUPP from "../constants/RuleActionListSupportConstants";
 import STATS from "../constants/RuleStatConstants";
 import SLOTS from "../items/const/RuleWearSlots";
+import FEATS from "../constants/RuleFeatsConstants";
 
 function isForcingAttackState(action) {
    if (SUPP.FORCE_ATTACK_BUFFS.includes(action.additional1)) return true;
@@ -145,24 +146,52 @@ export default class RuleActionList {
         let attacksCount = 0;
         let left = false;
         let right = false;
+        let isLightWeapon = false;
         this.list.forEach(action => {
+            const character = action.performerObject.ruleCharacter;
             if (CONST.ATTACK_ACTIONS.includes(action.key)) {
-                if (action.targetItem) {
-                    if (action.targetItem.slot === SLOTS.RIGHT_HAND) {
+                let isConsecutive = false;
+                if (action.additional1) {
+                    if (action.additional1.slot === SLOTS.RIGHT_HAND) {
                         if (right) {
-                            ++attacksCount;
+                            isConsecutive = true;
                         } else {
                             right = true;
                         }
                     } else {
                         if (left) {
-                            ++attacksCount;
+                            isConsecutive = true;
                         } else {
                             left = true;
+                            isLightWeapon = Array.isArray(action.additional1.additionalTags) && action.additional1.additionalTags.includes("light");
                         }
                     }
                 }
-                action.consecutiveAction = attacksCount;
+                if (isConsecutive)  ++attacksCount;
+                action.consecutiveActionPenalty += attacksCount;
+            }
+        });
+        this.list.forEach(action => {
+            if (left && right) {
+                const character = action.performerObject.ruleCharacter;
+                if (character.hasFeat(FEATS.TWO_WEAPON_FIGHTING)) {
+                    action.consecutiveActionPenalty += isLightWeapon ? 2 : 4;
+                } else {
+                    const leftHand = action.additional1.slot === SLOTS.LEFT_HAND;
+                    if (isLightWeapon) {
+                        if (leftHand) {
+                            action.consecutiveActionPenalty += 8;
+                        } else {
+                            action.consecutiveActionPenalty += 4;
+                        }
+                    } else {
+                        if (leftHand) {
+                            action.consecutiveActionPenalty += 10;
+                        } else {
+                            action.consecutiveActionPenalty += 6;
+                        }
+                    }
+                }
             }
             action.doAction();
         });

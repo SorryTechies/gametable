@@ -8,6 +8,7 @@ import RuleAcType from "../constants/RuleACType";
 import SLOTS from "./const/RuleWearSlots";
 import DamageDice from "../../logic/roll/DamageDice";
 import RuleWeaponProficiency from "../constants/RuleWeaponProficiency";
+import WEAPON from "./const/RuleWeaponConstants";
 
 export default class RuleWeapon extends RuleWearable {
     constructor(key) {
@@ -44,5 +45,25 @@ export default class RuleWeapon extends RuleWearable {
         if (json.damaged) item.damaged = json.damaged;
         if (json.slot) item.slot = json.slot;
         return item;
+    }
+
+    /**
+     * @param {RuleItem} item
+     * @return RuleWeapon
+     */
+    static generateImprovised(item) {
+        const w = new RuleWeapon(WEAPON.IMPROVISED);
+        w.proficiency = RuleWeaponProficiency.IMPROVISED;
+        return w;
+    }
+
+    /**
+     * @param {RuleGameObject} obj
+     * @return RuleWeapon
+     */
+    static generateUnarmed(obj) {
+        const w = new RuleWeapon(WEAPON.UNARMED_STRIKE);
+        w.proficiency = RuleWeaponProficiency.UNARMED;
+        return w;
     }
 }

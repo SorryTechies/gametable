@@ -6,7 +6,7 @@ import RuleConstants from "../constants/RuleStatConstants";
 import * as RuleLoader from "../RuleLoader";
 import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleGameObjectConstans from "../constants/RuleGameObjectConstants";
-import {getAttackRoll} from "./RuleCommonImpl";
+import {getMeleeAttackImpl} from "./RuleCommonImpl";
 import DamageDice from "../../logic/roll/DamageDice";
 
 export const doShockGrasp = action => {
@@ -16,7 +16,7 @@ export const doShockGrasp = action => {
     let numberOfDices = perfCharacter.get(RuleConstants.CASTER_LEVEL);
     if (numberOfDices > 5) numberOfDices = 5;
     // TODO IMPLEMENT TOUCH BUFF INSTEAD OF DISCHARGE
-    const roll = getAttackRoll(perfCharacter);
+    const roll = getMeleeAttackImpl(perfCharacter);
     roll.name = "Touch";
     const damageRoll = new DamageDice();
     damageRoll.canBeCritical = false;

@@ -20,5 +20,9 @@ export default {
     ARMOR_EXPERT_TRAIT: "armor_expert_trait",
     SHIPS_SURGEON: "ships_surgeon",
     POINT_BLANK_SHOT: "point_blank_shot",
-    STARTOSS_STYLE: "startoss_style"
+    STARTOSS_STYLE: "startoss_style",
+    STARTOSS_COMET: "startoss_comet",
+    STARTOSS_SHOWER: "startoss_shower",
+    TWO_WEAPON_FIGHTING: "two_weapon_fighting",
+    MIND_SWORD: "mind_arcenal"
 };

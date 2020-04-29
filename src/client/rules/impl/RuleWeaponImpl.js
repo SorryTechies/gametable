@@ -4,29 +4,45 @@
 
 import {
     acCheck, touchCheck, flatFootedCheck, flatFootedTouchCheck,
-    getRangedAttackRoll, getMeleeAttackImpl, getThrowAttack, getImprovisedAttack
 } from "./RuleCommonImpl";
 import DamageDice from "../../logic/roll/DamageDice";
 import RuleConstants from "../constants/RuleStatConstants";
 import RuleACType from "../constants/RuleACType";
 import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 import RuleGameObjectConstants from "../constants/RuleGameObjectConstants";
-import * as RuelDamageToSizeTable from "../table/RuleDamageToSizeTable";
+import * as RuleDamageToSizeTable from "../table/RuleDamageToSizeTable";
+import ACTION from "../constants/RuleActionsConstants";
+import FEATS from "../constants/RuleFeatsConstants";
+import * as AttackImpl from "./RuleAttackImpl";
+
+function adjustDamageBonus(action, damageRoll) {
+    /** @type {RuleWeapon} */
+    const weapon = action.additional1;
+    const character = action.performerObject.ruleCharacter;
+    if (!weapon.isRanged) damageRoll.bonus = action.performerObject.get(RuleConstants.MOD_STRENGTH);
+    damageRoll.bonus += action.performerObject.get(RuleConstants.MODIFIER_DAMAGE);
+    if (action.key === ACTION.THROW_ATTACK) {
+        if (character.hasFeat(FEATS.STARTOSS_STYLE)) {
+            damageRoll.bonus += 2;
+            if (character.hasFeat(FEATS.STARTOSS_COMET)) damageRoll.bonus += 2;
+            if (character.hasFeat(FEATS.STARTOSS_SHOWER)) damageRoll.bonus += 2;
+        }
+    }
+}
 
 function doAttack(action) {
     /** @type {RuleWeapon} */
     const weapon = action.additional1;
     const damageRoll = new DamageDice();
-    if (!weapon.isRanged) damageRoll.bonus = action.performerObject.get(RuleConstants.MOD_STRENGTH);
-    damageRoll.bonus += action.performerObject.get(RuleConstants.MODIFIER_DAMAGE);
+    adjustDamageBonus(action, damageRoll);
     let damageDice;
     if (weapon.isWeapon) {
-        damageDice = RuelDamageToSizeTable.getDiceForSize(
+        damageDice = RuleDamageToSizeTable.getDiceForSize(
             {amount: weapon.amountOfDice, dice: weapon.damageDie},
             action.performerObject.get(RuleConstants.SIZE));
     } else {
-        damageDice = RuelDamageToSizeTable.getDiceForSize(
-            RuelDamageToSizeTable.getImprovisedDieFromWeight(weapon.weight),
+        damageDice = RuleDamageToSizeTable.getDiceForSize(
+            RuleDamageToSizeTable.getImprovisedDieFromWeight(weapon.weight),
             action.performerObject.get(RuleConstants.SIZE));
     }
     damageRoll.dice = damageDice.dice;
@@ -55,21 +71,21 @@ function doAttack(action) {
 }
 
 export function simpleRangedImpl(action) {
-    action.roll = getRangedAttackRoll(action);
+    action.roll = AttackImpl.getRangedAttackRoll(action);
     doAttack(action);
 }
 
 export function simpleMeleeAttackImpl(action) {
-    action.roll = getMeleeAttackImpl(action);
+    action.roll = AttackImpl.getMeleeAttackImpl(action);
     doAttack(action);
 }
 
 export function simpleThrowAttackImpl(action) {
-    action.roll = getThrowAttack(action);
+    action.roll = AttackImpl.getThrowAttack(action);
     doAttack(action);
 }
 
 export function simpleImprovisedAttackImpl(action) {
-    action.roll = getImprovisedAttack(action);
+    action.roll = AttackImpl.getImprovisedAttack(action);
     doAttack(action);
 }

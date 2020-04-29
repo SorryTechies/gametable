@@ -7,8 +7,10 @@ export default {
     MARTIAL: 1,
     EXOTIC: 2,
     IMPROVISED: 3,
-    EXOTIC_ELDAR: 4,
-    EXOTIC_TAU: 5,
+    IMPROVISED_THROW: 4,
+    UNARMED: 5,
+    EXOTIC_ELDAR: 6,
+    EXOTIC_TAU: 7,
 
     ALL: 10
 };

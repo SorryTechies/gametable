@@ -17,6 +17,7 @@ import RuleCombatManuverList from "../../../rules/constants/RuleCombatManuverLis
 import {MUST_DO_ATTACK_BUFFS} from "../../../rules/constants/RuleBuffGroupConstants";
 import SLOTS from "../../../rules/items/const/RuleWearSlots";
 import TARGET_TYPE from "../../../rules/constants/RuleActionTargetType";
+import RuleWeapon from "../../../rules/items/RuleWeapon";
 
 const NO = "no";
 
@@ -129,12 +130,28 @@ export default class StatusMenu extends React.Component {
                     this.action.additional1 = val1.allowedSlots[0];
                     return this.props.doAimAction(this.action);
                 });
-            case CONST.IMPROVISED_ATTACK:
             case CONST.MELEE_ATTACK:
+                return this.renderAction(val1 => {
+                    if (val1 === RuleWeaponConstants.UNARMED_STRIKE) {
+                        this.action.additional1 = RuleWeapon.generateUnarmed(val1);
+                    } else {
+                        this.action.additional1 = val1;
+                    }
+                    return this.props.doAimAction(this.action);
+                });
             case CONST.RANGED_ATTACK:
+            case CONST.IMPROVISED_ATTACK:
+                return this.renderAction(val1 => {
+                    this.action.additional1 = RuleWeapon.generateImprovised(val1);
+                    return this.props.doAimAction(this.action);
+                });
             case CONST.THROW_ATTACK:
                 return this.renderAction(val1 => {
-                    this.action.additional1 = val1;
+                    if (val1.isWeapon) {
+                        this.action.additional1 = val1;
+                    } else {
+                        this.action.additional1 = RuleWeapon.generateImprovised(val1);
+                    }
                     return this.props.doAimAction(this.action);
                 });
             case CONST.COMBAT_MANEUVERS:

@@ -12,6 +12,7 @@ import RuleEffectController from "./controllers/RuleEffectController";
 import CheckDice from "../logic/roll/CheckDice";
 import RuleReach from "./objects/RuleReach";
 import RulePoint from "./objects/RulePoint";
+import CONST from "./constants/RuleStatConstants";
 
 export default class RuleGameObject {
     constructor(id) {
@@ -149,5 +150,17 @@ export default class RuleGameObject {
             obj.movePoints.setStartingPoint(Object.assign({}, position));
         }
         return obj;
+    }
+
+    hasWeaponProficiency(prof) {
+        return this.get(CONST.WEAPON_PROFICIENCY).includes(prof);
+    }
+
+    hasArmorProficiency(prof) {
+        return this.get(CONST.ARMOR_PROFICIENCY).includes(prof);
+    }
+
+    hasFeat(key) {
+        return this.ruleCharacter.hasFeat(key);
     }
 }
