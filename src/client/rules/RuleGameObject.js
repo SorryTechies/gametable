@@ -108,6 +108,7 @@ export default class RuleGameObject {
         if (!this.ruleCharacter) return;
         this.calculatedData = {};
         RuleImplementation.statCalc(this);
+        RuleImplementation.calculateWeight(this);
         RuleImplementation.dodgeCalc(this);
         RuleImplementation.attackBonusCalc(this);
         RuleImplementation.defenceCalc(this);

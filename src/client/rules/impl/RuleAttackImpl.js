@@ -13,7 +13,7 @@ import {axeToGrindImpl} from "./RuleFeatsImpl";
 import W_PROF from "../constants/RuleWeaponProficiency";
 
 function getSimpleAttackBonus(action) {
-    return action.performerObject.get(CONST.ATTACK_FLAT);
+    return action.performerObject.get(CONST.ATTACK_FLAT) - action.consecutiveActionPenalty;
 }
 
 function getStrengthBonus(action) {
@@ -29,7 +29,7 @@ function getCharismaBonus(action) {
 }
 
 function getMeleeAttack(action) {
-    const char = action.gameObject.ruleCharacter;
+    const char = action.performerObject.ruleCharacter;
     let bonus = getSimpleAttackBonus(action);
     bonus += getStrengthBonus(action);
     if (char.hasFeat(FEATS.AXE_TO_GRIND)) bonus += axeToGrindImpl(action);
@@ -37,7 +37,7 @@ function getMeleeAttack(action) {
 }
 
 function getRangedAttack(action) {
-    const char = action.gameObject.ruleCharacter;
+    const char = action.performerObject.ruleCharacter;
     let bonus = getSimpleAttackBonus(action);
     bonus += getDexterityBonus(action);
     if (char.hasFeat(FEATS.POINT_BLANK_SHOT)) bonus += IMPL.pointBlankShotImpl(action);
@@ -45,7 +45,7 @@ function getRangedAttack(action) {
 }
 
 function getThrowingAttack(action) {
-    const char = action.gameObject.ruleCharacter;
+    const char = action.performerObject.ruleCharacter;
     let bonus = getSimpleAttackBonus(action);
     if (char.hasFeat(FEATS.MIND_SWORD)) {
         bonus += getCharismaBonus(action);

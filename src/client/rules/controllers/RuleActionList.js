@@ -167,8 +167,10 @@ export default class RuleActionList {
                         }
                     }
                 }
-                if (isConsecutive)  ++attacksCount;
-                action.consecutiveActionPenalty += attacksCount;
+                if (isConsecutive)  {
+                    ++attacksCount;
+                    action.consecutiveActionPenalty += attacksCount * 5;
+                }
             }
         });
         this.list.forEach(action => {

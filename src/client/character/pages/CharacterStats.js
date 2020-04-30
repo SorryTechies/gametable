@@ -3,16 +3,17 @@
  */
 
 import * as React from "react";
-import RuleConstants from "../../rules/constants/RuleStatConstants";
+import CONST from "../../rules/constants/RuleStatConstants";
 import CharacterPage from "./CharacterPage";
 
 const KEY_ARRAY = [
-    {stat: RuleConstants.STAT_STRENGTH, mod: RuleConstants.MOD_STRENGTH},
-    {stat: RuleConstants.STAT_DEXTERITY, mod: RuleConstants.MOD_DEXTERITY},
-    {stat: RuleConstants.STAT_CONSTITUTION, mod: RuleConstants.MOD_CONSTITUTION},
-    {stat: RuleConstants.STAT_INTELLIGENCE, mod: RuleConstants.MOD_INTELLIGENCE},
-    {stat: RuleConstants.STAT_WISDOM, mod: RuleConstants.MOD_WISDOM},
-    {stat: RuleConstants.STAT_CHARISMA, mod: RuleConstants.MOD_CHARISMA}
+    {stat: CONST.MONEY, mod: CONST.MONEY},
+    {stat: CONST.STAT_STRENGTH, mod: CONST.MOD_STRENGTH},
+    {stat: CONST.STAT_DEXTERITY, mod: CONST.MOD_DEXTERITY},
+    {stat: CONST.STAT_CONSTITUTION, mod: CONST.MOD_CONSTITUTION},
+    {stat: CONST.STAT_INTELLIGENCE, mod: CONST.MOD_INTELLIGENCE},
+    {stat: CONST.STAT_WISDOM, mod: CONST.MOD_WISDOM},
+    {stat: CONST.STAT_CHARISMA, mod: CONST.MOD_CHARISMA}
 ];
 
 export default class CharacterStats extends React.Component {

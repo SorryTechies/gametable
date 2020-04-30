@@ -8,6 +8,8 @@ import SKILL_CONST from "../constants/RuleSkillsStatConstants";
 import SKILLS from "../constants/RuleSkillConstants";
 import FEATS from "../constants/RuleFeatsConstants";
 import * as SKILL_SUP from "../constants/RuleSkillSupportConst";
+import LOADOUT from "../constants/RuleLoadType";
+import * as RuleWeightTable from "../table/RuleWeightTable";
 
 export const dodgeCalc = cha => cha.set(CONST.DODGE, cha.get(CONST.MODIFIER_DODGE) +
     cha.get(CONST.MOD_DEXTERITY));
@@ -18,7 +20,7 @@ export const dodgeCalc = cha => cha.set(CONST.DODGE, cha.get(CONST.MODIFIER_DODG
  */
 export const defenceCalc = gameObject => {
     const tffac = 10 + gameObject.get(CONST.MODIFIER_DEFLECT) - gameObject.get(CONST.SIZE);
-    const ARMOR =  gameObject.get(CONST.MODIFIER_ARMOR) + gameObject.get(CONST.MODIFIER_SHIELD);
+    const ARMOR = gameObject.get(CONST.MODIFIER_ARMOR) + gameObject.get(CONST.MODIFIER_SHIELD);
     const DODGE = gameObject.get(CONST.DODGE);
     const ac = tffac + ARMOR + DODGE;
     const setIfLesser = val => ac > val ? val : ac;
@@ -57,7 +59,7 @@ export const healthCalc = gm => {
 };
 
 export const attackBonusCalc = gm => {
-    gm.set(CONST.AMOUNT_OF_ATTACKS, Math.floor(gm.get(CONST.BAB)/5) + 1);
+    gm.set(CONST.AMOUNT_OF_ATTACKS, Math.floor(gm.get(CONST.BAB) / 5) + 1);
     gm.set(CONST.ATTACK_FLAT,
         gm.get(CONST.BAB) +
         gm.get(CONST.MODIFIER_ATTACK));
@@ -112,3 +114,9 @@ export const skillCalc = gm => {
 
     Object.values(SKILLS).forEach(key => gm.set(key, processRanks(key) + getSkillModifier(key)));
 };
+
+export function calculateWeight(gm) {
+    const weight = gm.items.items.reduce((acc, item) => acc + (typeof item.weight === "number" ? item.weight : 0), 0);
+    const load = RuleWeightTable.getLoad(weight, gm.get(CONST.STAT_STRENGTH));
+    gm.set(CONST.LOAD, load);
+}

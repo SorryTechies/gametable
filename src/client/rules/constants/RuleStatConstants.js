@@ -86,5 +86,8 @@ export default {
     CLASS_SKILLS_ARRAY: "c_skills_array",
 
     WEAPON_PROFICIENCY: "w_prof",
-    ARMOR_PROFICIENCY: "a_prof"
+    ARMOR_PROFICIENCY: "a_prof",
+
+    LOAD: "load",
+    MONEY: "money"
 };

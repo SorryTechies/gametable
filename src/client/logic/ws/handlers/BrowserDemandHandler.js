@@ -6,12 +6,13 @@ import * as React from "react";
 import StaticController from "../../../static/StaticController";
 import StaticViewManager from "../../../popup/StaticViewManager";
 import RollCheckView from "../../../popup/views/RollCheckView";
+import TranslationModule from "../../../rules/translation/TranslationModule";
 
 export function handle(message) {
     const key = message.data.key;
     const threshold = message.data.threshold;
     const view = {
-        title: "ROLL CHECK", obj: <RollCheckView onClickFunc={() => {
+        title: `${TranslationModule.getTranslation(key)} CHECK`, obj: <RollCheckView onClickFunc={() => {
             const char = StaticController.getObjectByCharacter(StaticController.getMyCharacter());
             if (char) {
                 const val = char.rollValue(key);
