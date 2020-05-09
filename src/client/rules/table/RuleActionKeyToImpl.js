@@ -8,7 +8,7 @@ import * as Val from "../impl/RuleActionValidationImpl";
 import RSN from "../constants/RuleSpellNames";
 import RuleState from "../RuleState";
 import RBC from "../constants/RuleBuffConstants";
-import RCML from "../constants/RuleCombatManuverList";
+import RCML from "../constants/RuleCombatManeuverList";
 import * as SpellImpl from "../impl/RuleSpellImpl";
 import * as CMBImpl from "../impl/RuleCombatManeuverImpl";
 import * as Weapon from "../impl/RuleWeaponImpl";

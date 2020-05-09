@@ -10,5 +10,6 @@ export default {
     COMBAT_EXPERTISE: "combat_expertise_b",
     FIGHTING_DEFENSIVELY: "fight_def_b",
     GRAPPLED: "grappled_b",
-    GRAPPLING: "grappling_b"
+    GRAPPLING: "grappling_b",
+    BLINDED: "blinded_b"
 }

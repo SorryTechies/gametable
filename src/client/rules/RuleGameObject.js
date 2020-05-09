@@ -153,6 +153,10 @@ export default class RuleGameObject {
         return obj;
     }
 
+    hasBuff(key) {
+        return !!this.buffs.getBuff(key);
+    }
+
     hasWeaponProficiency(prof) {
         return this.get(CONST.WEAPON_PROFICIENCY).includes(prof);
     }

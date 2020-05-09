@@ -11,6 +11,7 @@ import * as CONST from "./constants/RuleActionListConstants";
 import * as SUPP from "./constants/RuleActionListSupportConstants";
 import TranslationModule from "./translation/TranslationModule";
 import TARGET_TYPE from "./constants/RuleActionTargetType";
+import * as ActionTranslationToArgs from "./translation/ActionTranslationToArgs";
 
 function findType(key) {
     const type = Object.keys(RuleAction.ACTION_TYPE_OBJECT).find(item => RuleAction.ACTION_TYPE_OBJECT[item].includes(key));
@@ -199,7 +200,10 @@ export default class RuleAction {
 
     sendDescriptionText() {
         if (!this.isExecuted) throw new Error("Action isn't finished.");
-        RuleLoader.sendDescription(TranslationModule.getActionTranslation(this), this)
+        RuleLoader.sendDescription(TranslationModule.getActionTranslation(
+            ActionTranslationToArgs.getKeyForTranslation(this),
+            ActionTranslationToArgs.getArgumentsForTranslation(this)
+        ), this)
     }
 }
 

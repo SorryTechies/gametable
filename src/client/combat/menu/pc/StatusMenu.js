@@ -13,11 +13,12 @@ import RuleAction from "../../../rules/RuleAction";
 import CONST from "../../../rules/constants/RuleActionsConstants";
 import RuleConstants from "../../../rules/constants/RuleStatConstants";
 import RuleWeaponConstants from "../../../rules/items/const/RuleWeaponConstants";
-import RuleCombatManuverList from "../../../rules/constants/RuleCombatManuverList";
+import * as RuleCombatManeuverList from "../../../rules/constants/RuleCombatManeuverList";
 import {MUST_DO_ATTACK_BUFFS} from "../../../rules/constants/RuleBuffGroupConstants";
 import SLOTS from "../../../rules/items/const/RuleWearSlots";
 import TARGET_TYPE from "../../../rules/constants/RuleActionTargetType";
 import RuleWeapon from "../../../rules/items/RuleWeapon";
+import BUFFS from "../../../rules/constants/RuleBuffConstants";
 
 const NO = "no";
 
@@ -71,7 +72,15 @@ export default class StatusMenu extends React.Component {
         const unit = this.props.unit;
         switch (this.state.nextSelector) {
             case CONST.COMBAT_MANEUVERS:
-                return Object.values(RuleCombatManuverList);
+                if (unit.hasBuff(BUFFS.GRAPPLED)) {
+                    return Object.values(RuleCombatManeuverList.GRAPPLED);
+                } else {
+                    if (unit.hasBuff(BUFFS.GRAPPLING)) {
+                        return Object.values(RuleCombatManeuverList.GRAPPLING);
+                    } else {
+                        return Object.values(RuleCombatManeuverList.NORMAL);
+                    }
+                }
             case CONST.THROW_ATTACK:
             case CONST.IMPROVISED_ATTACK:
                 return unit.items.getItemsFromHands()

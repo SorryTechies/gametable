@@ -19,8 +19,8 @@ export function doUnequip(action) {
 }
 
 export const doTotalDefence = action => {
-    RuleLoader.sendTranslatedDescription(action, RuleBuffConstants.TOTAL_DEFENSE, action.performerObject.name);
     RuleState.doTotalDefenceState(action);
+    action.sendDescriptionText();
 };
 
 export const doCharge = action => {

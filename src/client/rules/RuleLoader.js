@@ -16,7 +16,3 @@ export const getLoader = () => loader;
 export function sendDescription(message, action) {
     loader.sendActionDescription(message, action);
 }
-
-export function sendTranslatedDescription(action, key, ...args) {
-    sendDescription(TranslationModule.getTranslation(key, args), action);
-}

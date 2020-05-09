@@ -10,11 +10,12 @@ import * as SUPP from "../constants/RuleActionListSupportConstants";
 import STATS from "../constants/RuleStatConstants";
 import SLOTS from "../items/const/RuleWearSlots";
 import FEATS from "../constants/RuleFeatsConstants";
+import BUFFS from "../constants/RuleBuffConstants";
 
 function isForcingAttackState(action) {
-   if (SUPP.FORCE_ATTACK_BUFFS.includes(action.additional1)) return true;
-   if (SUPP.FORCE_ATTACK_ACTIONS.includes(action.key)) return true;
-   return false;
+    if (SUPP.FORCE_ATTACK_BUFFS.includes(action.additional1)) return true;
+    if (SUPP.FORCE_ATTACK_ACTIONS.includes(action.key)) return true;
+    return false;
 }
 
 /**
@@ -84,7 +85,7 @@ function canAttack(obj) {
     if (!obj.canDoMoveAction && obj.attacks === 1) {
         return false;
     } else {
-        return obj.gameObject.get(STATS.AMOUNT_OF_ATTACKS) + (obj.twoWeaponAttack ? 1 : 0)> obj.attacks;
+        return obj.gameObject.get(STATS.AMOUNT_OF_ATTACKS) + (obj.twoWeaponAttack ? 1 : 0) > obj.attacks;
     }
 }
 
@@ -125,12 +126,14 @@ export default class RuleActionList {
     }
 
     getAllowedActionsList() {
-        const ans = new Set([...CONST.FREE_ACTIONS, ...CONST.IMMEDIATE_ACTION]);
+        let ans = new Set([...CONST.FREE_ACTIONS, ...CONST.IMMEDIATE_ACTION]);
         if (this.canDoStandardAction && this.canDoMoveAction) CONST.FULL_ROUND_ACTIONS.forEach(ans.add, ans);
         if (this.canDoStandardAction) CONST.STANDARD_ACTIONS.forEach(ans.add, ans);
         if (canAttack(this)) CONST.ATTACK_ACTIONS.forEach(ans.add, ans);
         if (this.canDoMoveAction || this.canDoStandardAction) CONST.MOVE_ACTIONS.forEach(ans.add, ans);
         if (this.canDoSwiftAction) CONST.SWIFT_ACTION.forEach(ans.add, ans);
+        if (this.gameObject.hasBuff(BUFFS.GRAPPLING)) SUPP.GRAPPLING_MOVES.forEach(ans.add, ans);
+        if (this.gameObject.hasBuff(BUFFS.GRAPPLED)) SUPP.GRAPPLED_MOVES.forEach(ans.add, ans);
         return Array.from(ans).filter(filterActionByKey.bind(null, this));
     }
 
@@ -167,7 +170,7 @@ export default class RuleActionList {
                         }
                     }
                 }
-                if (isConsecutive)  {
+                if (isConsecutive) {
                     ++attacksCount;
                     action.consecutiveActionPenalty += attacksCount * 5;
                 }

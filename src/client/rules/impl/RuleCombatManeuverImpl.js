@@ -16,7 +16,9 @@ export function doGrapple(action) {
         const grappling = new RuleBuff(RuleBuffConstants.GRAPPLING);
         grappling.setTarget(action.performerObject);
         action.performerObject.buffs.addDM(grappling);
+        action.isSuccessfull = true;
     }
+    action.sendDescriptionText();
 }
 
 export function doDisarm(action) {

@@ -84,6 +84,38 @@ export function chargeBuffImpl(buff) {
     };
 }
 
+export function doRageBuff(buff, fatigueFunc) {
+    const arr = EFF.getRageEffect();
+    arr[0].val = 4;
+    arr[1].val = 4;
+    buff.onCreate = () =>  {
+        notifyBuffs(buff);
+        notifyEffects(buff.gameObject, arr[0]);
+        notifyEffects(buff.gameObject, arr[1]);
+    };
+    buff.onEnd = () => {
+        notifyBuffDeletion(buff);
+        notifyEffectDeletion(buff.gameObject, arr[0]);
+        notifyEffectDeletion(buff.gameObject, arr[1]);
+        fatigueFunc();
+    };
+}
+
+export function doFatigueBuff(buff) {
+    const arr = EFF.getFatigueEffect();
+    arr[0].val = 4;
+    arr[1].val = 4;
+    setupBuff(buff, arr);
+}
+
+export function doBlinded(buff) {
+    const arr = EFF.getBlindedEffects();
+    arr[0].val = -2;
+    arr[1].val = -4;
+    arr[2].val = -4;
+    setupBuff(buff, arr);
+}
+
 export function combatExpertiseImpl(buff) {
     buff.dispellable = true;
     const effectAC = EFF.getCombatExpertiseAC();
@@ -120,10 +152,6 @@ export function fightingDefensively(buff) {
         notifyEffectDeletion(buff.gameObject, effectAC);
         notifyEffectDeletion(buff.gameObject, effectAttack);
     };
-}
-
-export function grappled(buff) {
-
 }
 
 export function armorBuff(itemName, val, penalty, arcana, dex, buff) {

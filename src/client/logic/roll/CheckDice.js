@@ -23,6 +23,10 @@ export default class CheckDice extends Dice {
         return this;
     }
 
+    rollText() {
+        return `${this.result} ( ${this.getBonusText()} )`;
+    }
+
     generateForThisDice() {
         let status = "";
         if (this.critical) status = " critical";

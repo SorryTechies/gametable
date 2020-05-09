@@ -6,6 +6,7 @@ import RuleEffect from "../buff/RuleEffect";
 import RuleBuffConstants from "../constants/RuleBuffConstants";
 import RuleConstants from "../constants/RuleStatConstants";
 import RuleEffectTypeConstants from "../constants/RuleEffectTypeConstants";
+import RuleSkillConstants from "../constants/RuleSkillConstants";
 
 export function getTotalDefenceAC() {
     return new RuleEffect(
@@ -33,6 +34,28 @@ export function getCombatExpertiseAC() {
         RuleBuffConstants.COMBAT_EXPERTISE,
         RuleConstants.DODGE
     );
+}
+
+export function getRageEffect() {
+    return [
+        new RuleEffect(RuleBuffConstants.RAGE, RuleConstants.STAT_STRENGTH),
+        new RuleEffect(RuleBuffConstants.RAGE, RuleConstants.STAT_CONSTITUTION)
+    ];
+}
+
+export function getFatigueEffect() {
+    return [
+        new RuleEffect(RuleBuffConstants.FATIGUE, RuleConstants.STAT_STRENGTH),
+        new RuleEffect(RuleBuffConstants.FATIGUE, RuleConstants.STAT_CONSTITUTION)
+    ];
+}
+
+export function getBlindedEffects() {
+    return [
+        new RuleEffect(RuleBuffConstants.BLINDED, RuleConstants.ARMOR_CLASS),
+        new RuleEffect(RuleBuffConstants.BLINDED, RuleConstants.ARMOR_PENALTY),
+        new RuleEffect(RuleBuffConstants.BLINDED, RuleSkillConstants.SKILL_PERCEPTION)
+    ];
 }
 
 export function getCombatExpertiseAttack() {

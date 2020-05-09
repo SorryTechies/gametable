@@ -10,44 +10,54 @@ import FEATS from "../constants/RuleFeatsConstants";
 import * as SKILL_SUP from "../constants/RuleSkillSupportConst";
 import LOADOUT from "../constants/RuleLoadType";
 import * as RuleWeightTable from "../table/RuleWeightTable";
+import BUFFS from "../constants/RuleBuffConstants";
 
 export const dodgeCalc = cha => cha.set(CONST.DODGE, cha.get(CONST.MODIFIER_DODGE) +
     cha.get(CONST.MOD_DEXTERITY));
 
 /**
  * AC calculation.
- * @param {RuleGameObject} gameObject
+ * @param {RuleGameObject} gm
  */
-export const defenceCalc = gameObject => {
-    const tffac = 10 + gameObject.get(CONST.MODIFIER_DEFLECT) - gameObject.get(CONST.SIZE);
-    const ARMOR = gameObject.get(CONST.MODIFIER_ARMOR) + gameObject.get(CONST.MODIFIER_SHIELD);
-    const DODGE = gameObject.get(CONST.DODGE);
+export const defenceCalc = gm => {
+    const tffac = 10 + gm.get(CONST.MODIFIER_DEFLECT) - gm.get(CONST.SIZE) + gm.get(CONST.ARMOR_CLASS);
+    const ARMOR = gm.get(CONST.MODIFIER_ARMOR) + gm.get(CONST.MODIFIER_SHIELD);
+    const DODGE = gm.get(CONST.DODGE);
     const ac = tffac + ARMOR + DODGE;
     const setIfLesser = val => ac > val ? val : ac;
     const tac = tffac + DODGE;
     const ffac = tffac + ARMOR;
 
-    gameObject.set(CONST.DEFENCE_AC, ac);
-    gameObject.set(CONST.DEFENCE_TOUCH_AC, setIfLesser(tac));
-    gameObject.set(CONST.DEFENCE_FLAT_FOOTED_AC, setIfLesser(ffac));
-    gameObject.set(CONST.DEFENCE_TFF_AC, setIfLesser(tffac));
+    if (gm.hasBuff(BUFFS.BLINDED)) {
+        gm.set(CONST.DEFENCE_AC, ffac);
+        gm.set(CONST.DEFENCE_TOUCH_AC, tffac);
+    } else {
+        gm.set(CONST.DEFENCE_AC, ac);
+        gm.set(CONST.DEFENCE_TOUCH_AC, setIfLesser(tac));
+    }
+    gm.set(CONST.DEFENCE_FLAT_FOOTED_AC, setIfLesser(ffac));
+    gm.set(CONST.DEFENCE_TFF_AC, setIfLesser(tffac));
 };
 
 /**
  * Stat modificators calculation.
- * @param {RuleGameObject} gameObject
+ * @param {RuleGameObject} gm
  */
-export const statCalc = gameObject => {
+export const statCalc = gm => {
     const calcStats = (val) => {
         const mod = (val - 10) / 2;
         return mod < 0 ? Math.floor(mod) : Math.floor(mod);
     };
-    gameObject.set(CONST.MOD_STRENGTH, calcStats(gameObject.get(CONST.STAT_STRENGTH)));
-    gameObject.set(CONST.MOD_DEXTERITY, calcStats(gameObject.get(CONST.STAT_DEXTERITY)));
-    gameObject.set(CONST.MOD_CONSTITUTION, calcStats(gameObject.get(CONST.STAT_CONSTITUTION)));
-    gameObject.set(CONST.MOD_INTELLIGENCE, calcStats(gameObject.get(CONST.STAT_INTELLIGENCE)));
-    gameObject.set(CONST.MOD_WISDOM, calcStats(gameObject.get(CONST.STAT_WISDOM)));
-    gameObject.set(CONST.MOD_CHARISMA, calcStats(gameObject.get(CONST.STAT_CHARISMA)));
+    const size = gm.get(CONST.SIZE);
+    gm.set(CONST.STAT_STRENGTH, gm.get(CONST.STAT_STRENGTH) + 2);
+    gm.set(CONST.STAT_DEXTERITY, gm.get(CONST.STAT_DEXTERITY) - 2);
+
+    gm.set(CONST.MOD_STRENGTH, calcStats(gm.get(CONST.STAT_STRENGTH)));
+    gm.set(CONST.MOD_DEXTERITY, calcStats(gm.get(CONST.STAT_DEXTERITY)));
+    gm.set(CONST.MOD_CONSTITUTION, calcStats(gm.get(CONST.STAT_CONSTITUTION)));
+    gm.set(CONST.MOD_INTELLIGENCE, calcStats(gm.get(CONST.STAT_INTELLIGENCE)));
+    gm.set(CONST.MOD_WISDOM, calcStats(gm.get(CONST.STAT_WISDOM)));
+    gm.set(CONST.MOD_CHARISMA, calcStats(gm.get(CONST.STAT_CHARISMA)));
 };
 
 export const healthCalc = gm => {
@@ -62,7 +72,8 @@ export const attackBonusCalc = gm => {
     gm.set(CONST.AMOUNT_OF_ATTACKS, Math.floor(gm.get(CONST.BAB) / 5) + 1);
     gm.set(CONST.ATTACK_FLAT,
         gm.get(CONST.BAB) +
-        gm.get(CONST.MODIFIER_ATTACK));
+        gm.get(CONST.MODIFIER_ATTACK) -
+        gm.get(CONST.SIZE));
     gm.set(CONST.INITIATIVE, gm.get(CONST.MOD_DEXTERITY));
 };
 
@@ -118,5 +129,16 @@ export const skillCalc = gm => {
 export function calculateWeight(gm) {
     const weight = gm.items.items.reduce((acc, item) => acc + (typeof item.weight === "number" ? item.weight : 0), 0);
     const load = RuleWeightTable.getLoad(weight, gm.get(CONST.STAT_STRENGTH));
-    gm.set(CONST.LOAD, load);
+    const size = gm.get(CONST.SIZE);
+    let sizeMod;
+    if (size > 0) {
+        sizeMod = size * 8;
+    } else {
+        if (size < 0) {
+            sizeMod = 1 / (size * 8);
+        } else {
+            sizeMod = 1;
+        }
+    }
+    gm.set(CONST.LOAD, load * sizeMod);
 }

@@ -3,32 +3,37 @@
  */
 
 import SupportedLanguages from "./SupportedLanguages";
-import RuleBuffConstants from "../constants/RuleBuffConstants";
-import RuleActionConstants from "../constants/RuleActionsConstants";
+import BUFFS from "../constants/RuleBuffConstants";
+import ACTIONS from "../constants/RuleActionsConstants";
+import CMB from "../constants/RuleCombatManeuverList";
 
 export default {
     [SupportedLanguages.ENG]: {
         [true]: {
-            [RuleActionConstants.MELEE_ATTACK]: v =>
-                `${v[0]} melee attacks ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} ${v[5]} damage.`,
-            [RuleActionConstants.RANGED_ATTACK]: v =>
-                `${v[0]} shoots ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} ${v[5]} damage.`,
-            [RuleActionConstants.IMPROVISED_ATTACK]: v =>
-                `${v[0]} improvised attacks ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} ${v[5]} damage.`,
-            [RuleActionConstants.THROW_ATTACK]: v =>
-                `${v[0]} throws ${v[3]} at ${v[1]} ${v[2]} dealing ${v[4]} ${v[5]} damage.`,
-            [RuleBuffConstants.TOTAL_DEFENSE]: v =>
-                `${v[0]} enters total defence!`
+            [ACTIONS.MELEE_ATTACK]: v =>
+                `${v[0]} melee attacks ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} damage.`,
+            [ACTIONS.RANGED_ATTACK]: v =>
+                `${v[0]} shoots ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} damage.`,
+            [ACTIONS.IMPROVISED_ATTACK]: v =>
+                `${v[0]} improvised attacks ${v[1]} ${v[2]} with ${v[3]} dealing ${v[4]} damage.`,
+            [ACTIONS.THROW_ATTACK]: v =>
+                `${v[0]} throws ${v[3]} at ${v[1]} ${v[2]} dealing ${v[4]} damage.`,
+            [BUFFS.TOTAL_DEFENSE]: v =>
+                `${v[0]} enters total defence!`,
+            [CMB.GRAPPLE]: v =>
+            `${v[0]} grapples ${v[1]} ( ${v[2]} ) and succeeds.`
         },
         [false]: {
-            [RuleActionConstants.MELEE_ATTACK]: v =>
+            [ACTIONS.MELEE_ATTACK]: v =>
                 `${v[0]} melee attacks ${v[1]} ${v[2]} with ${v[3]} and misses.`,
-            [RuleActionConstants.RANGED_ATTACK]: v =>
+            [ACTIONS.RANGED_ATTACK]: v =>
                 `${v[0]} shoots ${v[1]} ${v[2]} with ${v[3]} and misses.`,
-            [RuleActionConstants.IMPROVISED_ATTACK]: v =>
+            [ACTIONS.IMPROVISED_ATTACK]: v =>
                 `${v[0]} improvised attacks ${v[1]} ${v[2]} with ${v[3]} and misses.`,
-            [RuleActionConstants.THROW_ATTACK]: v =>
+            [ACTIONS.THROW_ATTACK]: v =>
                 `${v[0]} throws ${v[3]} at ${v[1]} ${v[2]} and misses.`,
+            [CMB.GRAPPLE]: v =>
+                `${v[0]} grapples ${v[1]} ( ${v[2]} ) and fails.`
         }
     }
 }

@@ -37,6 +37,22 @@ export default class Dice {
         return `${this.name} roll ${this.result}`;
     }
 
+    getBonusText() {
+        if (this.bonus > 0) {
+            return "+"+this.bonus.toString();
+        } else {
+            if (this.bonus < 0) {
+                return this.bonus.toString();
+            } else {
+                return "";
+            }
+        }
+    }
+
+    rollText() {
+        return `${this.result} ( d${this.die}${this.getBonusText()} )`;
+    }
+
     generateText() {
         return this.nextDice.reduce((acc, dice) => acc + ' ' + dice.generateText(), this.generateForThisDice());
     }

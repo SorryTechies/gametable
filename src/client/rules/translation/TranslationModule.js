@@ -68,20 +68,14 @@ export default class TranslationModule {
     }
 
     /**
-     * @param {RuleAction} action
+     * @param {string} key
+     * @param {Array.<string>} args
+     * @return {string}
      */
-    static getActionTranslation(action) {
-        const func =  ActionDescriptionTranslation[currentLanguage][action.isSuccessfull][action.key];
-        if (typeof func !== "function") return action.key;
-        const args = [action.performerObject.name, action.targetObject.name];
-        if (action.roll) args.push(`( ${action.roll.result} [${action.roll.bonus}] )`);
-        if (action.additional1 && action.additional1.key) args.push(action.additional1.key);
-        if (action.roll && action.roll.nextDice.length !== 0) args.push(action.roll.nextDice[0].result);
-        if (action.additional1 && action.additional1.isItem) {
-            args.push(TranslationModule.getDamageTypeTranslation(action.additional1.damageType));
-        }
-        if (action.additional2) args.push(action.additional2);
-        sendDescription(func(args), action);
+    static getActionTranslation(key, args) {
+        let func =  ActionDescriptionTranslation[currentLanguage][key];
+        if (typeof func !== "function") return key;
+        return func(args);
     }
 
     static getDamageTypeTranslation(damageType) {

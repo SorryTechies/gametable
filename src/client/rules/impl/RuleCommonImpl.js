@@ -17,6 +17,7 @@ export function getCombatManRoll(action) {
     const roll = new CheckDice();
     roll.name = "CombatM";
     roll.bonus = action.performerObject.get(CONST.COMBAT_MANEUVER_BONUS);
+    if (action.performerObject.hasFeat(CONST.IMPROVED_GRAPPLE)) roll.bonus += 2;
     return roll;
 }
 

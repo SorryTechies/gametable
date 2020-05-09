@@ -4,52 +4,36 @@
 
 import RuleEffect from "./buff/RuleEffect";
 import RuleConstants from "./constants/RuleStatConstants";
-import RuleCharacterChangesBean from "./RuleCharacterChangesBean";
 import RuleBuffConstants from "./constants/RuleBuffConstants";
 import RuleBuff from "./RuleBuff";
-import {chargeBuffImpl, combatExpertiseImpl, fightingDefensively, totalDefenceImpl} from "./impl/RuleBuffImpl";
+import * as IMPL from "./impl/RuleBuffImpl";
 
 export default class RuleState {
-    /**
-     * @param {RuleAction} action
-     */
+    /** @param {RuleAction} action */
     static doRage(action) {
         const buff = new RuleBuff(RuleBuffConstants.RAGE);
-        // TODO add duration
-        buff.gameObject = action.performerObject;
-        const buffs = buff.gameObject.buffs;
-        buff.onCreate = () => {
-            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_STRENGTH, 4);
-            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_DEXTERITY, 4);
-            buff.gameObject.recalculate();
-        };
-        buff.onEnd = () => {
-            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_STRENGTH, -4);
-            RuleCharacterChangesBean.addDataModificationInstantly(buff.gameObject, RuleConstants.STAT_DEXTERITY, -4);
-            RuleState.doFatigue(action);
-        };
-        buffs.addDM(buff);
+        buff.dispellable = true;
+        buff.duration = 4 + action.performerObject.get(RuleConstants.MOD_CONSTITUTION) + (action.performerObject.get(RuleConstants.LEVEL) - 1) * 2;
+        buff.setTarget(action.performerObject);
+        IMPL.doRageBuff(buff, RuleState.doFatigue.bind(null, action));
+        buff.gameObject.buffs.addDM(buff);
     }
 
-    /**
-     * @param {RuleAction} action
-     * @param {RuleBuff} buff
-     */
-    static doFatigue(action, buff) {
-        // TODO add duration
-        buff.gameObject = action.performerObject;
-        const buffs = buff.gameObject.buffs;
-        const strEffect = new RuleEffect(RuleConstants.STAT_STRENGTH, -2);
-        const dexEffect = new RuleEffect(RuleConstants.STAT_DEXTERITY, -2);
-        buff.onCreate = () => {
-            buffs.addEffect(strEffect);
-            buffs.addEffect(dexEffect);
-        };
-        buff.onEnd = () => {
-            buffs.removeEffect(strEffect);
-            buffs.removeEffect(dexEffect);
-        };
-        buffs.add(buff);
+    /** @param {RuleAction} action */
+    static doFatigue(action) {
+        const buff = new RuleBuff(RuleBuffConstants.FATIGUE);
+        buff.setTarget(action.performerObject);
+        buff.duration = action.additional1 * 2;
+        IMPL.doFatigueBuff(action);
+        buff.gameObject.buffs.addDM(buff);
+    }
+
+    static doBlindSetup(action, duration) {
+        const buff = new RuleBuff(RuleBuffConstants.BLINDED);
+        buff.setTarget(action.performerObject);
+        buff.duration = duration;
+        IMPL.doFatigueBuff(action);
+        buff.gameObject.buffs.addDM(buff);
     }
 
     /** @param {RuleAction} action */
@@ -57,8 +41,9 @@ export default class RuleState {
         const buff = new RuleBuff(RuleBuffConstants.TOTAL_DEFENSE);
         buff.duration = 1;
         buff.setTarget(action.performerObject);
-        totalDefenceImpl(buff);
+        IMPL.totalDefenceImpl(buff);
         buff.gameObject.buffs.addDM(buff);
+        action.isSuccessfull = true;
     }
 
     /** @param {RuleAction} action */
@@ -66,7 +51,7 @@ export default class RuleState {
         const buff = new RuleBuff(RuleBuffConstants.CHARGE);
         buff.duration = 1;
         buff.setTarget(action.performerObject);
-        chargeBuffImpl(buff);
+        IMPL.chargeBuffImpl(buff);
         buff.gameObject.buffs.addDM(buff);
     }
 
@@ -74,7 +59,7 @@ export default class RuleState {
     static activateCombatExpertise(action) {
         const buff = new RuleBuff(RuleBuffConstants.COMBAT_EXPERTISE);
         buff.setTarget(action.performerObject);
-        combatExpertiseImpl(buff);
+        IMPL.combatExpertiseImpl(buff);
         buff.gameObject.buffs.addDM(buff);
     }
 
@@ -82,7 +67,7 @@ export default class RuleState {
     static activateFightingDefensively(action) {
         const buff = new RuleBuff(RuleBuffConstants.FIGHTING_DEFENSIVELY);
         buff.setTarget(action.performerObject);
-        fightingDefensively(buff);
+        IMPL.fightingDefensively(buff);
         buff.gameObject.buffs.addDM(buff);
     }
 

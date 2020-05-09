@@ -44,6 +44,7 @@ export default {
     DEFENCE_TOUCH_AC: "tac",
     DEFENCE_FLAT_FOOTED_AC: "ffac",
     DEFENCE_TFF_AC: "tffac",
+    ARMOR_CLASS: "armor_class",
 
     MODIFIER_DODGE: "modif_dodge",
     MODIFIER_DEFLECT: "modif_deflect",
@@ -89,5 +90,5 @@ export default {
     ARMOR_PROFICIENCY: "a_prof",
 
     LOAD: "load",
-    MONEY: "money"
+    MONEY: "money",
 };

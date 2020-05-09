@@ -47,6 +47,10 @@ export default class DamageDice extends Dice {
         return this;
     }
 
+    rollText() {
+        return `${this.result} ( ${this.amountOfDices}d${this.die}${this.getBonusText()} )`;
+    }
+
     generateForThisDice() {
         return `${this.name} ${this.result}(${diceToStr(this.amountOfDices, this.die, this.bonus)})`;
     }

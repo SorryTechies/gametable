@@ -3,7 +3,6 @@
  */
 
 import * as React from "react";
-import DiceRoller from "./DiceRoller";
 import PopupManager from "../popup/PopupManager";
 import rootScss from '../../scss/root.scss';
 import CheckDice from "./roll/CheckDice";

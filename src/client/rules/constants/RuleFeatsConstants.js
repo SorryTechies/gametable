@@ -24,5 +24,6 @@ export default {
     STARTOSS_COMET: "startoss_comet",
     STARTOSS_SHOWER: "startoss_shower",
     TWO_WEAPON_FIGHTING: "two_weapon_fighting",
-    MIND_SWORD: "mind_arcenal"
+    MIND_ARSENAL: "mind_arsenal",
+    IMPROVED_GRAPPLE: "improved_grapple"
 };

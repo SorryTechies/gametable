@@ -5,6 +5,8 @@
 import * as RuleActionListSupportConstants from "../constants/RuleActionListSupportConstants";
 import RuleActionsConstants from "../constants/RuleActionsConstants";
 import RuleConstants from "../constants/RuleStatConstants";
+import FEATS from "../constants/RuleBuffConstants";
+import ACTION from "../constants/RuleCombatManeuverList";
 
 function filterAttacksOnly(list, key) {
     return list.mustAttackOnThisRound && (
@@ -25,6 +27,16 @@ function filterMustHaveAttack(list, key) {
 
 function filterAlreadyMoved(list, key) {
     return list.movedAlready && RuleActionListSupportConstants.MOVE_BLOCK_ACTIONS.includes(key);
+}
+
+function filterGrapple(list, key) {
+    if (list.gameObject.hasBuff(FEATS.GRAPPLED) || list.gameObject.hasBuff(FEATS.GRAPPLING)) {
+        if (RuleActionListSupportConstants.MOVE_BLOCK_ACTIONS.includes(key)) return false;
+        switch (key) {
+            case ACTION.GRAPPLE:
+                return false;
+        }
+    }
 }
 
 /**
@@ -48,5 +60,6 @@ export function filterActionByKey(list, key) {
     if (filterReposition(list, key)) return false;
     if (filterMustHaveAttack(list, key)) return false;
     if (filterAlreadyMoved(list, key)) return false;
+    if (filterGrapple(list, key)) return false;
     return true;
 }

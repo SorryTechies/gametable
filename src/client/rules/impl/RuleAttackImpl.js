@@ -4,9 +4,7 @@
 
 import ACTION from "../constants/RuleActionsConstants";
 import CONST from "../constants/RuleStatConstants";
-import WEAPON from "../items/const/RuleWeaponConstants";
 import FEATS from "../constants/RuleFeatsConstants";
-import PROF from "../constants/RuleArmorType";
 import CheckDice from "../../logic/roll/CheckDice";
 import * as IMPL from "./RuleFeatsImpl";
 import {axeToGrindImpl} from "./RuleFeatsImpl";
@@ -47,7 +45,8 @@ function getRangedAttack(action) {
 function getThrowingAttack(action) {
     const char = action.performerObject.ruleCharacter;
     let bonus = getSimpleAttackBonus(action);
-    if (char.hasFeat(FEATS.MIND_SWORD)) {
+    if (char.hasFeat(FEATS.POINT_BLANK_SHOT)) bonus += IMPL.pointBlankShotImpl(action);
+    if (char.hasFeat(FEATS.MIND_ARSENAL)) {
         bonus += getCharismaBonus(action);
     } else {
         bonus += getStrengthBonus(action);
@@ -55,25 +54,16 @@ function getThrowingAttack(action) {
     return bonus;
 }
 
-function improvisedProficiency(action) {
-    if (action.key === ACTION.THROW_ATTACK) {
-        return action.performerObject.hasWeaponProficiency(W_PROF.IMPROVISED_THROW);
-    } else {
-        return action.performerObject.hasWeaponProficiency(W_PROF.IMPROVISED);
-    }
-}
-
 function isProficient(action) {
-    const weapon = action.additional1.key;
-    if (action.performerObject.hasWeaponProficiency(PROF.ALL)) return true;
-    return typeof weapon.proficiency === "number" &&
-        !action.performerObject.hasWeaponProficiency(weapon.proficiency);
+    const weapon = action.additional1;
+    if (action.performerObject.hasWeaponProficiency(W_PROF.ALL)) return true;
+    return typeof weapon.proficiency !== "number" ||
+        action.performerObject.hasWeaponProficiency(weapon.proficiency);
 }
 
 function checkProficiency(action, roll) {
     if (!isProficient(action)) roll.bonus -= 4;
 }
-
 
 export function getRangedAttackRoll(action) {
     const roll = new CheckDice();
