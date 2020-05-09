@@ -5,19 +5,19 @@
 import MongoController from "../MongoController";
 
 export default class AccountDB {
-    /** @return Promise<Account> */
+    /** @return Promise<AccountBean> */
     static getById(id) {
         return MongoController.getById(AccountDB.DB_NAME, id);
     }
 
-    /** @return Promise<Account> */
+    /** @return Promise<AccountBean> */
     static getByUsername(name) {
         return MongoController.getOne(AccountDB.DB_NAME, {[AccountDB.USERNAME_FIELD]: name});
     }
 
     /**
      * @param {string} character_id
-     * @return Promise<Account>
+     * @return Promise<AccountBean>
      */
     static findOwner(character_id) {
         return MongoController.getOne(AccountDB.DB_NAME, {[AccountDB.CHARACTERS_FIELD]: [character_id]});
@@ -25,7 +25,7 @@ export default class AccountDB {
 
     /**
      * @param {GameSession} game
-     * @return Promise<Array<Account>>
+     * @return Promise<Array<AccountBean>>
      */
     static getParticipantsInGame(game) {
         return MongoController.select(AccountDB.DB_NAME, {[AccountDB.CHARACTERS_FIELD]: game.participants_character_id});
@@ -33,7 +33,7 @@ export default class AccountDB {
 
     /**
      * @param {GameSession} game
-     * @return Promise<Array<Account>>
+     * @return Promise<Array<AccountBean>>
      */
     static getParticipantsInGameWithDM(game) {
         return MongoController.select(AccountDB.DB_NAME, {

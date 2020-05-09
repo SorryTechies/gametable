@@ -4,7 +4,6 @@
 
 import * as React from "react";
 import * as PropTypes from "prop-types";
-import StaticController from "../../../static/StaticController";
 import TARGET_TYPE from "../../../rules/constants/RuleActionTargetType";
 
 function toDisplay(action) {

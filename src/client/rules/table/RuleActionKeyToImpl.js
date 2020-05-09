@@ -8,7 +8,7 @@ import * as Val from "../impl/RuleActionValidationImpl";
 import RSN from "../constants/RuleSpellNames";
 import RuleState from "../RuleState";
 import RBC from "../constants/RuleBuffConstants";
-import RCML from "../constants/RuleCombatManeuverList";
+import * as RCML from "../constants/RuleCombatManeuverList";
 import * as SpellImpl from "../impl/RuleSpellImpl";
 import * as CMBImpl from "../impl/RuleCombatManeuverImpl";
 import * as Weapon from "../impl/RuleWeaponImpl";
@@ -30,11 +30,11 @@ export const implementation = {
         [RSN.SHOCKING_GRASP]: SpellImpl.doShockGrasp
     },
     [RAC.COMBAT_MANEUVERS]: {
-        [RCML.GRAPPLE]: CMBImpl.doGrapple,
-        [RCML.DISARM]: CMBImpl.doDisarm,
-        [RCML.TRIP]: Val.noValidation,
-        [RCML.BULL_RUSH]: Val.noValidation,
-        [RCML.DIRTY_TRICK]: Val.noValidation
+        [RCML.NORMAL.GRAPPLE]: CMBImpl.doGrapple,
+        [RCML.NORMAL.DISARM]: CMBImpl.doDisarm,
+        [RCML.NORMAL.TRIP]: Val.noValidation,
+        [RCML.NORMAL.BULL_RUSH]: Val.noValidation,
+        [RCML.NORMAL.DIRTY_TRICK]: Val.noValidation
     },
     [RAC.ACTIVATE_STATE]: {
         [RBC.COMBAT_EXPERTISE]: RuleState.activateCombatExpertise,
@@ -60,11 +60,11 @@ export const validation = {
     [RAC.DROP]: Val.noValidation,
     [RAC.GRAB]: Val.noValidation,
     [RAC.COMBAT_MANEUVERS]: {
-        [RCML.GRAPPLE]: Val.noValidation,
-        [RCML.DISARM]: Val.noValidation,
-        [RCML.TRIP]: Val.noValidation,
-        [RCML.BULL_RUSH]: Val.noValidation,
-        [RCML.DIRTY_TRICK]: Val.noValidation
+        [RCML.NORMAL.GRAPPLE]: Val.noValidation,
+        [RCML.NORMAL.DISARM]: Val.noValidation,
+        [RCML.NORMAL.TRIP]: Val.noValidation,
+        [RCML.NORMAL.BULL_RUSH]: Val.noValidation,
+        [RCML.NORMAL.DIRTY_TRICK]: Val.noValidation
     },
     [RAC.CAST_SPELL]: {
         [RSN.SHOCKING_GRASP]: Val.touchCheck

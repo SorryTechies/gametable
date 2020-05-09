@@ -19,9 +19,9 @@ import RuleConstants from "../rules/constants/RuleSkillConstants";
 import RuleMap from "../rules/map/RuleMap";
 import BadArgumentsError from "../../common/type/BadArgumentsError";
 
-/** @type {Account} */
+/** @type {AccountBean} */
 let account = null;
-/** @type {Account} */
+/** @type {AccountBean} */
 let dm = null;
 let subscribers = [];
 /** @type Array<ChatMessage> */
@@ -79,7 +79,7 @@ function pushMessage(message) {
 
 export default class StaticController {
     /**
-     * @param {Account} acc
+     * @param {AccountBean} acc
      * @return {Promise.<void>}
      */
     static async init(acc) {
@@ -176,7 +176,7 @@ export default class StaticController {
         return myCharacter;
     }
 
-    /** @return Account */
+    /** @return AccountBean */
     static getAccount() {
         return account;
     }
@@ -194,7 +194,7 @@ export default class StaticController {
         return characters.find(character => character.id === id);
     }
 
-    /** @return Array<Account> */
+    /** @return Array<AccountBean> */
     static getParticipants() {
         return participants;
     }

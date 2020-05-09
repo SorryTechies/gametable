@@ -38,7 +38,7 @@ export default class RuleGameObject {
         this.movePoints.setStartingPoint(Object.assign({}, this.position));
         /** @type {RuleCharacter} */
         this.ruleCharacter = null;
-        /** @type {Account} */
+        /** @type {AccountBean} */
         this.owner = null;
     }
 

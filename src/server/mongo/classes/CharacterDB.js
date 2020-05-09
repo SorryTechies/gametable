@@ -6,14 +6,14 @@ import * as MongoDB from "mongodb";
 import MongoController from "../MongoController";
 
 export default class CharacterDB {
-    /** @return Promise<GameCharacter> */
+    /** @return Promise<GameCharacterBean> */
     static getById(id) {
         return MongoController.getById(CharacterDB.DB_NAME, id);
     }
 
     /**
      * @param {Array<ids>} id
-     * @return Promise<GameCharacter>
+     * @return Promise<GameCharacterBean>
      */
     static findByIds(id) {
         const idArray = id.map(id => typeof id === "string" ? MongoDB.ObjectID(id) : id);

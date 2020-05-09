@@ -29,7 +29,7 @@ export default class WebSocketUser {
     }
 
     /**
-     * @param {Account} account
+     * @param {AccountBean} account
      * @param ws
      * @return WebSocketUser
      */
@@ -45,7 +45,7 @@ export default class WebSocketUser {
     }
 
     /**
-     * @param {Account|string} account
+     * @param {AccountBean|string} account
      * @return WebSocketUser
      */
     static findByUser(account) {
@@ -54,7 +54,7 @@ export default class WebSocketUser {
     }
 
     /**
-     * @param {Array.<Account|string>} accounts
+     * @param {Array.<AccountBean|string>} accounts
      * @return {Array.<WebSocketUser>}
      */
     static findByUsers(accounts) {
@@ -69,7 +69,7 @@ export default class WebSocketUser {
 
     /**
      * @param {WebSocketMessage} message
-     * @param {Array.<Account>} accounts
+     * @param {Array.<AccountBean>} accounts
      * @param [ws]
      */
     static sendToUsers(message, accounts, ws) {

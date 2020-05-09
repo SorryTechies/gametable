@@ -15,7 +15,6 @@ function findSettingValue(settings, name, defValue) {
 }
 
 const DEFAULT_VOLUME = 2;
-
 const VOLUME_FIELD = "volume";
 const EDIT_FIELD = "edit";
 

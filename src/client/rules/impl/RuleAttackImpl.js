@@ -2,7 +2,6 @@
  * Created by LastBerserk on 29.04.2020.
  */
 
-import ACTION from "../constants/RuleActionsConstants";
 import CONST from "../constants/RuleStatConstants";
 import FEATS from "../constants/RuleFeatsConstants";
 import CheckDice from "../../logic/roll/CheckDice";

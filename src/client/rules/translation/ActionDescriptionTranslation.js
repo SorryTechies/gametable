@@ -5,7 +5,7 @@
 import SupportedLanguages from "./SupportedLanguages";
 import BUFFS from "../constants/RuleBuffConstants";
 import ACTIONS from "../constants/RuleActionsConstants";
-import CMB from "../constants/RuleCombatManeuverList";
+import * as CMB from "../constants/RuleCombatManeuverList";
 
 export default {
     [SupportedLanguages.ENG]: {
@@ -20,7 +20,7 @@ export default {
                 `${v[0]} throws ${v[3]} at ${v[1]} ${v[2]} dealing ${v[4]} damage.`,
             [BUFFS.TOTAL_DEFENSE]: v =>
                 `${v[0]} enters total defence!`,
-            [CMB.GRAPPLE]: v =>
+            [CMB.NORMAL.GRAPPLE]: v =>
             `${v[0]} grapples ${v[1]} ( ${v[2]} ) and succeeds.`
         },
         [false]: {
@@ -32,7 +32,7 @@ export default {
                 `${v[0]} improvised attacks ${v[1]} ${v[2]} with ${v[3]} and misses.`,
             [ACTIONS.THROW_ATTACK]: v =>
                 `${v[0]} throws ${v[3]} at ${v[1]} ${v[2]} and misses.`,
-            [CMB.GRAPPLE]: v =>
+            [CMB.NORMAL.GRAPPLE]: v =>
                 `${v[0]} grapples ${v[1]} ( ${v[2]} ) and fails.`
         }
     }
