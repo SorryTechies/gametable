@@ -7,5 +7,4 @@ export interface GameCharacterBean {
     data: object;
     name: string;
     feats: object;
-    commandButtonLayout: Array<string>;
 }

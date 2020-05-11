@@ -236,6 +236,12 @@ export default class StaticController {
         RuleCharacterChangesBean.init();
     }
 
+    static saveLayout(unit) {
+        const message = new WebSocketMessage(WebSocketMessage.TYPE_LAYOUT_CHANGE);
+        message.data = unit.layoutToJson();
+        BrowserWebSocket.sendMessage(message);
+    }
+
     static finishRound() {
         round.finish();
         StaticController.sendBeans();

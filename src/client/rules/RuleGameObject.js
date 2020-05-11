@@ -30,7 +30,7 @@ export default class RuleGameObject {
         this.items = new RuleItemController(this);
         this.effects = new RuleEffectController(this);
         this.icon = "";
-        this.weapons = [];
+        this.commandButtonLayout = {};
 
         this.threatArea = new RuleReach(this);
         this.calculatedData = {};
@@ -145,6 +145,7 @@ export default class RuleGameObject {
         if (json.character_id) obj.character_id = json.character_id;
         if (Array.isArray(json.items)) obj.items = RuleItemController.fromJson(obj, json.items);
         if (Array.isArray(json.effects)) obj.effects = RuleEffectController.fromJson(obj, json.effects);
+        if (json.commandButtonLayout) obj.commandButtonLayout = json.commandButtonLayout;
         if (json.position) {
             const position = new RulePoint(json.position);
             obj.position = position;
@@ -167,5 +168,12 @@ export default class RuleGameObject {
 
     hasFeat(key) {
         return this.ruleCharacter.hasFeat(key);
+    }
+
+    layoutToJson() {
+        return {
+            _id: this.id,
+            commandButtonLayout: this.commandButtonLayout
+        };
     }
 }

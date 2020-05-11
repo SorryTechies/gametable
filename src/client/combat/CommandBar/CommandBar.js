@@ -1,19 +1,19 @@
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import CommandButton from "./CommandButton";
+import CommandButtonAdditional from "./CommandButtonAdditional";
 
-const BUTTON_AMOUNT = 9;
+const BUTTON_AMOUNT = 4;
 
 export default class CommandBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {arr: []};
-        for (let i = 0; i < BUTTON_AMOUNT; i++) this.state.arr.push("");
-    }
-
     render() {
+        const buttons = [];
+        for (let i = 0; i < BUTTON_AMOUNT; ++i) {
+            buttons.push(<CommandButton key={i} index={i} actionList={this.props.actionList}/>);
+        }
         return <div>
-            {this.state.arr.map((key, index) => <CommandButton key={index} actionKey={key} actionList={this.props.actionList}/>)}
+            {buttons}
+            <CommandButtonAdditional index={BUTTON_AMOUNT} actionList={this.props.actionList}/>
         </div>
     }
 }

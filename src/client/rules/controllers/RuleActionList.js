@@ -132,8 +132,6 @@ export default class RuleActionList {
         if (canAttack(this)) CONST.ATTACK_ACTIONS.forEach(ans.add, ans);
         if (this.canDoMoveAction || this.canDoStandardAction) CONST.MOVE_ACTIONS.forEach(ans.add, ans);
         if (this.canDoSwiftAction) CONST.SWIFT_ACTION.forEach(ans.add, ans);
-        if (this.gameObject.hasBuff(BUFFS.GRAPPLING)) SUPP.GRAPPLING_MOVES.forEach(ans.add, ans);
-        if (this.gameObject.hasBuff(BUFFS.GRAPPLED)) SUPP.GRAPPLED_MOVES.forEach(ans.add, ans);
         return Array.from(ans).filter(filterActionByKey.bind(null, this));
     }
 

@@ -3,9 +3,9 @@ import * as PropTypes from "prop-types";
 import rootScss from '../../../scss/root.scss';
 import {getButtonState} from "./CommandButtonByKey";
 import FloatElement from "../../popup/FloatElement";
+import ACTIONS from "../../rules/constants/RuleActionsConstants";
 import StaticClicker from "../../static/StaticClicker";
-import ActionSelector from "../ActionSelector/ActionSelector";
-import StaticController from "../../static/StaticController";
+import CustomSelectWithFavorite from "../CustomSelect/CustomSelectWithFavorite";
 
 export default class CommandButton extends React.Component {
     constructor(props) {
@@ -24,9 +24,6 @@ export default class CommandButton extends React.Component {
     }
 
     onMouseClicked(event) {
-        if (this.clickBlock) {
-            setTimeout(() => this.clickBlock = false, 100);
-        }
         if (this.state.float && !this.clickBlock && !event.target.closest(`.${rootScss.floatElement}`)) {
             this.setState({float: null});
         }
@@ -44,9 +41,13 @@ export default class CommandButton extends React.Component {
         this.setState({float: null});
     }
 
+    onSelected(value) {
+        // TODO save changed value
+        this.clearFloat();
+    }
+
     onSavedChanged(newLayout) {
         this.props.actionList.gameObject.commandButtonLayout[this.props.index] = newLayout;
-        StaticController.saveLayout(this.props.actionList.gameObject)
         this.clearFloat();
         this.forceUpdate();
     }
@@ -55,10 +56,11 @@ export default class CommandButton extends React.Component {
         const fav = this.props.actionList.gameObject.commandButtonLayout[this.props.index];
         this.setState({
             float: <div id={this.id}><FloatElement element={
-                <ActionSelector
-                    currentlySelected={fav}
-                    actionList={this.props.actionList}
-                    onSelectComplete={this.onSavedChanged.bind(this)}/>
+                <CustomSelectWithFavorite
+                    values={Object.values(ACTIONS)}
+                    onSelected={this.onSelected.bind(this)}
+                    favorite={fav}
+                    onFavoriteChange={this.onSavedChanged.bind(this)}/>
             }/></div>
         });
     }
@@ -74,6 +76,7 @@ export default class CommandButton extends React.Component {
 
     onActionUp(action) {
         // Blocker for first mUp
+        setTimeout(() => this.clickBlock = false, 100);
         if (typeof this.timeout === "number") {
             this.clear();
         }

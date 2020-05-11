@@ -1,7 +1,14 @@
 import CONST from "../../rules/constants/RuleActionsConstants";
 import TranslationModule from "../../rules/translation/TranslationModule";
 
+const NO_SELECTION = "no_selection";
+
 const state = {
+    [NO_SELECTION]: {
+        icon: "/icons/defaultButtonIcon.png",
+        name: "No action selected",
+        action: null
+    },
     [CONST.MOVE]: {
 
     }
@@ -23,12 +30,18 @@ function getNew(key) {
 }
 
 /**
- * @param {string} key
+ * @param {ButtonLayoutBean} layout
  * @return {CommandButtonState}
  */
-export function getButtonState(key) {
-    const def = getNew(key);
-    const s = state[key];
-    if (s) Object.keys(s).forEach(k => def[k] = s[k]);
-    return def;
+export function getButtonState(layout) {
+    if (layout && layout.key) {
+        let final = layout;
+        if (final.next) final = final.next;
+        const def = getNew(final.key);
+        const s = state[final.key];
+        if (s) Object.keys(s).forEach(k => def[k] = s[k]);
+        return def;
+    } else {
+        return getNew(NO_SELECTION);
+    }
 }

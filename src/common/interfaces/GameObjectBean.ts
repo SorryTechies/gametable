@@ -1,6 +1,7 @@
 /**
  * Created by LastBerserk on 02.02.2020.
  */
+import ButtonLayoutBean from "./ButtonLayoutBean";
 
 export interface GameObjectBean {
     _id: string;
@@ -13,5 +14,6 @@ export interface GameObjectBean {
     effects: Array<object>;
     spells: Array<string>
     items: Array<object>;
+    commandButtonLayout: object;
     icon: string;
 }

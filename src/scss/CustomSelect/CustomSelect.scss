@@ -1,0 +1,21 @@
+.customSelect {
+  background-color: antiquewhite;
+  border: bisque;
+  box-shadow: black 1px 1px 5px;
+  overflow-y: auto;
+  max-height: 500px;
+  padding-left: 10px;
+}
+
+.customSelectOption {
+  margin: 5px 10px;
+  line-height: 22px;
+  font-size: 22px;
+  display: flex;
+  justify-content: right;
+
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}

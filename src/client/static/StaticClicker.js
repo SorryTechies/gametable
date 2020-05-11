@@ -5,7 +5,6 @@
 let subscribers = [];
 
 export default class StaticClicker {
-
     static handleClick(event) {
         subscribers.forEach(obj => obj.func(event));
     }
