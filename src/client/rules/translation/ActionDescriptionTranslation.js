@@ -21,7 +21,20 @@ export default {
             [BUFFS.TOTAL_DEFENSE]: v =>
                 `${v[0]} enters total defence!`,
             [CMB.GRAPPLE]: v =>
-            `${v[0]} grapples ${v[1]} ( ${v[2]} ) and succeeds.`
+            `${v[0]} grapples ${v[1]} ( ${v[2]} ) and succeeds.`,
+            //russland
+           /* [ACTIONS.MELEE_ATTACK]: v =>
+                `${v[0]} бьет ${v[1]} ${v[2]} с ${v[3]} и наносит ${v[4]} урона.`,
+            [ACTIONS.RANGED_ATTACK]: v =>
+                `${v[0]} стреляет ${v[1]} ${v[2]} из ${v[3]} и наносит ${v[4]} урона.`,
+            [ACTIONS.IMPROVISED_ATTACK]: v =>
+                `${v[0]} атакует ${v[1]} ${v[2]} с ${v[3]} и наносит ${v[4]} урона.`,
+              [ACTIONS.THROW_ATTACK]: v =>
+                `${v[0]} метает ${v[3]} в ${v[1]} ${v[2]} и наносит ${v[4]} урона.`,
+            [BUFFS.TOTAL_DEFENSE]: v =>
+                `${v[0]} активировал защитную стойку`,
+              [CMB.GRAPPLE]: v =>
+            `${v[0]} успешно проводит захват(еее борцуха) ${v[1]} ( ${v[2]} )`*/
         },
         [false]: {
             [ACTIONS.MELEE_ATTACK]: v =>
@@ -33,7 +46,18 @@ export default {
             [ACTIONS.THROW_ATTACK]: v =>
                 `${v[0]} throws ${v[3]} at ${v[1]} ${v[2]} and misses.`,
             [CMB.GRAPPLE]: v =>
-                `${v[0]} grapples ${v[1]} ( ${v[2]} ) and fails.`
-        }
+                `${v[0]} grapples ${v[1]} ( ${v[2]} ) and fails.`,
+            //rusland
+            /*[ACTIONS.MELEE_ATTACK]: v =>
+                `${v[0]}бьет ${v[1]} ${v[2]} с ${v[3]} , но промахивается.`,
+            [ACTIONS.RANGED_ATTACK]: v =>
+                `${v[0]} стреляет ${v[1]} ${v[2]} из ${v[3]}, но промахивается.`,
+             [ACTIONS.IMPROVISED_ATTACK]: v =>
+                `${v[0]} атакует ${v[1]} ${v[2]} с ${v[3]}, но промахивается.`,
+             [ACTIONS.THROW_ATTACK]: v =>
+                `${v[0]}метает ${v[3]} в ${v[1]} ${v[2]}, но промахивается.`,
+            [CMB.GRAPPLE]: v =>
+                `${v[0]} не смог схватить ${v[1]} ( ${v[2]} ).`*/
+         }
     }
 }
