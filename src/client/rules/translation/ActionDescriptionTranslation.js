@@ -38,7 +38,7 @@ export default {
          }
     }
   //russland suc
-  /*  [SupportedLanguages.RUS]: {
+  /*  [SupportedLanguages.RU]: {
         [true]: {
             [ACTIONS.MELEE_ATTACK]: v =>
                 `${v[0]} бьет ${v[1]} ${v[2]} с ${v[3]} и наносит ${v[4]} урона.`,
