@@ -6,7 +6,7 @@ function getAdditional(obj) {
         if (obj.isItem) {
             // TODO item translation
             let str = obj.key;
-            if (obj.damageType) str += " " + TranslationModule.getDamageTypeTranslation(obj.damageType);
+            if (typeof obj.damageType === "number") str += " " + TranslationModule.getDamageTypeTranslation(obj.damageType);
             return str;
         } else {
             return obj.key;
@@ -40,6 +40,6 @@ export function getKeyForTranslation(action) {
         case RuleActionsConstants.SPECIAL:
             return action.additional1;
         default:
-            action.key;
+            return action.key;
     }
 }

@@ -347,6 +347,13 @@ export default class StaticController {
     static pushChatMessage(message) {
         pushMessage(message);
     }
+
+    static getItem(id) {
+        for (let i = 0; i < objects.length; ++i) {
+            const item = objects[i].items.getByID(id);
+            if (item) return item;
+        }
+    }
 }
 
 TranslationModule.setLanguage(SupportedLanguages.ENG);

@@ -170,7 +170,7 @@ export default class RuleActionList {
                 }
                 if (isConsecutive) {
                     ++attacksCount;
-                    action.consecutiveActionPenalty += attacksCount * 5;
+                    if (!action.performerObject.hasFeat(FEATS.STARTOSS_COMET)) action.consecutiveActionPenalty += attacksCount * 5;
                 }
             }
         });

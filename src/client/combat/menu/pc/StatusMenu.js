@@ -191,7 +191,7 @@ export default class StatusMenu extends React.Component {
         const canControl = LoginController.isDM() || StaticController.isMyCharacter(unit.character_id);
         return <div className={`${rootScss.static_element} ${rootScss.combat_menu}`}>
             {unit.name}
-            {canControl ? <CommandBar actionList={this.props.actionList}/> : null}
+            {canControl ? this.renderSelectors() : null}
             <ActionBar actionList={this.props.actionList} onDelete={this.props.onActionDelete} isMine={canControl}/>
         </div>
     }

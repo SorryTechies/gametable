@@ -44,7 +44,13 @@ function actionKeyToTarget(key) {
 }
 
 function getJSON(obj) {
-    return obj && typeof obj.toJson === "function" ? obj.toJson() : obj;
+    if (obj && typeof obj.toJson === "function") {
+        const json = obj.toJson();
+        if (obj.isItem) json.isItem = obj.isItem;
+        return json;
+    } else {
+        return obj;
+    }
 }
 
 export default class RuleAction {
@@ -166,7 +172,15 @@ export default class RuleAction {
             default:
                 obj.setTarget(obj.targetType, json.target);
         }
-        if (json.additional1) obj.additional1 = json.additional1;
+        if (json.additional1) {
+            if (json.additional1.isItem) {
+                const item = RuleLoader.getLoader().getItem(json.additional1.id);
+                if (!item) throw new Error("Item not found in session.");
+                obj.additional1 = item;
+            } else {
+                obj.additional1 = json.additional1;
+            }
+        }
         if (json.additional2) obj.additional2 = json.additional2;
         if (json.consecutiveAction) obj.consecutiveAction = json.consecutiveAction;
         obj.consumeMoveSlot = json.consumeMoveSlot;

@@ -49,11 +49,11 @@ export const statCalc = gm => {
         return mod < 0 ? Math.floor(mod) : Math.floor(mod);
     };
     const size = gm.get(CONST.SIZE);
-    gm.set(CONST.STAT_STRENGTH, gm.get(CONST.STAT_STRENGTH) + 2);
-    gm.set(CONST.STAT_DEXTERITY, gm.get(CONST.STAT_DEXTERITY) - 2);
+    const str = (gm.get(CONST.STAT_STRENGTH) + 2) * size;
+    const dex = (gm.get(CONST.STAT_STRENGTH) - 2) * size;
 
-    gm.set(CONST.MOD_STRENGTH, calcStats(gm.get(CONST.STAT_STRENGTH)));
-    gm.set(CONST.MOD_DEXTERITY, calcStats(gm.get(CONST.STAT_DEXTERITY)));
+    gm.set(CONST.MOD_STRENGTH, calcStats(gm.get(CONST.STAT_STRENGTH) + str));
+    gm.set(CONST.MOD_DEXTERITY, calcStats(gm.get(CONST.STAT_DEXTERITY) + dex));
     gm.set(CONST.MOD_CONSTITUTION, calcStats(gm.get(CONST.STAT_CONSTITUTION)));
     gm.set(CONST.MOD_INTELLIGENCE, calcStats(gm.get(CONST.STAT_INTELLIGENCE)));
     gm.set(CONST.MOD_WISDOM, calcStats(gm.get(CONST.STAT_WISDOM)));
@@ -108,8 +108,8 @@ export const skillCalc = gm => {
     gm.set(CONST.SKILL_RANKS, gm.get(CONST.SKILL_RANKS_PER_LEVEL) * gm.get(CONST.LEVEL));
 
     const getSkillModifier = key => {
-        if (SKILL_CONST.SKILLS_STR.includes(key)) return gm.get(CONST.MOD_STRENGTH) + gm.get(CONST.ARMOR_PENALTY);
-        if (SKILL_CONST.SKILLS_DEX.includes(key)) return gm.get(CONST.MOD_DEXTERITY) + gm.get(CONST.ARMOR_PENALTY);
+        if (SKILL_CONST.SKILLS_STR.includes(key)) return gm.get(CONST.MOD_STRENGTH) - gm.get(CONST.ARMOR_PENALTY);
+        if (SKILL_CONST.SKILLS_DEX.includes(key)) return gm.get(CONST.MOD_DEXTERITY) - gm.get(CONST.ARMOR_PENALTY);
         if (SKILL_CONST.SKILLS_INT.includes(key)) return gm.get(CONST.MOD_INTELLIGENCE);
         if (SKILL_CONST.SKILLS_WIS.includes(key)) return gm.get(CONST.MOD_WISDOM);
         if (SKILL_CONST.SKILLS_CHA.includes(key)) return gm.get(CONST.MOD_CHARISMA);

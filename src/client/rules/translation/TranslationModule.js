@@ -6,7 +6,6 @@ import SupportedLanguages from "./SupportedLanguages";
 import FeatsTranslation from "./FeatsTranslation";
 import ActionDescriptionTranslation from "./ActionDescriptionTranslation";
 import ActionTranslation from "./ActionTranslation";
-import {sendDescription} from "../RuleLoader";
 import SkillTranslation from "./SkillTranslation";
 import DamageTypeTranslation from "./DamageTypeTranslation";
 
@@ -73,16 +72,17 @@ export default class TranslationModule {
      * @return {string}
      */
     static getActionTranslation(key, args) {
-        let func =  ActionDescriptionTranslation[currentLanguage][key];
+        let func = ActionDescriptionTranslation[currentLanguage][args[0]][key];
         if (typeof func !== "function") return key;
+        args.splice(0, 1);
         return func(args);
     }
 
     static getDamageTypeTranslation(damageType) {
-        const str =  DamageTypeTranslation[currentLanguage][damageType];
+        const str = DamageTypeTranslation[currentLanguage][damageType];
         if (str) {
             return str;
-        }  else {
+        } else {
             return damageType;
         }
     }
