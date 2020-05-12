@@ -36,9 +36,9 @@ export default {
             [CMB.GRAPPLE]: v =>
                 `${v[0]} grapples ${v[1]} ( ${v[2]} ) and fails.`
          }
-    }
+    },
   //russland suc
-  /*  [SupportedLanguages.RU]: {
+    [SupportedLanguages.RU]: {
         [true]: {
             [ACTIONS.MELEE_ATTACK]: v =>
                 `${v[0]} бьет ${v[1]} ${v[2]} с ${v[3]} и наносит ${v[4]} урона.`,
@@ -66,5 +66,5 @@ export default {
             [CMB.GRAPPLE]: v =>
                 `${v[0]} не смог схватить ${v[1]} ( ${v[2]} ).`
          }
-    }*/
+    }
 }
