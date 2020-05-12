@@ -17,7 +17,7 @@ export default {
         [RuleActionConstants.THROW_ATTACK]: "Throw",
         [RuleActionConstants.COMBAT_MANEUVERS]: "Combat Maneuvers",
         [RuleActionConstants.IMPROVISED_ATTACK]: "Improvised attack",
-    }/*,
+    },
        [SupportedLanguages.RU]: {
         [RuleActionConstants.ACTIVATE_STATE]: "Войти в защитную стойку",
         [RuleActionConstants.DEACTIVATE_STATE]: "Выйти из стойки",
@@ -29,5 +29,5 @@ export default {
         [RuleActionConstants.THROW_ATTACK]: "Метнуть",
         [RuleActionConstants.COMBAT_MANEUVERS]: "Боевые маневры",// is it f** normal?
         [RuleActionConstants.IMPROVISED_ATTACK]: "Импровизированная атака"
-       }*/
+       }
 }
