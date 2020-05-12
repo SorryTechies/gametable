@@ -1,7 +1,6 @@
 /**
  * Created by LastBerserk on 17.01.2020.
  */
-//vatan huilo
 
 import CONST from "../constants/RuleStatConstants";
 import SKILL_CONST from "../constants/RuleSkillsStatConstants";

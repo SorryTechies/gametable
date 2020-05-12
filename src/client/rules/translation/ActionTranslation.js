@@ -19,15 +19,15 @@ export default {
         [RuleActionConstants.IMPROVISED_ATTACK]: "Improvised attack",
     },
        [SupportedLanguages.RU]: {
-        [RuleActionConstants.ACTIVATE_STATE]: "Войти в защитную стойку",
-        [RuleActionConstants.DEACTIVATE_STATE]: "Выйти из стойки",
-        [RuleActionConstants.CAST_SPELL]: "Читает заклинание",
-        [RuleActionConstants.TOTAL_DEFENCE]: "Глухая оборона,
+        [RuleActionConstants.ACTIVATE_STATE]: "Актевировать состояние",
+        [RuleActionConstants.DEACTIVATE_STATE]: "Деактивировать состояние",
+        [RuleActionConstants.CAST_SPELL]: "Применить заклинание",
+        [RuleActionConstants.TOTAL_DEFENCE]: "Глухая оборона",
         [RuleActionConstants.FIVE_FOOT_STEP]: "5-футовый шаг",
         [RuleActionConstants.MELEE_ATTACK]: "Атака в ближнем бою",
         [RuleActionConstants.RANGED_ATTACK]: "Атака в дальнем бою",
         [RuleActionConstants.THROW_ATTACK]: "Метнуть",
-        [RuleActionConstants.COMBAT_MANEUVERS]: "Боевые маневры",// is it f** normal?
+        [RuleActionConstants.COMBAT_MANEUVERS]: "Боевые маневры",
         [RuleActionConstants.IMPROVISED_ATTACK]: "Импровизированная атака"
        }
 }
