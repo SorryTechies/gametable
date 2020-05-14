@@ -45,7 +45,7 @@ export default class CharacterRow extends React.Component {
     render() {
         return <tr onClick={this.getOnClick()}>
             <CharacterField value={this.props.displayName}/>
-            <CharacterField value={this.props.finalValue}/>
+            {typeof this.props.finalValue === "number" ? <CharacterField value={this.props.finalValue}/> : null}
             {this.getModifiable()}
         </tr>;
     }
@@ -53,7 +53,7 @@ export default class CharacterRow extends React.Component {
 
 CharacterRow.propTypes = {
     displayName: PropTypes.string.isRequired,
-    finalValue: PropTypes.number.isRequired,
+    finalValue: PropTypes.number,
     modifiedValue: PropTypes.number.isRequired,
     onSave: PropTypes.func.isRequired,
     onClick: PropTypes.func

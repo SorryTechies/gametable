@@ -87,4 +87,8 @@ export default class RuleCharacterChangesBean {
     static init() {
         beans = [];
     }
+
+    static createStandaloneModification(id, mod) {
+        return {id: id, mod: mod};
+    }
 }

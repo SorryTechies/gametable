@@ -3,29 +3,33 @@
  */
 
 import * as React from "react";
-import CharacterListPage from "./CharacterListPage";
-import TranslationModule from "../../rules/translation/TranslationModule";
 import StaticController from "../../static/StaticController";
 import BrowserWebSocket from "../../logic/ws/BrowserWebSocket";
 import WebSocketMessage from "../../../common/logic/WebSocketMessage";
-import FeatsPopup from "./list/FeatsPopup";
+import CONST from "../../rules/constants/RuleGameObjectConstants";
+import RuleCharacterChangesBean from "../../rules/RuleCharacterChangesBean";
+import RuleGameObject from "../../rules/RuleGameObject";
+import GameObjectPage from "./GameObjectPage";
+
+const KEY_ARRAY = [CONST.MONEY];
 
 export default class CharacterItemList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             /** @type {RuleGameObject} */
-            unit: StaticController.getObjectByCharacter(StaticController.getMyCharacter()),
-            popup: false
+            gameObject: StaticController.getObjectByCharacter(StaticController.getMyCharacter()),
+            popup: false,
         };
     }
 
-    sendUpdateMessage() {
-        BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_OBJECT, [{
-            _id: this.state.unit.id,
-            items: this.state.unit.items.items.map()
-        }]));
-        this.forceUpdate();
+    sendBean(mod) {
+        BrowserWebSocket.sendMessage(new WebSocketMessage(WebSocketMessage.TYPE_OBJECT,
+            [RuleCharacterChangesBean.createStandaloneModification(this.state.gameObject.id, mod)]));
+    }
+
+    modifyItem() {
+
     }
 
     onDelete(item) {
@@ -48,13 +52,9 @@ export default class CharacterItemList extends React.Component {
     }
 
     render() {
-        if (!this.state.character) return null;
+        if (!this.state.gameObject) return null;
         return <div>
-            <CharacterListPage onDelete={this.onDelete.bind(this)}
-                               list={this.state.character}
-                               onCreate={this.onAdd.bind(this)}/>
-            {this.state.popup ? <FeatsPopup onPicked={this.onFeatAdd.bind(this)}
-                                            onClose={this.onClose.bind(this)}/> : null}
+            <GameObjectPage rows={KEY_ARRAY}/>
         </div>
     }
 }

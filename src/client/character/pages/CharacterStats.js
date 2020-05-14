@@ -7,7 +7,6 @@ import CONST from "../../rules/constants/RuleStatConstants";
 import CharacterPage from "./CharacterPage";
 
 const KEY_ARRAY = [
-    {stat: CONST.MONEY, mod: CONST.MONEY},
     {stat: CONST.STAT_STRENGTH, mod: CONST.MOD_STRENGTH},
     {stat: CONST.STAT_DEXTERITY, mod: CONST.MOD_DEXTERITY},
     {stat: CONST.STAT_CONSTITUTION, mod: CONST.MOD_CONSTITUTION},

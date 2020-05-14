@@ -11,6 +11,7 @@ import CharacterDefense from "./pages/CharacterDefense";
 import CharacterOffense from "./pages/CharacterOffense";
 import CharacterSkills from "./pages/CharacterSkills";
 import CharacterFeatsList from "./pages/CharacterFeatsList";
+import CharacterItemList from "./pages/CharacterItemList";
 
 const MENUS = {
     "basic": <div>
@@ -38,6 +39,10 @@ const MENUS = {
     "feats": <div>
         <h3>States</h3>
         <CharacterFeatsList/>
+    </div>,
+    "items": <div>
+        <h3>Items</h3>
+        <CharacterItemList/>
     </div>
 };
 

@@ -73,6 +73,14 @@ export default class RuleGameObject {
         }
     }
 
+    setData(key, val) {
+        this.data[key] = val;
+    }
+
+    getData(key) {
+        return this.data[key];
+    }
+
     addModification(key, val) {
         if (key === "_id" || key === "id") return;
         if (typeof this.data[key] === "number") {

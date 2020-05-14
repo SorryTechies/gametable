@@ -89,6 +89,5 @@ export default {
     WEAPON_PROFICIENCY: "w_prof",
     ARMOR_PROFICIENCY: "a_prof",
 
-    LOAD: "load",
-    MONEY: "money",
+    LOAD: "load"
 };
