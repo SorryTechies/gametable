@@ -3,9 +3,9 @@
  */
 
 import RuleWearSlots from "./const/RuleWearSlots";
-import RuleConstants from "../constants/RuleStatConstants";
-import {unequipBuff, equipBuff} from "./RuleItemImpl";
+import {equipBuff} from "./RuleItemImpl";
 import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
+import RuleState from "../RuleState";
 
 function getSlotObject() {
     return Object.values(RuleWearSlots).reduce((acc, slot) => {
@@ -40,17 +40,19 @@ export default class RuleItemSlots {
             if (!isHandSlot(slot) && !item.allowedSlots.includes(slot))
                 throw new Error("This item cannot be equipped in this slot.");
         } else {
-            if (!isHandSlot(slot))throw new Error("This item cannot be equipped.");
+            if (!isHandSlot(slot)) throw new Error("This item cannot be equipped.");
         }
         item.slot = slot;
         this.slots[slot] = item;
     }
 
-    equipDM(item, slot) {
-        if (item.isWearable && item.allowedSlots.includes(slot)) equipBuff(this.gameObject, item);
+    equipDM(action) {
+        if (action.targetItem.isWearable && action.targetItem.allowedSlots.includes(action.additional1)) {
+            RuleState.itemBuffImpl(action);
+        }
         this.gameObject.recalculate();
-        if (isHandSlot(slot)) this.gameObject.threatArea.calculate(item.reach);
-        RuleCharacterChangesBean.addItemModification(this.gameObject, item.toJson());
+        if (isHandSlot(action.additional1)) this.gameObject.threatArea.calculate(action.targetItem.reach);
+        RuleCharacterChangesBean.addItemModification(this.gameObject, action.targetItem.toJson());
     }
 
 
@@ -63,7 +65,7 @@ export default class RuleItemSlots {
     }
 
     unequipDM(item, slot) {
-        unequipBuff(this.gameObject, item);
+        this.gameObject.buffs.removeDmByKey(item.key);
         this.gameObject.recalculate();
         if (isHandSlot(slot)) this.gameObject.threatArea.calculate();
         RuleCharacterChangesBean.addItemModification(this.gameObject, item.toJson());

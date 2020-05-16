@@ -26,14 +26,14 @@ EXPRESS_SERVER.use(async (req, res, next) => {
         if (excludePublicPaths(req.path)) return next();
         const login = req.headers[Headers.LOGIN_HEADER.toLowerCase()];
         const sessionID = req.headers[Headers.X_SESSION_HEADER.toLowerCase()];
-        if (!login) throw new Error("Unauthorized.");
+        if (!login) throw new Error("No login provided.");
         const user = await AccountDB.getByUsername(login);
-        if (!user) throw new Error("Unauthorized.");
+        if (!user) throw new Error("No user found in database.");
         req.access = user;
         if (sessionID) req.session = await GameSessionDB.getById(sessionID);
         next();
     } catch (e) {
         console.error(e);
-        res.status(401).send({error: "No such login found."});
+        res.status(401).send({error: "Unauthorized."});
     }
 });

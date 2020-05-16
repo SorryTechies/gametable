@@ -32,7 +32,7 @@ export default class CombatWindow extends React.Component {
         /** @type RuleActionList */
         this.selectedActionList = null;
         this.state = {
-            /** @type SessionMap */
+            /** @type SessionMapBean */
             map: null,
             objects: [],
             /** @type RuleGameObject */
@@ -119,6 +119,7 @@ export default class CombatWindow extends React.Component {
                 this.state.clickRuleAction.setTarget(TARGET_TYPE.UNIT, unit);
                 this.clearAim(this.state.clickRuleAction);
             } catch (ignored) {
+                console.warn(ignored);
                 PopupManager.push("Нужно указать свободную клетку.");
             }
         } else {

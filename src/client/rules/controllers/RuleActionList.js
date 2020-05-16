@@ -48,7 +48,7 @@ function setTriggers(list, action) {
                 action.consumeMoveSlot = true;
             }
             ++list.attacks;
-            if (action.additional1.twoHanded) list.twoWeaponAttack = false;
+            if (action.additional1 && action.additional1.twoHanded) list.twoWeaponAttack = false;
             break;
 
     }

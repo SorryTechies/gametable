@@ -1,3 +1,5 @@
+import RuleCharacterChangesBean from "./RuleCharacterChangesBean";
+
 /**
  * Created by LastBerserk on 17.01.2020.
  */
@@ -20,6 +22,16 @@ export default class RuleBuff {
         this.effects = [];
         /** @type RuleGameObject */
         this.gameObject = null;
+    }
+
+    end() {
+        this.gameObject.effects.removeForBuff(this.key);
+        this.onEnd(this);
+    }
+
+    start() {
+        this.onCreate(this);
+        this.gameObject.effects.addArr(this.effects);
     }
 
     setTarget(gameObject) {
@@ -55,7 +67,6 @@ export default class RuleBuff {
         buff.setTarget(obj);
         return buff;
     }
-
 }
 
 RuleBuff.EMPTY_FUNCTION = () => {};

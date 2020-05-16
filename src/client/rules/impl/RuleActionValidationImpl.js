@@ -45,6 +45,7 @@ export const fiveFootValidation = action => {
 export const attackValidation = action => {
     /** @type {RuleWeapon} */
     const item = action.additional1;
+    if (!item) return touchCheck(action);
     if (!item.isRanged) {
         if (item.reach) {
             reachValidation(action);

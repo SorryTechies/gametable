@@ -4,6 +4,7 @@
 
 import RuleEffect from "../buff/RuleEffect";
 import RuleEffectTypeConstants from "../constants/RuleEffectTypeConstants";
+import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
 
 export default class RuleEffectController {
     constructor(obj) {
@@ -14,15 +15,31 @@ export default class RuleEffectController {
 
     add(effect) {
         this.arr.push(effect);
+        RuleCharacterChangesBean.addEffectModification(this.gameObject, effect.toJson());
+    }
+
+    addArr(effects) {
+        effects.forEach(this.add.bind(this));
     }
 
     remove(effect) {
         const index = this.arr.findIndex(item => item.key === effect.key && item.buffKey === effect.buffKey);
-        if (index !== -1) this.arr.splice(index, 1);
+        if (index !== -1) {
+            this.arr.splice(index, 1);
+            RuleCharacterChangesBean.addEffectModification(this.gameObject, effect.toJson(true));
+        }
     }
 
     removeForBuff(buffKey) {
-        this.arr = this.arr.filter(item => item.buffKey !== buffKey);
+        this.arr = this.arr.filter(item => {
+            if (item.buffKey === buffKey) {
+                RuleCharacterChangesBean.addEffectModification(this.gameObject, item.toJson(true));
+                return false;
+            } else {
+                return true;
+            }
+        });
+
     }
 
     getBonus(key) {
@@ -50,5 +67,9 @@ export default class RuleEffectController {
         const controller = new RuleEffectController(obj);
         if (Array.isArray(json))  controller.arr = json.map(RuleEffect.fromJson);
         return controller;
+    }
+
+    getEffectsForBuff(buff) {
+        return this.arr.filter(eff => eff.buffKey === buff.key);
     }
 }

@@ -143,7 +143,7 @@ export default class StatusMenu extends React.Component {
             case CONST.MELEE_ATTACK:
                 return this.renderAction(val1 => {
                     if (val1 === RuleWeaponConstants.UNARMED_STRIKE) {
-                        this.action.additional1 = RuleWeapon.generateUnarmed(val1);
+                        this.action.additional1 = null;
                     } else {
                         this.action.additional1 = val1;
                     }
@@ -151,19 +151,7 @@ export default class StatusMenu extends React.Component {
                 });
             case CONST.RANGED_ATTACK:
             case CONST.IMPROVISED_ATTACK:
-                return this.renderAction(val1 => {
-                    this.action.additional1 = RuleWeapon.generateImprovised(val1);
-                    return this.props.doAimAction(this.action);
-                });
             case CONST.THROW_ATTACK:
-                return this.renderAction(val1 => {
-                    if (val1.isWeapon) {
-                        this.action.additional1 = val1;
-                    } else {
-                        this.action.additional1 = RuleWeapon.generateImprovised(val1);
-                    }
-                    return this.props.doAimAction(this.action);
-                });
             case CONST.COMBAT_MANEUVERS:
             case CONST.CAST_SPELL:
             case CONST.ACTIVATE_STATE:

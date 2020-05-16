@@ -5,10 +5,12 @@
 import RuleBuff from "../RuleBuff";
 import RuleBuffToImpl from "../table/RuleBuffToImpl";
 import MalformedJsonError from "../../../common/type/MalformedJsonError";
+import RuleCharacterChangesBean from "../RuleCharacterChangesBean";
+import RuleState from "../RuleState";
 
 export default class RuleBuffController {
     constructor(gameObject) {
-        this.ruleCharacter = gameObject;
+        this.gameObject = gameObject;
         this.buffs = {};
         this.hasDispellable = false;
     }
@@ -19,7 +21,7 @@ export default class RuleBuffController {
 
     add(buff) {
         if (!buff instanceof RuleBuff) throw new Error("Object passed isn't buff.");
-        buff.ruleCharacter = this.ruleCharacter;
+        buff.gameObject = this.gameObject;
         this.buffs[buff.key] = buff;
         if (buff.dispellable) this.hasDispellable = true;
     }
@@ -29,9 +31,10 @@ export default class RuleBuffController {
         if (oldBuff) {
             oldBuff.onRenew(oldBuff);
         } else {
-            buff.onCreate(buff);
+            buff.start();
         }
         this.add(buff);
+        RuleCharacterChangesBean.addBuffModification(this.gameObject, buff.toJson());
     }
 
     getDispellableDebuffs() {
@@ -49,8 +52,9 @@ export default class RuleBuffController {
     }
 
     removeDM(buff) {
-        buff.onEnd(buff);
         this.remove(buff);
+        buff.end();
+        RuleCharacterChangesBean.addBuffModification(this.gameObject, buff.toJson(true));
     }
 
     removeDmByKey(key) {
@@ -76,7 +80,7 @@ export default class RuleBuffController {
     processJson(json) {
         if (typeof json !== "object") throw new MalformedJsonError();
         Object.values(json).forEach(obj => {
-            const buff = RuleBuff.fromJson(obj, this.ruleCharacter);
+            const buff = RuleBuff.fromJson(obj, this.gameObject);
             if (buff.duration === 0) {
                 this.remove(buff);
             } else {
@@ -87,8 +91,8 @@ export default class RuleBuffController {
 
     mountBuffs() {
         Object.values(this.buffs).forEach(buff => {
-            const impl = RuleBuffToImpl[buff.key];
-            if (typeof impl === "function") impl(buff);
+            RuleState.onBuffSetup(buff);
+            buff.effects = this.gameObject.effects.getEffectsForBuff(buff);
             if (buff.dispellable) buff.gameObject.buffs.hasDispellable = true;
         });
     }

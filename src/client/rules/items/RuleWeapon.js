@@ -9,6 +9,7 @@ import SLOTS from "./const/RuleWearSlots";
 import DamageDice from "../../logic/roll/DamageDice";
 import RuleWeaponProficiency from "../constants/RuleWeaponProficiency";
 import WEAPON from "./const/RuleWeaponConstants";
+import RuleItem from "./RuleItem";
 
 export default class RuleWeapon extends RuleWearable {
     constructor(key) {
@@ -40,10 +41,7 @@ export default class RuleWeapon extends RuleWearable {
 
     static fromJson(json) {
         const item = new RuleWeapon(json.key);
-        if (json.id) item.id = json.id;
-        if (json.damaged) item.damaged = json.damaged;
-        if (json.slot) item.slot = json.slot;
-        if (Array.isArray(json.additionalTags)) item.additionalTags = json.additionalTags;
+        RuleItem.setFromJson(item, json);
         return item;
     }
 

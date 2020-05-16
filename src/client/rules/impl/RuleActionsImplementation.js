@@ -12,7 +12,7 @@ export const doMove = action => {
     RuleCharacterChangesBean.addModification(action.performerId, "position", action.target);
 };
 
-export const doEquip = action => action.performerObject.items.slots.equipDM(action.targetItem, action.additional1);
+export const doEquip = action => action.performerObject.items.slots.equipDM(action);
 
 export function doUnequip(action) {
     action.performerObject.items.slots.unequipDM(action.targetItem, action.additional1);

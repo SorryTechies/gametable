@@ -61,9 +61,13 @@ function getImprovised(action) {
 
 function isProficient(action) {
     const weapon = action.additional1;
-    if (action.performerObject.hasWeaponProficiency(W_PROF.ALL)) return true;
-    return typeof weapon.proficiency !== "number" ||
-        action.performerObject.hasWeaponProficiency(weapon.proficiency);
+    if (weapon) {
+        if (action.performerObject.hasWeaponProficiency(W_PROF.ALL)) return true;
+        return typeof weapon.proficiency !== "number" ||
+            action.performerObject.hasWeaponProficiency(weapon.proficiency);
+    } else {
+        return action.performerObject.hasWeaponProficiency(W_PROF.UNARMED);
+    }
 }
 
 function checkProficiency(action, roll) {

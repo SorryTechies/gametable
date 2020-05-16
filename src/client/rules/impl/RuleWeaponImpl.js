@@ -18,6 +18,7 @@ import {pointBlankShotImpl} from "./RuleFeatsImpl";
 import STATS from "../constants/RuleStatConstants";
 import RuleWeaponTags from "../constants/RuleWeaponTags";
 import RuleDamageType from "../constants/RuleDamageType";
+import RuleWeapon from "../items/RuleWeapon";
 
 function flamingWeaponImpl(action) {
     const flamingRoll = new DamageDice();
@@ -47,16 +48,17 @@ function adjustDamageBonus(action, damageRoll) {
 }
 
 function doAttack(action) {
-    /** @type {RuleWeapon} */
+    if (!action.additional1) action.additional1 = RuleWeapon.generateUnarmed(action.performerObject);
+    /** @type {RuleWeapon|RuleItem} */
     const weapon = action.additional1;
     const damageRoll = new DamageDice();
     action.roll.nextDice.push(damageRoll);
     damageRoll.bonus = action.performerObject.get(STATS.MODIFIER_DAMAGE);
     damageRoll.name = weapon.key;
-    damageRoll.damageType = weapon.damageType;
     adjustDamageBonus(action, damageRoll);
     let damageDice;
     if (weapon.isWeapon) {
+        damageRoll.damageType = weapon.damageType;
         damageDice = RuleDamageToSizeTable.getDiceForSize(
             {amount: weapon.amountOfDice, dice: weapon.damageDie},
             action.performerObject.get(RuleConstants.SIZE));

@@ -62,10 +62,12 @@ const itemTable = {
     },
     [SHIELDS.SNARLSHIELD]: {
         maxHealth: 20,
+        weight: 20,
         hardeness: 10
     },
     [SHIELDS.DRAGON_SLAYER]: {
         maxHealth: 200,
+        weight: 45,
         proficiency: RuleArmorType.TOWER_SHIELD,
         hardeness: 10
     }
