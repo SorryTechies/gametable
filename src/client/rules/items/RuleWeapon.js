@@ -21,7 +21,6 @@ export default class RuleWeapon extends RuleWearable {
         this.range = 30;
         this.damageDie = 6;
         this.damageType = RuleDamageType.BLUDGEONING;
-        this.additionalTags = [];
         this.amountOfDice = 1;
         this.twoHanded = false;
         this.isThrown = false;
@@ -44,6 +43,7 @@ export default class RuleWeapon extends RuleWearable {
         if (json.id) item.id = json.id;
         if (json.damaged) item.damaged = json.damaged;
         if (json.slot) item.slot = json.slot;
+        if (Array.isArray(json.additionalTags)) item.additionalTags = json.additionalTags;
         return item;
     }
 

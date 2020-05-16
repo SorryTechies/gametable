@@ -73,6 +73,11 @@ function processItems(db, mod) {
                     } else {
                         delete dbItem.damaged ;
                     }
+                    if (Array.isArray(item.additionalTags) && item.additionalTags.length > 0) {
+                        dbItem.additionalTags = item.additionalTags;
+                    } else {
+                        delete dbItem.additionalTags;
+                    }
                 } else {
                     db.items.push(item);
                 }

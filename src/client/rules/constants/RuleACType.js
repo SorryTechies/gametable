@@ -7,5 +7,6 @@ export default {
     TOUCH: 1,
     FLAT_FOOTED: 2,
     FF_TOUCH: 3,
+    CMB: 4,
     PENETRATING: 5
 };

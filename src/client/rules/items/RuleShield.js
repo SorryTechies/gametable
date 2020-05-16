@@ -17,6 +17,7 @@ export default class RuleShield extends RuleWearable {
         if (json.id) item.id = json.id;
         if (json.damaged) item.damaged = json.damaged;
         if (json.slot) item.slot = json.slot;
+        if (Array.isArray(json.additionalTags)) item.additionalTags = json.additionalTags;
         return item;
     }
 }

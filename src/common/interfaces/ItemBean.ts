@@ -6,6 +6,7 @@ export interface ItemBean {
     id: string;
     key: string;
 
+    additionalTags?: Array<string>;
     toDelete?: boolean;
     damaged?: number;
     slot?: number;

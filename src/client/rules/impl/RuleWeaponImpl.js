@@ -16,6 +16,16 @@ import FEATS from "../constants/RuleFeatsConstants";
 import * as AttackImpl from "./RuleAttackImpl";
 import {pointBlankShotImpl} from "./RuleFeatsImpl";
 import STATS from "../constants/RuleStatConstants";
+import RuleWeaponTags from "../constants/RuleWeaponTags";
+import RuleDamageType from "../constants/RuleDamageType";
+
+function flamingWeaponImpl(action) {
+    const flamingRoll = new DamageDice();
+    flamingRoll.damageType = RuleDamageType.FIRE;
+    flamingRoll.name = "Flaming Weapon";
+    flamingRoll.canBeCritical = false;
+    action.roll.nextDice.push(flamingRoll);
+}
 
 function adjustDamageBonus(action, damageRoll) {
     /** @type {RuleWeapon} */
@@ -31,13 +41,19 @@ function adjustDamageBonus(action, damageRoll) {
             if (character.hasFeat(FEATS.STARTOSS_SHOWER)) damageRoll.bonus += 2;
         }
     }
+
+    // WEAPON EFFECTS IMPL
+    if (weapon.hasTag(RuleWeaponTags.FLAMING)) flamingWeaponImpl(action);
 }
 
 function doAttack(action) {
     /** @type {RuleWeapon} */
     const weapon = action.additional1;
     const damageRoll = new DamageDice();
+    action.roll.nextDice.push(damageRoll);
     damageRoll.bonus = action.performerObject.get(STATS.MODIFIER_DAMAGE);
+    damageRoll.name = weapon.key;
+    damageRoll.damageType = weapon.damageType;
     adjustDamageBonus(action, damageRoll);
     let damageDice;
     if (weapon.isWeapon) {
@@ -51,26 +67,9 @@ function doAttack(action) {
     }
     damageRoll.die = damageDice.dice;
     damageRoll.amountOfDices = damageDice.amount;
-    action.roll.nextDice.push(damageRoll);
     action.roll.roll();
-    switch (action.additional1.acType) {
-        case RuleACType.NORMAL:
-            acCheck(action);
-            break;
-        case RuleACType.TOUCH:
-            touchCheck(action);
-            break;
-        case RuleACType.FLAT_FOOTED:
-            flatFootedCheck(action);
-            break;
-        case RuleACType.FF_TOUCH:
-            flatFootedTouchCheck(action);
-            break;
-    }
-    if (action.isSuccessfull) {
-        action.targetObject.dealDamage(damageRoll.result, action.additional1.damageType);
-        RuleCharacterChangesBean.addDataModification(action.target, RuleGameObjectConstants.LETHAL_DAMAGE, damageRoll.result);
-    }
+    action.isSuccessfull = action.roll.passed(action.targetObject);
+    if (action.isSuccessfull) action.roll.nextDice.forEach(dd => action.targetObject.dealDamage(dd.result, dd.damageType));
     action.isExecuted = true;
     action.sendDescriptionText();
 }

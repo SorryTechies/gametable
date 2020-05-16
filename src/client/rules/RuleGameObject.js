@@ -13,6 +13,7 @@ import CheckDice from "../logic/roll/CheckDice";
 import RuleReach from "./objects/RuleReach";
 import RulePoint from "./objects/RulePoint";
 import CONST from "./constants/RuleStatConstants";
+import RuleCharacterChangesBean from "./RuleCharacterChangesBean";
 
 export default class RuleGameObject {
     constructor(id) {
@@ -100,11 +101,15 @@ export default class RuleGameObject {
     }
 
     dealDamage(val, type = RuleDamageType.BLUDGEONING, isNonLethal = false) {
+        let damage = val;
         if (isNonLethal) {
-            this.data[RuleGameObjectConstants.NONLETHAL_DAMAGE] += val;
+            this.data[RuleGameObjectConstants.NONLETHAL_DAMAGE] += damage;
+            RuleCharacterChangesBean.addDataModification(this.id, RuleGameObjectConstants.NONLETHAL_DAMAGE, damage);
         } else {
-            this.data[RuleGameObjectConstants.LETHAL_DAMAGE] += val;
+            this.data[RuleGameObjectConstants.LETHAL_DAMAGE] += damage;
+            RuleCharacterChangesBean.addDataModification(this.id, RuleGameObjectConstants.LETHAL_DAMAGE, damage);
         }
+
     }
 
     reset() {

@@ -4,5 +4,6 @@
 
 export default {
     BLOCKING: "blocking",
-    DISARM: "disarm"
+    DISARM: "disarm",
+    FLAMING: "flaming"
 };

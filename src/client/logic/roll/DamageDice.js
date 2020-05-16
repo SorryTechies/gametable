@@ -1,10 +1,12 @@
 /**
  * Created by LastBerserk on 15.12.2019.
  */
+import RuleDamageType from "../../rules/constants/RuleDamageType";
 
 const diceToStr = require("../../../common/const/StringUtils").diceToStr;
 
 import Dice from "./Dice";
+import TranslationModule from "../../rules/translation/TranslationModule";
 
 function fullFormula(self) {
     let result = self.result;
@@ -25,6 +27,7 @@ export default class DamageDice extends Dice {
         this.canBeCritical = true;
         this.criticalModifier = 2;
         this.amountOfDices = 1;
+        this.damageType = RuleDamageType.BLUDGEONING;
     }
 
     simpleRoll() {
@@ -47,8 +50,12 @@ export default class DamageDice extends Dice {
         return this;
     }
 
+    getDamageType() {
+        return TranslationModule.getDamageTypeTranslation(this.damageType);
+    }
+
     rollText() {
-        return `${this.result} ( ${this.amountOfDices}d${this.die}${this.getBonusText()} )`;
+        return `${this.name} ${this.result} ( ${this.amountOfDices}d${this.die}${this.getBonusText()} ${this.getDamageType()} )`;
     }
 
     generateForThisDice() {

@@ -60,11 +60,6 @@ export default class RuleCharacterChangesBean {
         target.addEffect(effect);
     }
 
-    static addDataModificationInstantly(obj, key, val) {
-        RuleCharacterChangesBean.addDataModification(obj.id, key, val);
-        obj.addModification(key, val);
-    }
-
     static addBuffModification(obj, buff) {
         const bean = getOrCreateBean(obj.id);
         if (!bean.mod.buffs) bean.mod.buffs = {};

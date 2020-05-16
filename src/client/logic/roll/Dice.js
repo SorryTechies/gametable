@@ -1,6 +1,7 @@
 /**
  * Created by LastBerserk on 15.12.2019.
  */
+import TranslationModule from "../../rules/translation/TranslationModule";
 
 export default class Dice {
     constructor() {

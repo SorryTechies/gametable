@@ -19,6 +19,7 @@ export default class RuleItem {
         this.isShield = false;
         this.isRanged = false;
         this.onUse = RuleItem.EMPTY_FUNC;
+        this.additionalTags = [];
 
         this.damaged = 0;
         this.slot = RuleWearSlots.NO;
@@ -26,6 +27,10 @@ export default class RuleItem {
 
     isEquipped() {
         return this.slot !== RuleWearSlots.NO;
+    }
+
+    hasTag(tag) {
+        return this.additionalTags.includes(tag);
     }
 
     /**
@@ -38,18 +43,25 @@ export default class RuleItem {
             key: this.key
         };
         if (this.damaged) obj.damaged = this.damaged;
+        if (this.additionalTags) obj.additionalTags = this.additionalTags;
         if (this.isEquipped()) obj.slot = this.slot;
         if (toDelete) obj.toDelete = toDelete;
         return obj;
     }
 
     static fromJson(json) {
-       const item = new RuleItem(json.key);
-       if (json.id) item.id = json.id;
-       if (json.damaged) item.damaged = json.damaged;
-       if (json.slot) item.slot = json.slot;
-       return item;
+        const item = new RuleItem(json.key);
+        RuleItem.setFromJson(item, json);
+        return item;
+    }
+
+    static setFromJson(item, json) {
+        if (json.id) item.id = json.id;
+        if (json.damaged) item.damaged = json.damaged;
+        if (json.slot) item.slot = json.slot;
+        if (Array.isArray(json.additionalTags)) item.additionalTags = json.additionalTags;
     }
 }
 
-RuleItem.EMPTY_FUNC = () => {};
+RuleItem.EMPTY_FUNC = () => {
+};

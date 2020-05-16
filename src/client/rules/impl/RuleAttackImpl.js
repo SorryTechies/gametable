@@ -4,10 +4,10 @@
 
 import CONST from "../constants/RuleStatConstants";
 import FEATS from "../constants/RuleFeatsConstants";
-import CheckDice from "../../logic/roll/CheckDice";
 import * as IMPL from "./RuleFeatsImpl";
 import {axeToGrindImpl} from "./RuleFeatsImpl";
 import W_PROF from "../constants/RuleWeaponProficiency";
+import AttackDice from "../../logic/roll/AttackDice";
 
 function getSimpleAttackBonus(action) {
     return action.performerObject.get(CONST.ATTACK_FLAT) - action.consecutiveActionPenalty;
@@ -53,6 +53,12 @@ function getThrowingAttack(action) {
     return bonus;
 }
 
+function getImprovised(action) {
+    const char = action.performerObject.ruleCharacter;
+    let bonus = getSimpleAttackBonus(action);
+    return bonus;
+}
+
 function isProficient(action) {
     const weapon = action.additional1;
     if (action.performerObject.hasWeaponProficiency(W_PROF.ALL)) return true;
@@ -65,7 +71,7 @@ function checkProficiency(action, roll) {
 }
 
 export function getRangedAttackRoll(action) {
-    const roll = new CheckDice();
+    const roll = new AttackDice();
     roll.name = "Ranged Attack";
     roll.bonus = getRangedAttack(action);
     checkProficiency(action, roll);
@@ -73,7 +79,7 @@ export function getRangedAttackRoll(action) {
 }
 
 export function getMeleeAttackImpl(action) {
-    const roll = new CheckDice();
+    const roll = new AttackDice();
     roll.name = "Melee Attack";
     roll.bonus = getMeleeAttack(action);
     checkProficiency(action, roll);
@@ -81,7 +87,7 @@ export function getMeleeAttackImpl(action) {
 }
 
 export function getThrowAttack(action) {
-    const roll = new CheckDice();
+    const roll = new AttackDice();
     roll.name = "Throw Attack";
     roll.bonus = getThrowingAttack(action);
     checkProficiency(action, roll);
@@ -89,9 +95,9 @@ export function getThrowAttack(action) {
 }
 
 export function getImprovisedAttack(action) {
-    const roll = new CheckDice();
+    const roll = new AttackDice();
     roll.name = "Improvised Attack";
-    roll.bonus = action.performerObject.get(CONST.ATTACK_STR);
+    roll.bonus = getImprovised(action);
     checkProficiency(action, roll);
     return roll;
 }

@@ -29,7 +29,6 @@ export const doShockGrasp = action => {
             `${action.performerObject.name} casts Shocking Grasps on ${action.targetObject.name} dealing ${damageRoll.result} electric damage.`,
             action
         );
-        RuleCharacterChangesBean.addDataModification(action.target, RuleGameObjectConstans.LETHAL_DAMAGE, damageRoll.result);
     } else {
         RuleLoader.getLoader().sendActionDescription(
             `${action.performerObject.name} casts Shocking Grasps on ${action.targetObject.name} and misses.`,

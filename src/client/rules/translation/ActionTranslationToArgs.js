@@ -1,21 +1,17 @@
 import RuleActionsConstants from "../constants/RuleActionsConstants";
 import TranslationModule from "./TranslationModule";
 
-function getAdditional(obj) {
-    if (obj.key) {
-        if (obj.isItem) {
-            // TODO item translation
-            let str = obj.key;
-            if (typeof obj.damageType === "number") str += " " + TranslationModule.getDamageTypeTranslation(obj.damageType);
-            return str;
-        } else {
-            return obj.key;
-        }
+function getAdditional(add) {
+    let str = "";
+    if (typeof add === "string") {
+        str += add;
     } else {
-        return obj;
+        if (typeof add.key === "string") {
+            str += add.key;
+        }
     }
+    return str;
 }
-
 
 /**
  *
@@ -28,7 +24,14 @@ export function getArgumentsForTranslation(action) {
     if (action.targetItem) args.push(action.targetItem.key);
     if (action.roll) args.push(action.roll.rollText());
     if (action.additional1) args.push(getAdditional(action.additional1));
-    if (action.additional2) args.push(action.additional2);
+    if (action.roll) args.push(action.roll.nextDice.reduce((acc, dd, i) => {
+        if (i === 0) {
+            return acc + dd.rollText();
+        } else {
+            return acc + " + " + dd.rollText();
+        }
+    }, ""));
+    if (typeof action.additional2 === "string") args.push(action.additional2);
     return args;
 }
 
