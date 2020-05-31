@@ -69,15 +69,15 @@ export default {
         },
         [RuleFeatsConstants.SHIPS_SURGEON]: {
             name: "Ship’s Surgeon",
-            description: " Benefit You begin play with a fully stocked healer’s kit and gain a +1 trait bonus on Craft (carpentry) and Heal checks, and Heal is a class skill for you."
+            description: "Benefit You begin play with a fully stocked healer’s kit and gain a +1 trait bonus on Craft (carpentry) and Heal checks, and Heal is a class skill for you."
         },
         [RuleFeatsConstants.POINT_BLANK_SHOT]: {
             name: "Point-Blank Shot (Combat)",
-            description: " Benefit: You get a +1 bonus on attack and damage rolls with ranged weapons at ranges of up to 30 feet."
+            description: "Benefit: You get a +1 bonus on attack and damage rolls with ranged weapons at ranges of up to 30 feet."
         },
         [RuleFeatsConstants.STARTOSS_STYLE]: {
             name: "Startoss Style (Combat, Style)",
-            description: " Prerequisite(s): Dex 13, Point-Blank Shot, Weapon Focus with the chosen weapon. Benefit(s): Choose one weapon from the thrown fighter weapon group. While using this style and the chosen weapon, you gain a bonus on damage rolls made with the weapon equal to 2 + 2 per style feat you possess that lists Startoss Style as a prerequisite (maximum +6 damage). You cannot use this ability if you are carrying a weapon or a shield in your off hand (except for a buckler). Special: In addition to the chosen weapon, a character with this feat and the weapon training (thrown) class feature can use Startoss Style with any thrown weapons that she wields in one hand."
+            description: "Prerequisite(s): Dex 13, Point-Blank Shot, Weapon Focus with the chosen weapon. Benefit(s): Choose one weapon from the thrown fighter weapon group. While using this style and the chosen weapon, you gain a bonus on damage rolls made with the weapon equal to 2 + 2 per style feat you possess that lists Startoss Style as a prerequisite (maximum +6 damage). You cannot use this ability if you are carrying a weapon or a shield in your off hand (except for a buckler). Special: In addition to the chosen weapon, a character with this feat and the weapon training (thrown) class feature can use Startoss Style with any thrown weapons that she wields in one hand."
         },
          [RuleFeatsConstants.STARTOSS_COMET]: {
             name: "Startoss Comet (Combat)",
@@ -111,7 +111,7 @@ export default {
         },
         [RuleFeatsConstants.COMBAT_EXPERTISE]: {
             name: "Combat Expertise (Combat)",
-            description: " Ты можешь выбрать получить -1 к атаке в ближнем бою и к боевым маневрам, чтобы получить +1 бонус уворота к броне.Когда бонус к атаке становится +4 и каждые +4 почле него, твой штраф увеличивется на -1, а уворот увеличивается на +1.  Вы можете использовать это умение только тогда, когда заявляете, что совершаете атаку или действие полной атаки с использованием оружия ближнего боя. Эффект этого умения длится до вашего следующего хода."
+            description: "Ты можешь выбрать получить -1 к атаке в ближнем бою и к боевым маневрам, чтобы получить +1 бонус уворота к броне.Когда бонус к атаке становится +4 и каждые +4 почле него, твой штраф увеличивется на -1, а уворот увеличивается на +1.  Вы можете использовать это умение только тогда, когда заявляете, что совершаете атаку или действие полной атаки с использованием оружия ближнего боя. Эффект этого умения длится до вашего следующего хода."
         }
     }
 };
