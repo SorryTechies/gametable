@@ -17,7 +17,6 @@ import * as RuleCombatManeuverList from "../../../rules/constants/RuleCombatMane
 import {MUST_DO_ATTACK_BUFFS} from "../../../rules/constants/RuleBuffGroupConstants";
 import SLOTS from "../../../rules/items/const/RuleWearSlots";
 import TARGET_TYPE from "../../../rules/constants/RuleActionTargetType";
-import RuleWeapon from "../../../rules/items/RuleWeapon";
 import BUFFS from "../../../rules/constants/RuleBuffConstants";
 import CommandBar from "../../CommandBar/CommandBar";
 
@@ -179,7 +178,7 @@ export default class StatusMenu extends React.Component {
         const canControl = LoginController.isDM() || StaticController.isMyCharacter(unit.character_id);
         return <div className={`${rootScss.static_element} ${rootScss.combat_menu}`}>
             {unit.name}
-            {canControl ? this.renderSelectors() : null}
+            {canControl ? <CommandBar actionList={this.props.actionList} doAimAction={this.props.doAimAction}/> : null}
             <ActionBar actionList={this.props.actionList} onDelete={this.props.onActionDelete} isMine={canControl}/>
         </div>
     }

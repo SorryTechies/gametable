@@ -78,10 +78,10 @@ export default class ActionSelector extends React.Component {
     }
 
     onSelection(layout) {
-        const secondSelect = gatherSecondSelector(this.props.actionList, layout.key);
-        if (secondSelect) {
+        const nextSelector = gatherSecondSelector(this.props.actionList, layout.key);
+        if (nextSelector) {
             this.rootSelect = layout;
-            this.setState({currentSelector: secondSelect});
+            this.setState({currentSelector: nextSelector});
         } else {
             if (this.rootSelect) {
                 this.rootSelect.next = layout;

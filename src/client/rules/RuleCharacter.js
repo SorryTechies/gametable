@@ -11,7 +11,6 @@ export default class RuleCharacter {
         this.id = character._id;
         this.name = character.name;
         this.feats = Array.isArray(character.feats) ? character.feats : [];
-        this.commandButtonLayout = Array.isArray(character.commandButtonLayout) ? character.commandButtonLayout : [];
         if (character.data) {
             this.data = character.data;
         } else {

@@ -6,11 +6,11 @@ const NO_SELECTION = "no_selection";
 const state = {
     [NO_SELECTION]: {
         icon: "/icons/defaultButtonIcon.png",
-        name: "No action selected",
-        action: null
+        name: "No action selected"
     },
     [CONST.MOVE]: {
-
+        icon: "/icons/moveIcon.png",
+        name: "Move"
     }
 };
 

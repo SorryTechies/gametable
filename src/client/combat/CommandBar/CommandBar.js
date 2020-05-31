@@ -9,7 +9,11 @@ export default class CommandBar extends React.Component {
     render() {
         const buttons = [];
         for (let i = 0; i < BUTTON_AMOUNT; ++i) {
-            buttons.push(<CommandButton key={i} index={i} actionList={this.props.actionList}/>);
+            buttons.push(<CommandButton key={i}
+                                        index={i}
+                                        actionList={this.props.actionList}
+                                        doAimAction={this.props.doAimAction}
+             />);
         }
         return <div>
             {buttons}
@@ -19,5 +23,6 @@ export default class CommandBar extends React.Component {
 }
 
 CommandBar.propTypes = {
-    actionList: PropTypes.object.isRequired
+    actionList: PropTypes.object.isRequired,
+    doAimAction: PropTypes.func.isRequired
 };
