@@ -49,36 +49,39 @@ export default {
     },
      [SupportedLanguages.RU]: {
         [SKILLS.SKILL_ACROBATICS]: "Акробатика",
-        [SKILLS.SKILL_APPRAISE]: "Оценивание(булщит)",
-        [SKILLS.SKILL_BLUFF]: "Блеф",
-        [SKILLS.SKILL_CLIMB]: "Карабкание(булщит)",
+        [SKILLS.SKILL_APPRAISE]: "Оценка",
+        [SKILLS.SKILL_BLUFF]: "Обман",
+         // TODO find better
+        [SKILLS.SKILL_CLIMB]: "Альпинизм",
         [SKILLS.SKILL_CRAFT]: "Ремесло",
         [SKILLS.SKILL_DIPLOMACY]: "Дипломатия",
+         // TODO find better
         [SKILLS.SKILL_DISABLE_DEVICE]: "Деактивация устройства",
         [SKILLS.SKILL_DISGUISE]: "Маскировка",
-        [SKILLS.SKILL_ESCAPE_ARTIST]: "Мастер побега(булщит)",
+         // TODO find better
+        [SKILLS.SKILL_ESCAPE_ARTIST]: "Мастер побега",
         [SKILLS.SKILL_FLY]: "Полет",
         [SKILLS.SKILL_INTIMIDATE]: "Запугивание",
         [SKILLS.SKILL_HANDLE_ANIMAL]: "Обращение с животным",
         [SKILLS.SKILL_HEAL]: "Исцеление",
 
-        [SKILLS.SKILL_KNOWLEDGE_ARCANA]: "Знание арканы",
+        [SKILLS.SKILL_KNOWLEDGE_ARCANA]: "Знание Арканы",
         [SKILLS.SKILL_KNOWLEDGE_DUNGEONEERING]: "Знание Подземелья",
-        [SKILLS.SKILL_KNOWLEDGE_GEOGRAPHY]: "Знание географии",
-        [SKILLS.SKILL_KNOWLEDGE_ENGINEERING]: "Знание инжинерии",
-        [SKILLS.SKILL_KNOWLEDGE_LOCAL]: "Знание местных",
-        [SKILLS.SKILL_KNOWLEDGE_NATURE]: "Знание природы",
-        [SKILLS.SKILL_KNOWLEDGE_NOBILITY]: "Знание о  знати",
+        [SKILLS.SKILL_KNOWLEDGE_GEOGRAPHY]: "Знание Географии",
+        [SKILLS.SKILL_KNOWLEDGE_ENGINEERING]: "Знание Инжинерии",
+        [SKILLS.SKILL_KNOWLEDGE_LOCAL]: "Знание Местных",
+        [SKILLS.SKILL_KNOWLEDGE_NATURE]: "Знание Природы",
+        [SKILLS.SKILL_KNOWLEDGE_NOBILITY]: "Знание о Знати",
         [SKILLS.SKILL_KNOWLEDGE_RELIGION]: "Знание Религии",
         [SKILLS.SKILL_KNOWLEDGE_PLANES]: "Знание Планов",
         [SKILLS.SKILL_KNOWLEDGE_HISTORY]: "Знание Истории",
 
         [SKILLS.SKILL_LINGUISTICS]: "Лингвистика",
-        [SKILLS.SKILL_PERFORM]: "Представление",
+        [SKILLS.SKILL_PERFORM]: "Выступление",
         [SKILLS.SKILL_PERCEPTION]: "Внимательность",
         [SKILLS.SKILL_PROFESSION]: "Профессия",
         [SKILLS.SKILL_RIDE]: "Вождение",
-        [SKILLS.SKILL_SENSE_MOTIVE]: "Предчувстве мотива(булщит)",
+        [SKILLS.SKILL_SENSE_MOTIVE]: "Проницательность",
         [SKILLS.SKILL_SPELLCRAFT]: "Колдовство",
         [SKILLS.SKILL_SLEIGHT_OF_HAND]: "Ловкость рук",
         [SKILLS.SKILL_STEALTH]: "Скрытность",
@@ -86,6 +89,6 @@ export default {
         [SKILLS.SKILL_SWIM]: "Плавание",
         [SKILLS.SKILL_USE_MAGIC_DEVICE]: "Использование Магического Устройства",
 
-        [SKILLS.SKILL_SCIENCE]: " Знание Науки"
+        [SKILLS.SKILL_SCIENCE]: "Науки"
     }
 }

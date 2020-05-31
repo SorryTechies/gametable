@@ -15,11 +15,11 @@ export default {
         [DamageType.FIRE]: "fire"
     },
       [LANG.RU]: {
-        [DamageType.PIERCING]: "Колющее",
-        [DamageType.BLUDGEONING]: "Дробящее",
-        [DamageType.SLASHING]: "Рубящее",
-        [DamageType.ENERGY]: "Энергия",
-        [DamageType.ICE]: "Лед",
-        [DamageType.FIRE]: "Огонь"
+        [DamageType.PIERCING]: "колющий",
+        [DamageType.BLUDGEONING]: "дробящий",
+        [DamageType.SLASHING]: "рубящий",
+        [DamageType.ENERGY]: "энергитический",
+        [DamageType.ICE]: "ледяной",
+        [DamageType.FIRE]: "огненный"
     }
 };

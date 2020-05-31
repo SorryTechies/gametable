@@ -3,10 +3,10 @@
  */
 
 export default {
-    AXE_TO_GRIND: "axe_ro_grind",//done
+    AXE_TO_GRIND: "axe_ro_grind",
     IMPROVED_UNARMED_STRIKE: "improved_unarmed_strike",
-    CARETAKER: "caretaker",//done
-    COMBAT_EXPERTISE: "combat_expertise",//done
+    CARETAKER: "caretaker",
+    COMBAT_EXPERTISE: "combat_expertise",
     ENDURANCE: "endurance",
     DIEHARD: "diehard",
     CATCH_OF_GUARD: "catch_of_guard",
