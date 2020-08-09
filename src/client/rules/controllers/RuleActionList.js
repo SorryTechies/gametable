@@ -195,7 +195,13 @@ export default class RuleActionList {
                         }
                     }
                 }
+
+                // TODO disable shield bash armor bonus
             }
+
+            // check, if action is two handed
+            if (this.gameObject.items.getItemsFromHands().length === 1) action.isTwoHanded = true;
+
             action.doAction();
         });
     }

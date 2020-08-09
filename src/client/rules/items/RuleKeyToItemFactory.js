@@ -63,11 +63,18 @@ const itemTable = {
     [SHIELDS.SNARLSHIELD]: {
         maxHealth: 20,
         weight: 20,
-        hardeness: 10
+        hardeness: 10,
+        damageDie: 4,
+        weaponProficiency: RuleWeaponProficiency.MARTIAL,
+        proficiency: RuleArmorType.SHIELD,
     },
     [SHIELDS.DRAGON_SLAYER]: {
         maxHealth: 200,
         weight: 45,
+        damageDie: 8,
+        amountOfDice: 2,
+        damageType: RuleDamageType.SLASHING,
+        weaponProficiency: RuleWeaponProficiency.MARTIAL,
         proficiency: RuleArmorType.TOWER_SHIELD,
         hardeness: 10
     }

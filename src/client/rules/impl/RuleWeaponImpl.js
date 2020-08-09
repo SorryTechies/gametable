@@ -32,7 +32,9 @@ function adjustDamageBonus(action, damageRoll) {
     /** @type {RuleWeapon} */
     const weapon = action.additional1;
     const character = action.performerObject.ruleCharacter;
-    if (!weapon.isRanged) damageRoll.bonus = action.performerObject.get(RuleConstants.MOD_STRENGTH);
+    let strBonus = action.performerObject.get(RuleConstants.MOD_STRENGTH);
+    if (action.isTwoHanded) strBonus = Math.floor(1.5 * strBonus);
+    if (!weapon.isRanged) damageRoll.bonus = strBonus;
     damageRoll.bonus += action.performerObject.get(RuleConstants.MODIFIER_DAMAGE);
     if (action.key === ACTION.THROW_ATTACK) {
         if (character.hasFeat(FEATS.POINT_BLANK_SHOT)) damageRoll.bonus += pointBlankShotImpl(action);

@@ -17,7 +17,7 @@ import TARGET_TYPE from "../../rules/constants/RuleActionTargetType";
 import SLOTS from "../../rules/items/const/RuleWearSlots";
 
 function filterAllowedStates(actionList) {
-    return actionList.gameObject.getStateList().filter(key =>
+    return actionList.gameObject.ruleCharacter.getStateList().filter(key =>
         // filter states, that require an attack
         actionList.canDoStandardAction && MUST_DO_ATTACK_BUFFS.includes(key)
     );
@@ -40,17 +40,14 @@ function secondListProcessor(key, actionList) {
         case CONST.THROW_ATTACK:
         case CONST.IMPROVISED_ATTACK:
             return unit.items.getItemsFromHands()
-                .filter(item => this.props.actionList.canAttackWithWeapon(item));
+                .filter(item => actionList.canAttackWithWeapon(item));
         case CONST.MELEE_ATTACK:
             return [RuleWeaponConstants.UNARMED_STRIKE]
                 .concat(unit.items.getItemsFromHands()
-                    .filter(item => item.isWeapon &&
-                        this.props.actionList.canAttackWithWeapon(item)));
+                    .filter(item => item.isWeapon && actionList.canAttackWithWeapon(item)));
         case CONST.RANGED_ATTACK:
             return unit.items.getItemsFromHands()
-                .filter(item => item.isWeapon &&
-                    item.isRanged &&
-                    this.props.actionList.canAttackWithWeapon(item));
+                .filter(item => item.isWeapon && item.isRanged && actionList.canAttackWithWeapon(item));
         case CONST.CAST_SPELL:
             return unit.ruleCharacter.get(RuleConstants.SPELL_ARRAY);
         case CONST.ACTIVATE_STATE:

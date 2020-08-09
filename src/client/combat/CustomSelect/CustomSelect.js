@@ -4,7 +4,7 @@ import rootScss from '../../../scss/root.scss';
 
 function getClassName(val, selectedObject) {
     // mark as favorite, value in selected chain
-    if (selectedObject.key === val.key || selectedObject.next && selectedObject.next.key === val.key) {
+    if (selectedObject && (selectedObject.key === val.key || selectedObject.next && selectedObject.next.key === val.key)) {
         return rootScss.customSelectOption + " " + rootScss.customSelectFavorite;
     } else {
         return rootScss.customSelectOption;

@@ -63,8 +63,8 @@ function isProficient(action) {
     const weapon = action.additional1;
     if (weapon) {
         if (action.performerObject.hasWeaponProficiency(W_PROF.ALL)) return true;
-        return typeof weapon.proficiency !== "number" ||
-            action.performerObject.hasWeaponProficiency(weapon.proficiency);
+        return typeof weapon.weaponProficiency !== "number" ||
+            action.performerObject.hasWeaponProficiency(weapon.weaponProficiency);
     } else {
         return action.performerObject.hasWeaponProficiency(W_PROF.UNARMED);
     }

@@ -2,10 +2,11 @@
  * Created by LastBerserk on 09.03.2020.
  */
 
-import RuleWearable from "./RuleWearable";
 import SLOTS from "./const/RuleWearSlots";
+import RuleWeapon from "./RuleWeapon";
+import RuleItem from "./RuleItem";
 
-export default class RuleShield extends RuleWearable {
+export default class RuleShield extends RuleWeapon {
     constructor(key) {
         super(key);
         this.isShield = true;
@@ -14,10 +15,7 @@ export default class RuleShield extends RuleWearable {
 
     static fromJson(json) {
         const item = new RuleShield(json.key);
-        if (json.id) item.id = json.id;
-        if (json.damaged) item.damaged = json.damaged;
-        if (json.slot) item.slot = json.slot;
-        if (Array.isArray(json.additionalTags)) item.additionalTags = json.additionalTags;
+        RuleItem.setFromJson(item, json);
         return item;
     }
 }

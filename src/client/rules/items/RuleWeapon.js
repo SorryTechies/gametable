@@ -10,6 +10,7 @@ import DamageDice from "../../logic/roll/DamageDice";
 import RuleWeaponProficiency from "../constants/RuleWeaponProficiency";
 import WEAPON from "./const/RuleWeaponConstants";
 import RuleItem from "./RuleItem";
+import RuleArmorType from "../constants/RuleArmorType";
 
 export default class RuleWeapon extends RuleWearable {
     constructor(key) {
@@ -26,8 +27,9 @@ export default class RuleWeapon extends RuleWearable {
         this.twoHanded = false;
         this.isThrown = false;
         this.acType = RuleAcType.NORMAL;
-        this.proficiency = RuleWeaponProficiency.SIMPLE;
-        this.allowedSlots = [SLOTS.RIGHT_HAND];
+        this.weaponProficiency = RuleWeaponProficiency.SIMPLE;
+        this.proficiency = null;
+        this.allowedSlots = [SLOTS.RIGHT_HAND, SLOTS.LEFT_HAND];
     }
 
     getDamageRoll() {
@@ -51,7 +53,7 @@ export default class RuleWeapon extends RuleWearable {
      */
     static generateImprovised(item) {
         const w = new RuleWeapon(WEAPON.IMPROVISED);
-        w.proficiency = RuleWeaponProficiency.IMPROVISED;
+        w.weaponProficiency = RuleWeaponProficiency.IMPROVISED;
         return w;
     }
 
@@ -61,7 +63,7 @@ export default class RuleWeapon extends RuleWearable {
      */
     static generateUnarmed(obj) {
         const w = new RuleWeapon(WEAPON.UNARMED_STRIKE);
-        w.proficiency = RuleWeaponProficiency.UNARMED;
+        w.weaponProficiency = RuleWeaponProficiency.UNARMED;
         return w;
     }
 }

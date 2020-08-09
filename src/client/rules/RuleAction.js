@@ -82,6 +82,7 @@ export default class RuleAction {
         this.isExecuted = false;
         this.isSuccessfull = false;
         this.consecutiveActionPenalty = 0;
+        this.isTwoHanded = false;
     }
 
     setPerformer(data) {
